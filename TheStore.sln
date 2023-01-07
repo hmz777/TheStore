@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{D9C2BB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.ApiCommon", "Shared\TheStore.ApiCommon\TheStore.ApiCommon.csproj", "{16A13845-CA7D-4362-9F92-F4FBBF7DC410}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Auth", "Identity\AuthServer\TheStore.Auth.csproj", "{8F43B86A-1040-434A-9C19-9A56CC219D97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Auth", "Identity\TheStore.Auth\TheStore.Auth.csproj", "{8F43B86A-1040-434A-9C19-9A56CC219D97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Catalog.API", "APIs\Catalog\TheStore.Catalog.API\TheStore.Catalog.API.csproj", "{5895696F-5A14-4DBB-8417-5C96E32311BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web", "Web\MVC\TheStore.Web.csproj", "{8E976DDB-1962-4AB5-9DDC-C87E91FFB413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web", "Web\TheStore.Web\TheStore.Web.csproj", "{8E976DDB-1962-4AB5-9DDC-C87E91FFB413}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{833FD00A-2649-4B36-8F5B-104F7362C41E}"
 EndProject
