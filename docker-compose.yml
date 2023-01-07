@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  thestoreweb:
+    image: ${DOCKER_REGISTRY-}thestoreweb
+    build:
+      context: .
+      dockerfile: Web/MVC/Dockerfile
+    depends_on:
+      - catalog
+
+  catalog:
+    image: ${DOCKER_REGISTRY-}catalog
+    build:
+      context: .
+      dockerfile: APIs/Catalog/Dockerfile
+    depends_on:
+      - sqlserver
+
+  #authserver:
+  #  image: ${DOCKER_REGISTRY-}authserver
+  #  build:
+  #    context: .
+  #    dockerfile: Identity/AuthServer/Dockerfile
+  #  depends_on:
+  #    - sqlserver
+
+  sqlserver:
+     image: mcr.microsoft.com/mssql/server:2019-latest
+        
+        

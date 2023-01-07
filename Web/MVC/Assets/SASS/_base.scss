@@ -1,0 +1,41 @@
+﻿html, body {
+    font-family: $mainFont;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    background: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+.form-control:focus, .form-check-input:focus {
+    border-color: $logoColor;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.04), 0 0 8px rgba(255, 0, 0, 0.3);
+}
+
+.form-check-input:checked {
+    background: $logoColor;
+}
+
+.swiper-pagination, .swiper-button-prev, .swiper-button-next {
+    color: black !important;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: black !important; 
+}

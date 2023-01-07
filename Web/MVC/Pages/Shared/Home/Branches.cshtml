@@ -1,0 +1,31 @@
+﻿@	using TheStoreWeb.ViewModels.Branches
+@{
+    var branchViewModels =
+    new List<BranchViewModel>()  {
+        new BranchViewModel("Tartus Branch", "b1.jpg", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip","Tartus, Barranieh St"),
+        new BranchViewModel("Lattakia Branch", "b2.jpg", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip","Lattakia, amercan St"),
+        new BranchViewModel("Homes Branch", "b3.jpg", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip","Homs, some St"),
+        new BranchViewModel("Damascus Branch", "b4.jpg", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip","Damascus, other St")
+                    };
+}
+
+<section id="branches">
+    <header>
+        <h2>Points of Sale</h2>
+        <hr class="horizontal-separator mx-auto" />
+    </header>
+    <div class="swiper" id="branches-swiper">
+        <div class="swiper-wrapper">
+            @foreach (var viewModel in branchViewModels)
+            {
+                <div class="swiper-slide branch-slide">
+                    <partial name="Home/Branch" model="viewModel" />
+                    <div class="swiper-lazy-preloader"></div>
+                </div>
+            }
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+</section>
