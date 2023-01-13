@@ -1,31 +1,22 @@
 version: '3.4'
 
 services:
-  thestoreweb:
+  thestore.catalog.api:
+    image: ${DOCKER_REGISTRY-}thestorecatalogapi
+    build:
+      context: .
+      dockerfile: APIs/Catalog/TheStore.Catalog.API/Dockerfile
+
+  thestore.auth:
+    image: ${DOCKER_REGISTRY-}thestoreauth
+    build:
+      context: .
+      dockerfile: Identity/TheStore.Auth/Dockerfile
+
+
+  thestore.web:
     image: ${DOCKER_REGISTRY-}thestoreweb
     build:
       context: .
-      dockerfile: Web/MVC/Dockerfile
-    depends_on:
-      - catalog
+      dockerfile: Web/TheStore.Web/Dockerfile
 
-  catalog:
-    image: ${DOCKER_REGISTRY-}catalog
-    build:
-      context: .
-      dockerfile: APIs/Catalog/Dockerfile
-    depends_on:
-      - sqlserver
-
-  #authserver:
-  #  image: ${DOCKER_REGISTRY-}authserver
-  #  build:
-  #    context: .
-  #    dockerfile: Identity/AuthServer/Dockerfile
-  #  depends_on:
-  #    - sqlserver
-
-  sqlserver:
-     image: mcr.microsoft.com/mssql/server:2019-latest
-        
-        

@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Identity/AuthServer/AuthServer.csproj", "Identity/AuthServer/"]
-RUN dotnet restore "Identity/AuthServer/AuthServer.csproj"
+COPY ["Identity/TheStore.Auth/TheStore.Auth.csproj", "Identity/TheStore.Auth/"]
+RUN dotnet restore "Identity/TheStore.Auth/TheStore.Auth.csproj"
 COPY . .
-WORKDIR "/src/Identity/AuthServer"
-RUN dotnet build "AuthServer.csproj" -c Release -o /app/build
+WORKDIR "/src/Identity/TheStore.Auth"
+RUN dotnet build "TheStore.Auth.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "AuthServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "TheStore.Auth.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AuthServer.dll"]
+ENTRYPOINT ["dotnet", "TheStore.Auth.dll"]
