@@ -10,12 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TheStore.ApiCommon.Data.Repository;
 using static TheStore.ApiCommon.Constants.Common.ConfigurationKeys;
 
@@ -155,9 +150,8 @@ namespace TheStore.ApiCommon.Extensions.Services
 			Log.Information("Add data repositories");
 
 			// Repository
-			services.AddScoped(typeof(IRepository<,>), typeof(DataRepository<,>));
-			services.AddScoped(typeof(IReadRepository<,>), typeof(CacheRepository<,>));
-			services.AddScoped(typeof(ReadRepositoryWrapper));
+			services.AddScoped(typeof(IApiRepository<,>), typeof(DataRepository<,>));
+			services.AddScoped(typeof(IReadApiRepository<,>), typeof(CachedRepository<,>));
 
 			#endregion
 

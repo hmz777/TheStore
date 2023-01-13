@@ -6,7 +6,7 @@ using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.ApiCommon.Data.Repository
 {
-	public class CacheRepository<TContext, T> :
+	public class CachedRepository<TContext, T> :
 		 IReadApiRepository<TContext, T> where TContext : DbContext where T : class, IAggregateRoot
 	{
 		private readonly IReadApiRepository<TContext, T> dataRepository;
@@ -14,7 +14,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		private readonly IHostEnvironment hostEnvironment;
 		private readonly MemoryCacheEntryOptions memoryCacheEntryOptions;
 
-		public CacheRepository(
+		public CachedRepository(
 			IReadApiRepository<TContext, T> dataRepository,
 			IMemoryCache memoryCache,
 			IHostEnvironment hostEnvironment)
