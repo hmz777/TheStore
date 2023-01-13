@@ -5,4 +5,6 @@ using TheStore.Catalog.API.Data;
 var builder = WebApplication.CreateBuilder(args)
 				.RegisterCommonApiServices<CatalogDbContext>();
 
+// API-specific services can be registered here
+
 var app = builder.BuildAndRunPipeline<CatalogDbContext>();
