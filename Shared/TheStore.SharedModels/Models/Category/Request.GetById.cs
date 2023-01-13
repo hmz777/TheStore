@@ -1,10 +1,4 @@
-﻿using Catalog.Domain.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheStore.Catalog.API.Endpoints;
+﻿using TheStore.SharedModels.Models;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {

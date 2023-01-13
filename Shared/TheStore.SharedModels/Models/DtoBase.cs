@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.SharedModels.Models
 {
-	public class DeleteRequest
+	public class DtoBase
 	{
 
 	}

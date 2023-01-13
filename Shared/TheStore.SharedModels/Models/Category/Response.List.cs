@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheStore.Catalog.API.Endpoints
+namespace TheStore.SharedModels.Models.Category
 {
-	public class ResponseBase : EndpointViewModel
+	public class ListResponse
 	{
-
+		
 	}
 }

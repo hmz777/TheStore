@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TheStore.SharedModels.Models;
 
 namespace TheStore.Catalog.API.Dtos.Category
 {
-	public class CategoryDto
+	public class CategoryDto : DtoBase
 	{
 		public int Order { get; set; }
 		public string Name { get; set; }
