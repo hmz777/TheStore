@@ -1,0 +1,62 @@
+﻿@page
+@using TheStore.Web.Pages;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@section Styles {
+    <environment include="Development">
+        <link href="~/lib/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    </environment>
+    <environment include="Production">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.3/swiper-bundle.min.css"
+          integrity="sha512-uuenj2ro+QKfF5Ig2BYOy3s3BhYPODotv/9V8Ue1MHrrwsiYKY01WzNMNk45i0jRUMXZxEuGpUzyPahsKOMKTg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+          asp-fallback-href="~/lib/swiper/swiper-bundle.min.css" />
+    </environment>
+}
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/lib/swiper/swiper-bundle.min.js"></script>
+    </environment>
+    <environment include="Production">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.3/swiper-bundle.min.js"
+            integrity="sha512-4MIWP9ui3MVR0iuCnJ9l6b9DWrCspboU0BbX5DNXoSJ4ZQXjrY7+sPJEehrR0rAx88jVUT9f9Hoa7fawwB3jHg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+            asp-fallback-src="~/lib/swiper/swiper-bundle.min.js"></script>
+    </environment>
+
+    <script>
+        const swiper = new Swiper('#branches-swiper', {
+            autoplay: {
+                pauseOnMouseEnter: true,
+                disableOnInteraction: false
+            },
+            speed: 400,
+            direction: 'horizontal',
+            loop: true,
+            slidesPerView: 1,
+            preloadImages: false,
+            lazy: {
+                enabled: true,
+                checkInView: true,
+                loadOnTransitionStart: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+    </script>
+}
+
+    <partial name="Home/Hero" />
+    <partial name="Home/WhoWeAre" />
+    <partial name="Home/Branches" />
