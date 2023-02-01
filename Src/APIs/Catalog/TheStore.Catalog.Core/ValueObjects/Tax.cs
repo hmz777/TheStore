@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.GuardClauses;
+using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace TheStore.Catalog.Core.ValueObjects
 
 		public Tax(string taxType, decimal amount, Currency currency) : base(amount, currency)
 		{
+			Guard.Against.NullOrWhiteSpace(taxType, nameof(taxType));
+			Guard.Against.NegativeOrZero(amount, nameof(amount));
+			Guard.Against.Null(currency, nameof(currency));
+
 			TaxType = taxType;
 		}
 	}

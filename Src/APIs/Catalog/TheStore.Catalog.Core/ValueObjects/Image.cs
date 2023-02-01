@@ -5,32 +5,23 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Image : ValueObject
 	{
-		public string Uri { get; private set; }
-		public string FileName { get; private set; }
-		public string Alt { get; private set; }
-		public string ColorCode { get; private set; }
+		public Uri FileUri { get; }
+		public string FileNameWithExtension => Path.GetExtension(FileUri.AbsoluteUri);
+		public string Alt { get; }
 
-		public Image(string uri, string fileName, string alt, string colorCode)
+		public Image(Uri fileUri, string alt)
 		{
-			Guard.Against.NullOrEmpty(uri, nameof(uri));
-			Guard.Against.NullOrEmpty(fileName, nameof(fileName));
+			Guard.Against.Null(fileUri, nameof(fileUri));
 			Guard.Against.NullOrEmpty(alt, nameof(alt));
-			Guard.Against.NullOrEmpty(colorCode, nameof(colorCode));
+			Guard.Against.InvalidInput(fileUri, nameof(fileUri), x => fileUri.IsFile || Path.HasExtension(fileUri.LocalPath), message: "Uri is not a file");
 
-			if (File.Exists(uri) == false)
-			{
-				throw new FileNotFoundException($"Image with filename:{fileName} can't be created, {uri} not found");
-			}
-
-			Uri = uri;
-			FileName = fileName;
+			FileUri = fileUri;
 			Alt = alt;
-			ColorCode = colorCode;
 		}
 
 		protected override IEnumerable<object> GetEqualityComponents()
 		{
-			yield return Uri;
+			yield return FileUri;
 		}
 	}
 }
