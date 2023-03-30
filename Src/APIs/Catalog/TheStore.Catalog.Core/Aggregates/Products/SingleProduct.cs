@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
+using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-    public class SingleProduct : Product, IAggregateRoot
+	public class SingleProduct : Product, IAggregateRoot
 	{
-		public CategoryId CategoryId { get; set; }
+		public SingleProduct(CategoryId categoryId, string name, string description, string shortDescription, string sku, InventoryRecord inventory)
+			: base(name, description, shortDescription, sku, inventory)
+		{
+			Guard.Against.Null(categoryId, nameof(categoryId));
 
+			CategoryId = categoryId;
+		}
+
+		public CategoryId CategoryId { get; set; }
 	}
 }

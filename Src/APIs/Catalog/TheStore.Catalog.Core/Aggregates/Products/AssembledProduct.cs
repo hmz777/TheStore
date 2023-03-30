@@ -1,13 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
+using System.Collections.ObjectModel;
+using TheStore.Catalog.Core.ValueObjects;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class AssembledProduct : SingleProduct
 	{
+		private List<ProductId> parts;
+		public ReadOnlyCollection<ProductId> Parts => parts.AsReadOnly();
 
+		public AssembledProduct(List<ProductId> parts, CategoryId categoryId, string name, string description, string shortDescription, string sku, InventoryRecord inventory)
+			: base(categoryId, name, description, shortDescription, sku, inventory)
+		{
+			this.parts = parts;
+		}
+
+		public void AddPart(ProductId productId)
+		{
+			Guard.Against.Null(productId, nameof(productId));
+
+			parts.Add(productId);
+		}
+		public void RemovePart(ProductId productId)
+		{
+			Guard.Against.Null(productId, nameof(productId));
+
+			parts.Remove(productId);
+		}
 	}
 }
