@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheStore.Catalog.Core.ValueObjects;
 
-namespace TheStore.Tests.Domain
+namespace TheStore.Domain.Tests
 {
     public class TaxSpec
     {

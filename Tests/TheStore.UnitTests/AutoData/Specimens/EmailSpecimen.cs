@@ -2,7 +2,7 @@
 using AutoFixture.Kernel;
 using System.Reflection;
 
-namespace TheStore.Tests.Domain.AutoData.Specimens
+namespace TheStore.Domain.Tests.AutoData.Specimens
 {
     public class EmailSpecimen : ISpecimenBuilder
     {
