@@ -5,14 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-TheStoreWeb-3911376B-480C-4E7C-98BF-2D031A0C1E29</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.EFCore.Extensions" Version="6.0.0" />
@@ -30,17 +23,4 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="Pages\Shared\Components\" />
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\js\" />
-    <Folder Include="wwwroot\lib\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="compilerconfig.json" />
-  </ItemGroup>
-
 </Project>
