@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheStore.ApiCommon.Extensions.Migrations;
+using TheStore.ApiCommon.Interfaces;
 
 namespace TheStore.ApiCommon.Extensions.Pipeline
 {
 	public static class Common
 	{
-		public static WebApplication BuildAndRunPipeline<TContext>(this WebApplicationBuilder builder) where TContext : DbContext
+		public static WebApplication BuildAndRunPipeline<TContext>(
+			this WebApplicationBuilder builder,
+				 IDataSeeder? dataSeeder = null) where TContext : DbContext
 		{
 			var app = builder.Build();
 
@@ -29,6 +28,15 @@ namespace TheStore.ApiCommon.Extensions.Pipeline
 					options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
 					options.RoutePrefix = string.Empty;
 				});
+			}
+
+			if (dataSeeder != null)
+			{
+				using (var scope = app.Services.CreateScope())
+				{
+					var context = scope.ServiceProvider.GetRequiredService<TContext>();
+					dataSeeder?.SeedData(context);
+				}
 			}
 
 			app.UseHttpsRedirection();

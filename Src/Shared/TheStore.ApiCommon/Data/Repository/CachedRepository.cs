@@ -134,7 +134,7 @@ namespace TheStore.ApiCommon.Data.Repository
 			throw new NotImplementedException();
 		}
 
-		public Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
+		public Task<List<T>?> ListAsync(CancellationToken cancellationToken = default)
 		{
 			string cacheKey = $"{nameof(T)}-{nameof(ListAsync)}";
 
@@ -145,7 +145,7 @@ namespace TheStore.ApiCommon.Data.Repository
 			});
 		}
 
-		public Task<List<T>> ListAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+		public Task<List<T>?> ListAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
 			if (specification.CacheEnabled)
 			{
