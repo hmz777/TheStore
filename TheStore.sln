@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2F1741F4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{EF50387F-6517-444C-9456-D84AB11B1BA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Tests", "Tests\TheStore.UnitTests\TheStore.Tests.csproj", "{0763FA90-4179-4745-9919-0731D8ABB2C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Domain.Tests", "Tests\TheStore.UnitTests\TheStore.Domain.Tests.csproj", "{0763FA90-4179-4745-9919-0731D8ABB2C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
