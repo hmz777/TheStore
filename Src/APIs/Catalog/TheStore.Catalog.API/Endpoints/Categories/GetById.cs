@@ -11,6 +11,7 @@ using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Data.Specifications.Categories;
 using TheStore.Catalog.API.Domain.Categories;
 using TheStore.Catalog.API.Dtos.Category;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
@@ -53,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 				return BadRequest(validation.AsErrors());
 
 			var category = (await repository
-				.FirstOrDefaultAsync(new GetCategoryByIdReadSpec(request.CategoryId), cancellationToken))
+				.FirstOrDefaultAsync(new GetCategoryByIdReadSpec(new CategoryId(request.CategoryId)), cancellationToken))
 				.Map<Category, CategoryDto>(mapper);
 
 			if (category == null)

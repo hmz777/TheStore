@@ -6,11 +6,16 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Money : ValueObject
 	{
-		public static readonly Currency Usd = new("USD");
-		public static readonly Money ZeroUsd = new(0, Usd);
+		public static readonly Money ZeroUsd = new(0, Currency.Usd);
 
 		public decimal Amount { get; private set; }
 		public Currency Currency { get; private set; }
+
+		// Ef Core
+		public Money()
+		{
+
+		}
 
 		public Money(decimal amount, Currency currency)
 		{

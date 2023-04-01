@@ -1,10 +1,11 @@
 ﻿using Ardalis.GuardClauses;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.Catalog.API.Domain.Categories
 {
-	public class Category : BaseEntity<int>, IAggregateRoot, ISyncableAggregate
+	public class Category : BaseEntity<CategoryId>, IAggregateRoot, ISyncableAggregate
 	{
 		public int Order { get; set; }
 		public string Name { get; set; }

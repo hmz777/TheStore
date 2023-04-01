@@ -7,8 +7,13 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class SingleProduct : Product, IAggregateRoot
 	{
-		public SingleProduct(CategoryId categoryId, string name, string description, string shortDescription, string sku, InventoryRecord inventory)
-			: base(name, description, shortDescription, sku, inventory)
+		// Ef Core
+		public SingleProduct()
+		{
+
+		}
+		public SingleProduct(CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
+			: base(name, description, shortDescription, sku, price, inventory)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
 

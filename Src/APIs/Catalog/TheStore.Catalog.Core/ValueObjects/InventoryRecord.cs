@@ -19,7 +19,13 @@ namespace TheStore.Catalog.Core.ValueObjects
 		[NotMapped]
 		public bool NeedsReorder => AvailableStock <= RestockThreshold;
 
-		public InventoryRecord(int availableStock, int restockThreshold, int maxStockThreshold, int overStock, bool onReorder)
+		// Ef Core
+        public InventoryRecord()
+        {
+            
+        }
+
+        public InventoryRecord(int availableStock, int restockThreshold, int maxStockThreshold, int overStock, bool onReorder)
 		{
 			Guard.Against.Negative(availableStock, nameof(availableStock));
 			Guard.Against.NegativeOrZero(restockThreshold, nameof(restockThreshold));

@@ -1,16 +1,12 @@
 ﻿using Ardalis.Specification;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheStore.Catalog.API.Domain.Categories;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.API.Data.Specifications.Categories
 {
 	public class GetCategoryByIdReadSpec : Specification<Category>, ISingleResultSpecification
 	{
-		public GetCategoryByIdReadSpec(int categoryId)
+		public GetCategoryByIdReadSpec(CategoryId categoryId)
 		{
 			Query
 				.Where(category => category.Id == categoryId)

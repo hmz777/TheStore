@@ -54,7 +54,7 @@ namespace TheStore.Domain.Tests
 		public void Can_Add_Images_To_Color()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new ProductColorCustomization());
+			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
 			var sut = new ProductColor("#000000", new List<Image>());
@@ -68,7 +68,7 @@ namespace TheStore.Domain.Tests
 		public void Can_Remove_Images_From_Color()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new ProductColorCustomization());
+			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
 			var sut = new ProductColor("#000000", new List<Image>());
@@ -91,9 +91,9 @@ namespace TheStore.Domain.Tests
 		public void Cant_Create_Valid_Product(string name, string description, string shortDescription, string sku)
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
+			fixture.Customize(new DomainCustomization());
 
-			var action = () => new Product(name, description, shortDescription, sku, fixture.Create<InventoryRecord>());
+			var action = () => new Product(name, description, shortDescription, sku, fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			action.Should().Throw<Exception>();
 		}
@@ -102,9 +102,9 @@ namespace TheStore.Domain.Tests
 		public void Can_Create_Valid_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
+			fixture.Customize(new DomainCustomization());
 
-			var action = () => new Product("sss", "sss", "sss", "sss", fixture.Create<InventoryRecord>());
+			var action = () => new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			action.Should().NotThrow<Exception>();
 		}
@@ -113,11 +113,10 @@ namespace TheStore.Domain.Tests
 		public void Can_Add_Color_To_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
-			fixture.Customize(new ProductColorCustomization());
+			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<InventoryRecord>());
+			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 			sut.AddOrUpdateColor(color);
 
 			sut.ProductColors.Should().Contain(color);
@@ -127,11 +126,10 @@ namespace TheStore.Domain.Tests
 		public void Can_Remove_Color_To_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
-			fixture.Customize(new ProductColorCustomization());
+			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<InventoryRecord>());
+			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 			sut.RemoveColor(color);
 
 			sut.ProductColors.Should().NotContain(color);
@@ -145,10 +143,10 @@ namespace TheStore.Domain.Tests
 		public void Can_Add_Parts_To_Assembled_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
+			fixture.Customize(new DomainCustomization());
 			var newPartId = new ProductId(1);
 
-			var sut = new AssembledProduct(new List<ProductId>(), new CategoryId(1), "name", "desc", "sdesc", "sku", fixture.Create<InventoryRecord>());
+			var sut = new AssembledProduct(new List<ProductId>(), new CategoryId(1), "name", "desc", "sdesc", "sku", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			sut.AddPart(newPartId);
 
@@ -159,10 +157,10 @@ namespace TheStore.Domain.Tests
 		public void Can_Remove_Parts_To_Assembled_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new InventoryRecordCustomization());
+			fixture.Customize(new DomainCustomization());
 			var newPartId = new ProductId(1);
 
-			var sut = new AssembledProduct(new List<ProductId>(), new CategoryId(1), "name", "desc", "sdesc", "sku", fixture.Create<InventoryRecord>());
+			var sut = new AssembledProduct(new List<ProductId>(), new CategoryId(1), "name", "desc", "sdesc", "sku", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			sut.RemovePart(newPartId);
 

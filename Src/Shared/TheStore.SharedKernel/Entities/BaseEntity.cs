@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TheStore.SharedKernel.DomainEvents;
 
 namespace TheStore.SharedKernel.Entities
 {
 	public abstract class BaseEntity<TId>
 	{
+		[Key]
 		public TId? Id { get; private set; }
+
+		[NotMapped]
 
 		public List<BaseDomainEvent> Events = new();
 

@@ -1,15 +1,13 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Currency : ValueObject
 	{
+		public static readonly Currency Usd = new("USD");
+		public static readonly Currency Eur = new("EUR");
+
 		public string CurrencyCode { get; private set; }
 
 		public Currency(string currencyCode)

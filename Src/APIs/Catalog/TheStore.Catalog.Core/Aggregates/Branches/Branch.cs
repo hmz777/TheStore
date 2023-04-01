@@ -7,15 +7,22 @@ namespace TheStore.Catalog.API.Domain.Branches
 {
 	public class Branch : BaseEntity<int>, IAggregateRoot
 	{
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string Address { get; set; }
+		public string Name { get; private set; }
+		public string Description { get; private set; }
+		public Address Address { get; private set; }
+		public Image Image { get; private set; }
 
-		public Branch(string name, string description, string address, Image image)
+		// Ef Core
+		public Branch()
+		{
+
+		}
+
+		public Branch(string name, string description, Address address, Image image)
 		{
 			Guard.Against.NullOrEmpty(name, nameof(name));
 			Guard.Against.NullOrEmpty(description, nameof(description));
-			Guard.Against.NullOrEmpty(address, nameof(address));
+			Guard.Against.Null(address, nameof(address));
 			Guard.Against.Null(image, nameof(image));
 
 			Name = name;
@@ -23,7 +30,5 @@ namespace TheStore.Catalog.API.Domain.Branches
 			Address = address;
 			Image = image;
 		}
-
-		public Image Image { get; set; }
 	}
 }

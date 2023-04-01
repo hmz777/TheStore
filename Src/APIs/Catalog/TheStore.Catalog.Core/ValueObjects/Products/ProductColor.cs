@@ -7,10 +7,16 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 	{
 		public string ColorCode { get; }
 
-		private List<Image> images;
+		private List<Image> images = new();
 		public IReadOnlyCollection<Image> Images => images.AsReadOnly();
 
-		public ProductColor(string colorCode, List<Image> images)
+		// Ef Core
+        public ProductColor()
+        {
+            
+        }
+
+        public ProductColor(string colorCode, List<Image> images)
 		{
 			Guard.Against.NullOrWhiteSpace(colorCode, nameof(colorCode));
 			Guard.Against.InvalidFormat(colorCode, nameof(colorCode), "^#(?:[0-9a-fA-F]{3,4}){1,2}$");

@@ -14,6 +14,12 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
         public string Name { get; private set; }
         public string Description { get; private set; }
 
+        // Ef Core
+        public ProductAttribute()
+        {
+            
+        }
+
         public ProductAttribute(string name, string description)
         {
             Guard.Against.NullOrWhiteSpace(name, nameof(name));

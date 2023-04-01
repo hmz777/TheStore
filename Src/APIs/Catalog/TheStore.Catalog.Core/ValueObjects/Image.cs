@@ -9,6 +9,12 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public string FileNameWithExtension => Path.GetExtension(FileUri.AbsoluteUri);
 		public string Alt { get; }
 
+		// Ef Core
+		public Image()
+		{
+
+		}
+
 		public Image(Uri fileUri, string alt)
 		{
 			Guard.Against.Null(fileUri, nameof(fileUri));
