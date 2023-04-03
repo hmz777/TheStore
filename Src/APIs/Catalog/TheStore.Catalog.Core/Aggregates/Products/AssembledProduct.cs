@@ -7,15 +7,16 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class AssembledProduct : SingleProduct
 	{
-		private List<ProductId> parts;
+		private List<ProductId> parts = new();
 		public ReadOnlyCollection<ProductId> Parts => parts.AsReadOnly();
 
 		// Ef Core
-        public AssembledProduct()
-        {
-            
-        }
-        public AssembledProduct(List<ProductId> parts, CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
+		public AssembledProduct()
+		{
+
+		}
+
+		public AssembledProduct(List<ProductId> parts, CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
 			: base(categoryId, name, description, shortDescription, sku, price, inventory)
 		{
 			this.parts = parts;

@@ -5,8 +5,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Currency : ValueObject
 	{
-		public static readonly Currency Usd = new("USD");
-		public static readonly Currency Eur = new("EUR");
+		public static Currency Usd => new("USD");
+		public static Currency Eur => new("EUR");
 
 		public string CurrencyCode { get; private set; }
 

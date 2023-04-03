@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
@@ -17,6 +18,8 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public InventoryRecord Inventory { get; private set; }
 
 		private List<ProductColor> productColors = new();
+
+		[NotMapped]
 		public ReadOnlyCollection<ProductColor> ProductColors => productColors.AsReadOnly();
 
 		// Ef Core
