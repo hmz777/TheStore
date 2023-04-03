@@ -1,9 +1,9 @@
 ﻿using TheStore.SharedModels.Models;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.SharedModels.Models.Category
 {
-    public class UpdateRequest : RequestBase
-    {
-        public override string Route => "categories";
-    }
+	public class UpdateRequest : RequestBase
+	{
+		public override string Route => "categories";
+	}
 }

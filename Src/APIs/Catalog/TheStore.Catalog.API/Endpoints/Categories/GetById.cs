@@ -10,8 +10,8 @@ using TheStore.ApiCommon.Extensions.Validation;
 using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Data.Specifications.Categories;
 using TheStore.Catalog.API.Domain.Categories;
-using TheStore.Catalog.API.Dtos.Category;
 using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {

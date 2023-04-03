@@ -7,4 +7,4 @@ var builder = WebApplication.CreateBuilder(args)
 
 // API-specific services can be registered here
 
-var app = builder.BuildAndRunPipeline<CatalogDbContext>();
+var app = await builder.BuildAndRunPipelineAsync<CatalogDbContext>(new DataSeeder());

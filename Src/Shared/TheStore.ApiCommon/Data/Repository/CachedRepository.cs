@@ -9,13 +9,13 @@ namespace TheStore.ApiCommon.Data.Repository
 	public class CachedRepository<TContext, T> :
 		 IReadApiRepository<TContext, T> where TContext : DbContext where T : class, IAggregateRoot
 	{
-		private readonly IReadApiRepository<TContext, T> dataRepository;
+		private readonly IApiRepository<TContext, T> dataRepository;
 		private readonly IMemoryCache memoryCache;
 		private readonly IHostEnvironment hostEnvironment;
 		private readonly MemoryCacheEntryOptions memoryCacheEntryOptions;
 
 		public CachedRepository(
-			IReadApiRepository<TContext, T> dataRepository,
+			IApiRepository<TContext, T> dataRepository,
 			IMemoryCache memoryCache,
 			IHostEnvironment hostEnvironment)
 		{

@@ -116,7 +116,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					Log.Information("Connect to database on local machine without infrastructure");
 
 					options
-					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={appName}Db;Trusted_Connection=True;MultipleActiveResultSets=true");
+					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={appName}Db;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
 				});
 			}
 

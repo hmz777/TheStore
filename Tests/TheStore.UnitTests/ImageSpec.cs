@@ -10,7 +10,7 @@ namespace TheStore.Domain.Tests
         [InlineData("https://www.siteNoExtension.com/im", "qwdqwdqwk")]
         public void Shouldnt_Create_Valid_Image(string uri, string alt)
         {
-            var action = () => new Image(new Uri(uri), alt);
+            var action = () => new Image(uri, alt);
 
             action.Should().Throw<Exception>();
         }
@@ -21,7 +21,7 @@ namespace TheStore.Domain.Tests
         [InlineData("http://www.imageuri.com/image.png", "Image alt")]
         public void Should_Create_Valid_Image(string uri, string alt)
         {
-            var action = () => new Image(new Uri(uri), alt);
+            var action = () => new Image(uri, alt);
 
             action.Should().NotThrow<Exception>();
         }

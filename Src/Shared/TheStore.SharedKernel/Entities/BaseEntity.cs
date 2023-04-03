@@ -7,10 +7,10 @@ namespace TheStore.SharedKernel.Entities
 	public abstract class BaseEntity<TId>
 	{
 		[Key]
-		public TId? Id { get; private set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public TId Id { get; set; }
 
 		[NotMapped]
-
 		public List<BaseDomainEvent> Events = new();
 
 		public override bool Equals(object? obj)

@@ -2,8 +2,8 @@
 
 namespace TheStore.ApiCommon.Interfaces
 {
-	public interface IDataSeeder
+	public interface IDataSeeder<T> where T : DbContext
 	{
-		public Task SeedData<T>(T context) where T : DbContext;
+		public Task SeedDataAsync(T context);
 	}
 }

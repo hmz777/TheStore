@@ -3,6 +3,8 @@ using TheStore.Catalog.API.Domain.Branches;
 using TheStore.Catalog.API.Domain.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueConverters;
+using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.Catalog.Core.ValueObjects.Products;
 
 namespace TheStore.Catalog.API.Data
 {
@@ -23,7 +25,7 @@ namespace TheStore.Catalog.API.Data
 				.OwnsOne(b => b.Address);
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Image);
+				.OwnsOne(b => b.Image);//.ToJson();
 
 			#endregion
 
@@ -37,23 +39,36 @@ namespace TheStore.Catalog.API.Data
 				.HasKey(s => s.Id);
 
 			modelBuilder.Entity<SingleProduct>()
-				.OwnsOne(s => s.Price, p => p.OwnsOne(pp => pp.Currency));
+				.Property(c => c.CategoryId)
+				.HasConversion<CategoryIdValueConverter>();
+
+			modelBuilder.Entity<SingleProduct>()
+				.OwnsOne(s => s.Price, p =>
+				{
+					p.Property(m => m.Amount)
+					 .HasPrecision(precision: 16, scale: 3);
+
+					p.OwnsOne(pp => pp.Currency);
+					//p.ToJson();
+				});
 
 			modelBuilder.Entity<SingleProduct>()
 				.OwnsOne(s => s.Inventory);
 
 			modelBuilder.Entity<SingleProduct>()
-				.OwnsMany(s => s.ProductColors, pc =>
+				.OwnsMany<ProductColor>("productColors", pc =>
 				{
 					pc.OwnsMany(pc => pc.Images);
+					//pc.ToJson();
 				});
 
 			#endregion
 
 			#region Assembled Product
 
-			modelBuilder.Entity<AssembledProduct>()
-				.HasMany(ap => ap.Parts);
+			//modelBuilder.Entity<AssembledProduct>()
+			//	.Property<List<ProductId>>("parts")
+			//	.HasConversion<ProductIdValueConverter>();
 
 			#endregion
 

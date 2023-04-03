@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {

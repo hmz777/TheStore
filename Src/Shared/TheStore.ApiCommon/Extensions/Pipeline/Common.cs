@@ -9,9 +9,9 @@ namespace TheStore.ApiCommon.Extensions.Pipeline
 {
 	public static class Common
 	{
-		public static WebApplication BuildAndRunPipeline<TContext>(
+		public async static Task<WebApplication> BuildAndRunPipelineAsync<TContext>(
 			this WebApplicationBuilder builder,
-				 IDataSeeder? dataSeeder = null) where TContext : DbContext
+				 IDataSeeder<TContext>? dataSeeder = null) where TContext : DbContext
 		{
 			var app = builder.Build();
 
@@ -35,7 +35,7 @@ namespace TheStore.ApiCommon.Extensions.Pipeline
 				using (var scope = app.Services.CreateScope())
 				{
 					var context = scope.ServiceProvider.GetRequiredService<TContext>();
-					dataSeeder?.SeedData(context);
+					await dataSeeder.SeedDataAsync(context);
 				}
 			}
 

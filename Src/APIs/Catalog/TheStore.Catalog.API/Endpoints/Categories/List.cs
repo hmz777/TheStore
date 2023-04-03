@@ -10,11 +10,11 @@ using TheStore.ApiCommon.Extensions.Validation;
 using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Data.Specifications.Categories;
 using TheStore.Catalog.API.Domain.Categories;
-using TheStore.Catalog.API.Dtos.Category;
+using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
-    public class List : EndpointBaseAsync
+	public class List : EndpointBaseAsync
         .WithRequest<ListRequest>
         .WithActionResult<List<CategoryDto>>
     {
