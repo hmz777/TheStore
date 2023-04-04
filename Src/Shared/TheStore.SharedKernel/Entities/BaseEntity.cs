@@ -31,7 +31,7 @@ namespace TheStore.SharedKernel.Entities
 			return EqualityComparer<TId>.Default.Equals(Id, other.Id);
 		}
 
-		public static bool operator ==(BaseEntity<TId> a, BaseEntity<TId> b)
+		public static bool operator ==(BaseEntity<TId>? a, BaseEntity<TId>? b)
 		{
 			if (a is null && b is null)
 				return true;
@@ -42,7 +42,7 @@ namespace TheStore.SharedKernel.Entities
 			return a.Equals(b);
 		}
 
-		public static bool operator !=(BaseEntity<TId> a, BaseEntity<TId> b)
+		public static bool operator !=(BaseEntity<TId>? a, BaseEntity<TId>? b)
 		{
 			return !(a == b);
 		}
