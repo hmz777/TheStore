@@ -1,11 +1,6 @@
 ﻿using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TheStore.ApiCommon.Extensions.Validation
+namespace TheStore.ApiCommon.Extensions.ModelValidation
 {
 	public static class Common
 	{

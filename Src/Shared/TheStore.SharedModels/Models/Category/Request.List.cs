@@ -4,7 +4,7 @@ namespace TheStore.SharedModels.Models.Category
 {
 	public class ListRequest : RequestBase
 	{
-		public const string RouteTemplate = "Categories";
+		public const string RouteTemplate = "categories";
 
 		public override string Route => RouteTemplate;
 

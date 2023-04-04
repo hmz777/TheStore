@@ -6,7 +6,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
-using TheStore.ApiCommon.Extensions.Validation;
+using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Data.Specifications.Categories;
 using TheStore.Catalog.API.Domain.Categories;

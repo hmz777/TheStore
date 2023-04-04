@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\TheStore.ApiCommon\TheStore.ApiCommon.csproj" />
+    <ProjectReference Include="..\..\..\Shared\TheStore.SharedModels\TheStore.SharedModels.csproj" />
     <ProjectReference Include="..\TheStore.Catalog.Core\TheStore.Catalog.Core.csproj" />
   </ItemGroup>
 
