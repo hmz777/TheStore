@@ -39,7 +39,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
         [SwaggerOperation(
             Summary = "Lists catalog categories",
             Description = "Lists catalog categories with pagination using skip and take",
-            OperationId = "Category.Get",
+            OperationId = "Category.List",
             Tags = new[] { "Categories" })]
         public async override Task<ActionResult<List<CategoryDto>>> HandleAsync(
             [FromQuery] ListRequest request,
