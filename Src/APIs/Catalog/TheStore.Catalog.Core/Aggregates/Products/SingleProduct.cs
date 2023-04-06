@@ -8,10 +8,11 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 	public class SingleProduct : Product, IAggregateRoot
 	{
 		// Ef Core
-		public SingleProduct()
+		protected SingleProduct()
 		{
 
 		}
+
 		public SingleProduct(CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
 			: base(name, description, shortDescription, sku, price, inventory)
 		{

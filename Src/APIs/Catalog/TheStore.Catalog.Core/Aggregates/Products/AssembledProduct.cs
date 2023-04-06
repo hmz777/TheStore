@@ -11,7 +11,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public ReadOnlyCollection<ProductId> Parts => parts.AsReadOnly();
 
 		// Ef Core
-		public AssembledProduct()
+		private AssembledProduct()
 		{
 
 		}

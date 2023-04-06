@@ -13,7 +13,7 @@ namespace TheStore.Catalog.API.Domain.Branches
 		public Image Image { get; private set; }
 
 		// Ef Core
-		public Branch()
+		private Branch()
 		{
 
 		}

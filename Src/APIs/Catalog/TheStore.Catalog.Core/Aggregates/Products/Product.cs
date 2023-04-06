@@ -23,7 +23,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public ReadOnlyCollection<ProductColor> ProductColors => productColors.AsReadOnly();
 
 		// Ef Core
-		public Product()
+		protected Product()
 		{
 
 		}
