@@ -110,31 +110,31 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 			if (isKubernetes)
 			{
+				Log.Information("Connect to database on Kubernetes");
+
 				services.AddDbContext<TContext>(options =>
 				{
-					Log.Information("Connect to database on Kubernetes");
-
 					options
 					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", $"{appName}Db"));
 				});
 			}
 			else if (isCompose)
 			{
+				Log.Information("Connect to database on Docker Compose");
+
 				services.AddDbContext<TContext>(options =>
 				{
-					Log.Information("Connect to database on Docker Compose");
-
 					options
 					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", $"{appName}Db"));
 				});
 			}
 			else
 			{
+				// If we reach here, then we're running the API independent of any infrastructure
+				Log.Information("Connect to database on local machine without infrastructure");
+
 				services.AddDbContext<TContext>(options =>
 				{
-					// If we reach here, then we're running the API independent of any infrastructure
-					Log.Information("Connect to database on local machine without infrastructure");
-
 					options
 					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={appName}Db;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
 				});
