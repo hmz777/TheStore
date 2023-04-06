@@ -11,7 +11,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		public IReadOnlyCollection<Image> Images => images.AsReadOnly();
 
 		// Ef Core
-        public ProductColor()
+		private ProductColor()
         {
             
         }
@@ -47,7 +47,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 			return new ProductColor(ColorCode, newImages);
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return ColorCode;
 

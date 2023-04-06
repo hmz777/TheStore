@@ -13,7 +13,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public string Alt { get; }
 
 		// Ef Core
-		public Image()
+		private Image()
 		{
 
 		}
@@ -31,9 +31,9 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Alt = alt;
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			yield return FileUri;
+			yield return StringFileUri;
 		}
 	}
 }

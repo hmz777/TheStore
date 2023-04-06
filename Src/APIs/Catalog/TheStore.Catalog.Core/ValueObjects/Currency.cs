@@ -10,14 +10,20 @@ namespace TheStore.Catalog.Core.ValueObjects
 
 		public string CurrencyCode { get; private set; }
 
-		public Currency(string currencyCode)
+		// Ef Core
+        private Currency()
+        {
+            
+        }
+
+        public Currency(string currencyCode)
 		{
 			Guard.Against.NullOrWhiteSpace(currencyCode, nameof(currencyCode));
 
 			CurrencyCode = currencyCode;
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return CurrencyCode;
 		}

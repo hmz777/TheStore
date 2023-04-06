@@ -12,7 +12,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public Coordinate Coordinate { get; }
 
 		// Ef Core
-		public Address()
+		private Address()
 		{
 
 		}
@@ -32,7 +32,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Coordinate = coordinate;
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return Country;
 			yield return City;

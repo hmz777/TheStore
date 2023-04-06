@@ -20,7 +20,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public bool NeedsReorder => AvailableStock <= RestockThreshold;
 
 		// Ef Core
-        public InventoryRecord()
+		private InventoryRecord()
         {
             
         }
@@ -136,7 +136,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 					onReorder: false);
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return AvailableStock;
 			yield return RestockThreshold;

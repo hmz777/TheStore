@@ -12,7 +12,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public Currency Currency { get; private set; }
 
 		// Ef Core
-		public Money()
+		private Money()
 		{
 
 		}
@@ -57,7 +57,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 				new Currency(left.Currency.CurrencyCode));
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return Amount;
 			yield return Currency;

@@ -14,8 +14,8 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
         public string Name { get; private set; }
         public string Description { get; private set; }
 
-        // Ef Core
-        public ProductAttribute()
+		// Ef Core
+		private ProductAttribute()
         {
             
         }
@@ -29,7 +29,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
             Description = description;
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        protected override IEnumerable<IComparable> GetEqualityComponents()
         {
             yield return Name;
             yield return Description;

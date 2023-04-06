@@ -13,9 +13,10 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Longitude = longitude;
 		}
 
-		protected override IEnumerable<object> GetEqualityComponents()
+		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			yield return Latitude; yield return Longitude;
+			yield return Latitude;
+			yield return Longitude;
 		}
 	}
 }
