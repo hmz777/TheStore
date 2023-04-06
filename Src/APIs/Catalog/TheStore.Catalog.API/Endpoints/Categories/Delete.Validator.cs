@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
-	public class DeleteValidator
+	public class DeleteValidator : AbstractValidator<DeleteRequest>
 	{
-
+		public DeleteValidator()
+		{
+			RuleFor(x => x.CategoryId)
+				.NotEmpty();
+		}
 	}
 }

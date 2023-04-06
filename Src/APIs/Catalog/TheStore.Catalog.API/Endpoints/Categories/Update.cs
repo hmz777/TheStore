@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
+using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.API.Data;
@@ -42,7 +43,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		   Description = "Updates a category",
 		   OperationId = "Category.Update",
 		   Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<UpdateResponse>> HandleAsync(UpdateRequest request, CancellationToken cancellationToken = default)
+		public async override Task<ActionResult<UpdateResponse>> HandleAsync(
+			UpdateRequest request,
+			CancellationToken cancellationToken = default)
 		{
 			log.Information("Update category with id: {Id}", request.CategoryId);
 
@@ -57,8 +60,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 				return NotFound();
 			}
 
-			mapper.Map(request, category);
-			await apiRepository.SaveChangesAsync(cancellationToken);
+			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
 
 			return NoContent();
 		}

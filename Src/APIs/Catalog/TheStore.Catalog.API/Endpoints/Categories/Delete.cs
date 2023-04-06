@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 				return NotFound();
 			}
 
-			await apiRepository.ExecuteDeleteAsync(category, cancellationToken);
+			await apiRepository.ExecuteDeleteAsync<Category, CategoryId>(category.Id, cancellationToken);
 
 			return NoContent();
 		}

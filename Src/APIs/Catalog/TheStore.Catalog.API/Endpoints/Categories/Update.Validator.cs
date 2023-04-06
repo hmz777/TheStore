@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
-	public class UpdateValidator
+	public class UpdateValidator : AbstractValidator<UpdateRequest>
 	{
+		public UpdateValidator()
+		{
+			RuleFor(x => x.CategoryId)
+				.NotEmpty();
 
+			RuleFor(x => x.Name)
+				.NotEmpty()
+				.MinimumLength(2);
+
+			RuleFor(x => x.Order)
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
+		}
 	}
 }
