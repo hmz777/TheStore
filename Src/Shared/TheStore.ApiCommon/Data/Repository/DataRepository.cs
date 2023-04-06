@@ -26,6 +26,11 @@ namespace TheStore.ApiCommon.Data.Repository
 			await context.Set<TEntity>().Where(x => x.Id.Equals(id)).ExecuteDeleteAsync(cancellationToken);
 		}
 
+		public Task ExecuteDeleteAsync<TId>(T entity, CancellationToken cancellationToken = default) where TId : notnull
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task ExecuteUpdateAsync()
 		{
 			throw new NotImplementedException();
