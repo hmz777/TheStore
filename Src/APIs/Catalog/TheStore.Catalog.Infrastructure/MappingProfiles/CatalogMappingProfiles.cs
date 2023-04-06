@@ -4,11 +4,12 @@ using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.Infrastructure.MappingProfiles
 {
-    public class CatalogMappingProfiles : Profile
-    {
-        public CatalogMappingProfiles()
-        {
-            CreateMap<Category, CategoryDto>().ReverseMap();
-        }
-    }
+	public class CatalogMappingProfiles : Profile
+	{
+		public CatalogMappingProfiles()
+		{
+			CreateMap<Category, CategoryDto>().ReverseMap();
+			CreateMap<UpdateRequest, Category>();
+		}
+	}
 }
