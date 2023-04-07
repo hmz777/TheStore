@@ -5,28 +5,26 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
-using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Domain.Categories;
-using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
-	public class Update : EndpointBaseAsync
-		.WithRequest<UpdateRequest>
-		.WithActionResult<UpdateResponse>
+	public class Create : EndpointBaseAsync
+		.WithRequest<CreateRequest>
+		.WithActionResult<CategoryDto>
 	{
-		private readonly IValidator<UpdateRequest> validator;
+		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Category> apiRepository;
 		private readonly IMapper mapper;
-		private readonly Serilog.ILogger log = Log.ForContext<Update>();
+		private readonly Serilog.ILogger log = Log.ForContext<Create>();
 
-		public Update(
-			IValidator<UpdateRequest> validator,
+		public Create(
+			IValidator<CreateRequest> validator,
 			IApiRepository<CatalogDbContext, Category> apiRepository,
 			IMapper mapper)
 		{
@@ -35,36 +33,28 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			this.mapper = mapper;
 		}
 
-		[HttpPut(UpdateRequest.RouteTemplate)]
+		[HttpPost(CreateRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		[SwaggerOperation(
-		   Summary = "Updates a category",
-		   Description = "Updates a category",
-		   OperationId = "Category.Update",
+		   Summary = "Creates a category",
+		   Description = "Creates a category",
+		   OperationId = "Category.Create",
 		   Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<UpdateResponse>> HandleAsync(
-			UpdateRequest request,
+		public async override Task<ActionResult<CategoryDto>> HandleAsync(
+			CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update category with id: {Id}", request.CategoryId);
+				log.Information("Create category with name: {Name}", request.Name, request.CorrelationId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = await apiRepository.GetByIdAsync(new CategoryId(request.CategoryId), cancellationToken);
+			var category = await apiRepository.AddAsync(mapper.Map<Category>(request), cancellationToken);
 
-			if (category == null)
-			{
-				return NotFound();
-			}
-
-			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
-
-			return NoContent();
+			return CreatedAtRoute(request.Route, mapper.Map<CategoryDto>(category));
 		}
 	}
 }

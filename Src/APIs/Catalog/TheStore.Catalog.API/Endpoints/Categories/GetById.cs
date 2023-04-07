@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
@@ -11,6 +12,7 @@ using TheStore.Catalog.API.Data;
 using TheStore.Catalog.API.Data.Specifications.Categories;
 using TheStore.Catalog.API.Domain.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Category;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
@@ -47,7 +49,8 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			log.Information("Get category with Id: {CategoryId}", request.CategoryId);
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Get category with Id: {CategoryId}", request.CategoryId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
@@ -60,7 +63,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			if (category == null)
 				return NotFound();
 
-			return category;
+			return Ok(category);
 		}
 	}
 }
