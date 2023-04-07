@@ -76,7 +76,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					   .Enrich.FromLogContext()
 					   .Enrich.WithMachineName()
 					   .Enrich.WithEnvironmentName()
-					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {RequestId}] {Message:lj}{NewLine}{Exception}")
+					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}")
 					   .WriteTo.Seq(seqUrl);
 				}
 				else
@@ -88,7 +88,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					   .Enrich.FromLogContext()
 					   .Enrich.WithMachineName()
 					   .Enrich.WithEnvironmentName()
-					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {RequestId}] {Message:lj}{NewLine}{Exception}");
+					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
 				}
 			});
 
