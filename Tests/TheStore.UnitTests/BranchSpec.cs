@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using TheStore.Catalog.API.Domain.Branches;
+using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Domain.Tests.AutoData.Customizations;
 

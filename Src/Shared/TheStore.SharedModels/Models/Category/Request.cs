@@ -9,7 +9,7 @@ namespace TheStore.SharedModels.Models.Category
 	/// <summary>
 	/// Dummy class for file grouping inside Visual Studio
 	/// </summary>
-	public class Request
+	internal class Request
 	{
 
 	}

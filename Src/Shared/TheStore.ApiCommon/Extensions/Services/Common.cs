@@ -95,13 +95,16 @@ namespace TheStore.ApiCommon.Extensions.Services
 			return webApplicationBuilder;
 		}
 
-		public static WebApplicationBuilder ConfigureDataAccess<TContext>(this WebApplicationBuilder webApplicationBuilder) where TContext : DbContext
+		public static WebApplicationBuilder ConfigureDataAccess<TContext>(
+			this WebApplicationBuilder webApplicationBuilder,
+			string? databaseName = null) where TContext : DbContext
 		{
 			var configuration = webApplicationBuilder.Configuration;
 			var services = webApplicationBuilder.Services;
 			var isKubernetes = configuration.GetValue<bool>(Deployment.IsKubernetes);
 			var isCompose = configuration.GetValue<bool>(Deployment.IsDockerCompose);
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
+			var dbName = appName ?? appName;
 
 			Log.Information("Add database context");
 
@@ -115,7 +118,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", $"{appName}Db"));
+					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", $"{dbName}Db"));
 				});
 			}
 			else if (isCompose)
@@ -125,7 +128,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", $"{appName}Db"));
+					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", $"{dbName}Db"));
 				});
 			}
 			else
@@ -136,7 +139,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={appName}Db;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName}Db;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
 				});
 			}
 
@@ -172,6 +175,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			{
 				setup.SwaggerDoc("v1", new OpenApiInfo { Title = appName, Version = "v1" });
 				setup.EnableAnnotations();
+				setup.CustomSchemaIds(x => x.FullName);
 			});
 
 			return webApplicationBuilder;

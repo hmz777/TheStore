@@ -1,8 +1,8 @@
 ﻿using Ardalis.Specification;
-using TheStore.Catalog.API.Domain.Categories;
+using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 
-namespace TheStore.Catalog.API.Data.Specifications.Categories
+namespace TheStore.Catalog.Infrastructure.Data.Specifications.Categories
 {
 	public class GetCategoryByIdReadSpec : Specification<Category>, ISingleResultSpecification
 	{

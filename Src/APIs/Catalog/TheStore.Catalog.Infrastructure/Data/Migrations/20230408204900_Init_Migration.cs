@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace TheStore.Catalog.API.Migrations
+namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class Init_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,13 +52,13 @@ namespace TheStore.Catalog.API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PriceAmount = table.Column<decimal>(name: "Price_Amount", type: "decimal(16,3)", precision: 16, scale: 3, nullable: false),
-                    PriceCurrencyCurrencyCode = table.Column<string>(name: "Price_Currency_CurrencyCode", type: "nvarchar(max)", nullable: false),
-                    InventoryAvailableStock = table.Column<int>(name: "Inventory_AvailableStock", type: "int", nullable: false),
-                    InventoryRestockThreshold = table.Column<int>(name: "Inventory_RestockThreshold", type: "int", nullable: false),
-                    InventoryMaxStockThreshold = table.Column<int>(name: "Inventory_MaxStockThreshold", type: "int", nullable: false),
-                    InventoryOverStock = table.Column<int>(name: "Inventory_OverStock", type: "int", nullable: false),
-                    InventoryOnReorder = table.Column<bool>(name: "Inventory_OnReorder", type: "bit", nullable: false)
+                    Price_Amount = table.Column<decimal>(type: "decimal(16,3)", precision: 16, scale: 3, nullable: false),
+                    Price_Currency_CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Inventory_AvailableStock = table.Column<int>(type: "int", nullable: false),
+                    Inventory_RestockThreshold = table.Column<int>(type: "int", nullable: false),
+                    Inventory_MaxStockThreshold = table.Column<int>(type: "int", nullable: false),
+                    Inventory_OverStock = table.Column<int>(type: "int", nullable: false),
+                    Inventory_OnReorder = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -8,26 +8,26 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
+using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Category;
+using TheStore.SharedModels.Models.Products;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<CategoryDto>>
+		.WithActionResult<List<ProductDto>>
 	{
 		private readonly IValidator<ListRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
+		private readonly IReadApiRepository<CatalogDbContext, SingleProduct> repository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<List>();
 
 		public List(
 			IValidator<ListRequest> validator,
-			IReadApiRepository<CatalogDbContext, Category> repository,
+			IReadApiRepository<CatalogDbContext, SingleProduct> repository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -39,27 +39,27 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[SwaggerOperation(
-			Summary = "Lists catalog categories",
-			Description = "Lists catalog categories with pagination using skip and take",
-			OperationId = "Category.List",
-			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<List<CategoryDto>>> HandleAsync(
+			Summary = "Lists single products",
+			Description = "Lists single products with pagination using skip and take",
+			OperationId = "Product.List",
+			Tags = new[] { "Products" })]
+		public async override Task<ActionResult<List<ProductDto>>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
+				log.Information("List products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var categories = (await repository
-				.ListAsync(new ListCategoriesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+			var products = (await repository
+				.ListAsync(new ListSingleProductsPaginationReadSpec(request.Take, request.Page), cancellationToken))
+				.Map<SingleProduct, ProductDto>(mapper);
 
-			return categories;
+			return products;
 		}
 	}
 }

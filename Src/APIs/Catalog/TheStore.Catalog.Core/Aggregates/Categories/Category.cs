@@ -3,7 +3,7 @@ using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
 
-namespace TheStore.Catalog.API.Domain.Categories
+namespace TheStore.Catalog.Core.Aggregates.Categories
 {
 	public class Category : BaseEntity<CategoryId>, IAggregateRoot, ISyncableAggregate
 	{
@@ -12,12 +12,12 @@ namespace TheStore.Catalog.API.Domain.Categories
 		public bool Active { get; set; }
 		public bool NeedsSynchronization { get; set; }
 
-        private Category()
-        {
-            
-        }
+		private Category()
+		{
 
-        public Category(int order, string name, bool active)
+		}
+
+		public Category(int order, string name, bool active)
 		{
 			Guard.Against.NegativeOrZero(order, nameof(order));
 			Guard.Against.NullOrEmpty(name, nameof(name));

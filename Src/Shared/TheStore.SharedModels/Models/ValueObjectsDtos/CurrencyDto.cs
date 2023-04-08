@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheStore.SharedModels.Models.Category
+namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
-	public class GetByIdResponse
+	public class CurrencyDto : DtoBase
 	{
-		
 	}
 }

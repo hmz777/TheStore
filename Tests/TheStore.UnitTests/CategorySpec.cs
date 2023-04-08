@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using TheStore.Catalog.API.Domain.Categories;
+using TheStore.Catalog.Core.Aggregates.Categories;
 
 namespace TheStore.Domain.Tests
 {

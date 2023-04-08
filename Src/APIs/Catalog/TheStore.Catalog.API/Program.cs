@@ -1,6 +1,6 @@
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Migrations;
-using TheStore.Catalog.API.Data;
+using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args)

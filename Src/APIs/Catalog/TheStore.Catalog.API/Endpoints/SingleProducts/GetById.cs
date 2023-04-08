@@ -8,27 +8,27 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
+using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Category;
+using TheStore.SharedModels.Models.Products;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetByIdRequest>
-		.WithActionResult<CategoryDto>
+		.WithActionResult<ProductDto>
 	{
 		private readonly IValidator<GetByIdRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
+		private readonly IReadApiRepository<CatalogDbContext, SingleProduct> repository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<GetById>();
 
 		public GetById(
 			IValidator<GetByIdRequest> validator,
-			IReadApiRepository<CatalogDbContext, Category> repository,
+			IReadApiRepository<CatalogDbContext, SingleProduct> repository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -41,29 +41,29 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[SwaggerOperation(
-			Summary = "Gets a catalog category by id",
-			Description = "Gets a catalog category by id",
-			OperationId = "Category.GetById",
-			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<CategoryDto>> HandleAsync(
-			[FromRoute] GetByIdRequest request,
+			Summary = "Gets a single product by id",
+			Description = "Gets a single product by id",
+			OperationId = "Product.Single.GetById",
+			Tags = new[] { "Products" })]
+		public async override Task<ActionResult<ProductDto>> HandleAsync(
+		[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get category with Id: {Id}", request.CategoryId);
+				log.Information("Get a single product with Id: {Id}", request.ProductId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = (await repository
-				.FirstOrDefaultAsync(new GetCategoryByIdReadSpec(new CategoryId(request.CategoryId)), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+			var singleProduct = (await repository
+				.FirstOrDefaultAsync(new GetSingleProductByIdReadSpec(new ProductId(request.ProductId)), cancellationToken))
+				.Map<Product, ProductDto>(mapper);
 
-			if (category == null)
+			if (singleProduct == null)
 				return NotFound();
 
-			return Ok(category);
+			return Ok(singleProduct);
 		}
 	}
 }

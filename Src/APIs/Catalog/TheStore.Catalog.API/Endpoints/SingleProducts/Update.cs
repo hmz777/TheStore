@@ -8,26 +8,26 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
+using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Category;
+using TheStore.SharedModels.Models.Products;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class Update : EndpointBaseAsync
 		.WithRequest<UpdateRequest>
 		.WithActionResult
 	{
 		private readonly IValidator<UpdateRequest> validator;
-		private readonly IApiRepository<CatalogDbContext, Category> apiRepository;
+		private readonly IApiRepository<CatalogDbContext, SingleProduct> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<Update>();
 
 		public Update(
 			IValidator<UpdateRequest> validator,
-			IApiRepository<CatalogDbContext, Category> apiRepository,
+			IApiRepository<CatalogDbContext, SingleProduct> apiRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -40,29 +40,29 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[SwaggerOperation(
-		   Summary = "Updates a category",
-		   Description = "Updates a category",
-		   OperationId = "Category.Update",
-		   Tags = new[] { "Categories" })]
+		   Summary = "Updates a single product",
+		   Description = "Updates a single product",
+		   OperationId = "Product.Single.Update",
+		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
 			UpdateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update category with id: {Id}", request.CategoryId);
+				log.Information("Update single product with id: {Id}", request.ProductId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = await apiRepository.GetByIdAsync(new CategoryId(request.CategoryId), cancellationToken);
+			var singleProduct = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
-			if (category == null)
+			if (singleProduct == null)
 			{
 				return NotFound();
 			}
 
-			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
+			await RepositoryHelpers.PropertyUpdateAsync(request, singleProduct, mapper, apiRepository);
 
 			return NoContent();
 		}

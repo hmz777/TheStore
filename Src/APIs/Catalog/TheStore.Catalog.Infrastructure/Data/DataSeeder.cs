@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TheStore.ApiCommon.Interfaces;
-using TheStore.Catalog.API.Domain.Branches;
-using TheStore.Catalog.API.Domain.Categories;
+using TheStore.Catalog.Core.Aggregates.Branches;
+using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 
-namespace TheStore.Catalog.API.Data
+namespace TheStore.Catalog.Infrastructure.Data
 {
 	public class DataSeeder : IDataSeeder<CatalogDbContext>
 	{

@@ -3,7 +3,7 @@ using TheStore.Catalog.Core.ValueObjects;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
 
-namespace TheStore.Catalog.API.Domain.Branches
+namespace TheStore.Catalog.Core.Aggregates.Branches
 {
 	public class Branch : BaseEntity<int>, IAggregateRoot
 	{
