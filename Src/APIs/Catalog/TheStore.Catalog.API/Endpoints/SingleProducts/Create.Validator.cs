@@ -7,6 +7,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 	{
 		public CreateValidator()
 		{
+			RuleFor(x => x.CategoryId)
+				.NotEmpty();
+
 			RuleFor(x => x.Name)
 				.NotEmpty();
 

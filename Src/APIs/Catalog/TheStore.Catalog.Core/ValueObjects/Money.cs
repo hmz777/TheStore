@@ -8,8 +8,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 	{
 		public static readonly Money ZeroUsd = new(0, Currency.Usd);
 
-		public decimal Amount { get; private set; }
-		public Currency Currency { get; private set; }
+		public decimal Amount { get; }
+		public Currency Currency { get; }
 
 		// Ef Core
 		private Money()

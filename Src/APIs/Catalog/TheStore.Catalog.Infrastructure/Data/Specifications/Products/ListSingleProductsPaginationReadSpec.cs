@@ -8,6 +8,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 		public ListSingleProductsPaginationReadSpec(int take, int page)
 		{
 			Query
+				.OrderBy(x => x.Id)
 				.Skip((page - 1) * take)
 				.Take(take)
 				.AsNoTracking();

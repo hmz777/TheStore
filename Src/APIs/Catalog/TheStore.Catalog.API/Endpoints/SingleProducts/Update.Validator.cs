@@ -10,6 +10,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
+			RuleFor(x => x.CategoryId)
+				.NotEmpty();
+
 			RuleFor(x => x.Name)
 				 .NotEmpty();
 

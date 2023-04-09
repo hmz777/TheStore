@@ -8,7 +8,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public static Currency Usd => new("USD");
 		public static Currency Eur => new("EUR");
 
-		public string CurrencyCode { get; private set; }
+		public string CurrencyCode { get; }
 
 		// Ef Core
         private Currency()

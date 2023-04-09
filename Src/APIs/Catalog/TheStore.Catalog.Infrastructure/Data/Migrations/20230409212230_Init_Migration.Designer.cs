@@ -11,7 +11,7 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20230408204900_Init_Migration")]
+    [Migration("20230409212230_Init_Migration")]
     partial class Init_Migration
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TheStore.Catalog.API.Domain.Branches.Branch", b =>
+            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Branches.Branch", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.ToTable("Branches");
                 });
 
-            modelBuilder.Entity("TheStore.Catalog.API.Domain.Categories.Category", b =>
+            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Categories.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,7 +136,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.HasDiscriminator().HasValue("AssembledProduct");
                 });
 
-            modelBuilder.Entity("TheStore.Catalog.API.Domain.Branches.Branch", b =>
+            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Branches.Branch", b =>
                 {
                     b.OwnsOne("TheStore.Catalog.Core.ValueObjects.Image", "Image", b1 =>
                         {
@@ -178,21 +178,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                             b1.Property<int>("SingleProductId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("AvailableStock")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("MaxStockThreshold")
-                                .HasColumnType("int");
-
-                            b1.Property<bool>("OnReorder")
-                                .HasColumnType("bit");
-
-                            b1.Property<int>("OverStock")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("RestockThreshold")
-                                .HasColumnType("int");
-
                             b1.HasKey("SingleProductId");
 
                             b1.ToTable("SingleProducts");
@@ -221,10 +206,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 {
                                     b2.Property<int>("MoneySingleProductId")
                                         .HasColumnType("int");
-
-                                    b2.Property<string>("CurrencyCode")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
 
                                     b2.HasKey("MoneySingleProductId");
 

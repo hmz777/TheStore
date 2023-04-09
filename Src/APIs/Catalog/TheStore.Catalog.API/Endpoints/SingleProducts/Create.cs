@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Reflection;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -18,7 +19,6 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		.WithRequest<CreateRequest>
 		.WithActionResult<ProductDto>
 	{
-
 		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, SingleProduct> apiRepository;
 		private readonly IMapper mapper;
@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var singleProduct = await apiRepository.AddAsync(mapper.Map<SingleProduct>(request), cancellationToken);
 
-			return CreatedAtRoute(request.Route, mapper.Map<ProductDto>(singleProduct));
+			return CreatedAtRoute(GetByIdRequest.RouteName, mapper.Map<ProductDto>(singleProduct));
 		}
 	}
 }

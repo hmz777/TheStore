@@ -8,6 +8,7 @@ namespace TheStore.SharedModels.Models.Products
 		public override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
 
 		public int ProductId { get; set; }
+		public int CategoryId { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string ShortDescription { get; set; }

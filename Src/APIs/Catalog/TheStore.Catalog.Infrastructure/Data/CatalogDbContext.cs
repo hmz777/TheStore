@@ -3,7 +3,6 @@ using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueConverters;
-using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
 
 namespace TheStore.Catalog.Infrastructure.Data
@@ -25,7 +24,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.OwnsOne(b => b.Address);
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Image);//.ToJson();
+				.OwnsOne(b => b.Image);
 
 			#endregion
 
@@ -49,7 +48,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 					 .HasPrecision(precision: 16, scale: 3);
 
 					p.OwnsOne(pp => pp.Currency);
-					//p.ToJson();
 				});
 
 			modelBuilder.Entity<SingleProduct>()
@@ -59,7 +57,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.OwnsMany<ProductColor>("productColors", pc =>
 				{
 					pc.OwnsMany(pc => pc.Images);
-					//pc.ToJson();
 				});
 
 			#endregion

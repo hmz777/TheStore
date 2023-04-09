@@ -52,13 +52,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price_Amount = table.Column<decimal>(type: "decimal(16,3)", precision: 16, scale: 3, nullable: false),
-                    Price_Currency_CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Inventory_AvailableStock = table.Column<int>(type: "int", nullable: false),
-                    Inventory_RestockThreshold = table.Column<int>(type: "int", nullable: false),
-                    Inventory_MaxStockThreshold = table.Column<int>(type: "int", nullable: false),
-                    Inventory_OverStock = table.Column<int>(type: "int", nullable: false),
-                    Inventory_OnReorder = table.Column<bool>(type: "bit", nullable: false)
+                    Price_Amount = table.Column<decimal>(type: "decimal(16,3)", precision: 16, scale: 3, nullable: false)
                 },
                 constraints: table =>
                 {

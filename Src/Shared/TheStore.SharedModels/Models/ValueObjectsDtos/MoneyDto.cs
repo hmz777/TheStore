@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheStore.SharedModels.Models.ValueObjectsDtos
+﻿namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
 	public class MoneyDto : DtoBase
 	{
+		public decimal Amount { get; set; }
+		public CurrencyDto Currency { get; set; }
 	}
 }
