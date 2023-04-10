@@ -14,6 +14,6 @@ namespace TheStore.SharedModels.Models.Products
 		public string Sku { get; set; }
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }
-		//	public List<ProductColorDto> ProductColors { get; set; }
+		public List<ProductColorDto> ProductColors { get; set; }
 	}
 }

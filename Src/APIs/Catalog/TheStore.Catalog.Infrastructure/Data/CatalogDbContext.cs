@@ -3,6 +3,7 @@ using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueConverters;
+using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Products;
 
 namespace TheStore.Catalog.Infrastructure.Data
@@ -48,6 +49,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 					 .HasPrecision(precision: 16, scale: 3);
 
 					p.OwnsOne(pp => pp.Currency);
+
+					p.ToTable(nameof(Money));
 				});
 
 			modelBuilder.Entity<SingleProduct>()

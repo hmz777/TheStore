@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 
 			var category = await apiRepository.AddAsync(mapper.Map<Category>(request), cancellationToken);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, mapper.Map<CategoryDto>(category));
+			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { CategoryId = category.Id.Id }, mapper.Map<CategoryDto>(category));
 		}
 	}
 }

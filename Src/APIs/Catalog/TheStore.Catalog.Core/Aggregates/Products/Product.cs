@@ -17,7 +17,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public Money Price { get; private set; }
 		public InventoryRecord Inventory { get; private set; }
 
-		private List<ProductColor> productColors = new();
+		private List<ProductColor> productColors;
 
 		[NotMapped]
 		public ReadOnlyCollection<ProductColor> ProductColors => productColors.AsReadOnly();
@@ -28,7 +28,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 		}
 
-		public Product(string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
+		public Product(string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory, List<ProductColor>? productColors = null)
 		{
 			Guard.Against.NullOrWhiteSpace(name, nameof(name));
 			Guard.Against.NullOrWhiteSpace(description, nameof(description));
@@ -43,6 +43,8 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Sku = sku;
 			Price = price;
 			Inventory = inventory;
+
+			this.productColors = productColors ?? new();
 		}
 
 		#region API

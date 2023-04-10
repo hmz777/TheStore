@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var singleProduct = await apiRepository.AddAsync(mapper.Map<SingleProduct>(request), cancellationToken);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, mapper.Map<ProductDto>(singleProduct));
+			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductDto>(singleProduct));
 		}
 	}
 }

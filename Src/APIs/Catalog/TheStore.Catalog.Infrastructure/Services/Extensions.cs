@@ -14,7 +14,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 		{
 			webApplicationBuilder.ConfigureLogging();
 			webApplicationBuilder.PlatformDetect();
-			webApplicationBuilder.ConfigureDataAccess<TContext>();
+			webApplicationBuilder.ConfigureDataAccess<TContext>("CatalogDb");
 			webApplicationBuilder.ConfigureApi();
 			webApplicationBuilder.ConfigureSwagger();
 			//webApplicationBuilder.ConfigureJwtAuthorization();

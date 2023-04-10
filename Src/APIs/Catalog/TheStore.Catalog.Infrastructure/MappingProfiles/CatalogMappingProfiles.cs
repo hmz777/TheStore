@@ -15,17 +15,21 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 		public CatalogMappingProfiles()
 		{
 			// Categories
-			CreateMap<Category, CategoryDto>();
+			CreateMap<Category, CategoryDto>()
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id.Id));
+
 			CreateMap<SharedModels.Models.Category.CreateRequest, Category>();
 			CreateMap<SharedModels.Models.Category.UpdateRequest, Category>();
 
 			// Single Products
-			CreateMap<SingleProduct, ProductDto>();
+			CreateMap<SingleProduct, ProductDto>()
+				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id));
+
 			CreateMap<SharedModels.Models.Products.CreateRequest, SingleProduct>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
-			
+
 			CreateMap<SharedModels.Models.Products.UpdateRequest, SingleProduct>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId))); ;
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
 
 			// Value Objects
 			CreateMap<Money, MoneyDto>().ReverseMap();
