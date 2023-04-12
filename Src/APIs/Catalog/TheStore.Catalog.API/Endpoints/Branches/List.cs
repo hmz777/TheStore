@@ -8,26 +8,26 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
+using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Branches;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.SharedModels.Models.Branches;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<CategoryDto>>
+		.WithActionResult<List<BranchDto>>
 	{
 		private readonly IValidator<ListRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
+		private readonly IReadApiRepository<CatalogDbContext, Branch> repository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<List>();
 
 		public List(
 			IValidator<ListRequest> validator,
-			IReadApiRepository<CatalogDbContext, Category> repository,
+			IReadApiRepository<CatalogDbContext, Branch> repository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -39,27 +39,27 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[SwaggerOperation(
-			Summary = "Lists catalog categories",
-			Description = "Lists catalog categories with pagination using skip and take",
-			OperationId = "Category.List",
-			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<List<CategoryDto>>> HandleAsync(
+			Summary = "Lists catalog branches",
+			Description = "Lists catalog branches with pagination using skip and take",
+			OperationId = "Branch.List",
+			Tags = new[] { "Branches" })]
+		public async override Task<ActionResult<List<BranchDto>>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
+				log.Information("List branches with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var categories = (await repository
-				.ListAsync(new ListCategoriesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+			var branches = (await repository
+				.ListAsync(new ListBranchesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
+				.Map<Branch, BranchDto>(mapper);
 
-			return categories;
+			return branches;
 		}
 	}
 }

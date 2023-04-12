@@ -8,27 +8,26 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
-using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Branches;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.SharedModels.Models.Branches;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetByIdRequest>
-		.WithActionResult<CategoryDto>
+		.WithActionResult<BranchDto>
 	{
 		private readonly IValidator<GetByIdRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
+		private readonly IReadApiRepository<CatalogDbContext, Branch> repository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<GetById>();
 
 		public GetById(
 			IValidator<GetByIdRequest> validator,
-			IReadApiRepository<CatalogDbContext, Category> repository,
+			IReadApiRepository<CatalogDbContext, Branch> repository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -41,29 +40,29 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[SwaggerOperation(
-			Summary = "Gets a catalog category by id",
-			Description = "Gets a catalog category by id",
-			OperationId = "Category.GetById",
-			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<CategoryDto>> HandleAsync(
+			Summary = "Gets a branch by id",
+			Description = "Gets a branch by id",
+			OperationId = "Branch.GetById",
+			Tags = new[] { "Branches" })]
+		public async override Task<ActionResult<BranchDto>> HandleAsync(
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get category with Id: {Id}", request.CategoryId);
+				log.Information("Get branch with Id: {Id}", request.BranchId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = (await repository
-				.FirstOrDefaultAsync(new GetCategoryByIdReadSpec(new CategoryId(request.CategoryId)), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+			var branch = (await repository
+				.FirstOrDefaultAsync(new GetBranchByIdReadSpec(request.BranchId), cancellationToken))
+				.Map<Branch, BranchDto>(mapper);
 
-			if (category == null)
+			if (branch == null)
 				return NotFound();
 
-			return Ok(category);
+			return Ok(branch);
 		}
 	}
 }

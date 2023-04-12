@@ -8,9 +8,11 @@ namespace TheStore.Catalog.Core.ValueObjects
 	{
 		[NotMapped]
 		public Uri FileUri { get; }
-		public string StringFileUri { get; }
+		public string StringFileUri { get; private set; }
+
+		[NotMapped]
 		public string FileNameWithExtension => Path.GetExtension(FileUri.AbsoluteUri);
-		public string Alt { get; }
+		public string Alt { get; private set; }
 
 		// Ef Core
 		private Image()
@@ -34,6 +36,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return StringFileUri;
+			yield return Alt;
 		}
 	}
 }

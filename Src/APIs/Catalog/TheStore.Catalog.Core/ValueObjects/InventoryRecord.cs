@@ -7,11 +7,11 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class InventoryRecord : ValueObject
 	{
-		public int AvailableStock { get; }
-		public int RestockThreshold { get; }
-		public int MaxStockThreshold { get; }
-		public int OverStock { get; }
-		public bool OnReorder { get; }
+		public int AvailableStock { get; private set; }
+		public int RestockThreshold { get; private set; }
+		public int MaxStockThreshold { get; private set; }
+		public int OverStock { get; private set; }
+		public bool OnReorder { get; private set; }
 
 		[NotMapped]
 		public bool HasOverStock => OverStock > 0;

@@ -1,4 +1,4 @@
-﻿namespace TheStore.SharedModels.Models.Category
+﻿namespace TheStore.SharedModels.Models.Categories
 {
 	public class ListRequest : RequestBase
 	{

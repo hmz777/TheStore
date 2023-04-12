@@ -5,7 +5,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 {
 	public class ProductColor : ValueObject
 	{
-		public string ColorCode { get; }
+		public string ColorCode { get; private set; }
 
 		private List<Image> images = new();
 		public IReadOnlyCollection<Image> Images => images.AsReadOnly();

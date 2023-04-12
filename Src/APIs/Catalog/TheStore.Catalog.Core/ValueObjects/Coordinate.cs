@@ -4,8 +4,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Coordinate : ValueObject
 	{
-		public float Latitude { get; }
-		public float Longitude { get; }
+		public float Latitude { get; private set; }
+		public float Longitude { get; private set; }
 
 		public Coordinate(float latitude, float longitude)
 		{

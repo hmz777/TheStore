@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TheStore.SharedModels.Models.Category
+namespace TheStore.SharedModels.Models.Categories
 {
 	public class CreateRequest : RequestBase
 	{

@@ -1,6 +1,4 @@
-﻿using TheStore.SharedModels.Models;
-
-namespace TheStore.SharedModels.Models.Category
+﻿namespace TheStore.SharedModels.Models.Categories
 {
 	public class DeleteRequest : RequestBase
 	{

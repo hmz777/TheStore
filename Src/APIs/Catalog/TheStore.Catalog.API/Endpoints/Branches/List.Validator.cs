@@ -1,12 +1,7 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.SharedModels.Models.Branches;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class ListValidator : AbstractValidator<ListRequest>
 	{

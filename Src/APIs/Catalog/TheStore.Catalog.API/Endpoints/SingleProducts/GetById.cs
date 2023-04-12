@@ -58,7 +58,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var singleProduct = (await repository
 				.FirstOrDefaultAsync(new GetSingleProductByIdReadSpec(new ProductId(request.ProductId)), cancellationToken))
-				.Map<Product, ProductDto>(mapper);
+				.Map<SingleProduct, ProductDto>(mapper);
 
 			if (singleProduct == null)
 				return NotFound();

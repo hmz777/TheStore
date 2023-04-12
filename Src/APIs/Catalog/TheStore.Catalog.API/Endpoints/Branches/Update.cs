@@ -8,26 +8,25 @@ using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Catalog.Core.Aggregates.Categories;
-using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.SharedModels.Models.Branches;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class Update : EndpointBaseAsync
 		.WithRequest<UpdateRequest>
 		.WithActionResult
 	{
 		private readonly IValidator<UpdateRequest> validator;
-		private readonly IApiRepository<CatalogDbContext, Category> apiRepository;
+		private readonly IApiRepository<CatalogDbContext, Branch> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<Update>();
 
 		public Update(
 			IValidator<UpdateRequest> validator,
-			IApiRepository<CatalogDbContext, Category> apiRepository,
+			IApiRepository<CatalogDbContext, Branch> apiRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
@@ -40,29 +39,29 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[SwaggerOperation(
-		   Summary = "Updates a category",
-		   Description = "Updates a category",
-		   OperationId = "Category.Update",
-		   Tags = new[] { "Categories" })]
+		   Summary = "Updates a branch",
+		   Description = "Updates a branch",
+		   OperationId = "Branch.Update",
+		   Tags = new[] { "Branches" })]
 		public async override Task<ActionResult> HandleAsync(
 			UpdateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update category with id: {Id}", request.CategoryId);
+				log.Information("Update branch with id: {Id}", request.BrancheId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = await apiRepository.GetByIdAsync(new CategoryId(request.CategoryId), cancellationToken);
+			var branch = await apiRepository.GetByIdAsync(request.BrancheId, cancellationToken);
 
-			if (category == null)
+			if (branch == null)
 			{
 				return NotFound();
 			}
 
-			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
+			await RepositoryHelpers.PropertyUpdateAsync(request, branch, mapper, apiRepository);
 
 			return NoContent();
 		}

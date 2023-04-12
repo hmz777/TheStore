@@ -3,7 +3,6 @@ using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueConverters;
-using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Products;
 
 namespace TheStore.Catalog.Infrastructure.Data
@@ -22,7 +21,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 			#region Branch
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Address);
+				.OwnsOne(b => b.Address, ad => ad.OwnsOne(add => add.Coordinate));
 
 			modelBuilder.Entity<Branch>()
 				.OwnsOne(b => b.Image);
@@ -49,8 +48,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 					 .HasPrecision(precision: 16, scale: 3);
 
 					p.OwnsOne(pp => pp.Currency);
-
-					p.ToTable(nameof(Money));
 				});
 
 			modelBuilder.Entity<SingleProduct>()

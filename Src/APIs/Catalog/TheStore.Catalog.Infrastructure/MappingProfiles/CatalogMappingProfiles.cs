@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
-using TheStore.SharedModels.Models.Category;
+using TheStore.SharedModels.Models.Branches;
+using TheStore.SharedModels.Models.Categories;
 using TheStore.SharedModels.Models.Products;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
@@ -18,8 +20,8 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Category, CategoryDto>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id.Id));
 
-			CreateMap<SharedModels.Models.Category.CreateRequest, Category>();
-			CreateMap<SharedModels.Models.Category.UpdateRequest, Category>();
+			CreateMap<SharedModels.Models.Categories.CreateRequest, Category>();
+			CreateMap<SharedModels.Models.Categories.UpdateRequest, Category>();
 
 			// Single Products
 			CreateMap<SingleProduct, ProductDto>()
@@ -37,6 +39,15 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
 			CreateMap<ProductColor, ProductColorDto>().ReverseMap();
+
+			// Branches
+			CreateMap<Branch, BranchDto>();
+			CreateMap<SharedModels.Models.Branches.CreateRequest, Branch>();
+			CreateMap<SharedModels.Models.Branches.UpdateRequest, Branch>();
+
+			// Value Objects
+			CreateMap<Address, AddressDto>().ReverseMap();
+			CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 		}
 	}
 }

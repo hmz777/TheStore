@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.SharedModels.Models.Branches;
 
-namespace TheStore.Catalog.API.Endpoints.Categories
+namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class CreateValidator : AbstractValidator<CreateRequest>
 	{
@@ -10,10 +10,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			RuleFor(x => x.Name)
 				.NotEmpty()
 				.MinimumLength(2);
-
-			RuleFor(x => x.Order)
-				.NotEmpty()
-				.GreaterThanOrEqualTo(1);
 		}
 	}
 }
