@@ -84,16 +84,17 @@ namespace TheStore.Domain.Tests
 		#region Product
 
 		[Theory]
-		[InlineData(null, "desc", "sdesc", "sku")]
-		[InlineData("name", null, "sdesc", "sku")]
-		[InlineData("name", "desc", null, "sku")]
-		[InlineData("name", "desc", "sdesc", null)]
-		public void Cant_Create_Valid_Product(string name, string description, string shortDescription, string sku)
+		[InlineData(0, null, "desc", "sdesc", "sku")]
+		[InlineData(1, null, "desc", "sdesc", "sku")]
+		[InlineData(1, "name", null, "sdesc", "sku")]
+		[InlineData(1, "name", "desc", null, "sku")]
+		[InlineData(1, "name", "desc", "sdesc", null)]
+		public void Cant_Create_Valid_Product(int categoryId, string name, string description, string shortDescription, string sku)
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
-			var action = () => new Product(name, description, shortDescription, sku, fixture.Create<Money>(), fixture.Create<InventoryRecord>());
+			var action = () => new SingleProduct(new CategoryId(categoryId), name, description, shortDescription, sku, fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			action.Should().Throw<Exception>();
 		}
@@ -104,7 +105,7 @@ namespace TheStore.Domain.Tests
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
-			var action = () => new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
+			var action = () => new SingleProduct(new CategoryId(1), "sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 
 			action.Should().NotThrow<Exception>();
 		}
@@ -116,7 +117,7 @@ namespace TheStore.Domain.Tests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
+			var sut = new SingleProduct(new CategoryId(1), "sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 			sut.AddOrUpdateColor(color);
 
 			sut.ProductColors.Should().Contain(color);
@@ -129,7 +130,7 @@ namespace TheStore.Domain.Tests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new Product("sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
+			var sut = new SingleProduct(new CategoryId(1), "sss", "sss", "sss", "sss", fixture.Create<Money>(), fixture.Create<InventoryRecord>());
 			sut.RemoveColor(color);
 
 			sut.ProductColors.Should().NotContain(color);
