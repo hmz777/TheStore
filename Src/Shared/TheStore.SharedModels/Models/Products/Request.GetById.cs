@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Products
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Products
 {
+	[DisplayName("Product.Single." + nameof(GetByIdRequest))]
 	public class GetByIdRequest : RequestBase
 	{
 		public const string RouteName = "SingleProducts.Id";

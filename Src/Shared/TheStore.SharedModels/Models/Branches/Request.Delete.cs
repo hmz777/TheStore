@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Branches
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Branches
 {
+	[DisplayName("Branch." + nameof(DeleteRequest))]
 	public class DeleteRequest : RequestBase
 	{
 		public const string RouteTemplate = "branches/{BranchId:int}";

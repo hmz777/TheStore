@@ -1,7 +1,9 @@
-﻿using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using System.ComponentModel;
+using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
+	[DisplayName(nameof(ProductDto))]
 	public class ProductDto : DtoBase
 	{
 		public int ProductId { get; set; }

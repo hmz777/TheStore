@@ -1,5 +1,9 @@
-﻿namespace TheStore.SharedModels.Models.ValueObjectsDtos
+﻿using System.ComponentModel;
+using TheStore.SharedModels.Models.Products;
+
+namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
+	[DisplayName(nameof(AddressDto))]
 	public class AddressDto : DtoBase
 	{
 		public string Country { get; set; }

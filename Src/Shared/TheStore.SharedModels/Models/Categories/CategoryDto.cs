@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Categories
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Categories
 {
+	[DisplayName(nameof(CategoryDto))]
 	public class CategoryDto : DtoBase
 	{
 		public int CategoryId { get; set; }

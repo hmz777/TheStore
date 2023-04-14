@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.ValueObjectsDtos
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
+	[DisplayName(nameof(ProductColorDto))]
 	public class ProductColorDto : DtoBase
 	{
 		public string ColorCode { get; set; }

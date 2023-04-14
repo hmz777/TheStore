@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Categories
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Categories
 {
+	[DisplayName("Category." + nameof(ListRequest))]
 	public class ListRequest : RequestBase
 	{
 		public const string RouteTemplate = "categories";

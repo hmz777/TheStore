@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using System.ComponentModel;
 using System.Reflection;
 using TheStore.ApiCommon.Data.Repository;
 using static TheStore.ApiCommon.Constants.Common.ConfigurationKeys;
@@ -175,7 +176,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			{
 				setup.SwaggerDoc("v1", new OpenApiInfo { Title = appName, Version = "v1" });
 				setup.EnableAnnotations();
-				setup.CustomSchemaIds(x => x.FullName);
+				setup.CustomSchemaIds(x => x.GetCustomAttributes<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
 			});
 
 			return webApplicationBuilder;

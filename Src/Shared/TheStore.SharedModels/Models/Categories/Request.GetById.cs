@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Categories
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Categories
 {
+	[DisplayName("Category." + nameof(GetByIdRequest))]
 	public class GetByIdRequest : RequestBase
 	{
 		public const string RouteName = "Categories.Id";

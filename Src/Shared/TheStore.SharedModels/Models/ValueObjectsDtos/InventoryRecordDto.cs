@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.ValueObjectsDtos
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
+	[DisplayName(nameof(InventoryRecordDto))]
 	public class InventoryRecordDto : DtoBase
 	{
 		public int AvailableStock { get; set; }

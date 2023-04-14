@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Categories
 {
+	[DisplayName("Category." + nameof(UpdateRequest))]
 	public class UpdateRequest : RequestBase
 	{
 		public const string RouteTemplate = "categories/{CategoryId:int}";

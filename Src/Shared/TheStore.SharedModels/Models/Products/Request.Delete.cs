@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Products
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Products
 {
+	[DisplayName("Product.Single." + nameof(DeleteRequest))]
 	public class DeleteRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/singleproducts/{ProductId:int}";

@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.ValueObjectsDtos
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
+	[DisplayName(nameof(ImageDto))]
 	public class ImageDto : DtoBase
 	{
 		public string StringFileUri { get; set; }

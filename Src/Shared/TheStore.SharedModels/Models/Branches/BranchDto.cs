@@ -1,7 +1,9 @@
-﻿using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using System.ComponentModel;
+using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Branches
 {
+	[DisplayName(nameof(BranchDto))]
 	public class BranchDto : DtoBase
 	{
 		public string Name { get; private set; }

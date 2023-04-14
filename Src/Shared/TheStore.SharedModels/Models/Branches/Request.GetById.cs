@@ -1,5 +1,8 @@
-﻿namespace TheStore.SharedModels.Models.Branches
+﻿using System.ComponentModel;
+
+namespace TheStore.SharedModels.Models.Branches
 {
+	[DisplayName("Branch." + nameof(GetByIdRequest))]
 	public class GetByIdRequest : RequestBase
 	{
 		public const string RouteName = "Branches.Id";

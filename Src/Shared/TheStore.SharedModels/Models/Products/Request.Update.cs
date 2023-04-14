@@ -1,7 +1,9 @@
-﻿using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using System.ComponentModel;
+using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
+	[DisplayName("Product.Single." + nameof(UpdateRequest))]
 	public class UpdateRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/singleproducts/{ProductId:int}";
