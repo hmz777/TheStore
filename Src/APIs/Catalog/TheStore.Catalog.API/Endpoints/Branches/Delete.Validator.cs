@@ -7,7 +7,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 	{
 		public DeleteValidator()
 		{
-			RuleFor(x => x.BrancheId)
+			RuleFor(x => x.BranchId)
 				.NotEmpty();
 		}
 	}

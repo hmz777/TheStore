@@ -48,13 +48,13 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update branch with id: {Id}", request.BrancheId);
+				log.Information("Update branch with id: {Id}", request.BranchId);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var branch = await apiRepository.GetByIdAsync(request.BrancheId, cancellationToken);
+			var branch = await apiRepository.GetByIdAsync(request.BranchId, cancellationToken);
 
 			if (branch == null)
 			{

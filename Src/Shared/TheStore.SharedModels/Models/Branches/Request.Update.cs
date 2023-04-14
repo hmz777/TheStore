@@ -14,13 +14,13 @@ namespace TheStore.SharedModels.Models.Branches
 		[FromBody]
 		public string Name { get; set; }
 
-		[FromBody
+		[FromBody]
 		public string Description { get; set; }
 
-		[FromBody
+		[FromBody]
 		public AddressDto Address { get; set; }
 
-		[FromBody
+		[FromBody]
 		public ImageDto Image { get; set; }
 	}
 }
