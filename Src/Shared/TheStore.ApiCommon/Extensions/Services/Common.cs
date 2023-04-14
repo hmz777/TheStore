@@ -104,7 +104,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var isKubernetes = configuration.GetValue<bool>(Deployment.IsKubernetes);
 			var isCompose = configuration.GetValue<bool>(Deployment.IsDockerCompose);
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
-			var dbName = appName ?? appName;
+			var dbName = databaseName ?? appName;
 
 			Log.Information("Add database context");
 
