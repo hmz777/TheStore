@@ -63,7 +63,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			if (category == null)
 				return NotFound();
 
-			return Ok(category);
+			return category;
 		}
 	}
 }

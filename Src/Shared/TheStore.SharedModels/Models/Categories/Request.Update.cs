@@ -20,5 +20,19 @@ namespace TheStore.SharedModels.Models.Categories
 
 		[FromBody]
 		public bool Active { get; set; }
+
+
+		public UpdateRequest()
+		{
+
+		}
+
+		public UpdateRequest(int categoryId, int order, string name, bool active)
+		{
+			CategoryId = categoryId;
+			Order = order;
+			Name = name;
+			Active = active;
+		}
 	}
 }
