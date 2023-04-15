@@ -105,7 +105,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var isKubernetes = configuration.GetValue<bool>(Deployment.IsKubernetes);
 			var isCompose = configuration.GetValue<bool>(Deployment.IsDockerCompose);
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
-			var dbName = databaseName ?? appName;
+			var dbName = databaseName ?? appName + "Db";
 
 			Log.Information("Add database context");
 
@@ -119,7 +119,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", $"{dbName}Db"));
+					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", dbName));
 				});
 			}
 			else if (isCompose)
@@ -129,7 +129,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", $"{dbName}Db"));
+					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", dbName));
 				});
 			}
 			else
@@ -140,7 +140,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				services.AddDbContext<TContext>(options =>
 				{
 					options
-					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName}Db;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
 				});
 			}
 
