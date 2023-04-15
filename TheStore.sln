@@ -47,11 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Endpoints.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cart", "Cart", "{9FBD291B-AD96-410A-AB57-95222C857986}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Cart.API", "Src\APIs\Cart\TheStore.Cart.API\TheStore.Cart.API.csproj", "{FF55B067-6D2F-4E73-A1E7-CDCEF25DD9EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.API", "Src\APIs\Cart\TheStore.Cart.API\TheStore.Cart.API.csproj", "{FF55B067-6D2F-4E73-A1E7-CDCEF25DD9EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Cart.Core", "Src\APIs\Cart\TheStore.Cart.Core\TheStore.Cart.Core.csproj", "{BCA909F9-B1CC-4B28-BB08-2D288DCA3619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Core", "Src\APIs\Cart\TheStore.Cart.Core\TheStore.Cart.Core.csproj", "{BCA909F9-B1CC-4B28-BB08-2D288DCA3619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Cart.Infrastructure", "Src\APIs\Cart\TheStore.Cart.Infrastructure\TheStore.Cart.Infrastructure.csproj", "{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Infrastructure", "Src\APIs\Cart\TheStore.Cart.Infrastructure\TheStore.Cart.Infrastructure.csproj", "{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
