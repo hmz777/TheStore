@@ -16,7 +16,7 @@ namespace TheStore.Domain.Tests.AutoData.Specimens
 
             return request switch
             {
-                ParameterInfo p when p.ParameterType == typeof(string) && p.Name.Contains("Color", StringComparison.InvariantCultureIgnoreCase) => $"#{random.Next(0x1000000):X6}",
+                ParameterInfo p when p.ParameterType == typeof(string) && p.Name.ToLower().Contains("color", StringComparison.InvariantCultureIgnoreCase) => $"#{random.Next(0x1000000):X6}",
                 _ => new NoSpecimen()
             };
         }

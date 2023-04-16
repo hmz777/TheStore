@@ -9,8 +9,8 @@ using TheStore.Catalog.API.Endpoints.Categories;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Endpoints.Tests.AutoData.DomainCustomizations;
-using TheStore.Endpoints.Tests.AutoData.ServiceCustomizations;
+using TheStore.Endpoints.Tests.AutoData.Endpoints;
+using TheStore.Endpoints.Tests.AutoData.Services;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Endpoints.Tests.UnitTests.Categories
@@ -22,7 +22,7 @@ namespace TheStore.Endpoints.Tests.UnitTests.Categories
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization());
-			fixture.Customize(new DomainCustomization());
+			fixture.Customize(new EndpointsCustomization());
 
 			var request = new ListRequest(1, 10);
 
@@ -42,7 +42,7 @@ namespace TheStore.Endpoints.Tests.UnitTests.Categories
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization());
-			fixture.Customize(new DomainCustomization());
+			fixture.Customize(new EndpointsCustomization());
 
 			var request = new GetByIdRequest(fixture.Create<int>());
 			var category = fixture.Create<Category>();
@@ -64,7 +64,7 @@ namespace TheStore.Endpoints.Tests.UnitTests.Categories
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization());
-			fixture.Customize(new DomainCustomization());
+			fixture.Customize(new EndpointsCustomization());
 
 			var request = new DeleteRequest(fixture.Create<int>());
 			var category = fixture.Create<Category>();
@@ -86,7 +86,7 @@ namespace TheStore.Endpoints.Tests.UnitTests.Categories
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization());
-			fixture.Customize(new DomainCustomization());
+			fixture.Customize(new EndpointsCustomization());
 
 			var request = new UpdateRequest(fixture.Create<int>(), fixture.Create<int>(), fixture.Create<string>(), false);
 			var category = fixture.Create<Category>();
@@ -108,7 +108,7 @@ namespace TheStore.Endpoints.Tests.UnitTests.Categories
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization());
-			fixture.Customize(new DomainCustomization());
+			fixture.Customize(new EndpointsCustomization());
 
 			fixture.Freeze<string>("Category Name");
 			fixture.Freeze<int>(1);
