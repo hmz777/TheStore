@@ -2,7 +2,7 @@
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 
-namespace TheStore.Endpoints.Tests.AutoData.DomainCustomizations
+namespace TheStore.Endpoints.Tests.AutoData.Endpoints
 {
 	public class CategoryCustomization : ICustomization
 	{
