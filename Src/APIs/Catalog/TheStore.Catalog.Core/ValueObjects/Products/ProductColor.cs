@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
+using System.Collections.ObjectModel;
 
 namespace TheStore.Catalog.Core.ValueObjects.Products
 {
@@ -8,18 +9,18 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		public string ColorCode { get; private set; }
 
 		private List<Image> images = new();
-		public IReadOnlyCollection<Image> Images => images.AsReadOnly();
+		public ReadOnlyCollection<Image> Images => images.AsReadOnly();
 
 		// Ef Core
 		private ProductColor()
-        {
-            
-        }
+		{
 
-        public ProductColor(string colorCode, List<Image> images)
+		}
+
+		public ProductColor(string colorCode, List<Image> images)
 		{
 			Guard.Against.NullOrWhiteSpace(colorCode, nameof(colorCode));
-			Guard.Against.InvalidFormat(colorCode, nameof(colorCode), "^#(?:[0-9a-fA-F]{3,4}){1,2}$");
+			Guard.Against.InvalidFormat(colorCode, nameof(colorCode), regexPattern: "^#(?:[0-9a-fA-F]{3,4}){1,2}$");
 
 			ColorCode = colorCode;
 			this.images = images ?? new List<Image>();

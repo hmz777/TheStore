@@ -38,7 +38,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			string sku,
 			Money price,
 			InventoryRecord inventory,
-			List<ProductColor>? productColors = null)
+			List<ProductColor> productColors)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
 			Guard.Against.NullOrWhiteSpace(name, nameof(name));
