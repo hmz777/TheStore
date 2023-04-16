@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Branches
@@ -10,19 +9,19 @@ namespace TheStore.SharedModels.Models.Branches
 		public const string RouteTemplate = "branches/{BranchId:int}";
 		public override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
 
-		[FromRoute]
+		//[FromRoute]
 		public int BranchId { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public string Name { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public string Description { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public AddressDto Address { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public ImageDto Image { get; set; }
 	}
 }

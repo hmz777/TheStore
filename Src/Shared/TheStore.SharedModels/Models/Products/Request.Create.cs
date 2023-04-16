@@ -17,5 +17,30 @@ namespace TheStore.SharedModels.Models.Products
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }
 		public List<ProductColorDto> ProductColors { get; set; }
+
+		public CreateRequest()
+		{
+
+		}
+
+		public CreateRequest(
+			int categoryId,
+			string name,
+			string description,
+			string shortDescription,
+			string sku,
+			MoneyDto price,
+			InventoryRecordDto inventory,
+			List<ProductColorDto> productColors)
+		{
+			CategoryId = categoryId;
+			Name = name;
+			Description = description;
+			ShortDescription = shortDescription;
+			Sku = sku;
+			Price = price;
+			Inventory = inventory;
+			ProductColors = productColors;
+		}
 	}
 }

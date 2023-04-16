@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Categories
 {
@@ -9,16 +8,16 @@ namespace TheStore.SharedModels.Models.Categories
 		public const string RouteTemplate = "categories/{CategoryId:int}";
 		public override string Route => RouteTemplate.Replace("{CategoryId:int}", CategoryId.ToString());
 
-		[FromRoute]
+		//[FromRoute]
 		public int CategoryId { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public int Order { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public string Name { get; set; }
 
-		[FromBody]
+		//[FromBody]
 		public bool Active { get; set; }
 
 
