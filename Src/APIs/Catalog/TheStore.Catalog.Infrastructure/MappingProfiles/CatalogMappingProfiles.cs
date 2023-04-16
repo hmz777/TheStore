@@ -25,20 +25,26 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			// Single Products
 			CreateMap<SingleProduct, ProductDto>()
-				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id));
+				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
+				.ForMember(dest => dest.ProductColors, opt => opt.MapFrom("productColors"));
 
 			CreateMap<SharedModels.Models.Products.CreateRequest, SingleProduct>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
+				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors));
 
 			CreateMap<SharedModels.Models.Products.UpdateRequest, SingleProduct>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
+				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors));
 
 			// Value Objects
 			CreateMap<Money, MoneyDto>().ReverseMap();
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
-			CreateMap<ProductColor, ProductColorDto>().ReverseMap();
+			CreateMap<ProductColor, ProductColorDto>()
+				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
+				.ReverseMap()
+				.ForMember("images", opt => opt.MapFrom(src => src.Images));
 
 			// Branches
 			CreateMap<Branch, BranchDto>();
