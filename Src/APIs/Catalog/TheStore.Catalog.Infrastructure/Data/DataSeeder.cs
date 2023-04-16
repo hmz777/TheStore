@@ -5,6 +5,7 @@ using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
+using TheStore.Catalog.Core.ValueObjects.Products;
 
 namespace TheStore.Catalog.Infrastructure.Data
 {
@@ -58,7 +59,14 @@ namespace TheStore.Catalog.Infrastructure.Data
 							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 							$"SKU{i}{j}",
 							new Money(50 * i * j, Currency.Usd),
-							new InventoryRecord(50, 5, 100, 0, false)));
+							new InventoryRecord(50, 5, 100, 0, false),
+							new List<ProductColor>
+							{
+								new ProductColor("#000000",new List<Image>()
+								{
+									new Image("https://www.site.com/file.png","image alt")
+								})
+							}));
 				}
 			}
 
