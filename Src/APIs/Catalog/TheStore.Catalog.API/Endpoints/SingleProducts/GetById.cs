@@ -63,7 +63,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			if (singleProduct == null)
 				return NotFound();
 
-			return Ok(singleProduct);
+			return singleProduct;
 		}
 	}
 }
