@@ -191,6 +191,8 @@ namespace TheStore.ApiCommon.Extensions.Services
 			{
 				automapper.AddCollectionMappers();
 				automapper.UseEntityFrameworkCoreModel<TContext>(serviceProvider);
+				automapper.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
+				automapper.ShouldMapField = p => p.IsPublic || p.IsAssembly;
 
 			}, assemblies);
 
