@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -152,6 +153,9 @@ coverage*.info
 *.coveragexml
 
 # NCrunch
+*.ncrunchproject
+*.ncrunchsolution
+*ncrunch*
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*

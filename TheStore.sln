@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2F1741F4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{EF50387F-6517-444C-9456-D84AB11B1BA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Domain.Tests", "Tests\TheStore.Domain.Tests\TheStore.Domain.Tests.csproj", "{0763FA90-4179-4745-9919-0731D8ABB2C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Domain.UnitTests", "Tests\TheStore.Domain.UnitTests\TheStore.Domain.UnitTests.csproj", "{0763FA90-4179-4745-9919-0731D8ABB2C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Blazor.Server", "Src\Web\TheStore.Blazor\Server\TheStore.Blazor.Server.csproj", "{C20F03F5-D1CE-48C4-9753-51359E0E1A36}"
 EndProject
@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{5B5603
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVC", "MVC", "{361C50FD-3A23-4221-999D-3AE9E8529B5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Endpoints.Tests", "Tests\TheStore.Endpoints.Tests\TheStore.Endpoints.Tests.csproj", "{0537A38C-8F07-4ABF-9D4A-509A616A8861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Endpoints.UnitTests", "Tests\TheStore.Endpoints.UnitTests\TheStore.Endpoints.UnitTests.csproj", "{0537A38C-8F07-4ABF-9D4A-509A616A8861}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cart", "Cart", "{9FBD291B-AD96-410A-AB57-95222C857986}"
 EndProject
@@ -52,6 +52,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Core", "Src\APIs\Cart\TheStore.Cart.Core\TheStore.Cart.Core.csproj", "{BCA909F9-B1CC-4B28-BB08-2D288DCA3619}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Infrastructure", "Src\APIs\Cart\TheStore.Cart.Infrastructure\TheStore.Cart.Infrastructure.csproj", "{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Endpoints.IntegrationTests", "Tests\TheStore.Endpoints.IntegrationTests\TheStore.Endpoints.IntegrationTests.csproj", "{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +121,10 @@ Global
 		{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91B19D88-6892-4A8B-9E85-DD0730B4DA9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +153,7 @@ Global
 		{FF55B067-6D2F-4E73-A1E7-CDCEF25DD9EA} = {9FBD291B-AD96-410A-AB57-95222C857986}
 		{BCA909F9-B1CC-4B28-BB08-2D288DCA3619} = {9FBD291B-AD96-410A-AB57-95222C857986}
 		{91B19D88-6892-4A8B-9E85-DD0730B4DA9E} = {9FBD291B-AD96-410A-AB57-95222C857986}
+		{68BF518C-7DF4-4974-8DF4-DD1A94DD95A6} = {2F1741F4-42FC-4946-A986-C4A4279E9D91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7A7C7C9-F2EC-4506-971E-2184B411D9F6}

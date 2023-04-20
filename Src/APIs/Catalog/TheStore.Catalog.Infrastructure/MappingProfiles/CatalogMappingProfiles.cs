@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TheStore.ApiCommon.Data.Helpers;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -20,7 +21,13 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Category, CategoryDto>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id.Id));
 
-			CreateMap<SharedModels.Models.Categories.CreateRequest, Category>();
+			CreateMap<SharedModels.Models.Categories.CreateRequest, Category>()
+				.ForMember(dest => dest.Id, opt =>
+				{
+					if (DatabaseHelpers.RunningOnInMemoryDatabase == false)
+						opt.Ignore();
+				});
+
 			CreateMap<SharedModels.Models.Categories.UpdateRequest, Category>();
 
 			// Single Products
@@ -30,11 +37,22 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			CreateMap<SharedModels.Models.Products.CreateRequest, SingleProduct>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
-				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors));
+				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors))
+				.ForMember(dest => dest.ProductColors, opt => opt.Ignore())
+				.ForMember(dest => dest.Id, opt =>
+				{
+					if (DatabaseHelpers.RunningOnInMemoryDatabase == false)
+						opt.Ignore();
+				});
 
 			CreateMap<SharedModels.Models.Products.UpdateRequest, SingleProduct>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
-				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors));
+				.ForMember("productColors", opt => opt.MapFrom(src => src.ProductColors))
+				.ForMember(dest => dest.ProductColors, opt =>
+				{
+					if (DatabaseHelpers.RunningOnInMemoryDatabase == false)
+						opt.Ignore();
+				});
 
 			// Value Objects
 			CreateMap<Money, MoneyDto>().ReverseMap();
@@ -48,7 +66,13 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			// Branches
 			CreateMap<Branch, BranchDto>();
-			CreateMap<SharedModels.Models.Branches.CreateRequest, Branch>();
+			CreateMap<SharedModels.Models.Branches.CreateRequest, Branch>()
+					.ForMember(dest => dest.Id, opt =>
+					{
+						if (DatabaseHelpers.RunningOnInMemoryDatabase == false)
+							opt.Ignore();
+					});
+
 			CreateMap<SharedModels.Models.Branches.UpdateRequest, Branch>();
 
 			// Value Objects

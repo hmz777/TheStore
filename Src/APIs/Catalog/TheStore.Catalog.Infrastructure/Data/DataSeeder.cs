@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Interfaces;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
@@ -13,37 +14,48 @@ namespace TheStore.Catalog.Infrastructure.Data
 	{
 		public async Task SeedDataAsync(CatalogDbContext context)
 		{
-			if (await context.Categories.AnyAsync() == false)
-			{
-				await context.Categories.AddRangeAsync(GenerateCategories());
-			}
-
-			if (await context.SingleProducts.AnyAsync() == false)
-			{
-				await context.SingleProducts.AddRangeAsync(GenerateSingleProducts());
-			}
-
-			if (await context.Branches.AnyAsync() == false)
-			{
-				await context.Branches.AddRangeAsync(GenerateBranches());
-			}
-
+			await InsertData(context, context.IsInMemoryDatabaseUsed());
 			await context.SaveChangesAsync();
 		}
 
-		private List<Category> GenerateCategories()
+		private async Task InsertData(CatalogDbContext context, bool insertKeys = false)
+		{
+			if (await context.Categories.AnyAsync() == false)
+			{
+				await context.Categories.AddRangeAsync(GenerateCategories(insertKeys));
+			}
+
+			//if (await context.SingleProducts.AnyAsync() == false)
+			//{
+			//	await context.SingleProducts.AddRangeAsync(GenerateSingleProducts(insertKeys));
+			//}
+
+			//if (await context.Branches.AnyAsync() == false)
+			//{
+			//	await context.Branches.AddRangeAsync(GenerateBranches(insertKeys));
+			//}
+		}
+
+		private List<Category> GenerateCategories(bool insertKeys)
 		{
 			var categories = new List<Category>();
 
 			for (int i = 0; i < 20; i++)
 			{
-				categories.Add(new Category(i + 1, $"Category {i + 1}", true));
+				var category = new Category(i + 1, $"Category {i + 1}", true);
+
+				if (insertKeys)
+				{
+					category.Id = new CategoryId(i);
+				}
+
+				categories.Add(category);
 			}
 
 			return categories;
 		}
 
-		private List<SingleProduct> GenerateSingleProducts()
+		private List<SingleProduct> GenerateSingleProducts(bool insertKeys)
 		{
 			var singleProducts = new List<SingleProduct>();
 
@@ -73,7 +85,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 			return singleProducts;
 		}
 
-		private List<Branch> GenerateBranches()
+		private List<Branch> GenerateBranches(bool insertKeys)
 		{
 			var branches = new List<Branch>();
 

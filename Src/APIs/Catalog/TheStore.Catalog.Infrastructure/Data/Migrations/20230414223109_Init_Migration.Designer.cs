@@ -11,7 +11,7 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20230412164328_Init_Migration")]
+    [Migration("20230414223109_Init_Migration")]
     partial class Init_Migration
     {
         /// <inheritdoc />

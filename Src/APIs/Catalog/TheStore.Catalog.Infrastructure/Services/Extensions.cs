@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
+using TheStore.Catalog.Infrastructure.Data;
 
 namespace TheStore.Catalog.Infrastructure.Services
 {
@@ -14,7 +15,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 		{
 			webApplicationBuilder.ConfigureLogging();
 			webApplicationBuilder.PlatformDetect();
-			webApplicationBuilder.ConfigureDataAccess<TContext>("CatalogDb");
+			webApplicationBuilder.ConfigureDataAccess<TContext>(Constants.DatabaseName);
 			webApplicationBuilder.ConfigureApi();
 			webApplicationBuilder.ConfigureSwagger();
 			//webApplicationBuilder.ConfigureJwtAuthorization();
