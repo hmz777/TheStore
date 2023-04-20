@@ -22,7 +22,6 @@ namespace TheStore.Endpoints.IntegrationTests.WebApplication
 				services.AddDbContext<CatalogDbContext>((container, options) =>
 				{
 					dockerSqlServerDatabase = new DockerSqlServerDatabaseHelper();
-
 					dockerSqlServerDatabase.StartDatabaseServer().Wait();
 
 					options.UseSqlServer(
@@ -44,8 +43,6 @@ namespace TheStore.Endpoints.IntegrationTests.WebApplication
 		{
 			await dockerSqlServerDatabase.DisposeAsync();
 			await base.DisposeAsync();
-
-			return;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using Docker.DotNet;
 using Docker.DotNet.Models;
-using Xunit.Sdk;
 
 namespace TheStore.Endpoints.IntegrationTests.Helpers
 {
@@ -66,7 +65,7 @@ namespace TheStore.Endpoints.IntegrationTests.Helpers
 			DatabaseServerStarted = true;
 
 			// Wait for the container to start
-			await Task.Delay(3000, cancellationToken);
+			await Task.Delay(6000, cancellationToken);
 		}
 
 		public async Task StopDatabaseServer(CancellationToken cancellationToken = default)

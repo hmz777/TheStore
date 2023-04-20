@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TheStore.Endpoints.Tests\TheStore.Endpoints.UnitTests.csproj" />
+    <ProjectReference Include="..\TheStore.Endpoints.UnitTests\TheStore.Endpoints.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>
