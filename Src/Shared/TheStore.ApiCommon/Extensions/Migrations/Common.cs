@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Extensions.Migrations;
 
 namespace TheStore.ApiCommon.Extensions.Migrations
@@ -16,7 +17,11 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 				var serviceProvider = scope.ServiceProvider;
 				var context = serviceProvider.GetRequiredService<TContext>();
 
-				context?.Database.Migrate();
+				if (context.IsInMemoryDatabaseUsed() == false)
+				{
+					//context?.Database.Migrate();
+					context.Database.EnsureCreated();
+				}
 			}
 		}
 	}

@@ -91,7 +91,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					   .Enrich.WithEnvironmentName()
 					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
 				}
-			});
+			}, preserveStaticLogger: true);
 
 			return webApplicationBuilder;
 		}

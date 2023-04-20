@@ -6,7 +6,7 @@ using TheStore.SharedModels.Models;
 
 namespace TheStore.ApiCommon.Data.Helpers
 {
-	public class RepositoryHelpers
+	public static class RepositoryHelpers
 	{
 		public async static Task PropertyUpdateAsync<TViewModel, TEntity, TContext>(
 			TViewModel viewModel, TEntity entity, IMapper mapper, IApiRepository<TContext, TEntity> repository)
