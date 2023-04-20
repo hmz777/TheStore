@@ -62,7 +62,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			if (branch == null)
 				return NotFound();
 
-			return Ok(branch);
+			return branch;
 		}
 	}
 }
