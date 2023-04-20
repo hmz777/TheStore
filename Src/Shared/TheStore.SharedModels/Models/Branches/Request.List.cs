@@ -11,5 +11,16 @@ namespace TheStore.SharedModels.Models.Branches
 
 		public int Page { get; set; } = 1;
 		public int Take { get; set; } = 12;
+
+		public ListRequest()
+		{
+
+		}
+
+		public ListRequest(int page, int take)
+		{
+			Page = page;
+			Take = take;
+		}
 	}
 }
