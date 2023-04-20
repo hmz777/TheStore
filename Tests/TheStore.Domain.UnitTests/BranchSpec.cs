@@ -2,7 +2,7 @@
 using FluentAssertions;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.ValueObjects;
-using TheStore.Domain.Tests.AutoData.Customizations;
+using TheStore.Domain.UnitTests.AutoData.Customizations;
 
 namespace TheStore.Domain.UnitTests
 {

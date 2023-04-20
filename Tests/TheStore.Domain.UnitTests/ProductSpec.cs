@@ -4,7 +4,7 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
-using TheStore.Domain.Tests.AutoData.Customizations;
+using TheStore.Domain.UnitTests.AutoData.Customizations;
 
 namespace TheStore.Domain.UnitTests
 {
