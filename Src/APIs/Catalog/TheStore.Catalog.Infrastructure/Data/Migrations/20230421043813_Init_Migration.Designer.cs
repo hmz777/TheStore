@@ -11,7 +11,7 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20230414223109_Init_Migration")]
+    [Migration("20230421043813_Init_Migration")]
     partial class Init_Migration
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -306,7 +306,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("SingleProductId");
 
-                            b1.OwnsMany("TheStore.Catalog.Core.ValueObjects.Image", "Images", b2 =>
+                            b1.OwnsMany("TheStore.Catalog.Core.ValueObjects.Image", "images", b2 =>
                                 {
                                     b2.Property<int>("ProductColorSingleProductId")
                                         .HasColumnType("int");
@@ -330,13 +330,13 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("ProductColorSingleProductId", "ProductColorId", "Id");
 
-                                    b2.ToTable("ProductColor_Images");
+                                    b2.ToTable("ProductColor_images");
 
                                     b2.WithOwner()
                                         .HasForeignKey("ProductColorSingleProductId", "ProductColorId");
                                 });
 
-                            b1.Navigation("Images");
+                            b1.Navigation("images");
                         });
 
                     b.Navigation("Inventory")

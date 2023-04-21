@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheStore.Catalog.Core.ValueObjects.Products
 {
@@ -9,6 +10,8 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		public string ColorCode { get; private set; }
 
 		private List<Image> images = new();
+
+		[NotMapped]
 		public ReadOnlyCollection<Image> Images => images.AsReadOnly();
 
 		// Ef Core

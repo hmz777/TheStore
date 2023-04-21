@@ -112,7 +112,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductColor_Images",
+                name: "ProductColor_images",
                 columns: table => new
                 {
                     ProductColorSingleProductId = table.Column<int>(type: "int", nullable: false),
@@ -124,9 +124,9 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductColor_Images", x => new { x.ProductColorSingleProductId, x.ProductColorId, x.Id });
+                    table.PrimaryKey("PK_ProductColor_images", x => new { x.ProductColorSingleProductId, x.ProductColorId, x.Id });
                     table.ForeignKey(
-                        name: "FK_ProductColor_Images_ProductColor_ProductColorSingleProductId_ProductColorId",
+                        name: "FK_ProductColor_images_ProductColor_ProductColorSingleProductId_ProductColorId",
                         columns: x => new { x.ProductColorSingleProductId, x.ProductColorId },
                         principalTable: "ProductColor",
                         principalColumns: new[] { "SingleProductId", "Id" },
@@ -149,7 +149,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "ProductColor_Images");
+                name: "ProductColor_images");
 
             migrationBuilder.DropTable(
                 name: "ProductId");

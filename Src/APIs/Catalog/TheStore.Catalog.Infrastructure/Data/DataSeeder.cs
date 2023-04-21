@@ -14,7 +14,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 	{
 		public async Task SeedDataAsync(CatalogDbContext context)
 		{
-			await InsertData(context, context.IsInMemoryDatabaseUsed());
+			await InsertData(context, false);
 			await context.SaveChangesAsync();
 		}
 
@@ -25,15 +25,15 @@ namespace TheStore.Catalog.Infrastructure.Data
 				await context.Categories.AddRangeAsync(GenerateCategories(insertKeys));
 			}
 
-			//if (await context.SingleProducts.AnyAsync() == false)
-			//{
-			//	await context.SingleProducts.AddRangeAsync(GenerateSingleProducts(insertKeys));
-			//}
+			if (await context.SingleProducts.AnyAsync() == false)
+			{
+				await context.SingleProducts.AddRangeAsync(GenerateSingleProducts(insertKeys));
+			}
 
-			//if (await context.Branches.AnyAsync() == false)
-			//{
-			//	await context.Branches.AddRangeAsync(GenerateBranches(insertKeys));
-			//}
+			if (await context.Branches.AnyAsync() == false)
+			{
+				await context.Branches.AddRangeAsync(GenerateBranches(insertKeys));
+			}
 		}
 
 		private List<Category> GenerateCategories(bool insertKeys)
@@ -63,9 +63,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 			{
 				for (int j = 0; j < 5; j++)
 				{
-					singleProducts.Add(
-						new SingleProduct(
-							new CategoryId(i),
+					var singleProduct = new SingleProduct(
+							new CategoryId(i + 1),
 							$"Product {j}",
 							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
 							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -78,7 +77,14 @@ namespace TheStore.Catalog.Infrastructure.Data
 								{
 									new Image("https://www.site.com/file.png","image alt")
 								})
-							}));
+							});
+
+					if (insertKeys)
+					{
+						singleProduct.Id = new ProductId(i + 1);
+					}
+
+					singleProducts.Add(singleProduct);
 				}
 			}
 
@@ -91,12 +97,18 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			for (int i = 0; i < 20; i++)
 			{
-				branches.Add(
-					new Branch(
+				var branch = new Branch(
 					$"Branch {i + 1}",
 					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 					new Address("Syria", "Tartus", "Barranieh", $"ZIP{i}", new Coordinate(0, 0)),
-					new Image("https://placehold.co/600x400.png", "Placeholder image")));
+					new Image("https://placehold.co/600x400.png", "Placeholder image"));
+
+				if (insertKeys)
+				{
+					branch.Id = i + 1;
+				}
+
+				branches.Add(branch);
 			}
 
 			return branches;
