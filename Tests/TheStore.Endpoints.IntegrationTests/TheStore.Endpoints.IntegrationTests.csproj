@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Branches\" />
     <Folder Include="Products\" />
   </ItemGroup>
 
