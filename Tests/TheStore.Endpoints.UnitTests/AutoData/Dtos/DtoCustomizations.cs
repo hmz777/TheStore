@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using TheStore.Endpoints.UnitTests.AutoData.Services;
 
 namespace TheStore.Endpoints.UnitTests.AutoData.Dtos
 {
@@ -6,6 +7,7 @@ namespace TheStore.Endpoints.UnitTests.AutoData.Dtos
 	{
 		public void Customize(IFixture fixture)
 		{
+			fixture.Customize(new AutoMapperCustomization());
 			fixture.Customize(new ImageDtoCustomization());
 			fixture.Customize(new InventoryRecordDtoCustomization());
 			fixture.Customize(new MoneyDtoCustomization());
