@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Products\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TheStore.Endpoints.UnitTests\TheStore.Endpoints.UnitTests.csproj" />
   </ItemGroup>
 
