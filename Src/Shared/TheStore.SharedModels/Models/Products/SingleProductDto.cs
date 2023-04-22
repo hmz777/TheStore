@@ -3,8 +3,8 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName(nameof(ProductDto))]
-	public class ProductDto : DtoBase
+	[DisplayName(nameof(SingleProductDto))]
+	public class SingleProductDto : DtoBase
 	{
 		public int ProductId { get; set; }
 		public string Name { get; set; }

@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<ProductDto>>
+		.WithActionResult<List<SingleProductDto>>
 	{
 		private readonly IValidator<ListRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, SingleProduct> repository;
@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			Description = "Lists single products with pagination using skip and take",
 			OperationId = "Product.List",
 			Tags = new[] { "Products" })]
-		public async override Task<ActionResult<List<ProductDto>>> HandleAsync(
+		public async override Task<ActionResult<List<SingleProductDto>>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -57,7 +57,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var products = (await repository
 				.ListAsync(new ListSingleProductsPaginationReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<SingleProduct, ProductDto>(mapper);
+				.Map<SingleProduct, SingleProductDto>(mapper);
 
 			return products;
 		}

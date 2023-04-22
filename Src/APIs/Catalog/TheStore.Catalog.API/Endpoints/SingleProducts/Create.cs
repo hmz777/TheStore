@@ -16,7 +16,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class Create : EndpointBaseAsync
 		.WithRequest<CreateRequest>
-		.WithActionResult<ProductDto>
+		.WithActionResult<SingleProductDto>
 	{
 		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, SingleProduct> apiRepository;
@@ -41,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		   Description = "Creates a single product",
 		   OperationId = "Product.Single.Create",
 		   Tags = new[] { "Products" })]
-		public async override Task<ActionResult<ProductDto>> HandleAsync(
+		public async override Task<ActionResult<SingleProductDto>> HandleAsync(
 		[FromBody] CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var singleProduct = await apiRepository.AddAsync(mapper.Map<SingleProduct>(request), cancellationToken);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductDto>(singleProduct));
+			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<SingleProductDto>(singleProduct));
 		}
 	}
 }

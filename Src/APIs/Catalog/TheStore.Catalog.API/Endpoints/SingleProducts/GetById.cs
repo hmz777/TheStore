@@ -19,7 +19,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetByIdRequest>
-		.WithActionResult<ProductDto>
+		.WithActionResult<SingleProductDto>
 	{
 		private readonly IValidator<GetByIdRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, SingleProduct> repository;
@@ -45,7 +45,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			Description = "Gets a single product by id",
 			OperationId = "Product.Single.GetById",
 			Tags = new[] { "Products" })]
-		public async override Task<ActionResult<ProductDto>> HandleAsync(
+		public async override Task<ActionResult<SingleProductDto>> HandleAsync(
 		[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -58,7 +58,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			var singleProduct = (await repository
 				.FirstOrDefaultAsync(new GetSingleProductByIdReadSpec(new ProductId(request.ProductId)), cancellationToken))
-				.Map<SingleProduct, ProductDto>(mapper);
+				.Map<SingleProduct, SingleProductDto>(mapper);
 
 			if (singleProduct == null)
 				return NotFound();
