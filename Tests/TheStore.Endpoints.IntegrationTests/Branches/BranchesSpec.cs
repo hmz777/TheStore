@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using TheStore.Endpoints.IntegrationTests.WebApplication;
+using TheStore.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Endpoints.IntegrationTests.Branches
@@ -39,6 +40,7 @@ namespace TheStore.Endpoints.IntegrationTests.Branches
 		public async Task Can_Create_Branch()
 		{
 			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
@@ -52,6 +54,7 @@ namespace TheStore.Endpoints.IntegrationTests.Branches
 		public async Task Can_Update_Branch()
 		{
 			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
 			var request = fixture.Create<UpdateRequest>();
 			request.BranchId = 1;
 

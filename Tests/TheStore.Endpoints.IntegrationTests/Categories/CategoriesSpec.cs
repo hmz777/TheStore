@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using TheStore.Endpoints.IntegrationTests.WebApplication;
+using TheStore.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Endpoints.IntegrationTests.Categories
@@ -39,10 +40,11 @@ namespace TheStore.Endpoints.IntegrationTests.Categories
 		public async Task Can_Create_Category()
 		{
 			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
-				.PostAsJsonAsync(CreateRequest.RouteTemplate, request);
+				.PostAsJsonAsync(request.Route, request);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 			response.Headers.Location.Should().NotBeNull();
@@ -52,6 +54,7 @@ namespace TheStore.Endpoints.IntegrationTests.Categories
 		public async Task Can_Update_Category()
 		{
 			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
 			var request = fixture.Create<UpdateRequest>();
 			request.CategoryId = 1;
 
