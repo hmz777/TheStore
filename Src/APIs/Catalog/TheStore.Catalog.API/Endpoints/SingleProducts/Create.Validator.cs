@@ -27,6 +27,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			RuleFor(x => x.Inventory)
 				.NotEmpty();
+
+			RuleFor(x => x.ProductColors)
+				.NotEmpty();
 		}
 	}
 }
