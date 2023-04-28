@@ -11,7 +11,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public string StringFileUri { get; private set; }
 
 		[NotMapped]
-		public string FileNameWithExtension => Path.GetExtension(FileUri.AbsoluteUri);
+		public string FileNameWithExtension => Path.GetFileName(FileUri.AbsoluteUri);
 		public string Alt { get; private set; }
 
 		// Ef Core

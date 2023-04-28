@@ -42,7 +42,10 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Money, MoneyDto>().ReverseMap();
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
-			CreateMap<Image, ImageDto>().ReverseMap();
+			CreateMap<Image, ImageDto>()
+				.ForMember(dest => dest.File, opt => opt.Ignore())
+				.ReverseMap();
+
 			CreateMap<ProductColor, ProductColorDto>()
 				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
 				.ReverseMap()
