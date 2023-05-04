@@ -3,16 +3,20 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.API.Validators
 {
-	public class ProductColorValidator : AbstractValidator<ProductColorDto>
+	public class UpdatedProductColorValidator : AbstractValidator<UpdateProductColorDto>
 	{
-		public ProductColorValidator()
+		public UpdatedProductColorValidator()
 		{
 			RuleFor(x => x.ColorCode)
 				.NotEmpty();
 
 			RuleFor(x => x.Images)
 				.NotEmpty()
-				.DependentRules(() => RuleForEach(x => x.Images).SetValidator(x => new ImageValidator()));
+				.DependentRules(() =>
+				{
+					RuleForEach(x => x.Images)
+						.SetValidator(x => new ImageValidator());
+				});
 		}
 	}
 }

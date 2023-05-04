@@ -3,7 +3,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.API.Validators
 {
-	public class ImageValidator : AbstractValidator<ImageDto>
+	public class ImageValidator : AbstractValidator<UpdateImageDto>
 	{
 		public ImageValidator()
 		{
