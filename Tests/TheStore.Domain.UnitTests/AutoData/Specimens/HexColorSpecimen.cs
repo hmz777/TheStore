@@ -1,10 +1,5 @@
 ﻿using AutoFixture.Kernel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheStore.Domain.UnitTests.AutoData.Specimens
 {
@@ -16,7 +11,16 @@ namespace TheStore.Domain.UnitTests.AutoData.Specimens
 
 			return request switch
 			{
-				ParameterInfo p when p.ParameterType == typeof(string) && p.Name.ToLower().Contains("color", StringComparison.InvariantCultureIgnoreCase) => $"#{random.Next(0x1000000):X6}",
+				ParameterInfo p
+				when p.ParameterType == typeof(string) &&
+				p.Name.Contains("Color", StringComparison.InvariantCultureIgnoreCase) =>
+				$"#{random.Next(0x1000000):X6}",
+
+				PropertyInfo p
+				when p.PropertyType == typeof(string) &&
+				p.Name.Contains("Color", StringComparison.InvariantCultureIgnoreCase) =>
+				$"#{random.Next(0x1000000):X6}",
+
 				_ => new NoSpecimen()
 			};
 		}

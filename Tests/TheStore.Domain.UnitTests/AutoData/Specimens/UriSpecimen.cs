@@ -11,6 +11,10 @@ namespace TheStore.Domain.UnitTests.AutoData.Specimens
 			{
 				PropertyInfo p when p.PropertyType == typeof(Uri) &&
 				p.Name.Contains("Uri", StringComparison.InvariantCultureIgnoreCase) => new Uri("http://example.com"),
+
+				ParameterInfo p when p.ParameterType == typeof(Uri) &&
+				p.Name.Contains("Uri", StringComparison.InvariantCultureIgnoreCase) => new Uri("http://example.com"),
+
 				_ => new NoSpecimen()
 			};
 		}
