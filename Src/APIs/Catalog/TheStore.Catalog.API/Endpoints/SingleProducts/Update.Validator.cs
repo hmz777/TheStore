@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TheStore.Catalog.API.Validators;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.SingleProducts
@@ -31,10 +30,6 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			RuleFor(x => x.Inventory)
 				.NotEmpty();
-
-			RuleFor(x => x.ProductColors)
-				.NotEmpty()
-				.DependentRules(() => RuleForEach(x => x.ProductColors).SetValidator(x => new ProductColorValidator()));
 		}
 	}
 }

@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
@@ -13,10 +8,12 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		public ListValidator()
 		{
 			RuleFor(x => x.Page)
-				.NotEmpty();
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
 
 			RuleFor(x => x.Take)
-				.NotEmpty();
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
 		}
 	}
 }

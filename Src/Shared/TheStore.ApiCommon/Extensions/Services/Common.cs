@@ -11,9 +11,11 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using System.ComponentModel;
+using System.IO.Abstractions;
 using System.Reflection;
 using TheStore.ApiCommon.Data.Repository;
-using static TheStore.ApiCommon.Constants.Common.ConfigurationKeys;
+using TheStore.ApiCommon.Services;
+using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
 namespace TheStore.ApiCommon.Extensions.Services
 {
@@ -266,6 +268,27 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 			services.AddMemoryCache();
 			services.AddDistributedMemoryCache();
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder AddFileUploader(this WebApplicationBuilder webApplicationBuilder)
+		{
+			webApplicationBuilder.Services.AddSingleton<IFileUploader, FileUploader>();
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder AddFileSystem(this WebApplicationBuilder webApplicationBuilder)
+		{
+			webApplicationBuilder.Services.AddSingleton<IFileSystem, FileSystem>();
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder AddMediatR(this WebApplicationBuilder webApplicationBuilder, Assembly assembly)
+		{
+			webApplicationBuilder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
 
 			return webApplicationBuilder;
 		}

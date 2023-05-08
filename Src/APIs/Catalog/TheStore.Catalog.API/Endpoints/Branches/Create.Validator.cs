@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TheStore.Catalog.API.Validators;
 using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Catalog.API.Endpoints.Branches
@@ -8,8 +9,14 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		public CreateValidator()
 		{
 			RuleFor(x => x.Name)
+				.NotEmpty();
+
+			RuleFor(x => x.Description)
+				.NotEmpty();
+
+			RuleFor(x => x.Address)
 				.NotEmpty()
-				.MinimumLength(2);
+				.SetValidator(x => new AddressValidator());
 		}
 	}
 }

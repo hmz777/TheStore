@@ -26,7 +26,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		public Create(
 			IValidator<CreateRequest> validator,
 			IApiRepository<CatalogDbContext, Branch> apiRepository,
-			IMapper mapper)
+ 			IMapper mapper)
 		{
 			this.validator = validator;
 			this.apiRepository = apiRepository;
@@ -51,6 +51,8 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
+
+			//await mediator.Send(new AddImageRequest(request.Image, ResourceFilePaths.BranchesImages), cancellationToken);
 
 			var branch = await apiRepository.AddAsync(mapper.Map<Branch>(request), cancellationToken);
 

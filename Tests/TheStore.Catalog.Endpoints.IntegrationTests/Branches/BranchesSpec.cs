@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using TheStore.Catalog.Endpoints.IntegrationTests.AutoData;
 using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.SharedModels.Models.Branches;
@@ -41,10 +42,11 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
+			fixture.Customize(new FormFileCustomization());
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
-				.PostAsJsonAsync(CreateRequest.RouteTemplate, request);
+				.PostAsJsonAsync(request.Route, request);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 			response.Headers.Location.Should().NotBeNull();

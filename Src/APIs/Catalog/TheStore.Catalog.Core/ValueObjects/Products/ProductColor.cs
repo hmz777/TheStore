@@ -1,12 +1,16 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheStore.Catalog.Core.ValueObjects.Products
 {
 	public class ProductColor : ValueObject
 	{
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; private set; }
 		public string ColorCode { get; private set; }
 
 		private List<Image> images = new();

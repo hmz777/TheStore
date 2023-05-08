@@ -1,8 +1,6 @@
 ﻿using AutoFixture;
-using AutoMapper;
-using TheStore.Catalog.Core.ValueObjects;
-using TheStore.Domain.UnitTests.AutoData.Customizations;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+using TheStore.APICommon.UnitTests.AutoData;
+using TheStore.Domain.UnitTests.AutoData.Specimens;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 {
@@ -10,14 +8,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 	{
 		public void Customize(IFixture fixture)
 		{
-			fixture.Customize(new ImageCustomization());
-			fixture.Register(() =>
-			{
-				var mapper = fixture.Create<IMapper>();
-				var image = fixture.Create<Image>();
-
-				return mapper.Map<ImageDto>(image);
-			});
+			fixture.Customize(new MockFormFileCustomization());
+			fixture.Customizations.Add(new FileUriSpecimen());
 		}
 	}
 }

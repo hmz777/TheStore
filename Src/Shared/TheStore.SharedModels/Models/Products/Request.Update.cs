@@ -17,7 +17,6 @@ namespace TheStore.SharedModels.Models.Products
 		public string Sku { get; set; }
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }
-		public List<ProductColorDto> ProductColors { get; set; }
 
 		public UpdateRequest()
 		{
@@ -32,8 +31,7 @@ namespace TheStore.SharedModels.Models.Products
 			string shortDescription,
 			string sku,
 			MoneyDto price,
-			InventoryRecordDto inventory,
-			List<ProductColorDto> productColors)
+			InventoryRecordDto inventory)
 		{
 			ProductId = productId;
 			CategoryId = categoryId;
@@ -43,7 +41,6 @@ namespace TheStore.SharedModels.Models.Products
 			Sku = sku;
 			Price = price;
 			Inventory = inventory;
-			ProductColors = productColors;
 		}
 	}
 }

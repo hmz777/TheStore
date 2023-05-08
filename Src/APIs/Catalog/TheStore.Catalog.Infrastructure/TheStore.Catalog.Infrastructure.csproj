@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\TheStore.ApiCommon\TheStore.ApiCommon.csproj" />
     <ProjectReference Include="..\..\..\Shared\TheStore.SharedModels\TheStore.SharedModels.csproj" />
     <ProjectReference Include="..\TheStore.Catalog.Core\TheStore.Catalog.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\ImageUploader\" />
   </ItemGroup>
 
 </Project>

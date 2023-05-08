@@ -1,8 +1,5 @@
 ﻿using AutoFixture;
-using AutoMapper;
-using TheStore.Catalog.Core.ValueObjects.Products;
-using TheStore.Domain.UnitTests.AutoData.Customizations;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+using TheStore.Domain.UnitTests.AutoData.Specimens;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 {
@@ -10,14 +7,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 	{
 		public void Customize(IFixture fixture)
 		{
-			fixture.Customize(new ProductColorCustomization());
-			fixture.Register(() =>
-			{
-				var mapper = fixture.Create<IMapper>();
-				var productColor = fixture.Create<ProductColor>();
-
-				return mapper.Map<ProductColorDto>(productColor);
-			});
+			fixture.Customizations.Add(new HexColorSpecimen());
 		}
 	}
 }

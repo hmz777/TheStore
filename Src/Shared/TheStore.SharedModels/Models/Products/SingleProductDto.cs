@@ -14,5 +14,7 @@ namespace TheStore.SharedModels.Models.Products
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }
 		public List<ProductColorDto> ProductColors { get; set; }
+
+		public ImageDto GetMainColor() => ProductColors.First().Images.First();
 	}
 }

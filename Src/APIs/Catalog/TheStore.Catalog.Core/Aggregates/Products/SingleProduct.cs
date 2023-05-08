@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using TheStore.Catalog.Core.Exceptions;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
@@ -63,7 +64,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 		public bool HasColors() => ProductColors.Any();
 
-		public void AddOrUpdateColor(ProductColor productColor)
+		public void AddColor(ProductColor productColor)
 		{
 			Guard.Against.Null(productColor, nameof(productColor));
 
@@ -71,7 +72,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 			if (color != null)
 			{
-				productColors.Remove(color);
+				throw new ColorAlreadyExistsException();
 			}
 
 			productColors.Add(productColor);

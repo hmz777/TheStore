@@ -46,7 +46,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			CancellationToken cancellationToken = default)
 		{
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create a single product with name: {Name}", request.Name, request.CorrelationId);
+				log.Information("Create a single product with name: {Name}", request.Name);
 
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)

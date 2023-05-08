@@ -8,10 +8,12 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		public ListValidator()
 		{
 			RuleFor(x => x.Page)
-				.NotEmpty();
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
 
 			RuleFor(x => x.Take)
-				.NotEmpty();
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
 		}
 	}
 }

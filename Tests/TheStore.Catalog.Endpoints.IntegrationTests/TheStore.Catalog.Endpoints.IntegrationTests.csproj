@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestResources\TestImages\TestImage.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestResources\TestImages\TestImage.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Docker.DotNet" Version="3.125.14" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.5" />
@@ -26,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TheStore.Endpoints.UnitTests\TheStore.Catalog.Endpoints.UnitTests.csproj" />
+    <ProjectReference Include="..\TheStore.Catalog.Endpoints.UnitTests\TheStore.Catalog.Endpoints.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>

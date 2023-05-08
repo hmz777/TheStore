@@ -13,7 +13,7 @@
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.0" />
     <PackageReference Include="AutoFixture.SeedExtensions" Version="4.18.0" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.18.0" />
-    <PackageReference Include="FluentAssertions" Version="6.10.0" />
+    <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.17.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\APIs\Catalog\TheStore.Catalog.API\TheStore.Catalog.API.csproj" />
+    <ProjectReference Include="..\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj" />
     <ProjectReference Include="..\TheStore.Domain.UnitTests\TheStore.Domain.UnitTests.csproj" />
   </ItemGroup>
 

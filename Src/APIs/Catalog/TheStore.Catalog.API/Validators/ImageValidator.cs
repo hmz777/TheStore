@@ -3,10 +3,25 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.API.Validators
 {
-	public class ImageValidator : AbstractValidator<UpdateImageDto>
+	public class AddImageDtoValidator : AbstractValidator<AddImageDto>
 	{
-		public ImageValidator()
+		public AddImageDtoValidator()
 		{
+			RuleFor(x => x.File)
+				.NotEmpty();
+
+			RuleFor(x => x.Alt)
+				.NotEmpty();
+		}
+	}
+
+	public class UpdateImageDtoValidator : AbstractValidator<UpdateImageDto>
+	{
+		public UpdateImageDtoValidator()
+		{
+			RuleFor(x => x.ImageId)
+				.NotEmpty();
+
 			RuleFor(x => x.File)
 				.NotEmpty();
 

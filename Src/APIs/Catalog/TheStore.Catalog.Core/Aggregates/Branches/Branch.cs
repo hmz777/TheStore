@@ -7,10 +7,10 @@ namespace TheStore.Catalog.Core.Aggregates.Branches
 {
 	public class Branch : BaseEntity<int>, IAggregateRoot
 	{
-		public string Name { get; private set; }
-		public string Description { get; private set; }
-		public Address Address { get; private set; }
-		public Image Image { get; private set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public Address Address { get; set; }
+		public Image Image { get; set; }
 
 		// Ef Core
 		private Branch()
