@@ -112,15 +112,7 @@ namespace TheStore.Domain.UnitTests
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
-			var action = () => new SingleProduct(
-				new CategoryId(1),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<Money>(),
-				fixture.Create<InventoryRecord>(),
-				fixture.CreateMany<ProductColor>().ToList());
+			var action = () => fixture.Create<SingleProduct>();
 
 			action.Should().NotThrow<Exception>();
 		}
@@ -132,17 +124,9 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new SingleProduct(
-				new CategoryId(1),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<Money>(),
-				fixture.Create<InventoryRecord>(),
-				fixture.CreateMany<ProductColor>().ToList());
+			var sut = fixture.Create<SingleProduct>();
 
-			sut.AddOrUpdateColor(color);
+			sut.AddColor(color);
 
 			sut.ProductColors.Should().Contain(color);
 		}
@@ -154,15 +138,7 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = new SingleProduct(
-						new CategoryId(1),
-						fixture.Create<string>(),
-						fixture.Create<string>(),
-						fixture.Create<string>(),
-						fixture.Create<string>(),
-						fixture.Create<Money>(),
-						fixture.Create<InventoryRecord>(),
-						fixture.CreateMany<ProductColor>().ToList());
+			var sut = fixture.Create<SingleProduct>();
 
 			sut.RemoveColor(color);
 
@@ -180,16 +156,7 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var newPartId = new ProductId(1);
 
-			var sut = new AssembledProduct(
-					new List<ProductId>(),
-					new CategoryId(1),
-					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<Money>(),
-					fixture.Create<InventoryRecord>(),
-					fixture.CreateMany<ProductColor>().ToList());
+			var sut = fixture.Create<AssembledProduct>();
 
 			sut.AddPart(newPartId);
 
@@ -203,16 +170,7 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var newPartId = new ProductId(1);
 
-			var sut = new AssembledProduct(
-							new List<ProductId>(),
-							new CategoryId(1),
-							fixture.Create<string>(),
-							fixture.Create<string>(),
-							fixture.Create<string>(),
-							fixture.Create<string>(),
-							fixture.Create<Money>(),
-							fixture.Create<InventoryRecord>(),
-							fixture.CreateMany<ProductColor>().ToList());
+			var sut = fixture.Create<AssembledProduct>();
 
 			sut.RemovePart(newPartId);
 
