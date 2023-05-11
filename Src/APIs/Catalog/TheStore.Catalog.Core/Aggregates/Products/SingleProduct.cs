@@ -20,7 +20,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public Money Price { get; set; }
 		public InventoryRecord Inventory { get; set; }
 
-		private List<ProductColor> productColors;
+		private List<ProductColor> productColors = new();
 
 		[NotMapped]
 		public ReadOnlyCollection<ProductColor> ProductColors => productColors.AsReadOnly();
@@ -29,6 +29,32 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		protected SingleProduct()
 		{
 
+		}
+
+		public SingleProduct(
+		CategoryId categoryId,
+		string name,
+		string description,
+		string shortDescription,
+		string sku,
+		Money price,
+		InventoryRecord inventory)
+		{
+			Guard.Against.Null(categoryId, nameof(categoryId));
+			Guard.Against.NullOrWhiteSpace(name, nameof(name));
+			Guard.Against.NullOrWhiteSpace(description, nameof(description));
+			Guard.Against.NullOrWhiteSpace(shortDescription, nameof(shortDescription));
+			Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
+			Guard.Against.Null(price, nameof(price));
+			Guard.Against.Null(inventory, nameof(inventory));
+
+			CategoryId = categoryId;
+			Name = name;
+			Description = description;
+			ShortDescription = shortDescription;
+			Sku = sku;
+			Price = price;
+			Inventory = inventory;
 		}
 
 		public SingleProduct(
@@ -68,9 +94,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		{
 			Guard.Against.Null(productColor, nameof(productColor));
 
-			var color = productColors.FirstOrDefault(c => c == productColor);
-
-			if (color != null)
+			if (productColors.Any(c => c == productColor || c.Id == productColor.Id))
 			{
 				throw new ColorAlreadyExistsException();
 			}

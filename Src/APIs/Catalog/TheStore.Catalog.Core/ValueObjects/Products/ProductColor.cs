@@ -10,7 +10,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; private set; }
+		public int Id { get; set; }
 		public string ColorCode { get; private set; }
 
 		private List<Image> images = new();
@@ -31,6 +31,12 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 
 			ColorCode = colorCode;
 			this.images = images ?? new List<Image>();
+		}
+
+		public ProductColor(int id, string colorCode, List<Image> images) : this(colorCode, images)
+		{
+			Guard.Against.NegativeOrZero(id, nameof(id));
+			Id = id;
 		}
 
 		public ProductColor AddImage(Image image)
@@ -58,11 +64,6 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
 			yield return ColorCode;
-
-			foreach (var image in images)
-			{
-				yield return image;
-			}
 		}
 	}
 }

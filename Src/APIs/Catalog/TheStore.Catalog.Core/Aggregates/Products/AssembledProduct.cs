@@ -17,6 +17,12 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 		}
 
+		public AssembledProduct(List<ProductId> parts, CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory)
+			: base(categoryId, name, description, shortDescription, sku, price, inventory)
+		{
+			this.parts = parts;
+		}
+
 		public AssembledProduct(List<ProductId> parts, CategoryId categoryId, string name, string description, string shortDescription, string sku, Money price, InventoryRecord inventory, List<ProductColor> productColors)
 			: base(categoryId, name, description, shortDescription, sku, price, inventory, productColors)
 		{

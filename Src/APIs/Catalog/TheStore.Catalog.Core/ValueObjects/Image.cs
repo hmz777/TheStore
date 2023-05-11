@@ -30,9 +30,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Guard.Against.Null(stringFileUri, nameof(stringFileUri));
 			Guard.Against.NullOrEmpty(alt, nameof(alt));
 
-			FileUri = new Uri(stringFileUri);
-
-			Guard.Against.InvalidInput(FileUri, nameof(FileUri), x => FileUri.IsFile || Path.HasExtension(FileUri.LocalPath), message: "Uri is not a file");
+			FileUri = new Uri(stringFileUri, UriKind.RelativeOrAbsolute);
 
 			StringFileUri = stringFileUri;
 			Alt = alt;
