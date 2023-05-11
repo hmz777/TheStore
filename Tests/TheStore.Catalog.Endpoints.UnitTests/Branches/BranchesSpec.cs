@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.Catalog.API.Endpoints.Branches;
+using TheStore.Catalog.API.Endpoints.Branches.Image;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.SharedModels.Models.Branches;
 using UpdateImageRequest = TheStore.SharedModels.Models.Branches.UpdateImageRequest;
 
