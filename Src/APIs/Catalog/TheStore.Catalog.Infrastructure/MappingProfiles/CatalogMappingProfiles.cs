@@ -43,8 +43,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
 			CreateMap<UpdateImageDto, Image>()
-				.EqualityComparison((src, dest) => src.ImageId == dest.Id)
-				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ImageId));
+				.EqualityComparison((src, dest) => src.ImageId == dest.Id);
 
 			CreateMap<ProductColor, ProductColorDto>()
 				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
@@ -53,9 +52,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			CreateMap<UpdateProductColorDto, ProductColor>()
 				.ForMember(dest => dest.Images, opt => opt.Ignore())
-				.EqualityComparison((src, dest) => src.ProductColorId == dest.Id)
-				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductColorId));
-
+				.EqualityComparison((src, dest) => src.ProductColorId == dest.Id);
 
 			// Branches
 			CreateMap<Branch, BranchDto>();

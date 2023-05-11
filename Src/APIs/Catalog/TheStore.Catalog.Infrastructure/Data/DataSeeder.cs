@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TheStore.ApiCommon.Data.Helpers;
+using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Interfaces;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
@@ -75,7 +75,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 							{
 								new ProductColor("#000000",new List<Image>()
 								{
-									new Image("https://www.site.com/file.png","image alt")
+									new Image(@$"{ResourceFilePaths.ProductsImages}\file.png","image alt")
 								})
 							});
 
@@ -101,7 +101,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 					$"Branch {i + 1}",
 					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 					new Address("Syria", "Tartus", "Barranieh", $"ZIP{i}", new Coordinate(0, 0)),
-					new Image("https://placehold.co/600x400.png", "Placeholder image"));
+					new Image(@$"{ResourceFilePaths.BranchesImages}\file.png", "Placeholder image"));
 
 				if (insertKeys)
 				{
