@@ -11,7 +11,7 @@ namespace TheStore.SharedKernel.Entities
 		public TId Id { get; set; }
 
 		[NotMapped]
-		public List<BaseDomainEvent> Events = new();
+		public List<BaseDomainEvent> Events { get; private set; } = new();
 
 		public override bool Equals(object? obj)
 		{
