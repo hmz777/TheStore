@@ -24,19 +24,16 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 		private readonly IValidator<UpdateColorRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, SingleProduct> apiRepository;
 		private readonly IMapper mapper;
-		private readonly IMediator mediator;
 		private readonly Serilog.ILogger log = Log.ForContext<UpdateColor>();
 
 		public UpdateColor(
 			IValidator<UpdateColorRequest> validator,
 			IApiRepository<CatalogDbContext, SingleProduct> apiRepository,
-			IMapper mapper,
-			IMediator mediator)
+			IMapper mapper)
 		{
 			this.validator = validator;
 			this.apiRepository = apiRepository;
 			this.mapper = mapper;
-			this.mediator = mediator;
 		}
 
 		[HttpPut(UpdateColorRequest.RouteTemplate)]
