@@ -2,20 +2,18 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.Catalog.API.Endpoints.SingleProducts;
+using TheStore.Catalog.API.Endpoints.SingleProducts.Colors;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.SharedModels.Models.Products;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
@@ -140,43 +138,31 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var mapper = fixture.Create<IMapper>();
 
-			var request = fixture.Create<UpdateColorsRequest>();
+			// Setup color dto and entity
+			var updateProductColor = fixture.Create<UpdateProductColorDto>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(fixture.Create<int>());
 
-			var newColors = fixture.CreateMany<UpdateProductColorDto>(5).ToList();
-			newColors.ForEach(i => i.ProductColorId = default);
-			newColors.SelectMany(c => c.Images).ToList().ForEach(i => i.ImageId = default);
+			// Make sure color ids match for update
+			var productColor = mapper.Map<ProductColor>(updateProductColor);
+			productColor.Id = updateProductColor.ProductColorId;
 
-			var presentColors = fixture.CreateMany<UpdateProductColorDto>(5).ToList();
-			int id1 = 0, id2 = 0;
-			presentColors.ForEach(i => i.ProductColorId = ++id1);
-			presentColors.SelectMany(c => c.Images).ToList().ForEach(i => i.ImageId = ++id2);
+			// Add the color so we simulate the update process
+			singleProduct.AddColor(productColor);
+			updateProductColor.ColorCode = "#FFFFFFA";
 
-			request.ProductColors = new List<UpdateProductColorDto>(newColors.Union(presentColors));
-
-			var singleProduct = new SingleProduct(
-				new CategoryId(1),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<string>(),
-				fixture.Create<Money>(),
-				fixture.Create<InventoryRecord>(),
-				mapper.Map<List<ProductColor>>(presentColors));
+			// Setup request with the product id for the update process to succeed
+			var request = new UpdateColorRequest(singleProduct.Id.Id, updateProductColor);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
 				.ReturnsAsync(singleProduct);
 
-			var mockMediator = new Mock<IMediator>();
-
-			var sut = new UpdateColor(new UpdateColorsValidator(), mockRepository.Object, fixture.Create<IMapper>(), mockMediator.Object);
+			var sut = new UpdateColor(new UpdateColorsValidator(), mockRepository.Object, mapper);
 
 			var result = await sut.HandleAsync(request);
 
-			mockMediator.Verify(x => x.Send(It.IsAny<UpdateImagesRequest>(), default), Times.Once);
-			mockMediator.Verify(x => x.Send(It.IsAny<AddImagesRequest>(), default), Times.Once);
-			request.ProductColors.SelectMany(x => x.Images).Any(i => string.IsNullOrEmpty(i.StringFileUri)).Should().BeFalse();
-			singleProduct.ProductColors.Count.Should().Be(presentColors.Count + newColors.Count);
+			singleProduct.ProductColors.First(x => x.Id == updateProductColor.ProductColorId).ColorCode.Should().Be(productColor.ColorCode);
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 	}
