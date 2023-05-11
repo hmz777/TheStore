@@ -42,7 +42,6 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
-			fixture.Customize(new FormFileCustomization());
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
@@ -64,6 +63,28 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 				.PutAsJsonAsync(request.Route, request);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
+		}
+
+		[Fact]
+		public async Task Can_Update_Branch_Image()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
+			fixture.Customize(new FormFileCustomization());
+			var request = fixture.Create<UpdateImageRequest>();
+			request.BranchId = 1;
+
+			using (var formData = new MultipartFormDataContent())
+			{
+				formData.Add(new StringContent(request.BranchId.ToString()), nameof(request.BranchId));
+				formData.Add(new StringContent(request.Image.Alt), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}");
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
+
+				var response = await _client
+						.PutAsync(request.Route, formData);
+
+				((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
+			}			
 		}
 
 		[Fact]
