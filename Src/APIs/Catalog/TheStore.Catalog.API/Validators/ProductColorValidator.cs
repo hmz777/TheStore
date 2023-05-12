@@ -16,9 +16,6 @@ namespace TheStore.Catalog.API.Validators
 	{
 		public UpdatedProductColorDtoValidator()
 		{
-			RuleFor(x => x.ProductColorId)
-				.NotEmpty();
-
 			RuleFor(x => x.ColorCode)
 				.NotEmpty();
 		}

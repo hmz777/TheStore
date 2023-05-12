@@ -50,9 +50,11 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ReverseMap()
 				.ForMember("images", opt => opt.MapFrom(src => src.Images));
 
+			CreateMap<AddProductColorDto, ProductColor>()
+				.ForMember(dest => dest.Images, opt => opt.Ignore());
+
 			CreateMap<UpdateProductColorDto, ProductColor>()
-				.ForMember(dest => dest.Images, opt => opt.Ignore())
-				.EqualityComparison((src, dest) => src.ProductColorId == dest.Id);
+				.ForMember(dest => dest.Images, opt => opt.Ignore());
 
 			// Branches
 			CreateMap<Branch, BranchDto>();

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
-using TheStore.ApiCommon.Services;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
 
 namespace TheStore.Catalog.Infrastructure.Services
@@ -28,7 +28,10 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.AddFileSystem();
 			webApplicationBuilder.AddMediatR(InfrastructureAssembly);
 
-			// Api specific services
+			// Api specific services and configuration
+
+			// Temporary fix until the binding sources issue is fixed in .NET 8
+			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
 
 			return webApplicationBuilder;
 		}
