@@ -59,7 +59,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.Id == request.Color.ProductColorId);
+			var color = singleProduct.ProductColors.FirstOrDefault(x => x.Id == request.ProductColorId);
 			if (color == null)
 				return NotFound("Color not found");
 
@@ -67,7 +67,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update a color with code: {ColorCode} in single product with id: {Id}", request.ProductId, color.ColorCode);
+				log.Information("Update a color with code: {ColorCode} in single product with id: {Id}", color.ColorCode, request.ProductId);
 
 			return NoContent();
 		}

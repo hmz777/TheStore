@@ -67,7 +67,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Add a color with code: {ColorCode} to single product with id: {Id}", request.ProductId, request.Color.ColorCode);
+				log.Information("Add a color with code: {ColorCode} to single product with id: {Id}", request.Color.ColorCode, request.ProductId);
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,

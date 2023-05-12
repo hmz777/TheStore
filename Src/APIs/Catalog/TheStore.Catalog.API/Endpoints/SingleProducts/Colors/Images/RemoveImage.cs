@@ -66,7 +66,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Remove an image from color with code: {ColorCode} from single product with id: {Id}", request.ProductId, color.ColorCode);
+				log.Information("Remove an image from color with code: {ColorCode} from single product with id: {Id}", color.ColorCode, request.ProductId);
 
 			return NoContent();
 		}
