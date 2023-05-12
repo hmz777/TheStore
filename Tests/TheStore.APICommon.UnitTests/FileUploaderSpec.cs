@@ -1,8 +1,6 @@
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Moq;
-using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using TheStore.ApiCommon.Services;
 using TheStore.APICommon.UnitTests.AutoData;
@@ -22,10 +20,10 @@ namespace TheStore.APICommon.UnitTests
 			var fileSystemMock = new MockFileSystem();
 			var sut = new FileUploader(fileSystemMock);
 
-			await sut.UploadFileAsync(location, file);
+			var filePath = await sut.UploadFileAsync(location, file);
 
 			fileSystemMock.AllFiles.Should().HaveCount(1);
-			fileSystemMock.AllFiles.Should().Contain(fileSystemMock.Path.Combine("C:\\", location, file.FileName));
+			fileSystemMock.AllFiles.Should().Contain(fileSystemMock.Path.Combine("C:\\", filePath));
 		}
 
 		[Fact]
@@ -39,10 +37,10 @@ namespace TheStore.APICommon.UnitTests
 			var fileSystemMock = new MockFileSystem();
 			var sut = new FileUploader(fileSystemMock);
 
-			await sut.UploadFilesAsync(location, files);
+			var filePaths = await sut.UploadFilesAsync(location, files);
 
 			fileSystemMock.AllFiles.Should().HaveCount(files.Count());
-			fileSystemMock.AllFiles.Should().Equal(files.Select(f => fileSystemMock.Path.Combine("C:\\", location, f.FileName)));
+			fileSystemMock.AllFiles.Should().Equal(filePaths.Select(f => fileSystemMock.Path.Combine("C:\\", f)));
 		}
 	}
 }
