@@ -15,7 +15,6 @@ using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.SharedModels.Models.Products;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {
@@ -130,7 +129,30 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		}
 
 		[Fact]
-		public async Task Can_Update_Single_Product_Colors()
+		public async Task Can_Add_Color_To_Single_Product()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			// Setup request and entity
+			var request = fixture.Create<AddColorRequest>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.ProductId);
+
+			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
+				.ReturnsAsync(singleProduct);
+
+			var sut = new AddColor(new AddColorValidator(), mockRepository.Object, fixture.Create<IMapper>());
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(CreatedAtRouteResult));
+		}
+
+		[Fact]
+		public async Task Can_Update_Single_Product_Color()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new EndpointsCustomization());
@@ -138,21 +160,18 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var mapper = fixture.Create<IMapper>();
 
-			// Setup color dto and entity
-			var updateProductColor = fixture.Create<UpdateProductColorDto>();
+			// Setup request and entity
+			var request = fixture.Create<UpdateColorRequest>();
 			var singleProduct = fixture.Create<SingleProduct>();
-			singleProduct.Id = new ProductId(fixture.Create<int>());
+			singleProduct.Id = new ProductId(request.ProductId);
 
 			// Make sure color ids match for update
-			var productColor = mapper.Map<ProductColor>(updateProductColor);
-			productColor.Id = updateProductColor.ProductColorId;
+			var productColor = mapper.Map<ProductColor>(request.Color);
+			productColor.Id = request.ProductColorId;
 
 			// Add the color so we simulate the update process
 			singleProduct.AddColor(productColor);
-			updateProductColor.ColorCode = "#FFFFFFA";
-
-			// Setup request with the product id for the update process to succeed
-			var request = new UpdateColorRequest(singleProduct.Id.Id, updateProductColor);
+			request.Color.ColorCode = "#FFFFFFA";
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
@@ -162,7 +181,39 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var result = await sut.HandleAsync(request);
 
-			singleProduct.ProductColors.First(x => x.Id == updateProductColor.ProductColorId).ColorCode.Should().Be(productColor.ColorCode);
+			singleProduct.ProductColors.First(x => x.Id == request.ProductColorId).ColorCode.Should().Be(productColor.ColorCode);
+			result.Should().BeOfType(typeof(NoContentResult));
+		}
+
+		[Fact]
+		public async Task Can_Remove_Color_From_Single_Product()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var mapper = fixture.Create<IMapper>();
+
+			// Setup request and entity
+			var request = fixture.Create<RemoveColorRequest>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.ProductId);
+
+			// Make sure color ids match for deletion
+			var productColor = fixture.Create<ProductColor>();
+			productColor.Id = request.ProductColorId;
+
+			// Add the color so we simulate the deletion process
+			singleProduct.AddColor(productColor);
+
+			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
+				.ReturnsAsync(singleProduct);
+
+			var sut = new RemoveColor(new RemoveColorValidator(), mockRepository.Object);
+
+			var result = await sut.HandleAsync(request);
+
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 	}
