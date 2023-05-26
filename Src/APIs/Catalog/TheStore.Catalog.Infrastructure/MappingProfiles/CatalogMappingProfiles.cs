@@ -42,8 +42,8 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
-			CreateMap<UpdateImageDto, Image>()
-				.EqualityComparison((src, dest) => src.ImageId == dest.Id);
+			CreateMap<AddImageDto, Image>();
+			CreateMap<UpdateImageDto, Image>();
 
 			CreateMap<ProductColor, ProductColorDto>()
 				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
