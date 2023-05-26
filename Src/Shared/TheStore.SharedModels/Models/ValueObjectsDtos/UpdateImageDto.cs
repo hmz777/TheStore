@@ -7,7 +7,6 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 	[DisplayName(nameof(UpdateImageDto))]
 	public class UpdateImageDto : DtoBase
 	{
-		public int ImageId { get; set; }
 		public IFormFile File { get; set; }
 		public string Alt { get; set; }
 

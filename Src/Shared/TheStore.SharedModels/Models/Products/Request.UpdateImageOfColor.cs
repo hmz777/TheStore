@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
@@ -6,15 +7,22 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(UpdateImageOfColorRequest))]
 	public class UpdateImageOfColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ProductColorId:int}/images/{ImageId:int}";
+		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ColorCode}/images/{ImagePath}";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
-			.Replace("{ProductColorId:int}", ProductColorId.ToString())
-			.Replace("{ImageId:int}", Image.ImageId.ToString());
+			.Replace("{ColorCode}", ColorCode)
+			.Replace("{ImagePath}", ImagePath);
 
+		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
-		public int ProductColorId { get; set; }
+
+		[FromRoute(Name = nameof(ColorCode))]
+		public string ColorCode { get; set; }
+
+		[FromRoute(Name = nameof(ImagePath))]
+		public string ImagePath { get; set; }
+
 		public UpdateImageDto Image { get; set; }
 	}
 }

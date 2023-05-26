@@ -10,9 +10,10 @@ namespace TheStore.SharedModels.Models.Branches
 		public const string RouteTemplate = "branches/{BranchId:int}/image";
 		public override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
 
-		[FromRoute]
+		[FromRoute(Name = nameof(BranchId))]
 		public int BranchId { get; set; }
 
+		[FromForm]
 		public UpdateImageDto Image { get; set; }
 	}
 }

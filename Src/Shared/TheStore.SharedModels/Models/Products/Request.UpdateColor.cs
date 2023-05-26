@@ -7,17 +7,17 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(UpdateColorRequest))]
 	public class UpdateColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ProductColorId:int}";
+		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ColorCode}";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
-			.Replace("{ProductColorId:int}", ProductColorId.ToString());
+			.Replace("{ColorCode}", ColorCode);
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
 
-		[FromRoute(Name = nameof(ProductColorId))]
-		public int ProductColorId { get; set; }
+		[FromRoute(Name = nameof(ColorCode))]
+		public string ColorCode { get; set; }
 
 		[FromBody]
 		public UpdateProductColorDto Color { get; set; }
@@ -27,9 +27,10 @@ namespace TheStore.SharedModels.Models.Products
 
 		}
 
-		public UpdateColorRequest(int productId, UpdateProductColorDto color)
+		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color)
 		{
 			ProductId = productId;
+			ColorCode = colorCode;
 			Color = color;
 		}
 	}
