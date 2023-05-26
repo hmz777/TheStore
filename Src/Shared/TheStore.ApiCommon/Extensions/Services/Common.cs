@@ -13,6 +13,7 @@ using Serilog.Events;
 using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Reflection;
+using System.Text.Json;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Services;
 using static TheStore.ApiCommon.Constants.ConfigurationKeys;
@@ -160,6 +161,18 @@ namespace TheStore.ApiCommon.Extensions.Services
 			Log.Information("Add controllers");
 
 			webApplicationBuilder.Services.AddControllers();
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder ConfigureJsonSerializerOptions(this WebApplicationBuilder webApplicationBuilder)
+		{
+			webApplicationBuilder.Services
+				.AddControllers()
+				.AddJsonOptions(opt =>
+				{
+					opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+				});
 
 			return webApplicationBuilder;
 		}
