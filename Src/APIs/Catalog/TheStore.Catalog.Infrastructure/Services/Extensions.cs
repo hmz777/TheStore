@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -19,6 +18,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.PlatformDetect();
 			webApplicationBuilder.ConfigureDataAccess<TContext>(Constants.DatabaseName);
 			webApplicationBuilder.ConfigureApi();
+			webApplicationBuilder.ConfigureJsonSerializerOptions();
 			webApplicationBuilder.ConfigureSwagger();
 			//webApplicationBuilder.ConfigureJwtAuthorization();
 			webApplicationBuilder.ConfigureAutoMapper<TContext>(assembly, InfrastructureAssembly);
@@ -31,7 +31,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 			// Api specific services and configuration
 
 			// Temporary fix until the binding sources issue is fixed in .NET 8
-			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
+			//webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
 
 			return webApplicationBuilder;
 		}
