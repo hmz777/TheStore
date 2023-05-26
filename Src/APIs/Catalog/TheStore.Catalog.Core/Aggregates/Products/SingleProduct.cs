@@ -94,7 +94,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		{
 			Guard.Against.Null(productColor, nameof(productColor));
 
-			if (productColors.Any(c => c == productColor || c.Id == productColor.Id))
+			if (productColors.Any(c => c == productColor))
 			{
 				throw new ColorAlreadyExistsException();
 			}
