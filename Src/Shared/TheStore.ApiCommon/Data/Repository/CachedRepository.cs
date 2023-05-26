@@ -66,6 +66,11 @@ namespace TheStore.ApiCommon.Data.Repository
 			});
 		}
 
+		public IAsyncEnumerable<T> AsAsyncEnumerable(ISpecification<T> specification)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
 			if (specification.CacheEnabled)
