@@ -73,7 +73,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 							new InventoryRecord(50, 5, 100, 0, false),
 							new List<ProductColor>
 							{
-								new ProductColor("#000000",new List<Image>()
+								new ProductColor("000000",new List<Image>()
 								{
 									new Image(@$"{ResourceFilePaths.ProductsImages}\file.png","image alt")
 								})
