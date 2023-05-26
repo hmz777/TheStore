@@ -7,10 +7,6 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Image : ValueObject
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; private set; }
-
 		[NotMapped]
 		public Uri FileUri { get; }
 		public string StringFileUri { get; private set; }
@@ -38,7 +34,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			yield return Id;
+			yield return StringFileUri;
 		}
 	}
 }
