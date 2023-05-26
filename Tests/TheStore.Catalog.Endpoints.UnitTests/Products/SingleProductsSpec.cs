@@ -2,12 +2,15 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.Catalog.API.Endpoints.SingleProducts;
 using TheStore.Catalog.API.Endpoints.SingleProducts.Colors;
+using TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images;
 using TheStore.Catalog.Core.Aggregates.Products;
+using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
@@ -158,30 +161,25 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			fixture.Customize(new EndpointsCustomization());
 			fixture.Customize(new DtoCustomizations());
 
-			var mapper = fixture.Create<IMapper>();
-
 			// Setup request and entity
 			var request = fixture.Create<UpdateColorRequest>();
 			var singleProduct = fixture.Create<SingleProduct>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			// Make sure color ids match for update
-			var productColor = mapper.Map<ProductColor>(request.Color);
-			productColor.Id = request.ProductColorId;
+			var productColor = new ProductColor(request.ColorCode, new List<Image>());
 
 			// Add the color so we simulate the update process
 			singleProduct.AddColor(productColor);
-			request.Color.ColorCode = "#FFFFFFA";
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
 				.ReturnsAsync(singleProduct);
 
-			var sut = new UpdateColor(new UpdateColorsValidator(), mockRepository.Object, mapper);
+			var sut = new UpdateColor(new UpdateColorsValidator(), mockRepository.Object);
 
 			var result = await sut.HandleAsync(request);
 
-			singleProduct.ProductColors.First(x => x.Id == request.ProductColorId).ColorCode.Should().Be(productColor.ColorCode);
+			singleProduct.ProductColors.First(x => x.ColorCode == request.ColorCode).ColorCode.Should().Be(productColor.ColorCode);
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 
@@ -199,9 +197,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<SingleProduct>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			// Make sure color ids match for deletion
-			var productColor = fixture.Create<ProductColor>();
-			productColor.Id = request.ProductColorId;
+			var productColor = new ProductColor(request.ColorCode, new List<Image>());
 
 			// Add the color so we simulate the deletion process
 			singleProduct.AddColor(productColor);
@@ -211,6 +207,68 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 				.ReturnsAsync(singleProduct);
 
 			var sut = new RemoveColor(new RemoveColorValidator(), mockRepository.Object);
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(NoContentResult));
+		}
+
+		[Fact]
+		public async Task Can_Add_Image_To_Color()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<AddImageToColorRequest>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.ProductId);
+
+			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+
+			// Add the color so we simulate the addition process
+			singleProduct.AddColor(productColor);
+
+			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			mockRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
+				.ReturnsAsync(singleProduct);
+
+			var mediator = new Mock<IMediator>();
+
+			var sut = new AddImage(new AddImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mediator.Object);
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(CreatedAtRouteResult));
+		}
+
+		[Fact]
+		public async Task Can_Update_Image_In_Color()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<UpdateImageOfColorRequest>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.ProductId);
+
+			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+
+			var image = new Image(request.ImagePath, fixture.Create<string>());
+
+			productColor = productColor.AddImage(image);
+
+			// Add the color so we simulate the addition process
+			singleProduct.AddColor(productColor);
+
+			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			mockRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
+				.ReturnsAsync(singleProduct);
+
+			var mediator = new Mock<IMediator>();
+
+			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mediator.Object);
 
 			var result = await sut.HandleAsync(request);
 

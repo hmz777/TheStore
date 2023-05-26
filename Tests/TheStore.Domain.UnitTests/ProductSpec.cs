@@ -45,7 +45,7 @@ namespace TheStore.Domain.UnitTests
 		[Fact]
 		public void Can_Create_Valid_Product_Color()
 		{
-			var action = () => new ProductColor("#000000", new List<Image>());
+			var action = () => new ProductColor("000000", new List<Image>());
 
 			action.Should().NotThrow();
 		}
@@ -57,7 +57,7 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("#000000", new List<Image>());
+			var sut = new ProductColor("000000", new List<Image>());
 
 			sut = sut.AddImage(image);
 
@@ -71,7 +71,7 @@ namespace TheStore.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("#000000", new List<Image>());
+			var sut = new ProductColor("000000", new List<Image>());
 
 			sut = sut.AddImage(image);
 			sut = sut.RemoveImage(image);

@@ -57,7 +57,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 			var request = fixture.Create<UpdateRequest>();
-			request.BranchId = 1;
+			request.BranchId = 2;
 
 			var response = await _client
 				.PutAsJsonAsync(request.Route, request);
@@ -72,7 +72,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 			fixture.Customize(new DtoCustomizations());
 			fixture.Customize(new FormFileCustomization());
 			var request = fixture.Create<UpdateImageRequest>();
-			request.BranchId = 1;
+			request.BranchId = 2;
 
 			using (var formData = new MultipartFormDataContent())
 			{
