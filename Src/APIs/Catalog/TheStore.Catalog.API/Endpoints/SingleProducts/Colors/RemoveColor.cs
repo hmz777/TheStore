@@ -41,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 		   OperationId = "Product.Single.Color.Remove",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			RemoveColorRequest request,
+		[FromRoute] RemoveColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.Id == request.ProductColorId);
+			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
 			if (color == null)
 				return NotFound("Color not found");
 

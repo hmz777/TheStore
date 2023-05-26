@@ -11,7 +11,10 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
-			RuleFor(x => x.ProductColorId)
+			RuleFor(x => x.ColorCode)
+				.NotEmpty();
+
+			RuleFor(x => x.ImagePath)
 				.NotEmpty();
 
 			RuleFor(x => x.Image)

@@ -19,9 +19,6 @@ namespace TheStore.Catalog.API.Validators
 	{
 		public UpdateImageDtoValidator()
 		{
-			RuleFor(x => x.ImageId)
-				.NotEmpty();
-
 			RuleFor(x => x.File)
 				.NotEmpty();
 

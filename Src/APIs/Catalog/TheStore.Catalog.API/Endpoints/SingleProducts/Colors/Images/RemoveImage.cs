@@ -54,11 +54,11 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.Id == request.ProductColorId);
+			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
 			if (color == null)
 				return NotFound("Color not found");
 
-			var image = color.Images.FirstOrDefault(x => x.Id == request.ImageId);
+			var image = color.Images.FirstOrDefault(x => x.StringFileUri == request.ImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 
@@ -66,7 +66,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Remove an image from color with code: {ColorCode} from single product with id: {Id}", color.ColorCode, request.ProductId);
+				log.Information("Remove an image with path: {ImagePath} from color with code: {ColorCode} from single product with id: {Id}", image.StringFileUri, color.ColorCode, request.ProductId);
 
 			return NoContent();
 		}

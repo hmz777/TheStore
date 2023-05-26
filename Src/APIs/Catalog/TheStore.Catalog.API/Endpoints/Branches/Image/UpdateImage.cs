@@ -73,8 +73,6 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 					.Handlers
 					.ImageUpload
 					.UpdateImageRequest(branch.Image.StringFileUri, image, ResourceFilePaths.BranchesImages), cancellationToken);
-
-				mapper.Map(request.Image, branch.Image);
 			}
 			else
 			{
@@ -84,9 +82,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 					.Handlers
 					.ImageUpload
 					.AddImageRequest(new AddImageDto(image.File, image.Alt), ResourceFilePaths.BranchesImages), cancellationToken);
-
-				branch.Image = mapper.Map<Core.ValueObjects.Image>(request.Image);
 			}
+
+			branch.Image = new Core.ValueObjects.Image(request.Image.StringFileUri, request.Image.Alt);
 
 			await apiRepository.SaveChangesAsync(cancellationToken);
 

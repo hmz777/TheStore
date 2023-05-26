@@ -64,7 +64,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			if (singleProduct == null)
 				return NotFound();
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.Id == request.ProductColorId);
+			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
 			if (color == null)
 				return NotFound("Color not found");
 
