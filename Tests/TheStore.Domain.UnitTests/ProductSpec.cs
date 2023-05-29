@@ -171,9 +171,11 @@ namespace TheStore.Domain.UnitTests
 			var newPartId = new ProductId(1);
 
 			var sut = fixture.Create<AssembledProduct>();
+			sut.AddPart(newPartId);
 
-			sut.RemovePart(newPartId);
+			var result = sut.RemovePart(newPartId);
 
+			result.Should().Be(true);
 			sut.Parts.Should().NotContain(newPartId);
 		}
 
