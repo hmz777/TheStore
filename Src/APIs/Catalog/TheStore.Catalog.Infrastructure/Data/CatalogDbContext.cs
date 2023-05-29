@@ -64,6 +64,17 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			#region Assembled Product
 
+			modelBuilder.Entity<AssembledProduct>()
+				.Property(s => s.Id)
+				.HasConversion<AssembledProductIdValueConverter>();
+
+			modelBuilder.Entity<AssembledProduct>()
+				.HasKey(s => s.Id);
+
+			modelBuilder.Entity<AssembledProduct>()
+				.Property(c => c.CategoryId)
+				.HasConversion<CategoryIdValueConverter>();
+
 			//modelBuilder.Entity<AssembledProduct>()
 			//	.Property<List<ProductId>>("parts")
 			//	.HasConversion<ProductIdValueConverter>();

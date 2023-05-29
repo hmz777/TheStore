@@ -66,23 +66,15 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Money price,
 			InventoryRecord inventory,
 			List<ProductColor> productColors)
+			: this(
+				  categoryId,
+				  name,
+				  description,
+				  shortDescription,
+				  sku,
+				  price,
+				  inventory)
 		{
-			Guard.Against.Null(categoryId, nameof(categoryId));
-			Guard.Against.NullOrWhiteSpace(name, nameof(name));
-			Guard.Against.NullOrWhiteSpace(description, nameof(description));
-			Guard.Against.NullOrWhiteSpace(shortDescription, nameof(shortDescription));
-			Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
-			Guard.Against.Null(price, nameof(price));
-			Guard.Against.Null(inventory, nameof(inventory));
-
-			CategoryId = categoryId;
-			Name = name;
-			Description = description;
-			ShortDescription = shortDescription;
-			Sku = sku;
-			Price = price;
-			Inventory = inventory;
-
 			this.productColors = productColors ?? new();
 		}
 
