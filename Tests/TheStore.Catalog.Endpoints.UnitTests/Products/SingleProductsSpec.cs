@@ -23,6 +23,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {
 	public class SingleProductsSpec
 	{
+		#region Single Products
+
 		[Fact]
 		public async Task Can_List_Single_Products()
 		{
@@ -131,6 +133,11 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			result.Result.Should().BeOfType(typeof(CreatedAtRouteResult));
 		}
 
+
+		#endregion
+
+		#region Product Colors
+
 		[Fact]
 		public async Task Can_Add_Color_To_Single_Product()
 		{
@@ -213,6 +220,10 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 
+		#endregion
+
+		#region Image
+
 		[Fact]
 		public async Task Can_Add_Image_To_Color()
 		{
@@ -274,5 +285,38 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
+
+		[Fact]
+		public async Task Can_Remove_Image_From_Color()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<RemoveImageFromColorRequest>();
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.ProductId);
+
+			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+
+			var image = new Image(request.ImagePath, fixture.Create<string>());
+
+			productColor = productColor.AddImage(image);
+
+			// Add the color so we simulate the addition process
+			singleProduct.AddColor(productColor);
+
+			var mockRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			mockRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
+				.ReturnsAsync(singleProduct);
+
+			var sut = new RemoveImage(new RemoveImageValidator(), mockRepository.Object);
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(NoContentResult));
+		}
+
+		#endregion
 	}
 }
