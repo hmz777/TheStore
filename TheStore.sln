@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.Blazor", "Src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Catalog.Infrastructure.UnitTests", "Tests\TheStore.Catalog.Infrastructure.UnitTests\TheStore.Catalog.Infrastructure.UnitTests.csproj", "{16626CC3-7B0B-4847-8121-B227CF1A2AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.APICommon.UnitTests", "Tests\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj", "{FDD48DD7-A89E-4EFE-A9E6-028BC3EAB26E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.APICommon.UnitTests", "Tests\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj", "{FDD48DD7-A89E-4EFE-A9E6-028BC3EAB26E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
