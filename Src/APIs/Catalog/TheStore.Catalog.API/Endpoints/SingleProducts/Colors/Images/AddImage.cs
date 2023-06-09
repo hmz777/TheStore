@@ -51,7 +51,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 		   OperationId = "Product.Single.Color.Image.Add",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			AddImageToColorRequest request,
+		   [FromForm] AddImageToColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

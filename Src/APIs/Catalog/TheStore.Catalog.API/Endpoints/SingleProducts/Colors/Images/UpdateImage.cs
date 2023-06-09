@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Web;
 using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
@@ -52,7 +53,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 		   OperationId = "Product.Single.Color.Image.Update",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			UpdateImageOfColorRequest request,
+		[FromForm] UpdateImageOfColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -69,7 +70,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images
 			if (color == null)
 				return NotFound("Color not found");
 
-			var image = color.Images.FirstOrDefault(x => x.StringFileUri == request.ImagePath);
+			var decodedImagePath = HttpUtility.UrlDecode(request.ImagePath);
+
+			var image = color.Images.FirstOrDefault(x => x.StringFileUri == decodedImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 
