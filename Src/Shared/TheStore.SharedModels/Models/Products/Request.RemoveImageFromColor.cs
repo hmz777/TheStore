@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Web;
 
 namespace TheStore.SharedModels.Models.Products
 {
@@ -10,10 +11,21 @@ namespace TheStore.SharedModels.Models.Products
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{ColorCode}", ColorCode.ToString())
-			.Replace("{ImagePath}", ImagePath);
+			.Replace("{ImagePath}", HttpUtility.UrlEncode(ImagePath));
 
 		public int ProductId { get; set; }
 		public string ColorCode { get; set; }
 		public string ImagePath { get; set; }
+
+        public RemoveImageFromColorRequest()
+        {
+            
+        }
+        public RemoveImageFromColorRequest(int productId, string colorCode, string imagePath)
+		{
+			ProductId = productId;
+			ColorCode = colorCode;
+			ImagePath = imagePath;
+		}
 	}
 }

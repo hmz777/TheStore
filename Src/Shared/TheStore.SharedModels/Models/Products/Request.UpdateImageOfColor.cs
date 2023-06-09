@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.Web;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
@@ -12,7 +13,7 @@ namespace TheStore.SharedModels.Models.Products
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{ColorCode}", ColorCode)
-			.Replace("{ImagePath}", ImagePath);
+			.Replace("{ImagePath}", HttpUtility.UrlEncode(ImagePath));
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }

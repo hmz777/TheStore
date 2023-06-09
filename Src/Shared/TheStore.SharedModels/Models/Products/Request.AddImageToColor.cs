@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
@@ -12,8 +13,12 @@ namespace TheStore.SharedModels.Models.Products
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{ColorCode}", ColorCode);
 
+		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
+
+		[FromRoute(Name = nameof(ColorCode))]
 		public string ColorCode { get; set; }
+
 		public AddImageDto Image { get; set; }
 	}
 }

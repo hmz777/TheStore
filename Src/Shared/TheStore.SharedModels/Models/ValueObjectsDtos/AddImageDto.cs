@@ -11,7 +11,7 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 		public string Alt { get; set; }
 
 		[JsonIgnore]
-		public string StringFileUri { get; set; }
+		public string? StringFileUri { get; set; }
 
         public AddImageDto()
         {
