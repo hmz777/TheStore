@@ -7,6 +7,7 @@ using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 {
+	[Atomic]
 	public class SingleProductsSpec : IClassFixture<CustomWebApplicationFactory<Program>>
 	{
 		private readonly HttpClient _client;

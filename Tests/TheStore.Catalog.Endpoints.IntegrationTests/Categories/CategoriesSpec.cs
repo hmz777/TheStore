@@ -1,11 +1,13 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using NCrunch.Framework;
 using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 {
+	[Atomic]
 	public class CategoriesSpec : IClassFixture<CustomWebApplicationFactory<Program>>
 	{
 		private readonly HttpClient _client;

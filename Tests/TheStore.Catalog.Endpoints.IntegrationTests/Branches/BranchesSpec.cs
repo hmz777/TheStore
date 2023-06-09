@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using NCrunch.Framework;
 using TheStore.Catalog.Endpoints.IntegrationTests.AutoData;
 using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
@@ -7,6 +8,7 @@ using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 {
+	[Atomic]
 	public class BranchesSpec : IClassFixture<CustomWebApplicationFactory<Program>>
 	{
 		private readonly HttpClient _client;
