@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using NCrunch.Framework;
 using System.Text.Json;
 using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
@@ -120,6 +121,87 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var response = await _client.DeleteAsync(request.Route);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
+		}
+
+		[Fact]
+		public async Task Can_Add_Image_To_Color()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<AddImageToColorRequest>();
+			request.ProductId = 1;
+			request.ColorCode = "000000";
+
+			using (var formData = new MultipartFormDataContent())
+			{
+				formData.Add(new StringContent(request.Image.Alt), "Image.Alt");
+				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
+					"Image.File", "TestImage.jpg");
+
+				var response = await _client.PostAsync(request.Route, formData);
+
+				var responseObject = JsonSerializer
+					.Deserialize<SingleProductDto>(
+					await response.Content.ReadAsStringAsync(),
+					new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+				((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
+				response.Headers.Location.Should().NotBeNull();
+
+				responseObject?.ProductColors.Should().Contain(x => x.ColorCode == request.ColorCode);
+			}
+		}
+
+		[Fact]
+		public async Task Can_Update_Image_In_Color()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new DtoCustomizations());
+
+			var listRequest = new ListRequest(1, 1);
+			var listResponse = await _client.
+				GetFromJsonAsync<List<SingleProductDto>>(listRequest.Route);
+
+			var product = listResponse!.First();
+			var color = product.GetMainColor();
+
+			var request = fixture.Create<UpdateImageOfColorRequest>();
+			request.ProductId = product.ProductId;
+			request.ColorCode = color.ColorCode;
+			request.ImagePath = color.GetMainImage().StringFileUri;
+
+			using (var formData = new MultipartFormDataContent())
+			{
+				formData.Add(new StringContent(request.Image.Alt), "Image.Alt");
+				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
+					"Image.File", "TestImage.jpg");
+
+				var response = await _client.PutAsync(request.Route, formData);
+
+				((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
+			}
+		}
+
+		[Fact]
+		public async Task Can_Remove_Image_From_Color()
+		{
+			var request = new ListRequest(1, 10);
+
+			var response = await _client.
+				GetFromJsonAsync<List<SingleProductDto>>(request.Route);
+
+			var imageToRemove = response!.First();
+			var color = imageToRemove.GetMainColor();
+
+			var removeRequest = new RemoveImageFromColorRequest(
+				imageToRemove.ProductId,
+				color.ColorCode,
+				color.GetMainImage().StringFileUri);
+
+			var removeResponse = await _client.DeleteAsync(removeRequest.Route);
+
+			((int)removeResponse.StatusCode).Should().Be(StatusCodes.Status204NoContent);
 		}
 	}
 }
