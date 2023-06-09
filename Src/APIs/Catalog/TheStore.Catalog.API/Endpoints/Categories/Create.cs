@@ -45,14 +45,14 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		[FromBody] CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create category with name: {Name}", request.Name, request.CorrelationId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
 			var category = await apiRepository.AddAsync(mapper.Map<Category>(request), cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Create category with name: {Name}", request.Name, request.CorrelationId);
 
 			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { CategoryId = category.Id.Id }, mapper.Map<CategoryDto>(category));
 		}
