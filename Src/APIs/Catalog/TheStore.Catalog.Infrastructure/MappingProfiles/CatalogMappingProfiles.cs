@@ -37,6 +37,17 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
 				.ForMember(dest => dest.ProductColors, opt => opt.Ignore());
 
+			// Assembled Products
+			CreateMap<AssembledProduct, AssembledProductDto>()
+				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
+				.ForMember(dest => dest.Parts, opt => opt.MapFrom("parts"));
+
+			CreateMap<CreateAssembledRequest, AssembledProduct>()
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+
+			CreateMap<UpdateAssembledRequest, AssembledProduct>()
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+
 			// Value Objects
 			CreateMap<Money, MoneyDto>().ReverseMap();
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
