@@ -1,5 +1,8 @@
 ﻿<ProjectConfiguration>
   <Settings>
+    <AdditionalFilesToIncludeForProject>
+      <Value>wwwroot\*</Value>
+    </AdditionalFilesToIncludeForProject>
     <IgnoredTests>
       <AllTestsSelector />
     </IgnoredTests>
