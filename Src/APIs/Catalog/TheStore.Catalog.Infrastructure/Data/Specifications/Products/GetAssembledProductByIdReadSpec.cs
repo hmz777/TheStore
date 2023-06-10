@@ -4,10 +4,10 @@ using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 {
-	public class GetSingleProductByIdReadSpec : Specification<SingleProduct>,
-		ISingleResultSpecification<SingleProduct>
+	public class GetAssembledProductByIdReadSpec : Specification<AssembledProduct>,
+		ISingleResultSpecification<AssembledProduct>
 	{
-		public GetSingleProductByIdReadSpec(ProductId productId)
+		public GetAssembledProductByIdReadSpec(ProductId productId)
 		{
 			Query.Where(product => product.Id == productId)
 				.AsNoTracking();
