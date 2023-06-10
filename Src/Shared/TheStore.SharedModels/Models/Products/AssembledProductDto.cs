@@ -10,5 +10,6 @@ namespace TheStore.SharedModels.Models.Products
 		public string Description { get; set; }
 		public string ShortDescription { get; set; }
 		public string Sku { get; set; }
+		public List<int> Parts { get; set; }
 	}
 }

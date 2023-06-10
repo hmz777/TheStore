@@ -5,7 +5,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Assembled." + nameof(ListAssembledRequest))]
 	public class ListAssembledRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts";
+		public const string RouteTemplate = "products/assembledproducts";
 
 		public override string Route
 			=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());
