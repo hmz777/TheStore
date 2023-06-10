@@ -41,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		[SwaggerOperation(
 			Summary = "Lists single products",
 			Description = "Lists single products with pagination using skip and take",
-			OperationId = "Product.List",
+			OperationId = "Product.Single.List",
 			Tags = new[] { "Products" })]
 		public async override Task<ActionResult<List<SingleProductDto>>> HandleAsync(
 			[FromQuery] ListRequest request,
