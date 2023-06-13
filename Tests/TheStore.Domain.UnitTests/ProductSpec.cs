@@ -164,7 +164,7 @@ namespace TheStore.Domain.UnitTests
 		}
 
 		[Fact]
-		public void Can_Remove_Parts_To_Assembled_Product()
+		public void Can_Remove_Parts_From_Assembled_Product()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
