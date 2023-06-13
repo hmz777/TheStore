@@ -125,5 +125,64 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			result.Result.Should().BeOfType(typeof(CreatedAtRouteResult));
 		}
+
+		[Fact]
+		public async Task Can_Add_Part_To_Assembled_Product()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<AddPartRequest>();
+			var assembledProduct = fixture.Create<AssembledProduct>();
+			assembledProduct.Id = new AssembledProductId(request.ProductId);
+
+			var singleProduct = fixture.Create<SingleProduct>();
+			singleProduct.Id = new ProductId(request.PartId);
+
+			var assembledProductRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
+			assembledProductRepository.Setup(x => x.GetByIdAsync(assembledProduct.Id, default))
+				.ReturnsAsync(assembledProduct);
+
+			var singleProductRepository = new Mock<IApiRepository<CatalogDbContext, SingleProduct>>();
+			singleProductRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
+				.ReturnsAsync(singleProduct);
+
+			var sut = new AddPart(
+				new AddPartValidator(),
+				assembledProductRepository.Object,
+				singleProductRepository.Object,
+				fixture.Create<IMapper>());
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(CreatedAtRouteResult));
+		}
+
+		[Fact]
+		public async Task Can_Remove_Part_From_Assembled_Product()
+		{
+			var fixture = new Fixture();
+			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new DtoCustomizations());
+
+			var request = fixture.Create<RemovePartRequest>();
+			var assembledProduct = fixture.Create<AssembledProduct>();
+			assembledProduct.Id = new AssembledProductId(request.ProductId);
+
+			assembledProduct.AddPart(new ProductId(request.PartId));
+
+			var assembledProductRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
+			assembledProductRepository.Setup(x => x.GetByIdAsync(assembledProduct.Id, default))
+				.ReturnsAsync(assembledProduct);
+
+			var sut = new RemovePart(
+				new RemovePartValidator(),
+				assembledProductRepository.Object);
+
+			var result = await sut.HandleAsync(request);
+
+			result.Should().BeOfType(typeof(NoContentResult));
+		}
 	}
 }
