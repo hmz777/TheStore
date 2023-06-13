@@ -40,7 +40,8 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			// Assembled Products
 			CreateMap<AssembledProduct, AssembledProductDto>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
-				.ForMember(dest => dest.Parts, opt => opt.MapFrom("parts"));
+				.ForMember(dest => dest.Parts,
+					opt => opt.MapFrom(src => src.Parts.Select(x => x.Id).ToList()));
 
 			CreateMap<CreateAssembledRequest, AssembledProduct>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
