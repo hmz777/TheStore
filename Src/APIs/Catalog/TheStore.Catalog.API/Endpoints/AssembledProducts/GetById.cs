@@ -36,7 +36,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			this.mapper = mapper;
 		}
 
-		[HttpGet(GetByIdRequest.RouteTemplate, Name = GetByIdRequest.RouteName)]
+		[HttpGet(GetAssembledByIdRequest.RouteTemplate, Name = GetAssembledByIdRequest.RouteName)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status200OK)]

@@ -35,7 +35,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			this.mapper = mapper;
 		}
 
-		[HttpPut(UpdateRequest.RouteTemplate)]
+		[HttpPut(UpdateAssembledRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
