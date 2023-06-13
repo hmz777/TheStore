@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TheStore.ApiCommon.Data.Helpers;
-using TheStore.ApiCommon.Extensions.Migrations;
 
 namespace TheStore.ApiCommon.Extensions.Migrations
 {
@@ -19,7 +18,7 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 
 				if (context.IsInMemoryDatabaseUsed() == false)
 				{
-					//context?.Database.Migrate();
+					//context.Database.Migrate();
 					context.Database.EnsureCreated();
 				}
 			}
