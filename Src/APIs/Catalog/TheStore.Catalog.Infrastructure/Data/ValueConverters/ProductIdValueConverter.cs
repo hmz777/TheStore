@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 
-namespace TheStore.Catalog.Core.ValueConverters
+namespace TheStore.Catalog.Infrastructure.Data.ValueConverters
 {
 	public class ProductIdValueConverter : ValueConverter<ProductId, int>
 	{
