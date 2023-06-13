@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace TheStore.Catalog.Core.ValueObjects.Keys
+namespace TheStore.SharedKernel.ValueObjects
 {
 	public class EntityId<T> : ValueObject where T : notnull, IComparable
 	{
