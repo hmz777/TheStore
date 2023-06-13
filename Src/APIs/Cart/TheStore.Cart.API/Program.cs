@@ -1,25 +1,44 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Reflection;
+using TheStore.ApiCommon.Extensions.Migrations;
+using TheStore.Cart.Infrastructure.Data;
+using TheStore.Cart.Infrastructure.Services;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args)
+	.RegisterServices<CartDbContext>(Assembly.GetExecutingAssembly());
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// API-specific services can be registered here
+
+// Pipeline
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+	// Apply pending migrations.
+	// In production, we use a different strategy.
+	app.Migrate<CartDbContext>();
+
+	// Swagger
 	app.UseSwagger();
-	app.UseSwaggerUI();
+	app.UseSwaggerUI(options =>
+	{
+		options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+		options.RoutePrefix = string.Empty;
+	});
+}
+
+using (var scope = app.Services.CreateScope())
+{
+	var context = scope.ServiceProvider.GetRequiredService<CartDbContext>();
+	await new DataSeeder().SeedDataAsync(context);
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
