@@ -1,4 +1,6 @@
-﻿namespace TheStore.Catalog.Core.ValueObjects.Keys
+﻿using TheStore.SharedKernel.ValueObjects;
+
+namespace TheStore.Catalog.Core.ValueObjects.Keys
 {
 	public class ProductId : EntityId<int>
 	{
