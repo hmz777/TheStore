@@ -11,12 +11,11 @@ using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Cart;
 using TheStore.SharedModels.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints
 {
-    public class AddToWishlist : EndpointBaseAsync
+	public class AddToWishlist : EndpointBaseAsync
 		.WithRequest<AddToWishlistRequest>
 		.WithActionResult
 	{

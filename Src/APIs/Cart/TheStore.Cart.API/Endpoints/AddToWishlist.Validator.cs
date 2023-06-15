@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.Cart;
+using TheStore.SharedModels.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints
 {
@@ -10,7 +10,7 @@ namespace TheStore.Cart.API.Endpoints
 			RuleFor(x => x.WishlistId)
 				.NotEmpty();
 
-			RuleFor(x => x.ItemId)
+			RuleFor(x => x.ProductId)
 				.NotEmpty();
 		}
 	}

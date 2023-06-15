@@ -43,7 +43,7 @@ namespace TheStore.Cart.API.Endpoints
 			Summary = "Gets a wishlist by id",
 			Description = "Gets a wishlist by id",
 			OperationId = "Wishlist.GetById",
-			Tags = new[] { "Wishlist" })]
+			Tags = new[] { "Wishlists" })]
 		public async override Task<ActionResult<WishlistDto>> HandleAsync(
 			GetWishlistByIdRequest request,
 			CancellationToken cancellationToken = default)

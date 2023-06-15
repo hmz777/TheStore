@@ -10,7 +10,7 @@ using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.ValueObjects.Keys;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Cart;
+using TheStore.SharedModels.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints
 {
@@ -38,7 +38,7 @@ namespace TheStore.Cart.API.Endpoints
 		   Summary = "Removes an item from wishlist",
 		   Description = "Removes an item from wishlist",
 		   OperationId = "Wishlist.Items.Remove",
-		   Tags = new[] { "Wishlist" })]
+		   Tags = new[] { "Wishlists" })]
 		public async override Task<ActionResult> HandleAsync(
 			RemoveFromWishlistRequest request,
 			CancellationToken cancellationToken = default)
