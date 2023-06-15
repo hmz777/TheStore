@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
@@ -11,6 +12,7 @@ namespace TheStore.Cart.Core.Aggregates
 	{
 		private List<WishlistItem> items;
 
+		[NotMapped]
 		public ReadOnlyCollection<WishlistItem> Items => items.AsReadOnly();
 
 		public BuyerId BuyerId { get; private set; }
