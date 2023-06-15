@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Text.Json;
 using Ardalis.GuardClauses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Localization;
+using System.Text.Json;
 
 namespace TheStore.Web.Services.StatusMessage;
 

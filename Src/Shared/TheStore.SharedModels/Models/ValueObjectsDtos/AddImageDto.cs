@@ -13,10 +13,10 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 		[JsonIgnore]
 		public string? StringFileUri { get; set; }
 
-        public AddImageDto()
-        {
-            
-        }
+		public AddImageDto()
+		{
+
+		}
 
 		public AddImageDto(IFormFile file, string alt)
 		{

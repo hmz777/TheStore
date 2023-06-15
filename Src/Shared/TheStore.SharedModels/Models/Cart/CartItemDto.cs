@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheStore.SharedModels.Models.Cart
+﻿namespace TheStore.SharedModels.Models.Cart
 {
 	public class CartItemDto : DtoBase
 	{

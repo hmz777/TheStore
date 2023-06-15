@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
-using TheStore.Domain.UnitTests.AutoData.Specimens;
 
-namespace TheStore.Domain.UnitTests.AutoData.Customizations
+namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 {
 	public class ProductColorCustomization : ICustomization
 	{

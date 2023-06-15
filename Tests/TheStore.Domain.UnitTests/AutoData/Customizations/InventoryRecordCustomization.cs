@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using TheStore.Catalog.Core.ValueObjects;
 
-namespace TheStore.Domain.UnitTests.AutoData.Customizations
+namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 {
 	public class InventoryRecordCustomization : ICustomization
 	{

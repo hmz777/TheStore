@@ -14,10 +14,10 @@ namespace TheStore.SharedModels.Models.Categories
 
 		public bool Active { get; set; }
 
-        public CreateRequest()
-        {
-            
-        }
+		public CreateRequest()
+		{
+
+		}
 
 		public CreateRequest(int order, string name, bool active)
 		{

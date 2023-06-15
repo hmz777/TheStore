@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.ComponentModel;
-using TheStore.SharedModels.Models;
-
-namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
+﻿namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
 {
 	public class FormDataFactory
 	{

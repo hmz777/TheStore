@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {

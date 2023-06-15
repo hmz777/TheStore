@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using TheStore.Catalog.Core.ValueObjects;
 
-namespace TheStore.Domain.UnitTests
+namespace TheStore.Catalog.Domain.UnitTests
 {
 	public class ImageSpec
 	{

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TheStore.SharedKernel.DomainEvents;
+﻿using TheStore.SharedKernel.DomainEvents;
 
 namespace TheStore.SharedKernel.Interfaces
 {

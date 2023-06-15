@@ -14,10 +14,10 @@ namespace TheStore.SharedModels.Models.Products
 		public string ShortDescription { get; set; }
 		public string Sku { get; set; }
 
-        public CreateAssembledRequest()
-        {
-            
-        }
+		public CreateAssembledRequest()
+		{
+
+		}
 
 		public CreateAssembledRequest(int categoryId, string name, string description, string shortDescription, string sku)
 		{

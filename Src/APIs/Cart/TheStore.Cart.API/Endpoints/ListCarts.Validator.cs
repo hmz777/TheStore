@@ -5,8 +5,8 @@ namespace TheStore.Cart.API.Endpoints
 {
 	public class ListCartsValidator : AbstractValidator<ListRequest>
 	{
-        public ListCartsValidator()
-        {
+		public ListCartsValidator()
+		{
 			RuleFor(x => x.Page)
 				.NotEmpty()
 				.GreaterThanOrEqualTo(1);
@@ -15,5 +15,5 @@ namespace TheStore.Cart.API.Endpoints
 				.NotEmpty()
 				.GreaterThanOrEqualTo(1);
 		}
-    }
+	}
 }

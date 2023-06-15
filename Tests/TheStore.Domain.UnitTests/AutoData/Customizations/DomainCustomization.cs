@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 
-namespace TheStore.Domain.UnitTests.AutoData.Customizations
+namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 {
 	public class DomainCustomization : ICustomization
 	{

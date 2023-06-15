@@ -10,10 +10,10 @@ namespace TheStore.SharedModels.Models.Products
 
 		public int ProductId { get; set; }
 
-        public DeleteRequest()
-        {
-            
-        }
+		public DeleteRequest()
+		{
+
+		}
 
 		public DeleteRequest(int productId)
 		{

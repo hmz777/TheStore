@@ -2,7 +2,6 @@
 using TheStore.ApiCommon.Data.ValueConverters;
 using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.Entities;
-using TheStore.Cart.Core.ValueObjects.Keys;
 using TheStore.Cart.Infrastructure.Data.ValueConverters;
 
 namespace TheStore.Cart.Infrastructure.Data
@@ -82,5 +81,5 @@ namespace TheStore.Cart.Infrastructure.Data
 		public DbSet<Core.Aggregates.Cart> Carts => Set<Core.Aggregates.Cart>();
 		public DbSet<Wishlist> Wishlists => Set<Wishlist>();
 		public DbSet<Buyer> Buyers => Set<Buyer>();
-    }
+	}
 }

@@ -11,12 +11,12 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public string CurrencyCode { get; private set; }
 
 		// Ef Core
-        private Currency()
-        {
-            
-        }
+		private Currency()
+		{
 
-        public Currency(string currencyCode)
+		}
+
+		public Currency(string currencyCode)
 		{
 			Guard.Against.NullOrWhiteSpace(currencyCode, nameof(currencyCode));
 

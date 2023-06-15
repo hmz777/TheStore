@@ -11,10 +11,10 @@ namespace TheStore.SharedModels.Models.Products
 
 		public int ProductId { get; set; }
 
-        public GetByIdRequest()
-        {
-            
-        }
+		public GetByIdRequest()
+		{
+
+		}
 
 		public GetByIdRequest(int productId)
 		{

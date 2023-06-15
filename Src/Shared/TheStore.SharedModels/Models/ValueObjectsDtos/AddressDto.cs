@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {

@@ -1,7 +1,7 @@
 ﻿namespace TheStore.Cart.Infrastructure.Data.Configuration
 {
-    public class Constants
-    {
-        public const string DatabaseName = "CartDb";
-    }
+	public class Constants
+	{
+		public const string DatabaseName = "CartDb";
+	}
 }

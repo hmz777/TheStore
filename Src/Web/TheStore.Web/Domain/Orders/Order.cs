@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheStore.Web.Domain;
-using TheStore.Web.Domain.Branches;
+﻿using TheStore.Web.Domain.Branches;
 using TheStore.Web.Domain.Products;
 
 namespace TheStore.Web.Domain.Orders

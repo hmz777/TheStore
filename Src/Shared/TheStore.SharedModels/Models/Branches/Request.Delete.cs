@@ -10,10 +10,10 @@ namespace TheStore.SharedModels.Models.Branches
 
 		public int BranchId { get; set; }
 
-        public DeleteRequest()
-        {
-            
-        }
+		public DeleteRequest()
+		{
+
+		}
 
 		public DeleteRequest(int branchId)
 		{

@@ -11,10 +11,10 @@ namespace TheStore.SharedModels.Models.Categories
 
 		public int CategoryId { get; set; }
 
-        public GetByIdRequest()
-        {
-            
-        }
+		public GetByIdRequest()
+		{
+
+		}
 
 		public GetByIdRequest(int categoryId)
 		{

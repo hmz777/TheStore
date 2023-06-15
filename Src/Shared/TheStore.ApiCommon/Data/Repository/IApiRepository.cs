@@ -1,5 +1,4 @@
 ﻿using Ardalis.Specification;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;

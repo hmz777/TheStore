@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace TheStore.Web.Services.StatusMessage;
 
 public interface IStatusMessageService

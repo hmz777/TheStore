@@ -2,7 +2,7 @@
 using TheStore.Catalog.Core.Exceptions;
 using TheStore.Catalog.Core.ValueObjects;
 
-namespace TheStore.Domain.UnitTests
+namespace TheStore.Catalog.Domain.UnitTests
 {
 	public class InventoryRecordSpec
 	{

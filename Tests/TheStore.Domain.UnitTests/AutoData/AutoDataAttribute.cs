@@ -1,8 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
-using TheStore.Domain.UnitTests.AutoData.Customizations;
 
-namespace TheStore.Domain.UnitTests.AutoData
+namespace TheStore.Catalog.Domain.UnitTests.AutoData
 {
 	public class DomainAutoDataAttribute : AutoDataAttribute
 	{

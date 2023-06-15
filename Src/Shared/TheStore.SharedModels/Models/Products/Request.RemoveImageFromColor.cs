@@ -17,11 +17,11 @@ namespace TheStore.SharedModels.Models.Products
 		public string ColorCode { get; set; }
 		public string ImagePath { get; set; }
 
-        public RemoveImageFromColorRequest()
-        {
-            
-        }
-        public RemoveImageFromColorRequest(int productId, string colorCode, string imagePath)
+		public RemoveImageFromColorRequest()
+		{
+
+		}
+		public RemoveImageFromColorRequest(int productId, string colorCode, string imagePath)
 		{
 			ProductId = productId;
 			ColorCode = colorCode;

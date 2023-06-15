@@ -86,7 +86,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 						.PutAsync(request.Route, formData);
 
 				((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
-			}			
+			}
 		}
 
 		[Fact]

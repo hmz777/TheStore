@@ -34,7 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Src\APIs\Catalog\TheStore.Catalog.API\TheStore.Catalog.API.csproj" />
     <ProjectReference Include="..\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj" />
-    <ProjectReference Include="..\TheStore.Domain.UnitTests\TheStore.Domain.UnitTests.csproj" />
+    <ProjectReference Include="..\TheStore.Domain.UnitTests\TheStore.Catalog.Domain.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>

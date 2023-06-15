@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TheStore.Catalog.Endpoints.IntegrationTests.Helpers;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
-using Xunit;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 {

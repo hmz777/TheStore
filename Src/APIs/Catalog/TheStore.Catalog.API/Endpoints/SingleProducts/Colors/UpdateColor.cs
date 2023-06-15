@@ -1,7 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using AutoMapper;
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
@@ -43,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts.Colors
 		   OperationId = "Product.Single.Color.Update",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-		    UpdateColorRequest request,
+			UpdateColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

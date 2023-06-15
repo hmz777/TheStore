@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheStore.Catalog.Core.Exceptions
+﻿namespace TheStore.Catalog.Core.Exceptions
 {
 	public class NotEnoughItemsInInventoryException : Exception
 	{

@@ -1,6 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
-using Azure;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;

@@ -4,7 +4,7 @@ namespace TheStore.Cart.Infrastructure.Data.Specifications
 {
 	public class ListCartsPaginationReadSpec : Specification<Core.Aggregates.Cart>
 	{
-        public ListCartsPaginationReadSpec(int take, int page)
+		public ListCartsPaginationReadSpec(int take, int page)
 		{
 			Query
 				.Skip((page - 1) * take)
@@ -15,5 +15,5 @@ namespace TheStore.Cart.Infrastructure.Data.Specifications
 			if (page == 1)
 				Query.EnableCache(nameof(ListCartsPaginationReadSpec), 1);
 		}
-    }
+	}
 }
