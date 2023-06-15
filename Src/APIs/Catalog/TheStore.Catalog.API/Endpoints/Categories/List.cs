@@ -47,9 +47,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -57,6 +54,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			var categories = (await repository
 				.ListAsync(new ListCategoriesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
 				.Map<Category, CategoryDto>(mapper);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
 			return categories;
 		}

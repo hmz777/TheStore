@@ -48,9 +48,6 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get branch with Id: {Id}", request.BranchId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -61,6 +58,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 
 			if (branch == null)
 				return NotFound();
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Get branch with Id: {Id}", request.BranchId);
 
 			return branch;
 		}

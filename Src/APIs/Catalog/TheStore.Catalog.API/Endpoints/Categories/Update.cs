@@ -48,9 +48,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			UpdateRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update category with id: {Id}", request.CategoryId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -63,6 +60,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			}
 
 			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Update category with id: {Id}", request.CategoryId);
 
 			return NoContent();
 		}

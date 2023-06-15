@@ -42,9 +42,6 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			[FromRoute] DeleteRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Delete branch with id: {Id}", request.BranchId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -57,6 +54,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			}
 
 			await apiRepository.ExecuteDeleteAsync<Branch, int>(branch.Id, cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Delete branch with id: {Id}", request.BranchId);
 
 			return NoContent();
 		}

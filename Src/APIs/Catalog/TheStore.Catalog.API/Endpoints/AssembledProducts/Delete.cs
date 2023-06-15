@@ -44,9 +44,6 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		[FromRoute] DeleteAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Delete assembled product with id: {Id}", request.ProductId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -59,6 +56,9 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			}
 
 			await apiRepository.ExecuteDeleteAsync<AssembledProduct, AssembledProductId>(assembledProduct.Id, cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Delete assembled product with id: {Id}", request.ProductId);
 
 			return NoContent();
 		}

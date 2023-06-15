@@ -49,9 +49,6 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get a single product with Id: {Id}", request.ProductId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -62,6 +59,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 
 			if (singleProduct == null)
 				return NotFound();
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Get a single product with Id: {Id}", request.ProductId);
 
 			return singleProduct;
 		}

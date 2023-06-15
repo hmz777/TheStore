@@ -45,14 +45,14 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		[FromBody] CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create a single product with name: {Name}", request.Name);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
 			var singleProduct = await apiRepository.AddAsync(mapper.Map<SingleProduct>(request), cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Create a single product with name: {Name}", request.Name);
 
 			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<SingleProductDto>(singleProduct));
 		}

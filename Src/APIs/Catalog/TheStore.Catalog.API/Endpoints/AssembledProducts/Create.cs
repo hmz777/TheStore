@@ -45,15 +45,15 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		[FromBody] CreateAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create assembled product with name: {Name}", request.Name);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
 			var assembledProduct = await apiRepository
 				.AddAsync(mapper.Map<AssembledProduct>(request), cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Create assembled product with name: {Name}", request.Name);
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,

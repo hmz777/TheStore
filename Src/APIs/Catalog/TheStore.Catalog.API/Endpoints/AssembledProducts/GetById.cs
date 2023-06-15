@@ -49,9 +49,6 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		[FromRoute] GetAssembledByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get assembled product with Id: {Id}", request.ProductId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -63,6 +60,9 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 
 			if (assembledProduct == null)
 				return NotFound();
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Get assembled product with Id: {Id}", request.ProductId);
 
 			return assembledProduct;
 		}

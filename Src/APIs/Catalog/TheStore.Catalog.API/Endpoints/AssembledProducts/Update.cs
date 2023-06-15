@@ -48,9 +48,6 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			UpdateAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update assembled product with id: {Id}", request.ProductId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -63,6 +60,9 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			}
 
 			await RepositoryHelpers.PropertyUpdateAsync(request, assembledProduct, mapper, apiRepository);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Update assembled product with id: {Id}", request.ProductId);
 
 			return NoContent();
 		}

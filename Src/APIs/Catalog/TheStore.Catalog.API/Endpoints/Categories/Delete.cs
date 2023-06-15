@@ -43,9 +43,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			[FromRoute] DeleteRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Delete category with id: {Id}", request.CategoryId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -58,6 +55,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			}
 
 			await apiRepository.ExecuteDeleteAsync<Category, CategoryId>(category.Id, cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Delete category with id: {Id}", request.CategoryId);
 
 			return NoContent();
 		}

@@ -44,9 +44,6 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 		[FromRoute] DeleteRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Delete a single product with id: {Id}", request.ProductId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -59,6 +56,9 @@ namespace TheStore.Catalog.API.Endpoints.SingleProducts
 			}
 
 			await apiRepository.ExecuteDeleteAsync<SingleProduct, ProductId>(singleProduct.Id, cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Delete a single product with id: {Id}", request.ProductId);
 
 			return NoContent();
 		}

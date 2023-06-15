@@ -47,9 +47,6 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			[FromQuery] ListAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List assembled products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -57,6 +54,9 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			var assembledProducts = (await repository
 				.ListAsync(new ListAssembledProductsPaginationReadSpec(request.Take, request.Page), cancellationToken))
 				.Map<AssembledProduct, AssembledProductDto>(mapper);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("List assembled products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
 			return assembledProducts;
 		}

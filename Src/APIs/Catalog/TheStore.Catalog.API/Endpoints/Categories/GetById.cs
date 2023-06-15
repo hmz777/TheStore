@@ -49,9 +49,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get category with Id: {Id}", request.CategoryId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -62,6 +59,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 
 			if (category == null)
 				return NotFound();
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Get category with Id: {Id}", request.CategoryId);
 
 			return category;
 		}

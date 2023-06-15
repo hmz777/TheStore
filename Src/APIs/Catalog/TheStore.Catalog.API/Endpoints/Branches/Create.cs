@@ -45,16 +45,14 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		[FromBody] CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create branch with name: {Name}", request.Name, request.CorrelationId);
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			//await mediator.Send(new AddImageRequest(request.Image, ResourceFilePaths.BranchesImages), cancellationToken);
-
 			var branch = await apiRepository.AddAsync(mapper.Map<Branch>(request), cancellationToken);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("Create branch with name: {Name}", request.Name, request.CorrelationId);
 
 			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { BranchId = branch.Id }, mapper.Map<BranchDto>(branch));
 		}

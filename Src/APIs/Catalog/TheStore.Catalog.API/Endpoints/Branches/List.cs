@@ -47,10 +47,6 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List branches with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
-
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
@@ -58,6 +54,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			var branches = (await repository
 				.ListAsync(new ListBranchesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
 				.Map<Branch, BranchDto>(mapper);
+
+			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+				log.Information("List branches with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
 			return branches;
 		}
