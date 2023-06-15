@@ -38,7 +38,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Summary = "Deletes an assembled product",
 		   Description = "Deletes an assembled product",
 		   OperationId = "Product.Assembled.Delete",
-		   Tags = new[] { "Products" })]
+		   Tags = new[] { "AssembledProducts" })]
 
 		public async override Task<ActionResult> HandleAsync(
 		[FromRoute] DeleteAssembledRequest request,

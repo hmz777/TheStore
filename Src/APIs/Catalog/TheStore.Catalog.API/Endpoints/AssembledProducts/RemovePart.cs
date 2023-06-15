@@ -38,7 +38,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Summary = "Removes a part from an assembled product",
 		   Description = "Removes a part from an assembled product",
 		   OperationId = "Product.Assembled.Part.Remove",
-		   Tags = new[] { "Products" })]
+		   Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult> HandleAsync(
 			RemovePartRequest request,
 			CancellationToken cancellationToken = default)

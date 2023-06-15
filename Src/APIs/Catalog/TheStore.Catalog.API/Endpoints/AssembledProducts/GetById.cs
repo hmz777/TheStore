@@ -44,7 +44,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			Summary = "Gets an assembled product by id",
 			Description = "Gets an assembled product by id",
 			OperationId = "Product.Assembled.GetById",
-			Tags = new[] { "Products" })]
+			Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult<AssembledProductDto>> HandleAsync(
 		[FromRoute] GetAssembledByIdRequest request,
 			CancellationToken cancellationToken = default)

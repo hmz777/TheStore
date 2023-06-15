@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Summary = "Updates an assembled product",
 		   Description = "Updates a assembled product",
 		   OperationId = "Product.Assembled.Update",
-		   Tags = new[] { "Products" })]
+		   Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult> HandleAsync(
 			UpdateAssembledRequest request,
 			CancellationToken cancellationToken = default)

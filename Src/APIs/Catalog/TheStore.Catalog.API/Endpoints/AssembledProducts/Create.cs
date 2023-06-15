@@ -40,7 +40,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Summary = "Creates a single product",
 		   Description = "Creates a single product",
 		   OperationId = "Product.Single.Create",
-		   Tags = new[] { "Products" })]
+		   Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult<AssembledProductDto>> HandleAsync(
 		[FromBody] CreateAssembledRequest request,
 			CancellationToken cancellationToken = default)

@@ -42,7 +42,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			Summary = "Lists assembled products",
 			Description = "Lists assembled products with pagination using skip and take",
 			OperationId = "Product.Assembled.List",
-			Tags = new[] { "Products" })]
+			Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult<List<AssembledProductDto>>> HandleAsync(
 			[FromQuery] ListAssembledRequest request,
 			CancellationToken cancellationToken = default)

@@ -46,7 +46,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Summary = "Adds a part to an assembled product",
 		   Description = "Adds a part to an assembled product",
 		   OperationId = "Product.Assembled.Part.Add",
-		   Tags = new[] { "Products" })]
+		   Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult> HandleAsync(
 			AddPartRequest request,
 			CancellationToken cancellationToken = default)
