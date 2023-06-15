@@ -50,7 +50,6 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
-
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
