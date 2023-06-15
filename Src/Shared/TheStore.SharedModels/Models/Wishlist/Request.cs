@@ -1,4 +1,4 @@
-﻿namespace TheStore.SharedModels.Models.Cart
+﻿namespace TheStore.SharedModels.Models.Wishlist
 {
 	/// <summary>
 	/// Dummy class for file grouping inside Visual Studio

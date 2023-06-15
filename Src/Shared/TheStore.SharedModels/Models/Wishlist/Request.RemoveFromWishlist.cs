@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
-namespace TheStore.SharedModels.Models.Cart
+namespace TheStore.SharedModels.Models.Wishlist
 {
 	[DisplayName("Wishlist." + nameof(RemoveFromWishlistRequest))]
 	public class RemoveFromWishlistRequest : RequestBase

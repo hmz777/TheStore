@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Cart
 	[DisplayName("Cart." + nameof(ListRequest))]
 	public class ListRequest : RequestBase
 	{
-		public const string RouteTemplate = "cart/{CartId}";
+		public const string RouteTemplate = "carts";
 
 		public override string Route
 			=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());

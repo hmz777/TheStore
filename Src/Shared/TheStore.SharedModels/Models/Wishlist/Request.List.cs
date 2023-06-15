@@ -5,7 +5,7 @@ namespace TheStore.SharedModels.Models.Wishlist
 	[DisplayName("Wishlist." + nameof(ListRequest))]
 	public class ListRequest : RequestBase
 	{
-		public const string RouteTemplate = "wishlist/{WishlistId}";
+		public const string RouteTemplate = "wishlists";
 		public override string Route
 		=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());
 
