@@ -25,7 +25,7 @@ namespace TheStore.Cart.Infrastructure.Data
 				.HasKey(x => x.Id);
 
 			modelBuilder.Entity<Core.Aggregates.Cart>()
-				.HasMany<CartItemId>("items")
+				.HasMany<CartItem>("items")
 				.WithOne();
 
 			#endregion
@@ -40,7 +40,7 @@ namespace TheStore.Cart.Infrastructure.Data
 				.HasKey(x => x.Id);
 
 			modelBuilder.Entity<Wishlist>()
-				.HasMany<WishlistItemId>("items")
+				.HasMany<WishlistItem>("items")
 				.WithOne();
 
 			#endregion
