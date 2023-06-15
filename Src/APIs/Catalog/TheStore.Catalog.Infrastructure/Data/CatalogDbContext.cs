@@ -2,18 +2,15 @@
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueConverters;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Products;
+using TheStore.Catalog.Infrastructure.Data.ValueConverters;
 
 namespace TheStore.Catalog.Infrastructure.Data
 {
 	public class CatalogDbContext : DbContext
 	{
-		public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions) : base(dbContextOptions)
-		{
-
-		}
+		public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions) : base(dbContextOptions) { }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
