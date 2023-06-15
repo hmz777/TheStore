@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
+using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 
 namespace TheStore.Catalog.Domain.UnitTests.AutoData
 {

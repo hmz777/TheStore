@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using TheStore.Catalog.Core.ValueObjects;
+using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos

@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints
 {

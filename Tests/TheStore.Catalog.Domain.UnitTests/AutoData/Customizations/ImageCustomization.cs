@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using TheStore.Catalog.Domain.UnitTests.AutoData.Specimens;
 
 namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 {
