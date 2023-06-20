@@ -1,34 +1,35 @@
 ﻿using Ardalis.GuardClauses;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-	public class AssembledProduct : BaseEntity<AssembledProductId>, IAggregateRoot
+	public class AssembledProduct : Product, IAggregateRoot
 	{
 		private List<ProductId> parts = new();
+
+		[NotMapped]
 		public ReadOnlyCollection<ProductId> Parts => parts.AsReadOnly();
 
-		public CategoryId CategoryId { get; set; }
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string ShortDescription { get; set; }
-		public string Sku { get; set; }
-
 		// Ef Core
-		private AssembledProduct()
-		{
-
-		}
+		private AssembledProduct() { }
 
 		public AssembledProduct(
 			CategoryId categoryId,
 			string name,
 			string description,
 			string shortDescription,
-			string sku)
+			string sku) : base(
+				categoryId,
+				name,
+				description,
+				shortDescription,
+				sku,
+				Money.ZeroUsd,
+				InventoryRecord.Empty)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
 			Guard.Against.NullOrWhiteSpace(name, nameof(name));

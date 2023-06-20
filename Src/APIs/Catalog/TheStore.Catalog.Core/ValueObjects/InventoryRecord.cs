@@ -7,6 +7,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class InventoryRecord : ValueObject
 	{
+		public static InventoryRecord Empty = new InventoryRecord(0, 1, 1, 0, false);
+
 		public int AvailableStock { get; private set; }
 		public int RestockThreshold { get; private set; }
 		public int MaxStockThreshold { get; private set; }
@@ -19,13 +21,21 @@ namespace TheStore.Catalog.Core.ValueObjects
 		[NotMapped]
 		public bool NeedsReorder => AvailableStock <= RestockThreshold;
 
+		[NotMapped]
+		public bool IsOutOfStock => AvailableStock <= 0;
+
 		// Ef Core
 		private InventoryRecord()
 		{
 
 		}
 
-		public InventoryRecord(int availableStock, int restockThreshold, int maxStockThreshold, int overStock, bool onReorder)
+		public InventoryRecord(
+			int availableStock,
+			int restockThreshold,
+			int maxStockThreshold,
+			int overStock,
+			bool onReorder)
 		{
 			Guard.Against.Negative(availableStock, nameof(availableStock));
 			Guard.Against.NegativeOrZero(restockThreshold, nameof(restockThreshold));

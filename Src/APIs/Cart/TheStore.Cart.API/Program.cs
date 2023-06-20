@@ -6,8 +6,6 @@ using TheStore.Cart.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args)
 	.RegisterServices<CartDbContext>(Assembly.GetExecutingAssembly());
 
-// API-specific services can be registered here
-
 // Pipeline
 
 var app = builder.Build();

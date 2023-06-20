@@ -9,6 +9,7 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
+using TheStore.Cart.Infrastructure.Services;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Cart;
 
@@ -19,16 +20,19 @@ namespace TheStore.Cart.API.Endpoints
 		.WithActionResult
 	{
 		private readonly IValidator<AddToCartRequest> validator;
+		private readonly CatalogEntityCheckService catalogEntityCheckService;
 		private readonly IApiRepository<CartDbContext, Core.Aggregates.Cart> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<AddToCart>();
 
 		public AddToCart(
 			IValidator<AddToCartRequest> validator,
+			CatalogEntityCheckService catalogEntityCheckService,
 			IApiRepository<CartDbContext, Core.Aggregates.Cart> apiRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
+			this.catalogEntityCheckService = catalogEntityCheckService;
 			this.apiRepository = apiRepository;
 			this.mapper = mapper;
 		}
@@ -51,7 +55,11 @@ namespace TheStore.Cart.API.Endpoints
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			// TODO: Use Grpc to check if product exists in the Catalog microservice
+			var productExists = await catalogEntityCheckService
+				.CheckProductExistsAsync(request.ProductId, cancellationToken);
+
+			if (productExists == false)
+				return NotFound("Product not found");
 
 			var cart = await apiRepository
 				.GetByIdAsync(request.CartId, cancellationToken);

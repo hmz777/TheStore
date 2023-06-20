@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(RemoveImageFromColorRequest))]
 	public class RemoveImageFromColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ColorCode}/images/{ImagePath}";
+		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}/images/{ImagePath}";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())

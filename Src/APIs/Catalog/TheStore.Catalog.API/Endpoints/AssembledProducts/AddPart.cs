@@ -21,19 +21,19 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 	{
 		private readonly IValidator<AddPartRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, AssembledProduct> assembledProductRepository;
-		private readonly IApiRepository<CatalogDbContext, SingleProduct> singleProductRepository;
+		private readonly IApiRepository<CatalogDbContext, Product> productRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<AddPart>();
 
 		public AddPart(
 			IValidator<AddPartRequest> validator,
 			IApiRepository<CatalogDbContext, AssembledProduct> assembledProductRepository,
-			IApiRepository<CatalogDbContext, SingleProduct> singleProductRepository,
+			IApiRepository<CatalogDbContext, Product> productRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
 			this.assembledProductRepository = assembledProductRepository;
-			this.singleProductRepository = singleProductRepository;
+			this.productRepository = productRepository;
 			this.mapper = mapper;
 		}
 
@@ -57,14 +57,14 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 
 			var partId = new ProductId(request.PartId);
 
-			var part = await singleProductRepository
+			var part = await productRepository
 				.GetByIdAsync(partId, cancellationToken);
 
 			if (part == null)
 				return NotFound("Part not found");
 
 			var assembledProduct = await assembledProductRepository
-				.GetByIdAsync(new AssembledProductId(request.ProductId), cancellationToken);
+				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (assembledProduct == null)
 				return NotFound("Assembled product not found");

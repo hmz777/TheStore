@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(CreateRequest))]
 	public class CreateRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts";
+		public const string RouteTemplate = "products";
 		public override string Route => RouteTemplate;
 
 		public int CategoryId { get; set; }

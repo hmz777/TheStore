@@ -1,12 +1,12 @@
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Migrations;
+using TheStore.Catalog.API.Endpoints;
+using TheStore.Catalog.API.Helpers;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args)
 				.RegisterServices<CatalogDbContext>(Assembly.GetExecutingAssembly());
-
-// API-specific services can be registered here
 
 // Pipeline
 
@@ -36,6 +36,8 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 //app.UseAuthorization();
+
+app.MapGrpcServices();
 
 app.MapControllers();
 

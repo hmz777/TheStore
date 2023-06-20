@@ -9,7 +9,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints
 		{
 			fixture.Customize(new DomainCustomization());
 			fixture.Customize(new CategoryCustomization());
-			fixture.Customize(new SingleProductCustomization());
+			fixture.Customize(new ProductCustomization());
 			fixture.Customize(new BranchCustomization());
 		}
 	}

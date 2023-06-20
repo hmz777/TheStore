@@ -50,7 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			var partId = new ProductId(request.PartId);
 
 			var assembledProduct = await assembledProductRepository
-				.GetByIdAsync(new AssembledProductId(request.ProductId), cancellationToken);
+				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (assembledProduct == null)
 				return NotFound("Assembled product not found");

@@ -26,20 +26,20 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			#endregion
 
-			#region Single Product
+			#region Product
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.Property(s => s.Id)
 				.HasConversion<ProductIdValueConverter>();
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.HasKey(s => s.Id);
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.Property(c => c.CategoryId)
 				.HasConversion<CategoryIdValueConverter>();
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.OwnsOne(s => s.Price, p =>
 				{
 					p.Property(m => m.Amount)
@@ -48,10 +48,10 @@ namespace TheStore.Catalog.Infrastructure.Data
 					p.OwnsOne(pp => pp.Currency);
 				});
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.OwnsOne(s => s.Inventory);
 
-			modelBuilder.Entity<SingleProduct>()
+			modelBuilder.Entity<Product>()
 				.OwnsMany<ProductColor>("productColors", pc =>
 				{
 					pc.OwnsMany<Image>("images");
@@ -62,19 +62,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 			#region Assembled Product
 
 			modelBuilder.Entity<AssembledProduct>()
-				.Property(s => s.Id)
-				.HasConversion<AssembledProductIdValueConverter>();
-
-			modelBuilder.Entity<AssembledProduct>()
-				.HasKey(s => s.Id);
-
-			modelBuilder.Entity<AssembledProduct>()
 				.Property(c => c.CategoryId)
 				.HasConversion<CategoryIdValueConverter>();
-
-			//modelBuilder.Entity<AssembledProduct>()
-			//	.Property<List<ProductId>>("parts")
-			//	.HasConversion<ProductIdValueConverter>();
 
 			#endregion
 
@@ -91,7 +80,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 		}
 
 		public DbSet<Category> Categories => Set<Category>();
-		public DbSet<SingleProduct> SingleProducts => Set<SingleProduct>();
+		public DbSet<Product> Products => Set<Product>();
 		public DbSet<AssembledProduct> AssembledProducts => Set<AssembledProduct>();
 		public DbSet<Branch> Branches => Set<Branch>();
 	}

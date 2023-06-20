@@ -29,6 +29,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.AddMediatR(InfrastructureAssembly);
 
 			// Api specific services and configuration
+			webApplicationBuilder.Services.AddGrpc();
 
 			// Temporary fix until the binding sources issue is fixed in .NET 8
 			//webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);

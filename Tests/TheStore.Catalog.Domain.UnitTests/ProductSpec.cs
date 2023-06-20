@@ -94,7 +94,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
-			var action = () => new SingleProduct(
+			var action = () => new Product(
 				new CategoryId(categoryId),
 				name, description,
 				shortDescription,
@@ -112,7 +112,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
-			var action = () => fixture.Create<SingleProduct>();
+			var action = () => fixture.Create<Product>();
 
 			action.Should().NotThrow<Exception>();
 		}
@@ -124,7 +124,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = fixture.Create<SingleProduct>();
+			var sut = fixture.Create<Product>();
 
 			sut.AddColor(color);
 
@@ -138,7 +138,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var color = fixture.Create<ProductColor>();
 
-			var sut = fixture.Create<SingleProduct>();
+			var sut = fixture.Create<Product>();
 
 			sut.RemoveColor(color);
 

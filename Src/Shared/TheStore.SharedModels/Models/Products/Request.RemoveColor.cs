@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(RemoveColorRequest))]
 	public class RemoveColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/singleproducts/{ProductId:int}/colors/{ColorCode}";
+		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())

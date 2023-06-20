@@ -24,15 +24,15 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<SharedModels.Models.Categories.UpdateRequest, Category>();
 
 			// Single Products
-			CreateMap<SingleProduct, SingleProductDto>()
+			CreateMap<Product, ProductDto>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
 				.ForMember(dest => dest.ProductColors, opt => opt.MapFrom("productColors"));
 
-			CreateMap<SharedModels.Models.Products.CreateRequest, SingleProduct>()
+			CreateMap<SharedModels.Models.Products.CreateRequest, Product>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
 				.ForMember(dest => dest.ProductColors, opt => opt.Ignore());
 
-			CreateMap<SharedModels.Models.Products.UpdateRequest, SingleProduct>()
+			CreateMap<SharedModels.Models.Products.UpdateRequest, Product>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
 				.ForMember(dest => dest.ProductColors, opt => opt.Ignore());
 

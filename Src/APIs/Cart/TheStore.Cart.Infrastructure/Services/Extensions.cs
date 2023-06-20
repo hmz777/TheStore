@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
 using TheStore.Cart.Infrastructure.Data.Configuration;
@@ -27,6 +28,8 @@ namespace TheStore.Cart.Infrastructure.Services
 			//webApplicationBuilder.ConfigureJwtAuthorization();
 
 			// Api specific services and configuration
+			webApplicationBuilder.Services.AddScoped<CatalogEntityCheckService>();
+			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>();
 
 			// Temporary fix until the binding sources issue is fixed in .NET 8
 			//webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);

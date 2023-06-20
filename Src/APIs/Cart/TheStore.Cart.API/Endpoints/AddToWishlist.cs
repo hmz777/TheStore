@@ -10,6 +10,7 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
+using TheStore.Cart.Infrastructure.Services;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Wishlist;
 
@@ -21,16 +22,19 @@ namespace TheStore.Cart.API.Endpoints
 	{
 
 		private readonly IValidator<AddToWishlistRequest> validator;
+		private readonly CatalogEntityCheckService catalogEntityCheckService;
 		private readonly IApiRepository<CartDbContext, Wishlist> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<AddToWishlist>();
 
 		public AddToWishlist(
 			IValidator<AddToWishlistRequest> validator,
+			CatalogEntityCheckService catalogEntityCheckService,
 			IApiRepository<CartDbContext, Wishlist> apiRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
+			this.catalogEntityCheckService = catalogEntityCheckService;
 			this.apiRepository = apiRepository;
 			this.mapper = mapper;
 		}
@@ -53,7 +57,11 @@ namespace TheStore.Cart.API.Endpoints
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			// TODO: Use Grpc to check if product exists in the Catalog microservice
+			var productExists = await catalogEntityCheckService
+				.CheckProductExistsAsync(request.ProductId, cancellationToken);
+
+			if (productExists == false)
+				return NotFound("Product not found");
 
 			var wishlist = await apiRepository
 				.GetByIdAsync(request.WishlistId, cancellationToken);

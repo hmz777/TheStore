@@ -25,9 +25,9 @@ namespace TheStore.Catalog.Infrastructure.Data
 				await context.Categories.AddRangeAsync(GenerateCategories(insertKeys));
 			}
 
-			if (await context.SingleProducts.AnyAsync() == false)
+			if (await context.Products.AnyAsync() == false)
 			{
-				await context.SingleProducts.AddRangeAsync(GenerateSingleProducts(insertKeys));
+				await context.Products.AddRangeAsync(GenerateProducts(insertKeys));
 			}
 
 			if (await context.Branches.AnyAsync() == false)
@@ -55,15 +55,15 @@ namespace TheStore.Catalog.Infrastructure.Data
 			return categories;
 		}
 
-		private List<SingleProduct> GenerateSingleProducts(bool insertKeys)
+		private List<Product> GenerateProducts(bool insertKeys)
 		{
-			var singleProducts = new List<SingleProduct>();
+			var singleProducts = new List<Product>();
 
 			for (int i = 0; i < 20; i++)
 			{
 				for (int j = 0; j < 5; j++)
 				{
-					var singleProduct = new SingleProduct(
+					var singleProduct = new Product(
 							new CategoryId(i + 1),
 							$"Product {j}",
 							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",

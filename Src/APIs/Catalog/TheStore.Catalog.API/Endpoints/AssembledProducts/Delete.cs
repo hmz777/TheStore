@@ -48,14 +48,14 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var assembledProduct = await apiRepository.GetByIdAsync(new AssembledProductId(request.ProductId), cancellationToken);
+			var assembledProduct = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (assembledProduct == null)
 			{
 				return NotFound();
 			}
 
-			await apiRepository.ExecuteDeleteAsync<AssembledProduct, AssembledProductId>(assembledProduct.Id, cancellationToken);
+			await apiRepository.ExecuteDeleteAsync<AssembledProduct, ProductId>(assembledProduct.Id, cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Delete assembled product with id: {Id}", request.ProductId);

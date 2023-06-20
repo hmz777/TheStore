@@ -52,7 +52,8 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var assembledProduct = await apiRepository.GetByIdAsync(new AssembledProductId(request.ProductId), cancellationToken);
+			var assembledProduct = await apiRepository
+				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (assembledProduct == null)
 			{

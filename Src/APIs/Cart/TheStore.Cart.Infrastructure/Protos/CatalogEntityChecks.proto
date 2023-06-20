@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service CatalogEntityChecks {
+	rpc BranchExists (CheckRequest) returns (CheckReply);
+	rpc CategoryExists (CheckRequest) returns (CheckReply);
+	rpc ProductExists (CheckRequest) returns (CheckReply);
+}
+
+message CheckRequest {
+	int32 Id = 1;
+}
+
+message CheckReply {
+	bool Result = 1;
+}
