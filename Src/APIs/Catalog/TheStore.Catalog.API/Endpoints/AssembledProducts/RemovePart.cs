@@ -40,7 +40,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   OperationId = "Product.Assembled.Part.Remove",
 		   Tags = new[] { "AssembledProducts" })]
 		public async override Task<ActionResult> HandleAsync(
-			RemovePartRequest request,
+		[FromRoute] RemovePartRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
