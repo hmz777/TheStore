@@ -33,7 +33,7 @@ using (var scope = app.Services.CreateScope())
 	await new DataSeeder().SeedDataAsync(context);
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 //app.UseAuthorization();
 
