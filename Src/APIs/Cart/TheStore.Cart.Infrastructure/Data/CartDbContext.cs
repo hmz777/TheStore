@@ -24,8 +24,7 @@ namespace TheStore.Cart.Infrastructure.Data
 				.HasKey(x => x.Id);
 
 			modelBuilder.Entity<Core.Aggregates.Cart>()
-				.HasMany<CartItem>("items")
-				.WithOne();
+				.OwnsMany<CartItem>("items");
 
 			#endregion
 
@@ -39,30 +38,29 @@ namespace TheStore.Cart.Infrastructure.Data
 				.HasKey(x => x.Id);
 
 			modelBuilder.Entity<Wishlist>()
-				.HasMany<WishlistItem>("items")
-				.WithOne();
+				.OwnsMany<WishlistItem>("items");
 
 			#endregion
 
 			#region Cart Item
 
-			modelBuilder.Entity<CartItem>()
-				.Property(x => x.Id)
-				.HasConversion(new CartItemIdValueConverter());
+			//modelBuilder.Entity<CartItem>()
+			//	.Property(x => x.Id)
+			//	.HasConversion(new CartItemIdValueConverter());
 
-			modelBuilder.Entity<CartItem>()
-				.HasKey(x => x.Id);
+			//modelBuilder.Entity<CartItem>()
+			//	.HasKey(x => x.Id);
 
 			#endregion
 
 			#region Wishlist Item
 
-			modelBuilder.Entity<WishlistItem>()
-				.Property(x => x.Id)
-				.HasConversion(new WishlistItemIdValueConverter());
+			//modelBuilder.Entity<WishlistItem>()
+			//	.Property(x => x.Id)
+			//	.HasConversion(new WishlistItemIdValueConverter());
 
-			modelBuilder.Entity<WishlistItem>()
-				.HasKey(x => x.Id);
+			//modelBuilder.Entity<WishlistItem>()
+			//	.HasKey(x => x.Id);
 
 			#endregion
 
