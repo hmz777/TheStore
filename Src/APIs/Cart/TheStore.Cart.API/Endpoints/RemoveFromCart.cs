@@ -53,7 +53,7 @@ namespace TheStore.Cart.API.Endpoints
 				return NotFound("Cart not found");
 
 			var cartItem = cart.Items
-				.FirstOrDefault(ci => ci.Id == new CartItemId(request.ItemId));
+				.FirstOrDefault(ci => ci.ProductId == request.ProductId);
 
 			if (cartItem == null)
 				return NotFound("Cart item not found");
@@ -63,8 +63,8 @@ namespace TheStore.Cart.API.Endpoints
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Remove item with id: {ItemId} and product id: {ProductId} from cart with id: {CartId}",
-					request.ItemId, cartItem.ProductId, request.CartId);
+				log.Information("Remove item with product id: {ProductId} from cart with id: {CartId}",
+					cartItem.ProductId, request.CartId);
 
 			return NoContent();
 		}

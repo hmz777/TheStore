@@ -43,7 +43,7 @@ namespace TheStore.Cart.API.Endpoints
 			OperationId = "Carts.List",
 			Tags = new[] { "Carts" })]
 		public async override Task<ActionResult<List<CartDto>>> HandleAsync(
-			ListRequest request,
+		[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

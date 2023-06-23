@@ -48,8 +48,12 @@ namespace TheStore.Cart.API.Endpoints
 		   OperationId = "Cart.Items.Add",
 		   Tags = new[] { "Carts" })]
 		public async override Task<ActionResult> HandleAsync(
-		[FromBody] AddToCartRequest request,
+			AddToCartRequest request,
 			CancellationToken cancellationToken = default)
+		// TODO: There is a mapping issue here
+		// that prevents mapping from multiple sources in the same model.
+		// Will be fixed in .NET8
+		// Until then we map cart id from body
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)

@@ -44,7 +44,7 @@ namespace TheStore.Cart.API.Endpoints
 			OperationId = "Cart.GetById",
 			Tags = new[] { "Carts" })]
 		public async override Task<ActionResult<CartDto>> HandleAsync(
-			GetCartByIdRequest request,
+		[FromRoute] GetCartByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
