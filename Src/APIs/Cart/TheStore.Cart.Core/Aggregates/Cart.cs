@@ -26,11 +26,16 @@ namespace TheStore.Cart.Core.Aggregates
 			this.items = items ?? new();
 		}
 
-		public void AddItem(CartItem item)
+		public bool AddItem(CartItem item)
 		{
 			Guard.Against.Null(item, nameof(item));
 
+			if (items.Contains(item))
+				return false;
+
 			items.Add(item);
+
+			return true;
 		}
 
 		public bool RemoveItem(CartItem item)
