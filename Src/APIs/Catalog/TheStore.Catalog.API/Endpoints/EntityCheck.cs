@@ -6,10 +6,12 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Specifications.Branches;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 
 namespace TheStore.Catalog.API.Endpoints
 {
-	public class EntityCheck : EntityChecks.EntityChecksBase
+	public class EntityCheck : CatalogEntityChecks.CatalogEntityChecksBase
 	{
 		private readonly IReadApiRepository<CatalogDbContext, Category> categoryRepository;
 		private readonly IReadApiRepository<CatalogDbContext, Branch> branchRepository;
@@ -18,7 +20,7 @@ namespace TheStore.Catalog.API.Endpoints
 		public EntityCheck(
 			IReadApiRepository<CatalogDbContext, Category> categoryRepository,
 			IReadApiRepository<CatalogDbContext, Branch> branchRepository,
-			IReadApiRepository<CatalogDbContext, Product> productRepository,
+			IReadApiRepository<CatalogDbContext, Product> productRepository)
 		{
 			this.categoryRepository = categoryRepository;
 			this.branchRepository = branchRepository;

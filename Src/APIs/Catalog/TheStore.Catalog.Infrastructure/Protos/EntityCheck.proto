@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-service EntityChecks {
+service CatalogEntityChecks {
 	rpc BranchExists (CheckRequest) returns (CheckReply);
 	rpc CategoryExists (CheckRequest) returns (CheckReply);
 	rpc ProductExists (CheckRequest) returns (CheckReply);
