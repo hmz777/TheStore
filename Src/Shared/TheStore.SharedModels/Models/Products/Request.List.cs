@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Products
 	{
 		public const string RouteTemplate = "products";
 
-		public override string Route
+		internal override string Route
 			=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());
 
 		public int Page { get; set; } = 1;

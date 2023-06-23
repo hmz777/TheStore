@@ -9,7 +9,7 @@ namespace TheStore.SharedModels.Models.Products
 	public class UpdateImageOfColorRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}/images/{ImagePath}";
-		public override string Route =>
+		internal override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{ColorCode}", ColorCode)

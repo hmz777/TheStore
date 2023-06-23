@@ -2,6 +2,6 @@
 {
 	public abstract class RequestBase : BaseMessage
 	{
-		public abstract string Route { get; }
+		internal abstract string Route { get; }
 	}
 }

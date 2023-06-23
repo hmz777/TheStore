@@ -6,12 +6,15 @@ namespace TheStore.SharedModels.Models.Wishlist
 	[DisplayName("Wishlist." + nameof(RemoveFromWishlistRequest))]
 	public class RemoveFromWishlistRequest : RequestBase
 	{
-		public const string RouteTemplate = "wishlist/{WishlistId}";
-		public override string Route => RouteTemplate.Replace("{WishlistId}", WishlistId.ToString());
+		public const string RouteTemplate = "wishlist/{WishlistId}/{ProductId:int}";
+		internal override string Route => RouteTemplate
+			.Replace("{WishlistId}", WishlistId.ToString())
+			.Replace("{ProductId:int}", ProductId.ToString());
 
 		[FromRoute(Name = nameof(WishlistId))]
 		public Guid WishlistId { get; set; }
 
-		public int ItemId { get; set; }
+		[FromRoute(Name = nameof(ProductId))]
+		public int ProductId { get; set; }
 	}
 }

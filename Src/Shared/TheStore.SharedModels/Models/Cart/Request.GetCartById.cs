@@ -8,9 +8,7 @@ namespace TheStore.SharedModels.Models.Cart
 	{
 		public const string RouteName = "Carts.Id";
 		public const string RouteTemplate = "cart/{CartId}";
-		public override string Route => RouteTemplate.Replace("{CartId}", CartId.ToString());
-
-		[FromRoute(Name = nameof(CartId))]
+		internal override string Route => RouteTemplate.Replace("{CartId}", CartId.ToString());
 		public Guid CartId { get; set; }
 	}
 }

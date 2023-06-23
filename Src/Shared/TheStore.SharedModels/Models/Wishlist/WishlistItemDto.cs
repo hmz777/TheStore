@@ -2,5 +2,6 @@
 {
 	public class WishlistItemDto : DtoBase
 	{
-	}
+        public int ProductId { get; set; }
+    }
 }

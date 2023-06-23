@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	public class DeleteRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}";
-		public override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
+		internal override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
 
 		public int ProductId { get; set; }
 

@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Cart
 	{
 		public const string RouteTemplate = "carts";
 
-		public override string Route
+		internal override string Route
 			=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());
 
 		public int Page { get; set; } = 1;

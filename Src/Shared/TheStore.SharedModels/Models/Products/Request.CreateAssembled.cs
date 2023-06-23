@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	public class CreateAssembledRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/assembledproducts";
-		public override string Route => RouteTemplate;
+		internal override string Route => RouteTemplate;
 
 		public int CategoryId { get; set; }
 		public string Name { get; set; }

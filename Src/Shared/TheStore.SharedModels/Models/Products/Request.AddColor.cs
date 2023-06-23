@@ -8,7 +8,7 @@ namespace TheStore.SharedModels.Models.Products
 	public class AddColorRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/colors";
-		public override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
+		internal override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }

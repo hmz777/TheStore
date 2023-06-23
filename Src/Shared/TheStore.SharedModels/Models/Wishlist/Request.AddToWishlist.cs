@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Wishlist
 	public class AddToWishlistRequest : RequestBase
 	{
 		public const string RouteTemplate = "wishlist/{WishlistId}";
-		public override string Route => RouteTemplate.Replace("{WishlistId}", WishlistId.ToString());
+		internal override string Route => RouteTemplate.Replace("{WishlistId}", WishlistId.ToString());
 
 		[FromRoute(Name = nameof(WishlistId))]
 		public Guid WishlistId { get; set; }
