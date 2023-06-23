@@ -29,7 +29,11 @@ namespace TheStore.Cart.Infrastructure.Services
 
 			// Api specific services and configuration
 			webApplicationBuilder.Services.AddScoped<CatalogEntityCheckService>();
-			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>();
+			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>(options =>
+			{
+				string address = "http://localhost:7272";
+				options.Address = new Uri(address);
+			});
 
 			// Temporary fix until the binding sources issue is fixed in .NET 8
 			//webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
