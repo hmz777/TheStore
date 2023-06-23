@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Reflection;
 using TheStore.ApiCommon.Data.Repository;
+using TheStore.ApiCommon.Helpers.Swagger;
 using TheStore.ApiCommon.Services;
 using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
@@ -189,6 +190,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			services.AddSwaggerGen(setup =>
 			{
 				setup.SwaggerDoc("v1", new OpenApiInfo { Title = appName, Version = "v1" });
+				setup.SchemaFilter<SwaggerIgnorePropertyFilter>();
 				setup.EnableAnnotations();
 				setup.CustomSchemaIds(x => x.GetCustomAttributes<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
 			});
