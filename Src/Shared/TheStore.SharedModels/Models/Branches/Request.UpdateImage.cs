@@ -8,7 +8,7 @@ namespace TheStore.SharedModels.Models.Branches
 	public class UpdateImageRequest : RequestBase
 	{
 		public const string RouteTemplate = "branches/{BranchId:int}/image";
-		internal override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
+		public override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
 
 		[FromRoute(Name = nameof(BranchId))]
 		public int BranchId { get; set; }

@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Cart
 	public class AddToCartRequest : RequestBase
 	{
 		public const string RouteTemplate = "cart/{CartId}";
-		internal override string Route => RouteTemplate.
+		public override string Route => RouteTemplate.
 			Replace("{CartId}", CartId.ToString());
 
 		[FromRoute(Name = nameof(CartId))]
@@ -15,5 +15,16 @@ namespace TheStore.SharedModels.Models.Cart
 
 		[FromBody]
 		public int ProductId { get; set; }
+
+        public AddToCartRequest()
+        {
+            
+        }
+
+		public AddToCartRequest(Guid cartId, int productId)
+		{
+			CartId = cartId;
+			ProductId = productId;
+		}
 	}
 }

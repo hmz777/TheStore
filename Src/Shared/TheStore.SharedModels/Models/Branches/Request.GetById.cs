@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Branches
 	{
 		public const string RouteName = "Branches.Id";
 		public const string RouteTemplate = "branches/{BranchId:int}";
-		internal override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
+		public override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
 
 		public int BranchId { get; set; }
 

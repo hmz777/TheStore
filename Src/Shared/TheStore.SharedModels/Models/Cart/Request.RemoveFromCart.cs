@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Cart
 	public class RemoveFromCartRequest : RequestBase
 	{
 		public const string RouteTemplate = "cart/{CartId}/{ProductId:int}";
-		internal override string Route => RouteTemplate
+		public override string Route => RouteTemplate
 			.Replace("{CartId}", CartId.ToString())
 			.Replace("{ProductId:int}", ProductId.ToString());
 
@@ -16,5 +16,16 @@ namespace TheStore.SharedModels.Models.Cart
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
+
+        public RemoveFromCartRequest()
+        {
+            
+        }
+
+		public RemoveFromCartRequest(Guid cartId, int productId)
+		{
+			CartId = cartId;
+			ProductId = productId;
+		}
 	}
 }

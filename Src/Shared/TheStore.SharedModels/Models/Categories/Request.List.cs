@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Categories
 	public class ListRequest : RequestBase
 	{
 		public const string RouteTemplate = "categories";
-		internal override string Route
+		public override string Route
 			=> (RouteTemplate + "?page={Page:int}&take={Take:int}").Replace("{Page:int}", Page.ToString()).Replace("{Take:int}", Take.ToString());
 
 		public int Page { get; set; } = 1;

@@ -3,7 +3,7 @@
 	public class RemovePartRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/assembledproducts/{ProductId:int}/parts/{PartId:int}";
-		internal override string Route => RouteTemplate
+		public override string Route => RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{PartId:int}", PartId.ToString());
 

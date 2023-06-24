@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Wishlist
 	public class RemoveFromWishlistRequest : RequestBase
 	{
 		public const string RouteTemplate = "wishlist/{WishlistId}/{ProductId:int}";
-		internal override string Route => RouteTemplate
+		public override string Route => RouteTemplate
 			.Replace("{WishlistId}", WishlistId.ToString())
 			.Replace("{ProductId:int}", ProductId.ToString());
 

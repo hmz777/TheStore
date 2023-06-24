@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Categories
 	public class CreateRequest : RequestBase
 	{
 		public const string RouteTemplate = "categories";
-		internal override string Route => RouteTemplate;
+		public override string Route => RouteTemplate;
 
 		public int Order { get; set; }
 

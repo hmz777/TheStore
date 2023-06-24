@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Cart
 {
@@ -8,7 +7,14 @@ namespace TheStore.SharedModels.Models.Cart
 	{
 		public const string RouteName = "Carts.Id";
 		public const string RouteTemplate = "cart/{CartId}";
-		internal override string Route => RouteTemplate.Replace("{CartId}", CartId.ToString());
+		public override string Route => RouteTemplate.Replace("{CartId}", CartId.ToString());
 		public Guid CartId { get; set; }
+
+		public GetCartByIdRequest() { }
+
+		public GetCartByIdRequest(Guid cartId)
+		{
+			CartId = cartId;
+		}
 	}
 }

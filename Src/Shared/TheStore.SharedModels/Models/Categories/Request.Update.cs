@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Categories
 	public class UpdateRequest : RequestBase
 	{
 		public const string RouteTemplate = "categories/{CategoryId:int}";
-		internal override string Route => RouteTemplate.Replace("{CategoryId:int}", CategoryId.ToString());
+		public override string Route => RouteTemplate.Replace("{CategoryId:int}", CategoryId.ToString());
 
 		[FromRoute(Name = nameof(CategoryId))]
 		public int CategoryId { get; set; }
