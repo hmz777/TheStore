@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Ardalis.GuardClauses;
+using CSharpFunctionalExtensions;
 
 namespace TheStore.Cart.Core.Entities
 {
@@ -9,6 +10,9 @@ namespace TheStore.Cart.Core.Entities
 
 		public CartItem(int productId, int quantity)
 		{
+			Guard.Against.Zero(productId, nameof(productId));
+			Guard.Against.NegativeOrZero(quantity, nameof(quantity));
+
 			ProductId = productId;
 			Quantity = quantity;
 		}
