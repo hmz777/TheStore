@@ -1,18 +1,23 @@
 ﻿using AutoFixture;
 using AutoFixture.Kernel;
 using AutoMapper;
-using TheStore.Catalog.Infrastructure.MappingProfiles;
 
-namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Services
+namespace TheStore.TestHelpers.AutoData.Services
 {
 	public class AutoMapperCustomization : ICustomization
 	{
+		private readonly Profile mappingProfile;
+
+		public AutoMapperCustomization(Profile mappingProfile)
+		{
+			this.mappingProfile = mappingProfile;
+		}
+
 		public void Customize(IFixture fixture)
 		{
 			fixture.Customizations.Add(new TypeRelay(typeof(IMapper), typeof(Mapper)));
 			fixture.Register(() =>
 			{
-				var mappingProfile = new CatalogMappingProfiles();
 				var mapperConfig = new MapperConfiguration(x => x.AddProfile(mappingProfile));
 				var mapper = new Mapper(mapperConfig);
 

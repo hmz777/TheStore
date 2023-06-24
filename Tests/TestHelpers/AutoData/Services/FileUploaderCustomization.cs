@@ -3,7 +3,7 @@ using AutoFixture.Kernel;
 using System.IO.Abstractions.TestingHelpers;
 using TheStore.ApiCommon.Services;
 
-namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Services
+namespace TheStore.TestHelpers.AutoData.Services
 {
 	public class FileUploaderCustomization : ICustomization
 	{

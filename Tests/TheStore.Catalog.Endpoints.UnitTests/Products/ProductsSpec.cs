@@ -6,18 +6,19 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
-using TheStore.Catalog.API.Endpoints.SingleProducts;
-using TheStore.Catalog.API.Endpoints.SingleProducts.Colors;
-using TheStore.Catalog.API.Endpoints.SingleProducts.Colors.Images;
+using TheStore.Catalog.API.Endpoints.Products;
+using TheStore.Catalog.API.Endpoints.Products.Colors;
+using TheStore.Catalog.API.Endpoints.Products.Colors.Images;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Products;
+using TheStore.TestHelpers.AutoData.Services;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {
@@ -29,7 +30,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_List_Products()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = new ListRequest(1, 10);
@@ -49,7 +50,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_Get_Product_By_Id()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<GetByIdRequest>();
@@ -71,7 +72,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_Delete_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<DeleteRequest>();

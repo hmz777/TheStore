@@ -55,9 +55,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Catalog.Infrastruc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.APICommon.UnitTests", "Tests\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj", "{FDD48DD7-A89E-4EFE-A9E6-028BC3EAB26E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Cart.Domain.UnitTests", "Tests\TheStore.Cart.Domain.UnitTests\TheStore.Cart.Domain.UnitTests.csproj", "{0CA12F58-3C15-4077-B5E9-06F8D1403ABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Domain.UnitTests", "Tests\TheStore.Cart.Domain.UnitTests\TheStore.Cart.Domain.UnitTests.csproj", "{0CA12F58-3C15-4077-B5E9-06F8D1403ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Cart.Endpoints.UnitTests", "Tests\TheStore.Cart.Endpoints.UnitTests\TheStore.Cart.Endpoints.UnitTests.csproj", "{A6760F12-D6A8-470A-91CB-D7BF32BB320D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Cart.Endpoints.UnitTests", "Tests\TheStore.Cart.Endpoints.UnitTests\TheStore.Cart.Endpoints.UnitTests.csproj", "{A6760F12-D6A8-470A-91CB-D7BF32BB320D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.TestHelpers", "Tests\TestHelpers\TheStore.TestHelpers.csproj", "{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,6 +139,10 @@ Global
 		{A6760F12-D6A8-470A-91CB-D7BF32BB320D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6760F12-D6A8-470A-91CB-D7BF32BB320D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6760F12-D6A8-470A-91CB-D7BF32BB320D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +174,7 @@ Global
 		{FDD48DD7-A89E-4EFE-A9E6-028BC3EAB26E} = {2F1741F4-42FC-4946-A986-C4A4279E9D91}
 		{0CA12F58-3C15-4077-B5E9-06F8D1403ABA} = {2F1741F4-42FC-4946-A986-C4A4279E9D91}
 		{A6760F12-D6A8-470A-91CB-D7BF32BB320D} = {2F1741F4-42FC-4946-A986-C4A4279E9D91}
+		{2E71EE7F-CD1A-49D6-ABE1-E689B6E408AA} = {2F1741F4-42FC-4946-A986-C4A4279E9D91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7A7C7C9-F2EC-4506-971E-2184B411D9F6}

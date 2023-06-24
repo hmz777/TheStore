@@ -11,9 +11,10 @@ using TheStore.Catalog.API.Endpoints.Branches.Image;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Branches;
+using TheStore.TestHelpers.AutoData.Services;
 using UpdateImageRequest = TheStore.SharedModels.Models.Branches.UpdateImageRequest;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Branches
@@ -24,7 +25,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 		public async Task Can_List_Branches()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = new ListRequest(1, 10);
@@ -44,7 +45,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 		public async Task Can_Get_Branch_By_Id()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<GetByIdRequest>();
@@ -66,7 +67,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 		public async Task Can_Delete_Branch()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<DeleteRequest>();
@@ -88,7 +89,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 		public async Task Can_Update_Branch()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 			fixture.Customize(new DtoCustomizations());
 
@@ -111,7 +112,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 		public async Task Can_Create_Branch()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new FileUploaderCustomization());
 			fixture.Customize(new EndpointsCustomization());
 			fixture.Customize(new DtoCustomizations());

@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
+using TheStore.Catalog.Infrastructure.MappingProfiles;
+using TheStore.TestHelpers.AutoData.Services;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 {
@@ -7,7 +8,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 	{
 		public void Customize(IFixture fixture)
 		{
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new ImageDtoCustomization());
 			fixture.Customize(new InventoryRecordDtoCustomization());
 			fixture.Customize(new MoneyDtoCustomization());

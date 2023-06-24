@@ -18,7 +18,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -33,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\APIs\Catalog\TheStore.Catalog.API\TheStore.Catalog.API.csproj" />
+    <ProjectReference Include="..\TestHelpers\TheStore.TestHelpers.csproj" />
     <ProjectReference Include="..\TheStore.APICommon.UnitTests\TheStore.APICommon.UnitTests.csproj" />
     <ProjectReference Include="..\TheStore.Catalog.Domain.UnitTests\TheStore.Catalog.Domain.UnitTests.csproj" />
   </ItemGroup>

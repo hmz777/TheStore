@@ -10,9 +10,10 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Products;
+using TheStore.TestHelpers.AutoData.Services;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {
@@ -22,7 +23,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_List_Assembled_Products()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = new ListAssembledRequest(1, 10);
@@ -42,7 +43,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_Get_Assembled_Product_By_Id()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<GetAssembledByIdRequest>();
@@ -64,7 +65,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		public async Task Can_Delete_Assembled_Product()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<DeleteAssembledRequest>();

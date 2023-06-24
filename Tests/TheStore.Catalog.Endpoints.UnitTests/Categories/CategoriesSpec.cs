@@ -9,9 +9,10 @@ using TheStore.Catalog.API.Endpoints.Categories;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Services;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Categories;
+using TheStore.TestHelpers.AutoData.Services;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 {
@@ -21,7 +22,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 		public async Task Can_List_Categories()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = new ListRequest(1, 10);
@@ -41,7 +42,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 		public async Task Can_Get_Category_By_Id()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<GetByIdRequest>();
@@ -63,7 +64,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 		public async Task Can_Delete_Category()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<DeleteRequest>();
@@ -85,7 +86,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 		public async Task Can_Update_Category()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<UpdateRequest>();
@@ -107,7 +108,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 		public async Task Can_Create_Category()
 		{
 			var fixture = new Fixture();
-			fixture.Customize(new AutoMapperCustomization());
+			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
 			var request = fixture.Create<CreateRequest>();
