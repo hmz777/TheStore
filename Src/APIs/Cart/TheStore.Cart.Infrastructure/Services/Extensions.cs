@@ -28,7 +28,7 @@ namespace TheStore.Cart.Infrastructure.Services
 			//webApplicationBuilder.ConfigureJwtAuthorization();
 
 			// Api specific services and configuration
-			webApplicationBuilder.Services.AddScoped<CatalogEntityCheckService>();
+			webApplicationBuilder.Services.AddScoped<ICatalogEntityCheckService, CatalogEntityCheckService>();
 			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>(options =>
 			{
 				string address = "http://localhost:7272";

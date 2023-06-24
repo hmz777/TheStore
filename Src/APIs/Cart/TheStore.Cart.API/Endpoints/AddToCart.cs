@@ -20,14 +20,14 @@ namespace TheStore.Cart.API.Endpoints
 		.WithActionResult
 	{
 		private readonly IValidator<AddToCartRequest> validator;
-		private readonly CatalogEntityCheckService catalogEntityCheckService;
+		private readonly ICatalogEntityCheckService catalogEntityCheckService;
 		private readonly IApiRepository<CartDbContext, Core.Aggregates.Cart> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<AddToCart>();
 
 		public AddToCart(
 			IValidator<AddToCartRequest> validator,
-			CatalogEntityCheckService catalogEntityCheckService,
+			ICatalogEntityCheckService catalogEntityCheckService,
 			IApiRepository<CartDbContext, Core.Aggregates.Cart> apiRepository,
 			IMapper mapper)
 		{
