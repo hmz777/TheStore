@@ -16,5 +16,16 @@ namespace TheStore.SharedModels.Models.Wishlist
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
+
+		public RemoveFromWishlistRequest()
+		{
+
+		}
+
+		public RemoveFromWishlistRequest(Guid wishlistId, int productId)
+		{
+			WishlistId = wishlistId;
+			ProductId = productId;
+		}
 	}
 }

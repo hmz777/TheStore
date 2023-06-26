@@ -22,14 +22,14 @@ namespace TheStore.Cart.API.Endpoints
 	{
 
 		private readonly IValidator<AddToWishlistRequest> validator;
-		private readonly CatalogEntityCheckService catalogEntityCheckService;
+		private readonly ICatalogEntityCheckService catalogEntityCheckService;
 		private readonly IApiRepository<CartDbContext, Wishlist> apiRepository;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<AddToWishlist>();
 
 		public AddToWishlist(
 			IValidator<AddToWishlistRequest> validator,
-			CatalogEntityCheckService catalogEntityCheckService,
+			ICatalogEntityCheckService catalogEntityCheckService,
 			IApiRepository<CartDbContext, Wishlist> apiRepository,
 			IMapper mapper)
 		{

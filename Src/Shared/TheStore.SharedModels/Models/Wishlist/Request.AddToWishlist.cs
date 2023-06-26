@@ -13,5 +13,16 @@ namespace TheStore.SharedModels.Models.Wishlist
 		public Guid WishlistId { get; set; }
 
 		public int ProductId { get; set; }
+
+        public AddToWishlistRequest()
+        {
+            
+        }
+
+		public AddToWishlistRequest(Guid wishlistId, int productId)
+		{
+			WishlistId = wishlistId;
+			ProductId = productId;
+		}
 	}
 }
