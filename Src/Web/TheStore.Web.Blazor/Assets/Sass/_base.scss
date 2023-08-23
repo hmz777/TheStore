@@ -1,0 +1,33 @@
+﻿html, body {
+    font-family: $mainFont;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    background: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin: .5em 0;
+}
+
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+.swiper-pagination, .swiper-button-prev, .swiper-button-next {
+    color: black !important;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: black !important; 
+}

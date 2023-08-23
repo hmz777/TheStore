@@ -1,0 +1,27 @@
+﻿$la-font-path: "../../wwwroot/vendor/line-awesome/fonts";
+
+/*===Fonts===*/
+$mainFont: 'Poppins', sans-serif;
+
+/*===Breakpoints===*/
+// Small tablets and large smartphones (landscape view)
+$screen-sm-min: 576px;
+
+// Small tablets (portrait view)
+$screen-md-min: 768px;
+
+// Tablets and small desktops
+$screen-lg-min: 992px;
+
+// Large tablets and desktops
+$screen-xl-min: 1200px;
+
+/*Layout*/
+$contentTopMargin: 15em;
+
+/*===Navbar===*/
+$navLinksColor: #FFF;
+
+/*===Logo===*/
+$logoColor: #E5BE3F;
+$logoBackColor: #FFFFFF;
