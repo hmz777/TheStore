@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "line-awesome@1.3.0",
+      "destination": "wwwroot/vendor/",
+      "files": [
+        "line-awesome/fonts/la-brands-400.eot",
+        "line-awesome/fonts/la-brands-400.svg",
+        "line-awesome/fonts/la-brands-400.ttf",
+        "line-awesome/fonts/la-brands-400.woff",
+        "line-awesome/fonts/la-brands-400.woff2",
+        "line-awesome/fonts/la-regular-400.eot",
+        "line-awesome/fonts/la-regular-400.svg",
+        "line-awesome/fonts/la-regular-400.ttf",
+        "line-awesome/fonts/la-regular-400.woff",
+        "line-awesome/fonts/la-regular-400.woff2",
+        "line-awesome/fonts/la-solid-900.eot",
+        "line-awesome/fonts/la-solid-900.svg",
+        "line-awesome/fonts/la-solid-900.ttf",
+        "line-awesome/fonts/la-solid-900.woff",
+        "line-awesome/fonts/la-solid-900.woff2",
+        "line-awesome/scss/line-awesome.scss",
+        "line-awesome/scss/_bordered_pulled.scss",
+        "line-awesome/scss/_core.scss",
+        "line-awesome/scss/_fixed-width.scss",
+        "line-awesome/scss/_icons.scss",
+        "line-awesome/scss/_larger.scss",
+        "line-awesome/scss/_list.scss",
+        "line-awesome/scss/_mixins.scss",
+        "line-awesome/scss/_path.scss",
+        "line-awesome/scss/_rotated-flipped.scss",
+        "line-awesome/scss/_screen-reader.scss",
+        "line-awesome/scss/_stacked.scss",
+        "line-awesome/scss/_variables.scss"
+      ]
+    }
+  ]
+}
