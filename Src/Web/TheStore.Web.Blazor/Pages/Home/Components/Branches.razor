@@ -1,0 +1,50 @@
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<section id="branches">
+	<header>
+		<h2>Points of Sale</h2>
+		<hr class="horizontal-separator mx-auto" />
+	</header>
+	<div class="swiper" id="branches-carousel">
+		<div class="swiper-wrapper">
+			@for (int i = 0; i < 5; i++)
+			{
+				<div class="swiper-slide">
+					<div class="branch-slide">
+						<Branch @key="i" />
+					</div>
+				</div>
+			}
+		</div>
+		<div class="swiper-pagination"></div>
+		<div class="swiper-button-prev"></div>
+		<div class="swiper-button-next"></div>
+	</div>
+</section>
+
+@code {
+	private IJSObjectReference? homeModule;
+
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			homeModule = await JS.InvokeAsync<IJSObjectReference>("import",
+					"./modules/HomeModule.js");
+
+			await InitCarousel();
+		}
+	}
+
+	private ValueTask InitCarousel()
+			=> homeModule is not null ? homeModule.InvokeVoidAsync("InitCarousel") : ValueTask.CompletedTask;
+
+	async ValueTask IAsyncDisposable.DisposeAsync()
+	{
+		if (homeModule is not null)
+		{
+			await homeModule.DisposeAsync();
+		}
+	}
+}
