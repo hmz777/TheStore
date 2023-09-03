@@ -1,0 +1,20 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/categories",
+      "DownstreamScheme": "http",
+      "ServiceName": "catalog.hmz.com",
+      "UpstreamPathTemplate": "/catalog/categories",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/carts",
+      "DownstreamScheme": "http",
+      "ServiceName": "cart.hmz.com",
+      "UpstreamPathTemplate": "/basket/carts",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ],
+  "GlobalConfiguration": {
+  }
+}
