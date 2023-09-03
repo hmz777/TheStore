@@ -1,7 +1,9 @@
+using Serilog;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Migrations;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Services;
+using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
 var builder = WebApplication.CreateBuilder(args)
 	.RegisterServices<CartDbContext>(Assembly.GetExecutingAssembly());
@@ -10,12 +12,17 @@ var builder = WebApplication.CreateBuilder(args)
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Configuration.GetValue<bool>(Testing.ApplyMigrationsAtRuntime))
 {
+	Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CartDbContext)}");
+
 	// Apply pending migrations.
 	// In production, we use a different strategy.
 	app.Migrate<CartDbContext>();
+}
 
+if (app.Environment.IsDevelopment())
+{
 	// Swagger
 	app.UseSwagger();
 	app.UseSwaggerUI(options =>
