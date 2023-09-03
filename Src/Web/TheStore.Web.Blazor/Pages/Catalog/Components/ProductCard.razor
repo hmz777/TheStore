@@ -1,0 +1,25 @@
+﻿<article class="product-card">
+	<img class="product-card-image" src="@ImageUrl" alt="@ImageAlt" />
+	<article class="product-card-body">
+		<header class="product-card-body-title">
+			@Name
+		</header>
+		<article class="product-card-body-desc">
+			@Description
+		</article>
+	</article>
+</article>
+
+@code {
+	[Parameter]
+	public string Name { get; set; }
+
+	[Parameter]
+	public string ImageUrl { get; set; }
+
+	[Parameter]
+	public string ImageAlt { get; set; }
+
+	[Parameter]
+	public string Description { get; set; }
+}

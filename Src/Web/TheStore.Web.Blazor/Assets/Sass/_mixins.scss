@@ -1,4 +1,6 @@
-﻿// Small devices
+﻿@use 'sass:color';
+
+// Small devices
 @mixin sm {
     @include breakpoint(min-width $screen-sm-min) {
         @content;
@@ -31,4 +33,30 @@
     -webkit-line-clamp: $numOfLines;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+@mixin makeSolidIcon($icon) {
+    @extend .las;
+    content: la-content($icon);
+}
+
+@mixin makeBrandIcon($icon) {
+    @extend .las;
+    content: la-content($icon);
+}
+
+@mixin makeButtonHoverable($backColor) {
+    background: $backColor;
+
+    &:hover {
+        background: color.adjust($backColor, $lightness: -10%);
+    }
+}
+
+@mixin makeLinkHoverable($color) {
+    color: $color !important;
+
+    &:hover {
+        color: color.adjust($color, $lightness: -10%) !important;
+    }
 }

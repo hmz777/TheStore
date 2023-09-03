@@ -1,9 +1,8 @@
-﻿@use 'sass:color';
-
+﻿/*===Separators===*/
 .vertical-separator {
     width: .2em;
     height: 2em;
-    background: white;
+    background: $accent2;
     margin: 0;
     border-radius: 1em;
 }
@@ -11,25 +10,85 @@
 .horizontal-separator {
     width: 5em;
     height: .5em;
-    background-color: white;
+    background-color: $accent2;
     margin: .5em 0 2em;
     border-radius: 1em;
 }
 
-.content-container {
-    margin-top: $contentTopMargin;
+.separator-with-text {
+    display: flex;
+    align-items: center;
     width: 100%;
-    height: auto;
+    margin: .5em 0;
+
+    .separator-text {
+        margin: 0 .5em;
+        font-weight: bold;
+    }
+
+    &:before, &:after {
+        display: inline-block;
+        content: '';
+        width: 100%;
+        height: 2px;
+        background: $accent4;
+    }
 }
 
-.action-btn {
-    background: $logoColor;
-    color: $logoBackColor;
-    padding: 1em 2em;
-    border-radius: .5em;
-    transition: .2s ease-in-out background;
 
-    &:hover {
-        background: color.adjust($logoColor, $lightness: -10%);
+/*===Buttons===*/
+.action-btn {
+    display: block;
+    color: $accent2;
+    padding: 1em 2em;
+    border-radius: $globalBorderRadius;
+    transition: $globalTransitionDuration ease-in-out background;
+    width: 100%;
+}
+
+.action-btn-primary {
+    @extend .action-btn;
+    @include makeButtonHoverable($accent1);
+}
+
+.action-btn-secondary {
+    @extend .action-btn;
+    @include makeButtonHoverable($accent4);
+}
+
+/*===Links===*/
+
+.link-primary {
+    @include makeLinkHoverable($accent1);
+}
+
+/*===Alerts===*/
+.c-alert {
+    border-radius: $globalBorderRadius;
+    color: $accent2;
+    padding: .5em 1em;
+    display: flex;
+    align-items: center;
+
+    &.c-alert-danger {
+        background: red;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            &:before {
+                display: inline-block;
+                @include makeSolidIcon($la-times-circle);
+                margin: 0 .5em 0 0;
+
+                [lang=ar] & {
+                    margin: 0 0 0 .5em;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,42 @@
+﻿@page "/contact"
+@using TheStore.Blazor.Models.Contact;
+
+<div class="container-fluid">
+	<div class="row row-cols-1 row-cols-lg-2">
+		<div class="col offset-lg-3">
+			<article class="d-flex flex-column">
+				<header>
+					<h1>Contact Us!</h1>
+				</header>
+				<article class="mb-5">
+					<EditForm class="c-form" Model="Model">
+						<DataAnnotationsValidator />
+						<div class="form-element">
+							<div class="c-form-input-wrapper">
+								<InputText class="c-form-input" @bind-Value="Model.Subject" />
+								<label class="c-form-label">Subject</label>
+							</div>
+							<ValidationMessage class="form-validation-msg" For="() => Model.Subject" />
+						</div>
+						<div class="form-element">
+							<div class="c-form-input-wrapper">
+								<InputTextArea rows="5" class="c-form-input c-form-input-text-area" @bind-Value="Model.Message" />
+								<label class="c-form-label">Message</label>
+							</div>
+							<ValidationMessage class="form-validation-msg" For="() => Model.Message" />
+						</div>
+						<div class="form-element">
+							<button class="action-btn-primary" type="submit">Submit</button>
+						</div>
+					</EditForm>
+				</article>
+			</article>
+		</div>
+	</div>
+</div>
+
+@code {
+	public ContactRequest Model { get; set; }
+
+	protected override void OnInitialized() => Model ??= new();
+}

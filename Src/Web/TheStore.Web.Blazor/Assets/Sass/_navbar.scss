@@ -1,27 +1,26 @@
-﻿#top-header {
-    position: fixed;
+﻿.logo {
+    font-weight: bold;
+    font-size: 1.5em;
+    letter-spacing: 2px;
+    color: $accent1;
+    background-color: $accent2;
+    padding: .25em .5em;
+    border-radius: $globalBorderRadius;
+    pointer-events: none;
+}
+
+#top-header {
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 15000; 
+    z-index: 15000;
 
     .top-navbar {
-        padding: 1.7em 8em;
-        background: black;
+        padding: 1.7em $layoutHorizontalPadding;
         display: flex;
         flex-flow: row;
-        background: rgba(#000000,0.2);
-
-        .logo {
-            font-weight: bold;
-            font-size: 1.5em;
-            letter-spacing: 2px;
-            margin-right: auto;
-            color: $logoColor;
-            background-color: $logoBackColor;
-            padding: .25em .5em;
-            border-radius: 1em;
-        }
+        background: rgba($accent3,0.2);
 
         .top-navbar-inner {
             padding: 0;

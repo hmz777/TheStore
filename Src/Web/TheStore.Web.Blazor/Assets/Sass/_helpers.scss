@@ -1,49 +1,29 @@
 ﻿/*===Width===*/
+.w-100 {
+    width: 100%;
+}
 
-.w-40 {
-    width: 40%;
+.w-lg-100 {
+    @include md {
+        width: 100%;
+    }
 }
 
 .w-60 {
     width: 60%;
 }
 
-.w-lg-100 {
-    width: auto;
-
-    @include md {
-        width: 100%;
+.w-lg-60 {
+    @include lg {
+        width: 60%;
     }
 }
 
-/*===Width===*/
-
-/*===Margin===*/
-.mx-auto {
-    margin: 0 auto !important;
+.w-40 {
+    width: 40%;
 }
-
-
-/*===Padding===*/
-
-.p-3e {
-    padding: 3em;
-}
-
-.p-4e {
-    padding: 4em;
-}
-
-.p-5e {
-    padding: 5em;
-}
-
-/*===Padding===*/
 
 /*===Colors===*/
-
 .bg-yellow {
-    background-color: $logoColor !important;
+    background-color: $accent1;
 }
-
-/*===Colors===*/

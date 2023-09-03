@@ -1,1 +1,11 @@
-﻿
+﻿@keyframes fadeDown {
+    from {
+        opacity: 0;
+        top: -.5em;
+    }
+
+    to {
+        opacity: 1;
+        top: 0;
+    }
+}

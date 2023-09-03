@@ -1,0 +1,54 @@
+﻿@page "/catalog/{catalogName?}/{manufacture?}/{priceRange?}/{sortDirection?}/{page:int?}"
+@using TheStore.Blazor.Models.Products;
+@using TheStore.Web.Blazor.Pages.Catalog.Components
+
+<CatalogHeader Header="@CatalogName" Description="@CatalogDescription" />
+
+@if (Products.Count > 0)
+{
+	@foreach (var product in Products)
+	{
+		var productMainImage = product.GetMainColor().GetMainImage();
+
+		<ProductCard @key="product.ProductId"
+					 Name="@product.Name"
+					 Description="@product.ShortDescription"
+					 ImageUrl="@productMainImage.StringFileUri"
+					 ImageAlt="@productMainImage.Alt" />
+	}
+}
+else
+{
+	<Result ImageUrl="/media/system/NoProducts.svg"
+			  ImageAlt="No products found"
+			  Message="No products available with the current filter" />
+}
+
+@code {
+	[Parameter]
+	public string? CatalogName { get; set; }
+	public string? CatalogDescription { get; set; }
+
+	[Parameter]
+	public string? Manufacture { get; set; }
+
+	[Parameter]
+	public string? PriceRange { get; set; }
+
+	[Parameter]
+	public string? SortDirection { get; set; }
+
+	[Parameter]
+	public int? Page { get; set; }
+
+	public List<ProductDto> Products { get; set; } = new();
+
+	protected override void OnParametersSet()
+	{
+		CatalogName = CatalogName ?? "Product Catalog";
+		CatalogDescription = CatalogDescription ?? "A variety of products to choose from!";
+
+		SortDirection = SortDirection ?? "asc";
+		Page = Page ?? 1;
+	}
+}

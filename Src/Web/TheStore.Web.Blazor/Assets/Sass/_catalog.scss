@@ -1,0 +1,14 @@
+.catalog-header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 $layoutHorizontalPadding;
+
+    &-title {
+    }
+
+    &-desc {
+        font-size: 1.2em;
+    }
+}

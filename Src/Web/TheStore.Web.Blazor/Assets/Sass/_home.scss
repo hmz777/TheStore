@@ -10,6 +10,8 @@
         align-items: center;
 
         .hero-text {
+            display: flex;
+            flex-flow: column wrap;
             padding: 0 4em;
             width: 100%;
             text-align: center;
@@ -46,7 +48,7 @@
 #who-we-are {
     background-color: black;
     padding: 5em;
-    color: white;
+    color: $accent2;
 
     h2, p {
         text-align: center;
@@ -67,34 +69,24 @@
     }
 
     #branches-carousel {
-        padding: 2em 0 3em;
-        width: 100%;
+        padding: 2em 3em 3em;
 
-        .branch-slide {
-            padding: 1em;
+        .branch-item {
+            width: 100%;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 50px;
+            background: linear-gradient(145deg, #f5cb43, #ceab39);
+            box-shadow: 17px 17px 34px #c3a236, -17px -17px 34px #ffdb48;
 
-            .branch-item {
+            img {
                 width: 100%;
+                height: 20em;
+                object-fit: cover;
+            }
 
-                @include md {
-                    width: 70%;
-                }
-
-                margin: auto;
-                overflow: hidden;
-                border-radius: 50px;
-                background: linear-gradient(145deg, #f5cb43, #ceab39);
-                box-shadow: 17px 17px 34px #c3a236, -17px -17px 34px #ffdb48;
-
-                img {
-                    width: 100%;
-                    height: 30em;
-                    object-fit: cover;
-                }
-
-                .branch-content {
-                    padding: 2em;
-                }
+            .branch-content {
+                padding: 2em;
             }
         }
     }

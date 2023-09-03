@@ -1,8 +1,8 @@
 ﻿.footer {
     margin-top: auto;
-    background: black;
-    padding: 3em;
-    color: white;
+    background: $accent3;
+    padding: $layoutHorizontalPadding;
+    color: $accent2;
 
     .footer-info {
         display: flex;
@@ -17,7 +17,7 @@
         }
 
         .author {
-            color: $logoColor;
+            color: $accent1;
         }
     }
 }

@@ -1,9 +1,39 @@
-﻿html, body {
-    font-family: $mainFont;
+﻿::selection {
+    background-color: $accent1;
+    color: $accent2;
+}
+
+::-moz-selection {
+    background-color: $accent1;
+    color: $accent2;
+}
+
+::-o-selection {
+    background-color: $accent1;
+    color: $accent2;
+}
+
+::-ms-selection {
+    background-color: $accent1;
+    color: $accent2;
+}
+
+::-webkit-selection {
+    background-color: $accent1;
+    color: $accent2;
+}
+
+html, body {
+    font-family: $mainFont !important;
+    font-size: 1em !important;
 }
 
 a {
     text-decoration: none;
+}
+
+input, textarea {
+    border: none;
 }
 
 button {
@@ -24,10 +54,12 @@ h2 {
     font-size: 3em;
 }
 
+/*===Swiper===*/
+
 .swiper-pagination, .swiper-button-prev, .swiper-button-next {
-    color: black !important;
+    color: $accent3 !important;
 }
 
 .swiper-pagination-bullet-active {
-    background-color: black !important; 
+    background-color: $accent3 !important;
 }

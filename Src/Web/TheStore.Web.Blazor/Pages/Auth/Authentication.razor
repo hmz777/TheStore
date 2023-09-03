@@ -1,0 +1,21 @@
+﻿@page "/auth/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<RemoteAuthenticatorView Action="@Action">
+	<LoggingIn>
+		<Result ImageUrl="/media/system/redirect.svg"
+				ImageAlt="Redirecting..."
+				Message="You are about to be redirected to {Auth server url here}" />
+	</LoggingIn>
+	<LogInFailed>
+		<Result ImageUrl="/media/system/error.svg"
+				ImageAlt="Login failed!"
+				Message="It seems that login has failed" />
+	</LogInFailed>
+</RemoteAuthenticatorView>
+
+@code {
+	[Parameter]
+	public string? Action { get; set; }
+}

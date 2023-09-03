@@ -1,28 +1,142 @@
-﻿#login-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+﻿$labelPadding: .5em 1em;
+$inputPadding: .3em;
 
-#loginForm {
+.c-form {
     display: flex;
-    flex-flow: column;
-    margin-bottom: $contentTopMargin/2;
+    flex-flow: column wrap;
+    margin: auto 0;
 
-    legend {
-        padding: .25em .5em;
-        border-radius: 1em;
-        color: $logoColor;
-        background-color: $logoBackColor;
-        font-weight: bold;
-        font-size: 1.5em;
-        align-self: flex-start;
-        width: auto;
+    .form-element {
+        display: flex;
+        flex-flow: column wrap;
+        margin-bottom: 1em;
     }
-}
 
-.form-validation-msg {
-    color: red;
-    margin-top: .3em;
-    display: block;
+    .c-form-input-wrapper {
+        border: $globalBorderWidth solid $formInputBorderColor;
+        border-radius: $globalBorderRadius;
+        display: flex;
+        flex-flow: row-reverse;
+        align-items: center;
+        width: auto;
+        position: relative;
+        padding: $inputPadding;
+
+        &:focus {
+            border-color: $accent1;
+        }
+    }
+
+    .c-form-checkbox-wrapper {
+        display: inline-flex;
+        align-self: flex-start;
+        align-items: center;
+        justify-content: space-between;
+
+        .c-form-checkbox {
+            position: relative;
+            border-radius: calc($globalBorderRadius / 1.5);
+            background: $accent3;
+            width: 2em;
+            height: 2em;
+            display: flex;
+            margin: 0 .5em 0 0;
+
+            .c-form-checkmark {
+                opacity: 0;
+                display: flex;
+                position: relative;
+                margin: auto;
+                color: $accent2;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                transition: opacity $globalTransitionDuration ease-in-out;
+
+                &:after {
+                    @include makeSolidIcon($la-check);
+                    margin: auto;
+                }
+            }
+
+            [lang=ar] & {
+                margin: 0 0 0 .5em !important;
+            }
+
+            input {
+                opacity: 0;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+
+                &:checked + .c-form-checkmark {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .c-form-label {
+        padding: $labelPadding;
+        background: $formLabelBackColor;
+        color: $formLabelColor;
+        border-radius: $globalBorderRadius;
+        transition: background $globalTransitionDuration ease-in-out;
+        white-space: nowrap;
+        align-self: flex-start;
+    }
+
+    .c-form-input {
+        padding: 0 0.5em;
+        border-radius: $globalBorderRadius;
+        outline: none;
+        font-size: 1.1em;
+        width: 100%;
+
+        &:focus {
+            & ~ .c-form-label {
+                background: $accent1;
+            }
+        }
+
+        input {
+            background: $accent3;
+
+            &:-webkit-autofill {
+                background-color: $accent3 !important;
+            }
+
+            &:-webkit-autofill:focus {
+                background-color: $accent3 !important;
+            }
+
+            &:-internal-autofill-selected {
+                background-color: $accent3 !important;
+            }
+        }
+    }
+
+    .form-validation-msg {
+        align-self: flex-end;
+        position: relative;
+        right: - $globalBorderWidth;
+        color: $accent2;
+        background: red;
+        margin-top: $inputPadding;
+        padding: .5em 1em;
+        border-radius: $globalBorderRadius;
+        font-size: .8em;
+        animation: fadeDown $globalAnimationDuration forwards ease-in-out;
+
+        &.asp-validation-message {
+            display: none;
+        }
+
+        &.field-validation-error {
+            display: inline-flex;
+        }
+    }
 }

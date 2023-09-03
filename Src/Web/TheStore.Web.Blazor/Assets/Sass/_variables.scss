@@ -1,27 +1,19 @@
-﻿$la-font-path: "../../wwwroot/vendor/line-awesome/fonts";
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
 /*===Fonts===*/
+$la-font-path: "../../wwwroot/vendor/line-awesome/fonts" !default;
 $mainFont: 'Poppins', sans-serif;
 
-/*===Breakpoints===*/
-// Small tablets and large smartphones (landscape view)
-$screen-sm-min: 576px;
-
-// Small tablets (portrait view)
-$screen-md-min: 768px;
-
-// Tablets and small desktops
-$screen-lg-min: 992px;
-
-// Large tablets and desktops
-$screen-xl-min: 1200px;
-
-/*Layout*/
+/*===Layout===*/
+$layoutHorizontalPadding: 4em;
 $contentTopMargin: 15em;
 
-/*===Navbar===*/
-$navLinksColor: #FFF;
+/*===Borders===*/
+$globalBorderWidth: 4px;
+$globalBorderRadius: 1em;
 
-/*===Logo===*/
-$logoColor: #E5BE3F;
-$logoBackColor: #FFFFFF;
+/*===Transitions===*/
+$globalTransitionDuration: .3s;
+
+/*===Animations===*/
+$globalAnimationDuration: .3s;
