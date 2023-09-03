@@ -1,0 +1,12 @@
+resources:
+  - "../../Base"
+namespace: development
+commonLabels:
+  env: dev
+images:
+  - name: thestore/catalog
+    newTag: dev
+  - name: thestore/cart
+    newTag: dev
+  - name: thestore/web-gateway
+    newTag: dev

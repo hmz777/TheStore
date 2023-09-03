@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/v1%40service": "file:///d%3A/Work/WebDevelopment/GitHub/Projects/TheStore/K8s/APIs/Cart-Deployment.yaml"
+    }
+}

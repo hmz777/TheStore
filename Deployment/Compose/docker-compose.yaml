@@ -1,0 +1,65 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    pull_policy: if_not_present
+    ports:
+      - "1433:1433"
+    environment:
+       MSSQL_PID: Express
+       ACCEPT_EULA: Y
+       MSSQL_SA_PASSWORD: /run/secrets/db_password
+    volumes:
+       - db_data:/var/opt/mssql
+    secrets:
+       - db_password 
+  catalog:
+    depends_on:
+      - db
+      - seq
+    image: thestore/catalog:dev
+    pull_policy: if_not_present
+    ports:
+      - "8080:80"
+    environment:
+      CONNECTIONSTRING: Server="db,1433";Database=catalogdb;User Id={DbUser};Password={DbPass};MultipleActiveResultSets=true;TrustServerCertificate=true 
+      DBPASS: /run/secrets/db_password
+      SEQURL: http://seq:5341
+    env_file: .env
+    secrets:
+       - db_password
+  cart:
+    depends_on:
+      - db
+      - seq
+    image: thestore/cart:dev
+    pull_policy: if_not_present
+    ports:
+      - "8081:80"
+    environment:
+      CONNECTIONSTRING: Server="db,1433";Database=cartdb;User Id={DbUser};Password={DbPass};MultipleActiveResultSets=true;TrustServerCertificate=true 
+      DBPASS: /run/secrets/db_password
+      SEQURL: http://seq:5341
+    env_file: .env
+    secrets:
+       - db_password 
+  seq:
+    image: datalust/seq:2023.3
+    pull_policy: if_not_present
+    ports: 
+    - "5341:5341"
+    - "8082:80"
+    environment:
+      ACCEPT_EULA: Y      
+    volumes:
+      - db_data:/data
+  grafana:
+    image: grafana/grafana-enterprise
+    ports: 
+    - "3000:3000"
+
+secrets:
+  db_password:
+   file: /Secrets/db_pass.txt
+
+volumes:
+    db_data:

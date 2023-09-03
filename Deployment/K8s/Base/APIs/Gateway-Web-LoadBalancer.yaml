@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-web-lb
+  labels:
+    app: loadbalancer
+    variant: web
+spec:
+  rules:
+    - host: "web-gateway.hmz.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: gateway-web-svc
+                port:
+                  name: gateway-web-prt

@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: services-lb
+  labels:
+    app: loadbalancer
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: catalog.hmz.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: catalog-svc
+                port:
+                  name: catalog-svc-prt
+    - host: cart.hmz.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: cart-svc
+                port:
+                  name: cart-svc-prt

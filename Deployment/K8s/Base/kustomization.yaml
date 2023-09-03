@@ -1,0 +1,11 @@
+commonLabels:
+  app: theStore
+resources:
+  - "APIs/API-ConfigMap.yaml"
+  - "APIs/API-Db-Secret.yaml"
+  - "APIs/Cart-Deployment.yaml"
+  - "APIs/MSSQL-Db-StatefulSet.yaml"
+  - "APIs/Catalog-Deployment.yaml"
+  # - "APIs/Gateway-Web-Deployment.yaml"
+  # - "APIs/Gateway-Web-LoadBalancer.yaml"
+  - "APIs/Services-LoadBalancer.yaml"

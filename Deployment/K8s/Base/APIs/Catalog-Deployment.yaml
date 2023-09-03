@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-dpl
+  labels:
+    app: catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: thestore-catalog
+          image: thestore/catalog
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: catalog-prt
+              containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: "CONNECTIONSTRING"
+              value: >
+                Server="mssql-db-svc,1433";Database=catalogdb;User Id={DbUser};Password={DbPass};MultipleActiveResultSets=true;TrustServerCertificate=true
+            - name: "DBUSER"
+              valueFrom:
+                secretKeyRef:
+                  name: api-db-secret
+                  key: username
+            - name: "DBPASS"
+              valueFrom:
+                secretKeyRef:
+                  name: api-db-secret
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: api-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-svc
+spec:
+  selector:
+    app: catalog
+  ports:
+    - name: catalog-svc-prt
+      port: 80
+      protocol: TCP
+      targetPort: catalog-prt

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-web-dpl
+  labels:
+    app: gateway-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-web
+  template:
+    metadata:
+      labels:
+        app: gateway-web
+    spec:
+      containers:
+        - name: thestore-gateway-web
+          image: thestore/web-gateway
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: gateway-web-prt
+              containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-web-svc
+spec:
+  selector:
+    app: gateway-web
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: gateway-web-prt

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-dpl
+  labels:
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+        - name: thestore-cart
+          image: thestore/cart
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: cart-prt
+              containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: "CONNECTIONSTRING"
+              value: >
+                Server="mssql-db-svc,1433";Database=cartdb;User Id={DbUser};Password={DbPass};MultipleActiveResultSets=true;TrustServerCertificate=true
+            - name: "DBUSER"
+              valueFrom:
+                secretKeyRef:
+                  name: api-db-secret
+                  key: username
+            - name: "DBPASS"
+              valueFrom:
+                secretKeyRef:
+                  name: api-db-secret
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: api-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-svc
+spec:
+  selector:
+    app: cart
+  ports:
+    - name: cart-svc-prt
+      port: 80
+      protocol: TCP
+      targetPort: cart-prt

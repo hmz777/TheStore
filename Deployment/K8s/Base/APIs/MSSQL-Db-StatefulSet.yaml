@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mssql-db-stset
+spec:
+  selector:
+    matchLabels:
+      app: mssql-db
+  serviceName: mssql-db-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mssql-db
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: thestore-mssqldb
+          image: mcr.microsoft.com/mssql/server:2019-latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MSSQL_PID
+              value: Express
+            - name: ACCEPT_EULA
+              value: Y
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-db-secret
+                  key: password
+          ports:
+            - name: mssql-db-prt
+              containerPort: 1433
+          volumeMounts:
+            - mountPath: /var/opt/mssql
+              name: mssql-db-vol
+  volumeClaimTemplates:
+    - metadata:
+        name: mssql-db-vol
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-db-svc
+spec:
+  selector:
+    app: mssql-db
+  ports:
+    - name: mssqldb-svc-prt
+      port: 1433
+      targetPort: mssql-db-prt
