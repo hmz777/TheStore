@@ -71,8 +71,6 @@ namespace TheStore.ApiCommon.Extensions.Services
 				{
 					var seqUrl = configuration.GetValue<string>(Logging.Seq);
 
-					Log.Information("Using Seq on Url: {Url}", seqUrl);
-
 					config
 					   .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 					   .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
@@ -80,8 +78,14 @@ namespace TheStore.ApiCommon.Extensions.Services
 					   .Enrich.FromLogContext()
 					   .Enrich.WithMachineName()
 					   .Enrich.WithEnvironmentName()
-					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}")
-					   .WriteTo.Seq(seqUrl);
+					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
+
+					if (string.IsNullOrWhiteSpace(seqUrl) == false)
+					{
+						Log.Information("Using Seq on Url: {Url}", seqUrl);
+						config.WriteTo.Seq(seqUrl);
+					}
+
 				}
 				else
 				{
@@ -94,7 +98,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					   .Enrich.WithEnvironmentName()
 					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
 				}
-			}, preserveStaticLogger: true);
+			}, preserveStaticLogger: false);
 
 			return webApplicationBuilder;
 		}
@@ -105,46 +109,54 @@ namespace TheStore.ApiCommon.Extensions.Services
 		{
 			var configuration = webApplicationBuilder.Configuration;
 			var services = webApplicationBuilder.Services;
-			var isKubernetes = configuration.GetValue<bool>(Deployment.IsKubernetes);
-			var isCompose = configuration.GetValue<bool>(Deployment.IsDockerCompose);
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
 			var dbName = databaseName ?? appName + "Db";
+			var dbUser = configuration.GetValue<string>(ConnectionStrings.DbUser);
+			var dbPass = configuration.GetValue<string>(ConnectionStrings.DbPassword);
 
 			Log.Information("Add database context");
 
-			var dockerDataConnStr = configuration.GetValue<string>(ConnectionStrings.DockerComposeData);
-			var kubernetesDataConnStr = configuration.GetValue<string>(ConnectionStrings.KubernetesData);
+			var connectionString = configuration.GetValue<string>(ConnectionStrings.ConnectionString);
 
-			if (isKubernetes)
+			switch (RunningPlatform)
 			{
-				Log.Information("Connect to database on Kubernetes");
+				case Constants.RunningPlatform.Standalone:
+					// If we reach here, then we're running the API independent of any infrastructure
+					Log.Information("Connect to database on local machine without infrastructure");
 
-				services.AddDbContext<TContext>(options =>
-				{
-					options
-					 .UseSqlServer(kubernetesDataConnStr.Replace("{DbName}", dbName));
-				});
-			}
-			else if (isCompose)
-			{
-				Log.Information("Connect to database on Docker Compose");
+					services.AddDbContext<TContext>(options =>
+					{
+						options
+						 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+					});
 
-				services.AddDbContext<TContext>(options =>
-				{
-					options
-					 .UseSqlServer(dockerDataConnStr.Replace("{DbName}", dbName));
-				});
-			}
-			else
-			{
-				// If we reach here, then we're running the API independent of any infrastructure
-				Log.Information("Connect to database on local machine without infrastructure");
+					break;
+				case Constants.RunningPlatform.DockerCompose:
+					Log.Information("Connect to database on Docker Compose");
 
-				services.AddDbContext<TContext>(options =>
-				{
-					options
-					 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
-				});
+					services.AddDbContext<TContext>(options =>
+					{
+						options
+						 .UseSqlServer(connectionString
+										.Replace("{DbUser}", dbUser)
+										.Replace("{DbPass}", dbPass));
+					});
+
+					break;
+				case Constants.RunningPlatform.Kubernetes:
+					Log.Information("Connect to database on Kubernetes");
+
+					services.AddDbContext<TContext>(options =>
+					{
+						options
+						 .UseSqlServer(connectionString
+										.Replace("{DbUser}", dbUser)
+										.Replace("{DbPass}", dbPass));
+					});
+
+					break;
+				default:
+					break;
 			}
 
 			Log.Information("Add data repositories");
@@ -233,17 +245,13 @@ namespace TheStore.ApiCommon.Extensions.Services
 				  switch (RunningPlatform)
 				  {
 					  case Constants.RunningPlatform.Standalone:
-						  authority = configuration
-									  .GetValue<string>(Identity.IdentityStandalone);
+						  authority = "localhost:7575";
 						  break;
 					  case Constants.RunningPlatform.DockerCompose:
-						  authority = configuration
-									  .GetValue<string>(Identity.IdentityDockerCompose);
-						  break;
 					  case Constants.RunningPlatform.Kubernetes:
 						  authority = configuration
-									 .GetValue<string>(Identity.IdentityKubernetes);
-						  break;
+									  .GetValue<string>(Identity.IdentityServer);
+						  break;					 
 					  default:
 						  break;
 				  }
