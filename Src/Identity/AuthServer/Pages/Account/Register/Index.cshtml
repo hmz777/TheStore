@@ -1,0 +1,86 @@
+﻿@page
+@model AuthServer.Pages.Account.Register.Index
+
+@section scripts {
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"
+			integrity="sha256-JwUksNJ6/R07ZiLRoXbGeNrtlFZMFDKX4hemPiHOmCA="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"
+			integrity="sha256-RFWFWIIPsjB4DucR4jqwxTWw13ZmtI+s6tVR2LJmZXk="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<section id="register-section" class="m-auto">
+	<div class="container-fluid p-0">
+		<div class="row gx-0 justify-content-center">
+			<div class="d-none d-lg-block col-lg-7">
+				<img class="auth-banner" src="/media/system/register-banner.jpg" alt="Register banner" />
+			</div>
+			<div class="col-12 col-lg-5">
+				<article class="form-card">
+					<header class="form-card-header">
+						<div class="logo-container">
+							<partial name="_Logo" />
+						</div>
+						<h1 class="form-title">Register a new account</h1>
+					</header>
+					<form class="c-form" method="post" asp-page="/Account/Register/Index">
+						<div class="row">
+							<div class="col-12 col-lg-6">
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="text" asp-for="Input.FirstName" />
+										<label class="c-form-label" asp-for="Input.FirstName"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.FirstName"></span>
+								</div>
+							</div>
+							<div class="col-12 col-lg-6">
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="text" asp-for="Input.LastName" />
+										<label class="c-form-label" asp-for="Input.LastName"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.LastName"></span>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="date" asp-for="Input.BirthDate" value="" />
+										<label class="c-form-label" asp-for="Input.BirthDate"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.BirthDate"></span>
+								</div>
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="email" asp-for="Input.Email" />
+										<label class="c-form-label" asp-for="Input.Email"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Email"></span>
+								</div>
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="tel" asp-for="Input.PhoneNumber" />
+										<label class="c-form-label" asp-for="Input.PhoneNumber"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.PhoneNumber"></span>
+								</div>
+								<button class="action-btn-primary" type="submit">Submit</button>
+							</div>
+						</div>
+					</form>
+					<footer class="mt-2">
+						Already have an account? <a class="link-primary">Login</a>
+					</footer>
+				</article>
+			</div>
+		</div>
+	</div>
+</section>

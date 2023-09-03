@@ -1,0 +1,23 @@
+@using Duende.IdentityServer.Extensions
+@{
+	string name = null;
+	if (!true.Equals(ViewData["signed-out"]))
+	{
+		name = Context.User?.GetDisplayName();
+	}
+}
+
+<header id="top-header">
+	<nav class="top-navbar">
+		<partial name="_Logo" />
+		<ul class="top-navbar-inner">
+			<li>
+				<a asp-page="/Account/Login/Index">Login</a>
+			</li>
+			<li>
+				<a asp-page="/Account/Register/Index">Register</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+

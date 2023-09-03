@@ -1,0 +1,108 @@
+@page
+@model AuthServer.Pages.Login.Index
+
+@section scripts {
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"
+			integrity="sha256-JwUksNJ6/R07ZiLRoXbGeNrtlFZMFDKX4hemPiHOmCA="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"
+			integrity="sha256-RFWFWIIPsjB4DucR4jqwxTWw13ZmtI+s6tVR2LJmZXk="
+			crossorigin="anonymous"
+			asp-fallback-src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<section id="login-section" class="m-auto">
+	<div class="container-fluid p-0">
+		<div class="row gx-0 justify-content-center">
+			<div class="d-none d-lg-block col-lg-7">
+				<img class="auth-banner" src="/media/system/login-banner.jpg" alt="Login banner" />
+			</div>
+			<div class="col-12 col-lg-5">
+				<article class="form-card">
+					<header class="form-card-header">
+						<div class="logo-container">
+							<partial name="_Logo" />
+						</div>
+						<h1 class="form-title">Login to your account</h1>
+					</header>
+					@if (Model.View.EnableLocalLogin)
+					{
+						<form class="c-form" method="post" asp-page="/Account/Login/Index">
+							<div class="c-alert c-alert-danger mb-4" asp-validation-summary="ModelOnly"></div>
+							<div class="row">
+								<div class="col-12">
+									<div class="form-element">
+										<div class="c-form-input-wrapper">
+											<input class="c-form-input" type="email" asp-for="Input.Username" />
+											<label class="c-form-label" asp-for="Input.Username"></label>
+										</div>
+										<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Username"></span>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-element">
+										<div class="c-form-input-wrapper">
+											<input class="c-form-input" type="password" asp-for="Input.Password" />
+											<label class="c-form-label" asp-for="Input.Password"></label>
+										</div>
+										<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Password"></span>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-element">
+										<div class="c-form-checkbox-wrapper">
+											<div class="c-form-checkbox">
+												<input type="checkbox" asp-for="Input.RememberLogin" />
+												<span class="c-form-checkmark"></span>
+											</div>
+											<label class="c-form-checkbox-label" asp-for="Input.RememberLogin"></label>
+										</div>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="row row-cols-2">
+										<div class="col"><input class="action-btn-secondary" asp-for="Input.Button" type="submit" value="Cancel" /></div>
+										<div class="col"><input class="action-btn-primary" asp-for="Input.Button" type="submit" value="Login" /></div>
+									</div>
+								</div>
+							</div>
+						</form>
+					}
+
+					
+					@if (Model.View.VisibleExternalProviders.Any())
+					{
+						<partial name="_SeparatorWithText" />
+						<ul class="external-providers-list">
+							@foreach (var provider in Model.View.VisibleExternalProviders)
+							{
+								<li class="provider-item">
+									<a class="action-btn-primary"
+									   asp-page="/ExternalLogin/Challenge"
+									   asp-route-scheme="@provider.AuthenticationScheme"
+									   asp-route-returnUrl="@Model.Input.ReturnUrl">
+										<i class="lab la-@(provider.DisplayName.ToLower())"></i>
+										@provider.DisplayName
+									</a>
+								</li>
+							}
+						</ul>
+					}
+
+					@if (!Model.View.EnableLocalLogin && !Model.View.VisibleExternalProviders.Any())
+					{
+						<div class="alert alert-warning">
+							<strong>Invalid login request</strong>
+							There are no login schemes configured for this request.
+						</div>
+					}
+				</article>
+			</div>
+		</div>
+	</div>
+</section>

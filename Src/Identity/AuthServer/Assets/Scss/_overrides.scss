@@ -1,0 +1,53 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.logo {
+    color: $accent2;
+    background: $accent1;
+}
+
+.c-form {
+    margin: 0;
+}
+
+.form-card {
+    padding: 1em 2em;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+
+    .form-title {
+        font-size: 4em;
+    }
+}
+
+.external-providers-list {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    width: 100%;
+
+    .provider-item {
+    }
+}
+
+.auth-banner {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.logo-container {
+    margin: 0 0 1em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
