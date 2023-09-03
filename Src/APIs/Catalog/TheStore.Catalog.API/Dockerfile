@@ -6,11 +6,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /source
 COPY ["Src/APIs/Catalog/TheStore.Catalog.API/TheStore.Catalog.API.csproj", "Src/APIs/Catalog/TheStore.Catalog.API/"]
+COPY ["Src/APIs/Catalog/TheStore.Catalog.Core/TheStore.Catalog.Core.csproj", "Src/APIs/Catalog/TheStore.Catalog.Core/"]
 COPY ["Src/APIs/Catalog/TheStore.Catalog.Infrastructure/TheStore.Catalog.Infrastructure.csproj", "Src/APIs/Catalog/TheStore.Catalog.Infrastructure/"]
 COPY ["Src/Shared/TheStore.ApiCommon/TheStore.ApiCommon.csproj", "Src/Shared/TheStore.ApiCommon/"]
 COPY ["Src/Shared/TheStore.SharedKernel/TheStore.SharedKernel.csproj", "Src/Shared/TheStore.SharedKernel/"]
 COPY ["Src/Shared/TheStore.SharedModels/TheStore.SharedModels.csproj", "Src/Shared/TheStore.SharedModels/"]
-COPY ["Src/APIs/Catalog/TheStore.Catalog.Core/TheStore.Catalog.Core.csproj", "Src/APIs/Catalog/TheStore.Catalog.Core/"]
 RUN dotnet restore "Src/APIs/Catalog/TheStore.Catalog.API/TheStore.Catalog.API.csproj"
 COPY . .
 WORKDIR "/source/Src/APIs/Catalog/TheStore.Catalog.API"
