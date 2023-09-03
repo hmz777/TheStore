@@ -9,8 +9,10 @@ namespace TheStore.SharedKernel.Entities
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public TId Id { get; set; }
+        public DateTimeOffset DateCreated { get; set; }
+        public DateTimeOffset DateUpdated { get; set; }
 
-		[NotMapped]
+        [NotMapped]
 		public List<BaseDomainEvent> Events { get; private set; } = new();
 
 		public override bool Equals(object? obj)
