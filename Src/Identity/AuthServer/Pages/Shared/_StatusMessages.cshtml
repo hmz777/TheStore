@@ -1,0 +1,19 @@
+﻿@using AuthServer.Services.StatusMessages;
+@{
+	var messages = TempData.GetStatusMessages();
+}
+
+<div class="c-alert-notification-container">
+	@{
+		foreach (var message in messages)
+		{
+			<div class="c-alert c-alert-notification @message.Type.GetCssClassName()">
+				<i class="c-alert-icon las la-2x @message.Type.GetIconClassName()"></i>
+				<p class="c-alert-message">@message.Message</p>
+				<button class="c-alert-close" type="button">
+					<i class="las la-times"></i>
+				</button>
+			</div>
+		}
+	}
+</div>
