@@ -1,6 +1,7 @@
 ﻿@page "/catalog/{catalogName?}/{manufacture?}/{priceRange?}/{sortDirection?}/{page:int?}"
 @using TheStore.Blazor.Models.Products;
 @using TheStore.Web.Blazor.Pages.Catalog.Components
+@using TheStore.Web.Blazor.Shared.Result
 
 <CatalogHeader Header="@CatalogName" Description="@CatalogDescription" />
 
@@ -19,9 +20,8 @@
 }
 else
 {
-	<Result ImageUrl="/media/system/NoProducts.svg"
-			  ImageAlt="No products found"
-			  Message="No products available with the current filter" />
+	<Result Type="ResultType.NoProducts"
+			Message="No products available with the current filter" />
 }
 
 @code {
