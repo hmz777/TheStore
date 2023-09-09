@@ -1,6 +1,10 @@
-﻿<header id="top-header">
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+@using System.Security.Claims;
+@inject NavigationManager Navigation
+
+<header id="top-header">
 	<nav class="top-navbar">
-		<div class="mr-auto">
+		<div class="logo-container">
 			<Logo />
 		</div>
 		<ul class="top-navbar-inner">
@@ -16,17 +20,21 @@
 			<li>
 				<hr class="vertical-separator" />
 			</li>
-			<li>
+			<li class="d-flex">
 				<AuthorizeView>
 					<Authorized>
-						<span>Hello @(context.User?.Identity?.Name)!</span>
-						<NavLink href="/user/profile">Profile</NavLink>
-						<NavLink href="/user/logout">Logout</NavLink>
+						<NavLink class="action-btn--primary action-btn--small mr-2" href="/user/profile">
+							@(context.User?.FindFirst("email")?.Value ?? "Error")
+						</NavLink>
+						<button class="action-btn--secondary action-btn--small" type="button" @onclick="BeginLogout">Logout</button>
 					</Authorized>
 					<NotAuthorized>
-						<NavLink href="/auth/login">Login</NavLink>
-						<NavLink href="/auth/register">Register</NavLink>
+						<button class="action-btn--primary action-btn--small mr-2" type="button" @onclick="BeginLogin">Login</button>
+						<NavLink class="action-btn--primary action-btn--small" href="/authentication/register">Register</NavLink>
 					</NotAuthorized>
+					<Authorizing>
+						<i class="las la-circle-notch la-spin la-2x"></i>
+					</Authorizing>
 				</AuthorizeView>
 			</li>
 		</ul>
@@ -35,4 +43,16 @@
 
 @code {
 
+	[CascadingParameter]
+	public Task<AuthenticationState>? AuthenticationState { get; set; }
+
+	private void BeginLogin(MouseEventArgs args)
+	{
+		Navigation.NavigateToLogout("authentication/login");
+	}
+
+	private void BeginLogout(MouseEventArgs args)
+	{
+		Navigation.NavigateToLogout("authentication/logout");
+	}
 }
