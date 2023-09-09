@@ -6,7 +6,6 @@
     background-color: $accent2;
     padding: .25em .5em;
     border-radius: $globalBorderRadius;
-    pointer-events: none;
 }
 
 #top-header {
@@ -20,7 +19,11 @@
         padding: 1.7em $layoutHorizontalPadding;
         display: flex;
         flex-flow: row;
-        background: rgba($accent3,0.2);
+        background: $accent4;
+
+        .logo-container {
+            margin-right: auto;
+        }
 
         .top-navbar-inner {
             padding: 0;

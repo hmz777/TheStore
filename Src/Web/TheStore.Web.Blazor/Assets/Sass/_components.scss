@@ -43,17 +43,24 @@
     padding: 1em 2em;
     border-radius: $globalBorderRadius;
     transition: $globalTransitionDuration ease-in-out background;
-    width: 100%;
-}
 
-.action-btn-primary {
-    @extend .action-btn;
-    @include makeButtonHoverable($accent1);
-}
+    &--block {
+        width: 100%;
+    }
 
-.action-btn-secondary {
-    @extend .action-btn;
-    @include makeButtonHoverable($accent4);
+    &--small {
+        padding: .5em;
+    }
+
+    &--primary {
+        @extend .action-btn;
+        @include makeButtonHoverable($accent1);
+    }
+
+    &--secondary {
+        @extend .action-btn;
+        @include makeButtonHoverable($accent4);
+    }
 }
 
 /*===Links===*/
@@ -63,15 +70,44 @@
 }
 
 /*===Alerts===*/
+.c-alert-notification-container {
+    display: flex;
+    flex-flow: column wrap;
+    position: absolute;
+    width: 30%;
+    max-height: 95vh;
+
+    .c-alert {
+        margin: .5em 0 0 .5em;
+    }
+}
+
 .c-alert {
     border-radius: $globalBorderRadius;
     color: $accent2;
-    padding: .5em 1em;
+    padding: .5em 1em .5em 1em;
     display: flex;
     align-items: center;
+    max-width: 100%;
+
+    [lang=ar] & {
+        padding: .5em 1em .5em 1em;
+    }
 
     &.c-alert-danger {
-        background: red;
+        background-color: red;
+    }
+
+    &.c-alert-success {
+        background-color: green;
+    }
+
+    &.c-alert-warning {
+        background-color: orange;
+    }
+
+    &.c-alert-info {
+        background-color: dodgerblue;
     }
 
     ul {
@@ -90,5 +126,53 @@
                 }
             }
         }
+    }
+
+    &.c-alert-notification {
+        box-shadow: 6.7px 6.7px 5.3px rgba(0, 0, 0, 0.053), 22.3px 22.3px 17.9px rgba(0, 0, 0, 0.077), 100px 100px 80px rgba(0, 0, 0, 0.13);
+
+        .c-alert-icon {
+            margin-right: .3em;
+        }
+
+        .c-alert-message {
+            margin: 0 .5em 0 0;
+            text-align: left;
+        }
+
+        .c-alert-close {
+            color: white;
+            margin: 0 0 0 auto;
+        }
+
+        [lang=ar] & {
+            .c-alert-icon {
+                margin-left: .3em;
+            }
+
+            .c-alert-message {
+                margin: 0 0 0 .5em;
+                text-align: right;
+            }
+
+            .c-alert-close {
+                margin: 0 auto 0 0;
+            }
+        }
+    }
+}
+
+/*===Results===*/
+.result {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    margin: 3em auto;
+    width: 13em;
+
+    .result-image {
+        width: 100%;
+        height: auto;
     }
 }
