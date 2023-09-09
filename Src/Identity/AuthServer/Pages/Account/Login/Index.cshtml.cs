@@ -1,13 +1,19 @@
+using AuthServer.Mediator.Commands;
 using AuthServer.Models;
+using AuthServer.Services.StatusMessages;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
+using Serilog;
+using System.Text;
 
 namespace AuthServer.Pages.Login
 {
@@ -21,6 +27,8 @@ namespace AuthServer.Pages.Login
 		private readonly IEventService _events;
 		private readonly IAuthenticationSchemeProvider _schemeProvider;
 		private readonly IIdentityProviderStore _identityProviderStore;
+		private readonly IMediator _mediator;
+		private readonly StatusMessageService _statusMessageService;
 
 		public ViewModel View { get; set; }
 
@@ -33,7 +41,9 @@ namespace AuthServer.Pages.Login
 			IIdentityProviderStore identityProviderStore,
 			IEventService events,
 			UserManager<ApplicationUser> userManager,
-			SignInManager<ApplicationUser> signInManager)
+			SignInManager<ApplicationUser> signInManager,
+			IMediator mediator,
+			StatusMessageService statusMessageService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
@@ -41,6 +51,8 @@ namespace AuthServer.Pages.Login
 			_schemeProvider = schemeProvider;
 			_identityProviderStore = identityProviderStore;
 			_events = events;
+			_mediator = mediator;
+			_statusMessageService = statusMessageService;
 		}
 
 		public async Task<IActionResult> OnGet(string returnUrl)
@@ -52,6 +64,9 @@ namespace AuthServer.Pages.Login
 				// we only have one option for logging in and it's an external provider
 				return RedirectToPage("/ExternalLogin/Challenge", new { scheme = View.ExternalLoginScheme, returnUrl });
 			}
+
+			// A flag indicating that this page is an auth page so we don't show navbar and footer
+			ViewData["IsAuthOp"] = true;
 
 			return Page();
 		}
@@ -106,8 +121,8 @@ namespace AuthServer.Pages.Login
 				// If there is a user with the supplied email we use the username of that user
 				// with the supplied password
 				var result = await _signInManager
-					.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberLogin, lockoutOnFailure: true);
-								
+					.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberLogin, lockoutOnFailure: false);
+
 				if (result.Succeeded)
 				{
 					await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
@@ -137,8 +152,41 @@ namespace AuthServer.Pages.Login
 					else
 					{
 						// user might have clicked on a malicious link - should be logged
-						throw new Exception("Invalid return URL");
+						Log.Error("Invalid return url while signing in user with id:{UserId} - Return url:{ReturnUrl}",
+							user.Id, Input.ReturnUrl);
+
+						return Redirect("~/");
 					}
+				}
+				else if (result.IsNotAllowed)
+				{
+					var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+					var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+					var activationUrl = Url.Page("/Account/ConfirmAccountEmail/Index",
+						pageHandler: null,
+						new
+						{
+							userId = user.Id,
+							token = encodedToken,
+							returnUrl = Input.ReturnUrl
+						},
+						Request.Scheme,
+						Request.Host.ToString());
+
+					await _mediator.Send(new ConfirmAccountEmailRequest(user.FullName, user.Email, activationUrl));
+
+					_statusMessageService
+						.AddMessage(StatusMessageType.Info, "Message_Info_ActivationEmailSent");
+
+					return RedirectToPage("/Account/Login/Index", new { returnUrl = Input.ReturnUrl });
+				}
+				else if (result.IsLockedOut)
+				{
+					_statusMessageService
+						.AddMessage(StatusMessageType.Warning, "Message_Warning_UserLockedOut");
+
+					return RedirectToPage("/Account/Login/Index", new { returnUrl = Input.ReturnUrl });
 				}
 
 				await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "Invalid credentials", clientId: context?.Client.ClientId));

@@ -1,9 +1,14 @@
+using AuthServer.App;
 using AuthServer.Data;
+using AuthServer.Localization;
 using AuthServer.Models;
+using AuthServer.Services.Emails;
+using AuthServer.Services.StatusMessages;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
 
 namespace AuthServer
 {
@@ -48,7 +53,46 @@ namespace AuthServer
 					options.ClientSecret = "copy client secret from Google here";
 				});
 
+			builder.ConfigureCustomServices();
+
 			return builder.Build();
+		}
+
+		public static void ConfigureCustomServices(this WebApplicationBuilder builder)
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+
+			builder.Services.Configure<IdentityOptions>(options =>
+			{
+				options.SignIn.RequireConfirmedAccount = true;
+				options.User.RequireUniqueEmail = true;
+			});
+
+			builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
+				o.TokenLifespan = TimeSpan.FromHours(1));
+
+			builder.Services.AddHttpContextAccessor();
+			builder.Services.AddLocalization(options => options.ResourcesPath = "Localization");
+			builder.Services.AddRazorPages()
+				 .AddDataAnnotationsLocalization(options =>
+				 {
+					 options.DataAnnotationLocalizerProvider = (type, factory) =>
+						 factory.Create(typeof(LocalizationResources));
+				 })
+				 .AddSessionStateTempDataProvider();
+			builder.Services.AddSession();
+
+			builder.Services.AddOptions<EmailOptions>()
+				.Bind(builder.Configuration.GetSection(EmailOptions.Key));
+
+			builder.Services.AddOptions<AppOptions>()
+				.Bind(builder.Configuration.GetSection(AppOptions.Key));
+
+			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+			builder.Services.AddAutoMapper(assembly);
+
+			builder.Services.AddScoped<EmailService>();
+			builder.Services.AddScoped<StatusMessageService>();
 		}
 
 		public static WebApplication ConfigurePipeline(this WebApplication app)
@@ -64,6 +108,8 @@ namespace AuthServer
 			app.UseRouting();
 			app.UseIdentityServer();
 			app.UseAuthorization();
+
+			app.UseSession();
 
 			app.MapRazorPages()
 				.RequireAuthorization();

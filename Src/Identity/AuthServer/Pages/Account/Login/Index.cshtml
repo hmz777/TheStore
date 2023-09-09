@@ -14,6 +14,7 @@
 			integrity="sha256-RFWFWIIPsjB4DucR4jqwxTWw13ZmtI+s6tVR2LJmZXk="
 			crossorigin="anonymous"
 			asp-fallback-src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/js/status-messages.js" asp-append-version="true"></script>
 }
 
 <section id="login-section" class="m-auto">
@@ -25,7 +26,7 @@
 			<div class="col-12 col-lg-5">
 				<article class="form-card">
 					<header class="form-card-header">
-						<div class="logo-container">
+						<div class="logo-container-auth">
 							<partial name="_Logo" />
 						</div>
 						<h1 class="form-title">Login to your account</h1>
@@ -66,15 +67,16 @@
 								</div>
 								<div class="col-12">
 									<div class="row row-cols-2">
-										<div class="col"><input class="action-btn-secondary" asp-for="Input.Button" type="submit" value="Cancel" /></div>
-										<div class="col"><input class="action-btn-primary" asp-for="Input.Button" type="submit" value="Login" /></div>
+										<input type="hidden" asp-for="Input.ReturnUrl" value="@Model.Input.ReturnUrl" />
+										<div class="col"><input class="action-btn--secondary action-btn--block" asp-for="Input.Button" type="submit" value="Cancel" /></div>
+										<div class="col"><input class="action-btn--primary action-btn--block" asp-for="Input.Button" type="submit" value="Login" /></div>
 									</div>
 								</div>
 							</div>
 						</form>
 					}
 
-					
+
 					@if (Model.View.VisibleExternalProviders.Any())
 					{
 						<partial name="_SeparatorWithText" />
@@ -82,7 +84,7 @@
 							@foreach (var provider in Model.View.VisibleExternalProviders)
 							{
 								<li class="provider-item">
-									<a class="action-btn-primary"
+									<a class="action-btn--primary"
 									   asp-page="/ExternalLogin/Challenge"
 									   asp-route-scheme="@provider.AuthenticationScheme"
 									   asp-route-returnUrl="@Model.Input.ReturnUrl">
@@ -96,7 +98,7 @@
 
 					@if (!Model.View.EnableLocalLogin && !Model.View.VisibleExternalProviders.Any())
 					{
-						<div class="alert alert-warning">
+						<div class="c-alert c-alert-danger">
 							<strong>Invalid login request</strong>
 							There are no login schemes configured for this request.
 						</div>

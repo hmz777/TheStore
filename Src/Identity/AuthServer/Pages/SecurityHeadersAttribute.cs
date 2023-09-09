@@ -47,7 +47,8 @@ namespace AuthServer.Pages
 				}
 
 				// also consider adding upgrade-insecure-requests once you have HTTPS in place for production
-				//csp += "upgrade-insecure-requests;";
+				csp += "upgrade-insecure-requests;";
+
 				// also an example if you need client images to be displayed from twitter
 				// csp += "img-src 'self' https://pbs.twimg.com;";
 

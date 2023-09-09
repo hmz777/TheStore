@@ -11,22 +11,17 @@ builder.Services.AddOidcAuthentication(config =>
 {
 	var authority = "https://localhost:5001";
 
-	config.AuthenticationPaths.LogInPath = "auth/login";
-	config.AuthenticationPaths.LogInCallbackPath = "auth/login-callback";
-	config.AuthenticationPaths.LogInFailedPath = "auth/login-failed";
-	config.AuthenticationPaths.LogOutPath = "auth/logout";
-	config.AuthenticationPaths.LogOutCallbackPath = "auth/logout-callback";
-	config.AuthenticationPaths.LogOutFailedPath = "auth/logout-failed";
-	config.AuthenticationPaths.LogOutSucceededPath = "auth/logged-out";
-	config.AuthenticationPaths.ProfilePath = "auth/profile";
-	config.AuthenticationPaths.RegisterPath = "auth/register";
+	config.AuthenticationPaths.RemoteRegisterPath = authority + "/account/register";
+	config.AuthenticationPaths.RemoteProfilePath = authority + "/account/profile";
+	config.AuthenticationPaths.LogOutSucceededPath = "/";
+	config.ProviderOptions.PostLogoutRedirectUri = config.AuthenticationPaths.LogOutCallbackPath;
 
-	config.AuthenticationPaths.RemoteRegisterPath = authority + "/account/register"; 
-	config.AuthenticationPaths.RemoteProfilePath = authority + "/account/profile"; 
-
-	config.ProviderOptions.ResponseType = "code";
 	config.ProviderOptions.Authority = authority;
+	config.ProviderOptions.ResponseType = "code";
 	config.ProviderOptions.ClientId = "TheStore.Web.Blazor";
+	config.ProviderOptions.DefaultScopes.Clear();
+	config.ProviderOptions.DefaultScopes.Add("openid");
+	config.ProviderOptions.DefaultScopes.Add("profile");
 });
 
 builder.Services.AddMudServices();

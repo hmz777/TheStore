@@ -1,6 +1,10 @@
 ﻿@page
 @model AuthServer.Pages.Account.Register.Index
 
+@{
+	ViewData["IsAuthOp"] = true;
+}
+
 @section scripts {
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
 			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -14,6 +18,8 @@
 			integrity="sha256-RFWFWIIPsjB4DucR4jqwxTWw13ZmtI+s6tVR2LJmZXk="
 			crossorigin="anonymous"
 			asp-fallback-src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/js/status-messages.js" asp-append-version="true"></script>
+	<script src="~/js/account.js" asp-append-version="true"></script>
 }
 
 <section id="register-section" class="m-auto">
@@ -25,7 +31,7 @@
 			<div class="col-12 col-lg-5">
 				<article class="form-card">
 					<header class="form-card-header">
-						<div class="logo-container">
+						<div class="logo-container-auth">
 							<partial name="_Logo" />
 						</div>
 						<h1 class="form-title">Register a new account</h1>
@@ -50,6 +56,24 @@
 									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.LastName"></span>
 								</div>
 							</div>
+							<div class="col-12 col-lg-6">
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="password" asp-for="Input.Password" />
+										<label class="c-form-label" asp-for="Input.Password"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Password"></span>
+								</div>
+							</div>
+							<div class="col-12 col-lg-6">
+								<div class="form-element">
+									<div class="c-form-input-wrapper">
+										<input class="c-form-input" type="password" asp-for="Input.ConfirmPassword" />
+										<label class="c-form-label" asp-for="Input.ConfirmPassword"></label>
+									</div>
+									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.ConfirmPassword"></span>
+								</div>
+							</div>
 							<div class="col-12">
 								<div class="form-element">
 									<div class="c-form-input-wrapper">
@@ -72,12 +96,13 @@
 									</div>
 									<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.PhoneNumber"></span>
 								</div>
-								<button class="action-btn-primary" type="submit">Submit</button>
+								<button class="action-btn--primary action-btn--block" type="submit">Submit</button>
 							</div>
 						</div>
 					</form>
 					<footer class="mt-2">
-						Already have an account? <a class="link-primary">Login</a>
+						Already have an account?
+						<a asp-page="/Account/Login/Index" asp-route-returnUrl="@Model.Input.ReturnUrl" class="link-primary">Login</a>
 					</footer>
 				</article>
 			</div>
