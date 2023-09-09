@@ -1,26 +1,13 @@
-html, body {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-flow: column wrap;
-}
-
-.logo {
-    color: $accent2;
-    background: $accent1;
-}
-
 .c-form {
     margin: 0;
 }
 
 .form-card {
-    padding: 1em 2em;
+    padding: 2em 2em;
     height: 100vh;
     display: flex;
     flex-flow: column;
     align-items: center;
-    justify-content: center;
     overflow-y: auto;
 
     .form-title {
@@ -44,10 +31,15 @@ html, body {
     object-fit: cover;
 }
 
-.logo-container {
+.logo-container-auth {
     margin: 0 0 1em;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .logo {
+        color: $accent2;
+        background: $accent1;
+    }
 }
