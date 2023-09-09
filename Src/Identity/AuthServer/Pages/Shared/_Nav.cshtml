@@ -9,14 +9,25 @@
 
 <header id="top-header">
 	<nav class="top-navbar">
-		<partial name="_Logo" />
+		<div class="logo-container">
+			<partial name="_Logo" />
+		</div>
 		<ul class="top-navbar-inner">
-			<li>
-				<a asp-page="/Account/Login/Index">Login</a>
-			</li>
-			<li>
-				<a asp-page="/Account/Register/Index">Register</a>
-			</li>
+			@if (User.Identity.IsAuthenticated == false)
+			{
+				<li>
+					<a asp-page="/Account/Login/Index">Login</a>
+				</li>
+				<li>
+					<a asp-page="/Account/Register/Index">Register</a>
+				</li>
+			}
+			else
+			{
+				<form method="post" asp-page="/Account/Logout/Index">
+					<button type="submit">Logout</button>
+				</form>
+			}
 		</ul>
 	</nav>
 </header>

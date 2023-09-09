@@ -1,3 +1,7 @@
+@{
+	var isNotAuthOpertation = ViewData["IsAuthOp"] == null ? true : !((bool)ViewData["IsAuthOp"]);
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +13,25 @@
 
 	<link rel="icon" type="image/x-icon" href="~/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
-	
+
 	<partial name="_Styles" />
 </head>
 <body>
-	@RenderBody()
+	@if (isNotAuthOpertation)
+	{
+		<partial name="_Nav" />
+	}
+
+	<partial name="_StatusMessages" />
+
+	<main>
+		@RenderBody()
+	</main>
+
+	@if (isNotAuthOpertation)
+	{
+		<partial name="_Footer" />
+	}
 
 	<partial name="_Scripts" />
 	@RenderSection("scripts", required: false)
