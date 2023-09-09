@@ -1,16 +1,14 @@
-﻿@page "/auth/{action}"
+﻿@page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@using TheStore.Web.Blazor.Shared.Result
 
 <RemoteAuthenticatorView Action="@Action">
 	<LoggingIn>
-		<Result ImageUrl="/media/system/redirect.svg"
-				ImageAlt="Redirecting..."
-				Message="You are about to be redirected to {Auth server url here}" />
+		<Result Type="ResultType.Redirect"
+				Message="You are about to be redirected for authentication" />
 	</LoggingIn>
 	<LogInFailed>
-		<Result ImageUrl="/media/system/error.svg"
-				ImageAlt="Login failed!"
+		<Result Type="ResultType.Error"
 				Message="It seems that login has failed" />
 	</LogInFailed>
 </RemoteAuthenticatorView>

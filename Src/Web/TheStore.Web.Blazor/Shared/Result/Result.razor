@@ -1,0 +1,47 @@
+﻿<div class="container-fluid d-flex h-100">
+	<div class="row row-cols-1 row-cols-lg-2 flex-grow-1">
+		<div class="col offset-lg-3 d-flex h-100">
+			<div class="result">
+				@switch (Type)
+				{
+					case ResultType.NotFound:
+						{
+							<img class="result-image" src="/media/system/404.svg" alt="Not found" />
+							break;
+						}
+					case ResultType.Redirect:
+						{
+							<img class="result-image" src="/media/system/redirect.svg" alt="Redirecting..." />
+							break;
+						}
+					case ResultType.Error:
+						{
+							<img class="result-image" src="/media/system/error.svg" alt="Access denied" />
+							break;
+						}
+					case ResultType.NoProducts:
+						{
+							<img class="result-image" src="/media/system/no-products.svg" alt="No products" />
+							break;
+						}
+					case ResultType.Info:
+						{
+							<img class="result-image" src="/media/system/info.svg" alt="No products" />
+							break;
+						}
+					default:
+						break;
+				}
+				<h5 class="text-center my-4">@((MarkupString)Message)</h5>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public ResultType Type { get; set; }
+
+	[Parameter]
+	public string Message { get; set; }
+}

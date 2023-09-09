@@ -1,7 +1,15 @@
-﻿<CascadingAuthenticationState>
+﻿@using TheStore.Web.Blazor.Shared.Result
+
+<CascadingAuthenticationState>
 	<Router AppAssembly="@typeof(App).Assembly">
 		<Found Context="routeData">
 			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+				<Authorizing>
+					<div class="m-auto w-100 h-100">
+						<Result Type="ResultType.Info"
+								Message="Loading..." />
+					</div>
+				</Authorizing>
 				<NotAuthorized>
 					@if (context.User.Identity?.IsAuthenticated != true)
 					{
@@ -9,8 +17,7 @@
 					}
 					else
 					{
-						<Result ImageUrl="/media/system/error.svg"
-								ImageAlt="Not Found"
+						<Result Type="ResultType.Error"
 								Message="You are not authorized to access this resource" />
 					}
 				</NotAuthorized>
@@ -20,8 +27,7 @@
 		<NotFound>
 			<PageTitle>Not found</PageTitle>
 			<LayoutView Layout="@typeof(MainLayout)">
-				<Result ImageUrl="/media/system/404.svg"
-						ImageAlt="Not Found"
+				<Result Type="ResultType.NotFound"
 						Message="It looks like there's nothing here &#x1F615;" />
 			</LayoutView>
 		</NotFound>
