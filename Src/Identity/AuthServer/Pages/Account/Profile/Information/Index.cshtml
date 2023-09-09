@@ -1,0 +1,37 @@
+﻿@page
+@model AuthServer.Pages.Account.Profile.Information.IndexModel
+@{
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 col-lg-3">
+			<partial name="Profile/_ProfileOptions" />
+		</div>
+		<div class="col-12 col-lg-9">
+			<div class="profile-content">
+				<h1>Information</h1>
+				<article class="info-section">
+					<header class="info-section-header">
+						<h2>Basic Info</h2>
+						<button type="button" class="action-btn--primary">Edit</button>
+					</header>
+					<article class="info-section-body">
+						<div class="info-section-cell">
+							<label class="info-section-cell-name">First Name:</label>
+							<span class="info-section-cell-value">@Model.ApplicationUser.FirstName</span>
+						</div>
+						<div class="info-section-cell">
+							<span class="info-section-cell-name">Last Name:</span>
+							<span class="info-section-cell-value">@Model.ApplicationUser.LastName</span>
+						</div>
+						<div class="info-section-cell">
+							<span class="info-section-cell-name">Email:</span>
+							<span class="info-section-cell-value">@Model.ApplicationUser.Email</span>
+						</div>
+					</article>
+				</article>
+			</div>
+		</div>
+	</div>
+</div>
