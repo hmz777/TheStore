@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\media\system\" />
     <Folder Include="wwwroot\vendor\" />
   </ItemGroup>
 
