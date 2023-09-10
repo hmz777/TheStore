@@ -18407,6 +18407,7 @@ h2, .h2 {
   text-align: left;
   background: #FFFFFF;
   padding: 0;
+  transition: background 0.3s ease-in-out;
 }
 .profile-options .profile-options:not(:last-of-type) {
   margin-bottom: 0.5em;

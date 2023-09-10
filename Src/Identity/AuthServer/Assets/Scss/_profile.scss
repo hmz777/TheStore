@@ -11,6 +11,7 @@
         text-align: left;
         background: $accent2;
         padding: 0;
+        transition: background $globalTransitionDuration ease-in-out;
 
         &:not(:last-of-type) {
             margin-bottom: .5em;
