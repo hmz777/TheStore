@@ -1,4 +1,6 @@
-﻿.logo {
+﻿@use "sass:color";
+
+.logo {
     font-weight: bold;
     font-size: 1.5em;
     letter-spacing: 2px;
@@ -6,6 +8,10 @@
     background-color: $accent2;
     padding: .25em .5em;
     border-radius: $globalBorderRadius;
+
+    &.active {
+        border: $globalBorderWidth solid $accent3;
+    }
 }
 
 #top-header {
@@ -19,7 +25,7 @@
         padding: 1.7em $layoutHorizontalPadding;
         display: flex;
         flex-flow: row;
-        background: $accent4;
+        background: rgba($accent4,0.7);
 
         .logo-container {
             margin-right: auto;
@@ -36,6 +42,26 @@
             li {
                 a {
                     color: $navLinksColor;
+                    position: relative;
+
+                    &:after {
+                        display: none;
+                        position: absolute;
+                        bottom: -1em;
+                        content: "";
+                        background-image: url(/media/system/underline.svg);
+                        background-size: 100% 100%;
+                        max-width: 100%;
+                        width: 100%;
+                        height: 1em;
+                    }
+
+
+                    &.active {
+                        &:after {
+                            display: block;
+                        }
+                    }
                 }
 
                 &:not(:last-of-type) {
