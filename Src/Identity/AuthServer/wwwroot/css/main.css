@@ -17862,16 +17862,23 @@ textarea.form-control-lg {
   color: #FFFFFF;
 }
 
+*:disabled, .disabled, *[disabled] {
+  cursor: not-allowed;
+}
+*:disabled *, .disabled *, *[disabled] * {
+  cursor: not-allowed;
+}
+
 html, body {
   font-family: "Poppins", sans-serif !important;
   font-size: 1em !important;
   height: 100vh;
   display: flex;
   flex-flow: column;
+  overflow-y: auto;
 }
 
 #app {
-  height: 100%;
   width: 100%;
   display: flex;
   flex-flow: column;
@@ -17974,11 +17981,17 @@ h2, .h2 {
 .action-btn--primary:hover {
   background: #d4a91d;
 }
+.action-btn--primary:disabled {
+  background: #b48f18;
+}
 .action-btn--secondary {
   background: #E5E5E5;
 }
 .action-btn--secondary:hover {
   background: #cccccc;
+}
+.action-btn--secondary:disabled {
+  background: #a0a0a0;
 }
 
 /*===Links===*/
@@ -18085,6 +18098,9 @@ h2, .h2 {
   padding: 0.25em 0.5em;
   border-radius: 1em;
 }
+.logo.active {
+  border: 4px solid #000000;
+}
 
 #top-header {
   position: sticky;
@@ -18097,7 +18113,7 @@ h2, .h2 {
   padding: 1.7em 4em;
   display: flex;
   flex-flow: row;
-  background: #E5E5E5;
+  background: rgba(229, 229, 229, 0.7);
 }
 #top-header .top-navbar .logo-container {
   margin-right: auto;
@@ -18111,7 +18127,22 @@ h2, .h2 {
   list-style: none;
 }
 #top-header .top-navbar .top-navbar-inner li a {
-  color: #FFFFFF;
+  color: #000000;
+  position: relative;
+}
+#top-header .top-navbar .top-navbar-inner li a:after {
+  display: none;
+  position: absolute;
+  bottom: -1em;
+  content: "";
+  background-image: url(/media/system/underline.svg);
+  background-size: 100% 100%;
+  max-width: 100%;
+  width: 100%;
+  height: 1em;
+}
+#top-header .top-navbar .top-navbar-inner li a.active:after {
+  display: block;
 }
 #top-header .top-navbar .top-navbar-inner li:not(:last-of-type) {
   margin-right: 1em;
@@ -18216,11 +18247,21 @@ h2, .h2 {
   display: flex;
   flex-flow: column wrap;
   margin: auto 0;
+  width: 100%;
 }
 .c-form .form-element {
   display: flex;
   flex-flow: column wrap;
   margin-bottom: 1em;
+}
+.c-form .form-element.disabled .c-form-input-wrapper {
+  background: #E5E5E5;
+}
+.c-form .form-element-wide {
+  width: 100%;
+}
+.c-form .form-element-inline {
+  margin-left: 0.5em;
 }
 .c-form .c-form-input-wrapper {
   border: 4px solid #000000;
@@ -18231,6 +18272,8 @@ h2, .h2 {
   width: auto;
   position: relative;
   padding: 0.3em;
+  background: #FFFFFF;
+  transition: background 0.3s ease-in-out;
 }
 .c-form .c-form-input-wrapper:focus {
   border-color: #E5BE3F;
@@ -18296,20 +18339,18 @@ h2, .h2 {
   outline: none;
   font-size: 1.1em;
   width: 100%;
+  background: transparent;
 }
 .c-form .c-form-input:focus ~ .c-form-label {
   background: #E5BE3F;
 }
-.c-form .c-form-input input {
-  background: #000000;
-}
-.c-form .c-form-input input:-webkit-autofill {
+.c-form .c-form-input:-webkit-autofill {
   background-color: #000000 !important;
 }
-.c-form .c-form-input input:-webkit-autofill:focus {
+.c-form .c-form-input:-webkit-autofill:focus {
   background-color: #000000 !important;
 }
-.c-form .c-form-input input:-internal-autofill-selected {
+.c-form .c-form-input:-internal-autofill-selected {
   background-color: #000000 !important;
 }
 .c-form .form-validation-msg {
@@ -18432,22 +18473,27 @@ h2, .h2 {
   background: #E5E5E5;
   display: inline-flex;
   flex-flow: column;
+  width: 100%;
+  margin-bottom: 2em;
+}
+@media (min-width: 992px) {
+  .profile-content .info-section {
+    width: 60%;
+  }
 }
 .profile-content .info-section .info-section-header {
   margin: 0 0 2em 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .profile-content .info-section .info-section-header h2, .profile-content .info-section .info-section-header .h2 {
   margin: 0;
 }
-.profile-content .info-section .info-section-body {
+.profile-content .info-section .info-section-body-table {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1em;
-}
-.profile-content .info-section .info-section-body .info-section-cell {
-  /*margin: 0 1em 1em 0;*/
 }
 .profile-content .info-section .info-section-body .info-section-cell .info-section-cell-name {
   font-weight: bold;

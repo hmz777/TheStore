@@ -43,11 +43,18 @@
         background: $accent4;
         display: inline-flex;
         flex-flow: column;
+        width: 100%;
+        margin-bottom: 2em;
+
+        @include lg {
+            width: 60%;
+        }
 
         .info-section-header {
             margin: 0 0 2em 0;
             display: flex;
             justify-content: space-between;
+            align-items: center;
 
             h2 {
                 margin: 0;
@@ -55,12 +62,15 @@
         }
 
         .info-section-body {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1em;
+
+
+            &-table {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1em;
+            }
 
             .info-section-cell {
-                /*margin: 0 1em 1em 0;*/
 
                 .info-section-cell-name {
                     font-weight: bold;

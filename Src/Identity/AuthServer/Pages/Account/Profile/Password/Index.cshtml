@@ -1,6 +1,8 @@
 ﻿@page
 @model AuthServer.Pages.Account.Profile.Password.IndexModel
-@{
+
+@section scripts {
+	<script src="~/js/account.js" asp-append-version="true"></script>
 }
 
 <div class="container-fluid">
@@ -9,7 +11,42 @@
 			<partial name="Profile/_ProfileOptions" />
 		</div>
 		<div class="col-12 col-lg-9">
-			<h1>Password</h1>
+			<div class="profile-content">
+				<h1>Password</h1>
+				<article class="info-section">
+					<header class="info-section-header">
+						<h2>Update Password</h2>
+						<button type="button" class="action-btn--primary edit-form-btn" data-toggle-text="Close">Edit</button>
+					</header>
+					<article class="info-section-body">
+						<div class="info-section-cell">
+							<form class="c-form" method="post" asp-page="/Account/Profile/UpdatePassword">
+								<div class="row">
+									<div class="col-12">
+										<div class="form-element disabled">
+											<div class="c-form-input-wrapper">
+												<input class="c-form-input" disabled="disabled" type="password" asp-for="View.Password" />
+												<label class="c-form-label" asp-for="View.Password"></label>
+											</div>
+											<span class="asp-validation-message form-validation-msg" asp-validation-for="View.Password"></span>
+										</div>
+										<div class="form-element disabled">
+											<div class="c-form-input-wrapper">
+												<input class="c-form-input" disabled="disabled" type="password" asp-for="View.ConfirmPassword" />
+												<label class="c-form-label" asp-for="View.ConfirmPassword"></label>
+											</div>
+											<span class="asp-validation-message form-validation-msg" asp-validation-for="View.ConfirmPassword"></span>
+										</div>
+										<div class="form-element disabled">
+											<input class="action-btn--primary ms-auto" disabled="disabled" type="submit" value="Save" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</article>
+				</article>
+			</div>
 		</div>
 	</div>
 </div>
