@@ -2,13 +2,19 @@ using AuthServer.App;
 using AuthServer.Data;
 using AuthServer.Localization;
 using AuthServer.Models;
+using AuthServer.Routing;
 using AuthServer.Services.Emails;
 using AuthServer.Services.StatusMessages;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Serilog;
+using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace AuthServer
 {
@@ -62,6 +68,14 @@ namespace AuthServer
 		{
 			var assembly = Assembly.GetExecutingAssembly();
 
+			builder.Services.AddRazorPages(options =>
+			{
+				options.Conventions.Add(new CultureRouteConvention());
+			});
+
+			builder.Services.AddRouting(options =>
+				options.ConstraintMap.Add("culture", typeof(CultureRouteConstraint)));
+
 			builder.Services.Configure<IdentityOptions>(options =>
 			{
 				options.SignIn.RequireConfirmedAccount = true;
@@ -72,7 +86,7 @@ namespace AuthServer
 				o.TokenLifespan = TimeSpan.FromHours(1));
 
 			builder.Services.AddHttpContextAccessor();
-			builder.Services.AddLocalization(options => options.ResourcesPath = "Localization");
+			builder.Services.AddLocalization();
 			builder.Services.AddRazorPages()
 				 .AddDataAnnotationsLocalization(options =>
 				 {
@@ -105,7 +119,33 @@ namespace AuthServer
 			}
 
 			app.UseStaticFiles();
+
+			// For now we load supported cultures from memory,
+			// but later we'll add the ability to localize the application dynamically and
+			// add more cultures from the admin dashboard
+
+			// TODO: Make localization dynamic
+
+			var cultures = new List<CultureInfo>() { new CultureInfo("en-US"), new CultureInfo("ar-SY") };
+
+			var requestLocalizationOptions = new RequestLocalizationOptions()
+			{
+				DefaultRequestCulture = new RequestCulture(cultures[0].Name, cultures[0].Name),
+				SupportedCultures = cultures,
+				SupportedUICultures = cultures,
+				ApplyCurrentCultureToResponseHeaders = true,
+			};
+
+			requestLocalizationOptions.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider()
+			{
+				RouteDataStringKey = "culture",
+				UIRouteDataStringKey = "culture",
+				Options = requestLocalizationOptions
+			});
+
 			app.UseRouting();
+			app.UseRequestLocalization(requestLocalizationOptions);
+
 			app.UseIdentityServer();
 			app.UseAuthorization();
 
