@@ -20,7 +20,7 @@ namespace AuthServer.TagHelpers
 		{		
 			var request = ViewContext.HttpContext.Request;
 
-			if (request.Path.ToString().Contains(ActiveWhen, StringComparison.InvariantCultureIgnoreCase))
+			if (ActiveWhen is not null && request.Path.ToString().Contains(ActiveWhen, StringComparison.InvariantCultureIgnoreCase))
 			{
 				output.AddClass(ActiveClass, HtmlEncoder.Default);
 			}
