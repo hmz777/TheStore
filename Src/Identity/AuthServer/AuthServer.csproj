@@ -38,4 +38,13 @@
   <ItemGroup>
     <None Include="compilerconfig.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\LocalizationResources.ar-SY.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\LocalizationResources.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
