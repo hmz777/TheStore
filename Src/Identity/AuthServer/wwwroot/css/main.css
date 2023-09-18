@@ -17962,7 +17962,7 @@ h2, .h2 {
 }
 
 /*===Buttons===*/
-.action-btn, .action-btn--secondary, .action-btn--primary {
+.action-btn {
   display: block;
   color: #FFFFFF;
   padding: 1em 2em;
@@ -17992,6 +17992,15 @@ h2, .h2 {
 }
 .action-btn--secondary:disabled {
   background: #a0a0a0;
+}
+.action-btn--tertiary {
+  background: #000000;
+}
+.action-btn--tertiary:hover {
+  background: black;
+}
+.action-btn--tertiary:disabled {
+  background: #999999;
 }
 
 /*===Links===*/
@@ -18478,7 +18487,7 @@ h2, .h2 {
 }
 @media (min-width: 992px) {
   .profile-content .info-section {
-    width: 60%;
+    width: 70%;
   }
 }
 .profile-content .info-section .info-section-header {
