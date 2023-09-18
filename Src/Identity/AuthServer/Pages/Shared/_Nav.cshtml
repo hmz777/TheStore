@@ -16,16 +16,16 @@
 			@if (User.Identity.IsAuthenticated == false)
 			{
 				<li>
-					<a asp-page="/Account/Login/Index">Login</a>
+					<a class="action-btn action-btn--tertiary action-btn--small" asp-page="/Account/Login/Index">Login</a>
 				</li>
 				<li>
-					<a asp-page="/Account/Register/Index">Register</a>
+					<a class="action-btn action-btn--tertiary action-btn--small" asp-page="/Account/Register/Index">Register</a>
 				</li>
 			}
 			else
 			{
 				<form method="post" asp-page="/Account/Logout/Index">
-					<button type="submit">Logout</button>
+					<button class="action-btn action-btn--tertiary action-btn--small" type="submit">Logout</button>
 				</form>
 			}
 		</ul>
