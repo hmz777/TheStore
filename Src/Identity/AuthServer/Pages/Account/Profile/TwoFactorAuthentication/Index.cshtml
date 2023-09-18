@@ -9,7 +9,28 @@
 			<partial name="Profile/_ProfileOptions" />
 		</div>
 		<div class="col-12 col-lg-9">
-			<h1>Two Factor Authentication</h1>
+			<div class="profile-content">
+				<h1>Two Factor Authentication</h1>
+				<article class="info-section">
+					<header class="info-section-header">
+						<h2>Options</h2>
+					</header>
+					<article class="info-section-body">
+						<div class="info-section-cell">
+							<form class="c-form" method="post" asp-page="/Account/Profile/UpdatePassword">
+								<div class="row">
+									<div class="col-12 d-flex flex-column">
+										<p>Two Factor Authentication is inactive.</p>
+										<div class="form-element d-inline-flex ms-auto">
+											<input class="action-btn action-btn--primary ms-auto" type="submit" value="Activate" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</article>
+				</article>
+			</div>
 		</div>
 	</div>
 </div>

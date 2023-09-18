@@ -44,8 +44,6 @@
 										</div>
 										<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Username"></span>
 									</div>
-								</div>
-								<div class="col-12">
 									<div class="form-element">
 										<div class="c-form-input-wrapper">
 											<input class="c-form-input" type="password" asp-for="Input.Password" />
@@ -53,8 +51,6 @@
 										</div>
 										<span class="asp-validation-message form-validation-msg" asp-validation-for="Input.Password"></span>
 									</div>
-								</div>
-								<div class="col-12">
 									<div class="form-element">
 										<div class="c-form-checkbox-wrapper">
 											<div class="c-form-checkbox">
@@ -65,13 +61,17 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-12">
-									<div class="row row-cols-2">
-										<input type="hidden" asp-for="Input.ReturnUrl" value="@Model.Input.ReturnUrl" />
-										<div class="col"><input class="action-btn--secondary action-btn--block" asp-for="Input.Button" type="submit" value="Cancel" /></div>
-										<div class="col"><input class="action-btn--primary action-btn--block" asp-for="Input.Button" type="submit" value="Login" /></div>
+								<div class="col-12 col-lg-6">
+									<div class="form-element">
+										<input class="action-btn action-btn--secondary action-btn--block" asp-for="Input.Button" type="submit" value="Cancel" />
 									</div>
 								</div>
+								<div class="col-12 col-lg-6">
+									<div class="form-element">
+										<input class="action-btn action-btn--primary action-btn--block" asp-for="Input.Button" type="submit" value="Login" />
+									</div>
+								</div>
+								<input type="hidden" asp-for="Input.ReturnUrl" value="@Model.Input.ReturnUrl" />
 							</div>
 						</form>
 					}
@@ -84,7 +84,7 @@
 							@foreach (var provider in Model.View.VisibleExternalProviders)
 							{
 								<li class="provider-item">
-									<a class="action-btn--primary"
+									<a class="action-btn action-btn--primary"
 									   asp-page="/ExternalLogin/Challenge"
 									   asp-route-scheme="@provider.AuthenticationScheme"
 									   asp-route-returnUrl="@Model.Input.ReturnUrl">

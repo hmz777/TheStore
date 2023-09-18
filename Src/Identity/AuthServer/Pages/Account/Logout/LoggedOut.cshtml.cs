@@ -23,7 +23,7 @@ namespace AuthServer.Pages.Logout
 			// get context information (client name, post logout redirect URI and iframe for federated signout)
 			var logout = await _interactionService.GetLogoutContextAsync(logoutId);
 
-			return Redirect(logout.PostLogoutRedirectUri);
+			return Redirect(logout.PostLogoutRedirectUri ?? "~/");
 		}
 	}
 }
