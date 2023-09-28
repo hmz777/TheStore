@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using MediatR;
+using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;

@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
+using TheStore.ApiCommon.Services;
 using TheStore.Catalog.API.Endpoints.Categories;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
@@ -88,6 +89,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
+			fixture.Customize(new EventDispatcherCustomization());
 
 			var request = fixture.Create<UpdateRequest>();
 			var category = fixture.Create<Category>();
@@ -97,7 +99,11 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 			mockRepository.Setup(x => x.GetByIdAsync(It.IsAny<CategoryId>(), default))
 				.ReturnsAsync(category);
 
-			var sut = new Update(new UpdateValidator(), mockRepository.Object, fixture.Create<IMapper>());
+			var sut = new Update(
+				new UpdateValidator(),
+				mockRepository.Object,
+				fixture.Create<IMapper>(),
+				fixture.Create<EventDispatcher>());
 
 			var result = await sut.HandleAsync(request);
 

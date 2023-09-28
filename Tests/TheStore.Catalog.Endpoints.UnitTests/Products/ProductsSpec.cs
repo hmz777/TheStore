@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using MediatR;
+using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
@@ -174,7 +174,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+			var productColor = new ProductColor(request.ColorCode, false, fixture.Create<InventoryRecord>(), new List<Image>());
 
 			// Add the color so we simulate the update process
 			singleProduct.AddColor(productColor);
@@ -205,7 +205,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+			var productColor = new ProductColor(request.ColorCode, false, fixture.Create<InventoryRecord>(), new List<Image>());
 
 			// Add the color so we simulate the deletion process
 			singleProduct.AddColor(productColor);
@@ -236,7 +236,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+			var productColor = new ProductColor(request.ColorCode, false, fixture.Create<InventoryRecord>(), new List<Image>());
 
 			// Add the color so we simulate the addition process
 			singleProduct.AddColor(productColor);
@@ -265,9 +265,9 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+			var productColor = new ProductColor(request.ColorCode, false, fixture.Create<InventoryRecord>(), new List<Image>());
 
-			var image = new Image(request.ImagePath, fixture.Create<string>());
+			var image = new Image(request.ImagePath, fixture.Create<string>(), false);
 
 			productColor = productColor.AddImage(image);
 
@@ -298,9 +298,9 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.ProductId);
 
-			var productColor = new ProductColor(request.ColorCode, new List<Image>());
+			var productColor = new ProductColor(request.ColorCode, false, fixture.Create<InventoryRecord>(), new List<Image>());
 
-			var image = new Image(request.ImagePath, fixture.Create<string>());
+			var image = new Image(request.ImagePath, fixture.Create<string>(), false);
 
 			productColor = productColor.AddImage(image);
 

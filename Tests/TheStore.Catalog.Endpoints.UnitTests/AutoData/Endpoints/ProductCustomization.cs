@@ -19,7 +19,6 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints
 					fixture.Create<string>(),
 					fixture.Create<string>(),
 					fixture.Create<Money>(),
-					fixture.Create<InventoryRecord>(),
 					fixture.CreateMany<ProductColor>().ToList());
 
 				return singleProduct;

@@ -12,7 +12,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData("http://www.imageuri.com/image", "Image alt")]
 		public void Should_Create_Valid_Image(string uri, string alt)
 		{
-			var action = () => new Image(uri, alt);
+			var action = () => new Image(uri, alt, false);
 
 			action.Should().NotThrow<Exception>();
 		}

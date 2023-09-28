@@ -37,7 +37,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData("notAHexColor")]
 		public void Cant_Create_Invalid_Product_Color(string colorCode)
 		{
-			var action = () => new ProductColor(colorCode, new List<Image>());
+			var action = () => new ProductColor(colorCode, false, InventoryRecord.Empty, new List<Image>());
 
 			action.Should().Throw<ArgumentException>();
 		}
@@ -45,7 +45,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[Fact]
 		public void Can_Create_Valid_Product_Color()
 		{
-			var action = () => new ProductColor("000000", new List<Image>());
+			var action = () => new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
 
 			action.Should().NotThrow();
 		}
@@ -57,7 +57,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("000000", new List<Image>());
+			var sut = new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
 
 			sut = sut.AddImage(image);
 
@@ -71,7 +71,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("000000", new List<Image>());
+			var sut = new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
 
 			sut = sut.AddImage(image);
 			sut = sut.RemoveImage(image);
@@ -100,7 +100,6 @@ namespace TheStore.Catalog.Domain.UnitTests
 				shortDescription,
 				sku,
 				fixture.Create<Money>(),
-				fixture.Create<InventoryRecord>(),
 				fixture.CreateMany<ProductColor>().ToList());
 
 			action.Should().Throw<Exception>();
