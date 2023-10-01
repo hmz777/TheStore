@@ -29,6 +29,14 @@
 			public const string IdentityServer = $"IDENTITYSERVER";
 		}
 
+		public class RabbitMqConfig
+		{
+			public const string RabbitMqHost = "RMQHOST";
+			public const string RabbitMqPort = "RMQPORT";
+			public const string RabbitMqUsername = "RMQUSER";
+			public const string RabbitMqPassword = "RMQPASS";
+		}
+
 		public class Testing
 		{
 			public const string ApplyMigrationsAtRuntime = "APPLYMIGRATIONSATRUNTIME";
