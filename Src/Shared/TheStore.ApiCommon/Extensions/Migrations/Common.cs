@@ -16,11 +16,7 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 				var serviceProvider = scope.ServiceProvider;
 				var context = serviceProvider.GetRequiredService<TContext>();
 
-				if (context.IsInMemoryDatabaseUsed() == false)
-				{
-					//context.Database.Migrate();
-					context.Database.EnsureCreated();
-				}
+				context.Database.Migrate();
 			}
 		}
 	}
