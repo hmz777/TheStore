@@ -1,12 +1,14 @@
-﻿<div class="catalog-header">
+﻿<div class="catalog-header" style="background-image:@(BackgroundImageUrl);background-size: 100% 100%;">
 	<div class="container-fluid p-0">
 		<div class="row gx-0 row-cols-1 row-cols-lg-2 align-items-center">
 			<div class="col text-center text-lg-start">
 				<h1 class="catalog-header-title">@Header</h1>
 			</div>
-			<div class="col text-center" style="position:relative">
-				<p class="catalog-header-desc m-0">@Description</p>
-				<img style="position:absolute;left:50%;transform:translateX(-50%)" src="/media/system/fun-underline.svg" alt="Underline illustration" />
+			<div class="col d-flex justify-content-end">
+				<div class="position-relative">
+					<p class="catalog-header-desc m-0">@Description</p>
+					<img style="position:absolute;left:50%;transform:translateX(-50%)" src="/media/system/fun-underline.svg" alt="Underline illustration" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -18,4 +20,7 @@
 
 	[Parameter]
 	public string Description { get; set; }
+
+	[Parameter]
+	public string BackgroundImageUrl { get; set; }
 }
