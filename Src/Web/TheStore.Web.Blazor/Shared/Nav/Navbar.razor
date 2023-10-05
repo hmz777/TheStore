@@ -23,14 +23,16 @@
 			<li class="d-flex">
 				<AuthorizeView>
 					<Authorized>
-						<NavLink class="action-btn--primary action-btn--small mr-2" href="/user/profile">
+						<NavLink class="action-btn action-btn--primary action-btn--small mr-2" href="/user/profile">
 							@(context.User?.FindFirst("email")?.Value ?? "Error")
 						</NavLink>
-						<button class="action-btn--secondary action-btn--small" type="button" @onclick="BeginLogout">Logout</button>
+						<button class="action-btn action-btn--secondary action-btn--small" type="button" @onclick="BeginLogout">Logout</button>
 					</Authorized>
 					<NotAuthorized>
-						<button class="action-btn--primary action-btn--small mr-2" type="button" @onclick="BeginLogin">Login</button>
-						<NavLink class="action-btn--primary action-btn--small" href="/authentication/register">Register</NavLink>
+						<div class="action-btn-group">
+							<button class="action-btn action-btn--primary action-btn--small" type="button" @onclick="BeginLogin">Login</button>
+							<NavLink class="action-btn action-btn--primary action-btn--small" href="/authentication/register">Register</NavLink>
+						</div>
 					</NotAuthorized>
 					<Authorizing>
 						<i class="las la-circle-notch la-spin la-2x"></i>
