@@ -5,11 +5,26 @@ $inputPadding: .3em;
     display: flex;
     flex-flow: column wrap;
     margin: auto 0;
+    width: 100%;
 
     .form-element {
         display: flex;
         flex-flow: column wrap;
         margin-bottom: 1em;
+
+        &.disabled {
+            .c-form-input-wrapper {
+                background: $accent4;
+            }
+        }
+
+        &-wide {
+            width: 100%;
+        }
+
+        &-inline {
+            margin-left: .5em;
+        }
     }
 
     .c-form-input-wrapper {
@@ -21,6 +36,8 @@ $inputPadding: .3em;
         width: auto;
         position: relative;
         padding: $inputPadding;
+        background: $accent2;
+        transition: background $globalTransitionDuration ease-in-out;
 
         &:focus {
             border-color: $accent1;
@@ -96,6 +113,7 @@ $inputPadding: .3em;
         outline: none;
         font-size: 1.1em;
         width: 100%;
+        background: transparent;
 
         &:focus {
             & ~ .c-form-label {
@@ -103,20 +121,16 @@ $inputPadding: .3em;
             }
         }
 
-        input {
-            background: $accent3;
+        &:-webkit-autofill {
+            background-color: $accent3 !important;
+        }
 
-            &:-webkit-autofill {
-                background-color: $accent3 !important;
-            }
+        &:-webkit-autofill:focus {
+            background-color: $accent3 !important;
+        }
 
-            &:-webkit-autofill:focus {
-                background-color: $accent3 !important;
-            }
-
-            &:-internal-autofill-selected {
-                background-color: $accent3 !important;
-            }
+        &:-internal-autofill-selected {
+            background-color: $accent3 !important;
         }
     }
 

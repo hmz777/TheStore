@@ -5,10 +5,126 @@
     align-items: center;
     padding: 0 $layoutHorizontalPadding;
 
-    &-title {
+    .catalog-header-title {
     }
 
-    &-desc {
+    .catalog-header-desc {
         font-size: 1.2em;
     }
+}
+
+.product-card {
+    border-radius: $globalBorderRadius;
+    margin-bottom: 1em;
+    transition: box-shadow $globalTransitionDuration ease-in-out, transform $globalTransitionDuration ease-in-out;
+    position: relative;
+
+    &:hover {
+        box-shadow: 6px -5px 0px 4px $accent3;
+        transform: translateY(-.2em);
+
+        .product-card-body {
+            border-color: $accent4;
+        }
+    }
+
+    &:active, &:focus {
+        box-shadow: 6px -5px 0px 4px $accent1;
+
+        .product-card-body-title {
+            color: $accent1;
+        }
+    }
+
+    &--skeleton {
+        border-top-left-radius: $globalBorderRadius;
+        border-top-right-radius: $globalBorderRadius;
+        overflow: hidden;
+    }
+
+
+    .swiper {
+        border-top-left-radius: $globalBorderRadius;
+        border-top-right-radius: $globalBorderRadius;
+    }
+
+    .product-card-image {
+        width: 100%;
+        height: 17em;
+        object-fit: cover;
+    }
+
+    .product-card-body {
+        padding: 1em;
+        overflow: hidden;
+        transition: border-color $globalTransitionDuration ease-in-out;
+        border-bottom-left-radius: $globalBorderRadius;
+        border-bottom-right-radius: $globalBorderRadius;
+        border-bottom: 1px solid transparent;
+        border-left: 1px solid transparent;
+
+        .product-card-body-title {
+            @include line-truncate(2);
+            transition: color $globalTransitionDuration ease-in-out;
+            margin-bottom: 1em;
+            @include makeUnselectable;
+        }
+
+        .product-card-body-desc {
+            @include line-truncate(3);
+            @include makeUnselectable;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+
+    .product-card-controls {
+        position: absolute;
+        z-index: 2;
+        top: 1em;
+        left: 1em;
+        display: flex;
+        flex-flow: column;
+        overflow: hidden;
+        border-radius: $globalBorderRadius;
+
+        .action-btn {
+            padding: .8em 1em;
+        }
+
+        i {
+            font-size: 1.5em;
+        }
+    }
+}
+
+.color-selector {
+    display: flex;
+
+    .color-selection {
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: calc($globalBorderRadius / 3);
+        outline: none;
+        border: 2px solid $accent4;
+
+        &.active {
+            outline: 3px solid $accent1;
+            border: none;
+        }
+
+        &:not(:last-of-type) {
+            margin-right: .5em;
+        }
+    }
+}
+
+.catalog-pagination {
+    display: flex;
+    flex-flow: column;
+    position: sticky;
+    bottom: 1em;
+    z-index: 3;
 }

@@ -23,6 +23,14 @@
     color: $accent2;
 }
 
+*:disabled, .disabled, *[disabled] {
+    cursor: not-allowed;
+
+    * {
+        cursor: not-allowed;
+    }
+}
+
 html, body {
     font-family: $mainFont !important;
     font-size: 1em !important;
@@ -47,6 +55,7 @@ main {
 
 a {
     text-decoration: none;
+    color: black;
 }
 
 input, textarea {

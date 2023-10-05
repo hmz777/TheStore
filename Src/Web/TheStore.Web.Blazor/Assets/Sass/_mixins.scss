@@ -29,8 +29,11 @@
 }
 
 @mixin line-truncate ($numOfLines: 1) {
+    display: -moz-box;
     display: -webkit-box;
+    line-clamp: $numOfLines;
     -webkit-line-clamp: $numOfLines;
+    -moz-box-orient: vertical;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -59,4 +62,12 @@
     &:hover {
         color: color.adjust($color, $lightness: -10%) !important;
     }
+}
+
+@mixin makeUnselectable() {
+    user-select: none;
+}
+
+@mixin makeUnclickable() {
+    pointer-events: none;
 }
