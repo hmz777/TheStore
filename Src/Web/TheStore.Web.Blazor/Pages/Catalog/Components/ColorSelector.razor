@@ -1,0 +1,39 @@
+﻿@using TheStore.Blazor.Models.ValueObjectsDtos;
+
+<div class="color-selector">
+	@foreach (var color in ProductColors)
+	{
+		<button class="color-selection @(ActiveColor == color.ColorCode ? "active" : "")"
+				type="button"
+				style="background:@color.ColorCode"
+		@onclick="() => ChooseColor(color.ColorCode)"
+		@key="color.ColorCode"></button>
+	}
+</div>
+
+@code {
+	[Parameter]
+	public List<ProductColorDto> ProductColors { get; set; } = new();
+
+	[Parameter]
+	public EventCallback<string> ColorChosen { get; set; }
+
+	private string ActiveColor { get; set; }
+
+	protected override void OnInitialized()
+	{
+		ActiveColor = ProductColors.First().ColorCode;
+	}
+
+	private async Task ChooseColor(string colorCode)
+	{
+		await ColorChosen.InvokeAsync(colorCode);
+
+		ActiveColor = colorCode;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+}
