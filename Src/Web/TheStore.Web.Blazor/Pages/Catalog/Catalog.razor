@@ -1,28 +1,51 @@
 ﻿@page "/catalog/{catalogName?}/{manufacture?}/{priceRange?}/{sortDirection?}/{page:int?}"
 @using TheStore.Blazor.Models.Products;
+@using TheStore.Blazor.Models.ValueObjectsDtos;
 @using TheStore.Web.Blazor.Pages.Catalog.Components
 @using TheStore.Web.Blazor.Shared.Result
 
 <CatalogHeader Header="@CatalogName" Description="@CatalogDescription" />
 
-@if (Products.Count > 0)
-{
-	@foreach (var product in Products)
-	{
-		var productMainImage = product.GetMainColor().GetMainImage();
+<div class="container my-5">
+	<div class="row">
+		@if (dataLoading)
+		{
+			<ProductCardsSkeleton />
+		}
+		else if (products.Count > 0)
+		{
+			@foreach (var product in products)
+			{
+				var productMainImage = product.GetMainColor().GetMainImage();
 
-		<ProductCard @key="product.ProductId"
-					 Name="@product.Name"
-					 Description="@product.ShortDescription"
-					 ImageUrl="@productMainImage.StringFileUri"
-					 ImageAlt="@productMainImage.Alt" />
-	}
-}
-else
-{
-	<Result Type="ResultType.NoProducts"
-			Message="No products available with the current filter" />
-}
+				<div class="col-12 col-md-6 col-lg-4">
+					<ProductCard @key="product.ProductId"
+								 Product="product" />
+				</div>
+			}
+
+			<div class="col-12 catalog-pagination">
+				<div class="action-btn-group mx-auto">
+					<button class="action-btn action-btn--primary" disabled="@(!canGoPrev)" @onclick="PrevPage" type="button">Prev</button>
+					@for (int i = 1; i <= NumberOfPages; i++)
+					{
+						var index = i;
+
+						<button class="action-btn action-btn--primary" disabled="@(Page == index)" @onclick="() => NavigateToPage(index)" type="button" @key="index">@index</button>
+					}
+					<button class="action-btn action-btn--primary" disabled="@(!canGoNext)" @onclick="NextPage" type="button">Next</button>
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-12 col-lg-6 offset-lg-3">
+				<Result Type="ResultType.NoProducts"
+						Message="No products available with the current filter" />
+			</div>
+		}
+	</div>
+</div>
 
 @code {
 	[Parameter]
@@ -39,9 +62,18 @@ else
 	public string? SortDirection { get; set; }
 
 	[Parameter]
-	public int? Page { get; set; }
+	public int Page { get; set; }
+	private int take { get; set; } = 6;
+	private int count { get; set; }
+	private int NumberOfPages => (int)Math.Ceiling(count / (decimal)take);
+	private bool canGoNext => Page < NumberOfPages;
+	private bool canGoPrev => Page > 1;
 
-	public List<ProductDto> Products { get; set; } = new();
+	private bool dataLoading = true;
+
+	// Warning: For testing only!
+	private List<ProductDto> dataSource { get; set; } = new();
+	private List<ProductDto> products { get; set; } = new();
 
 	protected override void OnParametersSet()
 	{
@@ -49,6 +81,172 @@ else
 		CatalogDescription = CatalogDescription ?? "A variety of products to choose from!";
 
 		SortDirection = SortDirection ?? "asc";
-		Page = Page ?? 1;
+		Page = Page == default ? 1 : Page;
+
+		InitDataSource();
+		count = dataSource.Count;
+	}
+
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			// Simulate the loading process process
+			await Task.Delay(3000);
+
+			dataLoading = false;
+
+			QueryDataSource(1, 6);
+
+			if (ShouldRender())
+			{
+				StateHasChanged();
+			}
+		}
+	}
+
+	private void InitDataSource()
+	{
+		dataSource.Clear();
+
+		var rand = new Random();
+		int randNum = 0;
+		for (int i = 0; i < 15; i++)
+		{
+			randNum = rand.Next(5, 5000);
+
+			dataSource.Add(new ProductDto
+				{
+					Description = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+					Name = $"Lorem ipsum dolor sit amet {randNum}",
+					Inventory = new InventoryRecordDto()
+					{
+						AvailableStock = randNum
+					},
+					Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
+					ProductColors = new List<ProductColorDto>
+					{
+						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
+						{
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
+						}},
+						new ProductColorDto { ColorCode = "#F62449", Images = new List<ImageDto>
+						{
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+1" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+2" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+3" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+4" }
+						}}
+					},
+					ProductId = randNum,
+					ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
+					Sku = $"SKU{randNum}"
+				});
+		}
+
+		dataSource.Insert(0, new ProductDto
+			{
+				Description = $"Lorem SSS ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+				Name = $"Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS",
+				Inventory = new InventoryRecordDto()
+				{
+					AvailableStock = randNum
+				},
+				Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
+				ProductColors = new List<ProductColorDto>
+					{
+						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
+						{
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
+						}},
+						new ProductColorDto { ColorCode = "#FFFFFF", Images = new List<ImageDto>
+						{
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+1" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+2" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+3" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+4" }
+						}}
+					},
+				ProductId = rand.Next(5, 5000),
+				ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
+				Sku = $"SKU{randNum}"
+			});
+
+		dataSource.Insert(1, new ProductDto
+			{
+				Description = $"Lorem SSS ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+				Name = $"Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS",
+				Inventory = new InventoryRecordDto()
+				{
+					AvailableStock = randNum
+				},
+				Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
+				ProductColors = new List<ProductColorDto>
+					{
+						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
+						{
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
+							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
+						}}
+					},
+				ProductId = rand.Next(5, 5000),
+				ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
+				Sku = $"SKU{randNum}"
+			});
+	}
+
+	private void QueryDataSource(int page, int take)
+	{
+		products = dataSource.Skip((page - 1) * take).Take(take).ToList();
+	}
+
+	private void NavigateToPage(int page)
+	{
+		Page = page;
+
+		QueryDataSource(Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private void NextPage()
+	{
+		if (canGoNext == false)
+		{
+			return;
+		}
+
+		QueryDataSource(++Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private void PrevPage()
+	{
+		if (canGoPrev == false)
+		{
+			return;
+		}
+
+		QueryDataSource(--Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
 	}
 }
