@@ -1,25 +1,90 @@
-﻿<article class="product-card">
-	<img class="product-card-image" src="@ImageUrl" alt="@ImageAlt" />
+﻿@using TheStore.Blazor.Models.Products;
+@using TheStore.Blazor.Models.ValueObjectsDtos;
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<article class="product-card">
+	<div class="swiper" id="image-carousel-@Product.ProductId">
+		<div class="swiper-wrapper">
+			@foreach (var image in CurrentColor.Images)
+			{
+				<div class="swiper-slide">
+					<img loading="lazy" class="product-card-image" src="@image.StringFileUri" alt="@image.Alt" />
+				</div>
+			}
+		</div>
+		<div class="swiper-pagination"></div>
+	</div>
 	<article class="product-card-body">
-		<header class="product-card-body-title">
-			@Name
+		<ColorSelector ProductColors="Product.ProductColors" ColorChosen="ColorChosen" />
+		<header class="product-card-body-title" title="@Product.Name">
+			<a href="#">
+				<h5>@Product.Name</h5>
+			</a>
 		</header>
-		<article class="product-card-body-desc">
-			@Description
+		<article class="product-card-body-desc" title="@Product.Description">
+			<p>@Product.Description</p>
 		</article>
 	</article>
+	<div class="product-card-controls">
+		<div class="action-btn-group">
+			<button class="action-btn action-btn--primary action-btn--small" type="button">
+				<i class="las la-cart-plus"></i>
+			</button>
+			<button class="action-btn action-btn--primary action-btn--small" type="button">
+				<i class="las la-heart"></i>
+			</button>
+		</div>
+	</div>
 </article>
 
 @code {
 	[Parameter]
-	public string Name { get; set; }
+	public ProductDto Product { get; set; }
 
-	[Parameter]
-	public string ImageUrl { get; set; }
+	private IJSObjectReference? catalogModule;
 
-	[Parameter]
-	public string ImageAlt { get; set; }
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			catalogModule = await JS.InvokeAsync<IJSObjectReference>("import",
+					"./modules/CatalogModule.js");
 
-	[Parameter]
-	public string Description { get; set; }
+			await CreateImageCarousel();
+		}
+	}
+
+	private ProductColorDto CurrentColor { get; set; }
+
+	protected override void OnInitialized()
+	{
+		CurrentColor = Product.GetMainColor();
+		CreateImageCarousel();
+	}
+
+	private void ColorChosen(string colorCode)
+	{
+		CurrentColor = Product.ProductColors.Where(pc => pc.ColorCode == colorCode).First();
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+
+		CreateImageCarousel();
+	}
+
+	private ValueTask CreateImageCarousel()
+			=> catalogModule is not null ?
+						catalogModule.InvokeVoidAsync("CreateProductImagesCarousel", $"#image-carousel-{Product.ProductId}") :
+						ValueTask.CompletedTask;
+
+	public async ValueTask DisposeAsync()
+	{
+		if (catalogModule is not null)
+		{
+			await catalogModule.DisposeAsync();
+		}
+	}
 }
