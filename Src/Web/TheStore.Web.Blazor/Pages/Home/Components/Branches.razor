@@ -36,7 +36,7 @@
 	}
 
 	private ValueTask InitCarousel()
-			=> homeModule is not null ? homeModule.InvokeVoidAsync("InitCarousel") : ValueTask.CompletedTask;
+			=> homeModule is not null ? homeModule.InvokeVoidAsync("CreateBranchesCarousel", "#branches-carousel") : ValueTask.CompletedTask;
 
 	async ValueTask IAsyncDisposable.DisposeAsync()
 	{
