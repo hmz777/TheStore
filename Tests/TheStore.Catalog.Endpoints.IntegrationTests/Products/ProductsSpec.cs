@@ -116,7 +116,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_Remove_Color_From_Product()
 		{
-			var request = new RemoveColorRequest(2, "000000");
+			var request = new RemoveColorRequest(3, "000000");
 
 			var response = await _client.DeleteAsync(request.Route);
 
@@ -130,7 +130,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			fixture.Customize(new DtoCustomizations());
 
 			var request = fixture.Create<AddImageToColorRequest>();
-			request.ProductId = 1;
+			request.ProductId = 4;
 			request.ColorCode = "000000";
 
 			using (var formData = new MultipartFormDataContent())
@@ -159,17 +159,20 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 
-			var listRequest = new ListRequest(1, 1);
-			var listResponse = await _client.
-				GetFromJsonAsync<List<ProductDto>>(listRequest.Route);
+			//var listRequest = new ListRequest(1, 1);
+			//var listResponse = await _client.
+			//	GetFromJsonAsync<List<ProductDto>>(listRequest.Route);
 
-			var product = listResponse!.First();
-			var color = product.GetMainColor();
+			//var product = listResponse!.First();
+			//var color = product.GetMainColor();
 
 			var request = fixture.Create<UpdateImageOfColorRequest>();
-			request.ProductId = product.ProductId;
-			request.ColorCode = color.ColorCode;
-			request.ImagePath = color.GetMainImage().StringFileUri;
+			//request.ProductId = product.ProductId;
+			//request.ColorCode = color.ColorCode;
+			//request.ImagePath = color.GetMainImage().StringFileUri;
+			request.ProductId = 4;
+			request.ColorCode = "000000";
+			request.ImagePath = "file.png";
 
 			using (var formData = new MultipartFormDataContent())
 			{

@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
@@ -245,9 +245,11 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			mockRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
 				.ReturnsAsync(singleProduct);
 
-			var mediator = new Mock<IMediator>();
+			var mockMediator = new Mock<IMediator>();
+			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default))
+				.ReturnsAsync(fixture.Create<string>());
 
-			var sut = new AddImage(new AddImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mediator.Object);
+			var sut = new AddImage(new AddImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mockMediator.Object);
 
 			var result = await sut.HandleAsync(request);
 
@@ -278,9 +280,11 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			mockRepository.Setup(x => x.GetByIdAsync(singleProduct.Id, default))
 				.ReturnsAsync(singleProduct);
 
-			var mediator = new Mock<IMediator>();
+			var mockMediator = new Mock<IMediator>();
+			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default))
+				.ReturnsAsync(fixture.Create<string>());
 
-			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mediator.Object);
+			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, mockMediator.Object);
 
 			var result = await sut.HandleAsync(request);
 

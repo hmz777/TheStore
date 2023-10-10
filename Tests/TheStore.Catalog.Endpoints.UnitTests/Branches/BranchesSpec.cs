@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TheStore.ApiCommon.Data.Repository;
@@ -148,19 +148,18 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 				.ReturnsAsync(branch);
 
 			var mockMediator = new Mock<IMediator>();
-			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.UpdateImageRequest>(), default))
-				.Callback(() =>
-				{
-					request.Image.StringFileUri = fixture.Create<string>();
-				})
-				.Returns(Task.CompletedTask);
+			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default))
+				.ReturnsAsync(fixture.Create<string>());
 
-			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mockMediator.Object);
+			var sut = new UpdateImage(
+				new UpdateImageValidator(),
+				mockRepository.Object,
+				fixture.Create<IMapper>(),
+				mockMediator.Object);
 
 			var result = await sut.HandleAsync(request);
 
 			mockMediator.Verify(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default), Times.Once);
-			request.Image.StringFileUri.Should().NotBeEmpty();
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 
@@ -180,18 +179,13 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 
 			var mockMediator = new Mock<IMediator>();
 			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.UpdateImageRequest>(), default))
-				.Callback(() =>
-				{
-					request.Image.StringFileUri = fixture.Create<string>();
-				})
-				.Returns(Task.CompletedTask);
+				.ReturnsAsync(fixture.Create<string>());
 
 			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mockMediator.Object);
 
 			var result = await sut.HandleAsync(request);
 
 			mockMediator.Verify(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.UpdateImageRequest>(), default), Times.Once);
-			request.Image.StringFileUri.Should().NotBeEmpty();
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 	}

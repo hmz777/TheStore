@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using MassTransit;
-using MassTransit.Mediator;
+using MediatR;
 using Moq;
 using TheStore.ApiCommon.Services;
 using TheStore.Events;

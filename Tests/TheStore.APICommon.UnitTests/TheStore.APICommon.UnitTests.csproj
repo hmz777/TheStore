@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\Shared\TheStore.ApiCommon\TheStore.ApiCommon.csproj" />
+    <ProjectReference Include="..\TestHelpers\TheStore.TestHelpers.csproj" />
   </ItemGroup>
 
 </Project>

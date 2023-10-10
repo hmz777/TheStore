@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using TheStore.ApiCommon.Constants;
 using TheStore.Catalog.Endpoints.IntegrationTests.Helpers;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
@@ -13,6 +14,9 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{
+			// Trigger runtime database migration
+			Environment.SetEnvironmentVariable(ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
+
 			builder.ConfigureServices(services =>
 			{
 				var descriptor = services.SingleOrDefault(
