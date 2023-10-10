@@ -1,0 +1,57 @@
+﻿<div class="catalog-pagination">
+	<div class="action-btn-group mx-auto">
+		<button class="action-btn action-btn--primary" disabled="@(!canGoPrev)" @onclick="NavigateToPreviousPage" type="button">Prev</button>
+		@for (int i = 1; i <= NumberOfPages; i++)
+		{
+			var index = i;
+
+			<button class="action-btn action-btn--primary" disabled="@(CurrentPage == index)" @onclick="() => NavigateToNumberedPage(index)" type="button" @key="index">@index</button>
+		}
+		<button class="action-btn action-btn--primary" disabled="@(!canGoNext)" @onclick="NavigateToNextPage" type="button">Next</button>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int NumberOfPages { get; set; }
+
+	[Parameter]
+	public int CurrentPage { get; set; }
+
+	[Parameter]
+	public EventCallback<int> OnNavigateToNumberedPage { get; set; }
+
+	[Parameter]
+	public EventCallback OnNavigateToNextPage { get; set; }
+
+	[Parameter]
+	public EventCallback OnNavigateToPreviousPage { get; set; }
+
+	private bool canGoNext => CurrentPage < NumberOfPages;
+	private bool canGoPrev => CurrentPage > 1;
+
+	private async Task NavigateToNumberedPage(int index)
+	{
+		await OnNavigateToNumberedPage.InvokeAsync(index);
+	}
+
+	private async Task NavigateToNextPage()
+	{
+		if (canGoNext == false)
+		{
+			return;
+		}
+
+		await OnNavigateToNextPage.InvokeAsync();
+	}
+
+	private async Task NavigateToPreviousPage()
+	{
+		if (canGoPrev == false)
+		{
+			return;
+		}
+
+		await OnNavigateToPreviousPage.InvokeAsync();
+	}
+}
