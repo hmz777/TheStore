@@ -12,5 +12,7 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 
 		[JsonIgnore]
 		public string? StringFileUri { get; set; }
-	}
+
+        public bool IsMainImage { get; set; }
+    }
 }

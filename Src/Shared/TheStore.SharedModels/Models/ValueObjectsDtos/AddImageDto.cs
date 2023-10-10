@@ -9,6 +9,7 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 	{
 		public IFormFile File { get; set; }
 		public string Alt { get; set; }
+		public bool IsMainImage { get; set; }
 
 		[JsonIgnore]
 		public string? StringFileUri { get; set; }

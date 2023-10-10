@@ -22,16 +22,17 @@ namespace TheStore.SharedModels.Models.Products
 		[FromBody]
 		public UpdateProductColorDto Color { get; set; }
 
-		public UpdateColorRequest()
-		{
+		[FromBody]
+		public InventoryRecordDto InventoryRecord { get; set; }
 
-		}
+		public UpdateColorRequest() { }
 
-		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color)
+		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color, InventoryRecordDto inventoryRecord)
 		{
 			ProductId = productId;
 			ColorCode = colorCode;
 			Color = color;
+			InventoryRecord = inventoryRecord;
 		}
 	}
 }
