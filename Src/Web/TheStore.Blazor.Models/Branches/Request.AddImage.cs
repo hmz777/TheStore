@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Blazor.Models;
 using TheStore.Blazor.Models.ValueObjectsDtos;
 
 namespace TheStore.Blazor.Models.Branches

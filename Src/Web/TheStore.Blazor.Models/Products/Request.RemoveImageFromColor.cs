@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Web;
-using TheStore.Blazor.Models;
 
 namespace TheStore.Blazor.Models.Products
 {

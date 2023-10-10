@@ -18,16 +18,16 @@ namespace TheStore.Blazor.Models.Products
 
 		public UpdateProductColorDto Color { get; set; }
 
-		public UpdateColorRequest()
-		{
+		public InventoryRecordDto InventoryRecord { get; set; }
 
-		}
+		public UpdateColorRequest() { }
 
-		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color)
+		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color, InventoryRecordDto inventoryRecord)
 		{
 			ProductId = productId;
 			ColorCode = colorCode;
 			Color = color;
+			InventoryRecord = inventoryRecord;
 		}
 	}
 }

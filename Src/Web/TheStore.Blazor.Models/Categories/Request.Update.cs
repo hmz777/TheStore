@@ -16,7 +16,6 @@ namespace TheStore.Blazor.Models.Categories
 
 		public bool Active { get; set; }
 
-
 		public UpdateRequest()
 		{
 

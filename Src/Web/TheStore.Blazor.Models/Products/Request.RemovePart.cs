@@ -1,6 +1,4 @@
-﻿using TheStore.Blazor.Models;
-
-namespace TheStore.Blazor.Models.Products
+﻿namespace TheStore.Blazor.Models.Products
 {
 	public class RemovePartRequest : RequestBase
 	{

@@ -2,8 +2,8 @@
 
 namespace TheStore.Blazor.Models.Cart
 {
-    public class CartDto : DtoBase
-    {
-        public List<CartItemDto> Items { get; set; }
-    }
+	public class CartDto : DtoBase
+	{
+		public List<CartItemDto> Items { get; set; }
+	}
 }

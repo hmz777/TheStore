@@ -2,8 +2,8 @@
 
 namespace TheStore.Blazor.Models.Wishlist
 {
-    public class WishlistDto : DtoBase
-    {
-        public List<WishlistItemDto> Items { get; set; }
-    }
+	public class WishlistDto : DtoBase
+	{
+		public List<WishlistItemDto> Items { get; set; }
+	}
 }

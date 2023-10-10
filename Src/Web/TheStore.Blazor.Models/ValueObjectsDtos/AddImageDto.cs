@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using TheStore.Blazor.Models;
 
 namespace TheStore.Blazor.Models.ValueObjectsDtos
 {
@@ -9,6 +10,7 @@ namespace TheStore.Blazor.Models.ValueObjectsDtos
 	{
 		public IFormFile File { get; set; }
 		public string Alt { get; set; }
+		public bool IsMainImage { get; set; }
 
 		[JsonIgnore]
 		public string? StringFileUri { get; set; }
