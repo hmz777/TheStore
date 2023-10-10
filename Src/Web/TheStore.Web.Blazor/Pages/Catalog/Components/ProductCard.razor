@@ -1,12 +1,13 @@
 ﻿@using TheStore.Blazor.Models.Products;
 @using TheStore.Blazor.Models.ValueObjectsDtos;
+@using TheStore.Web.Blazor.Helpers;
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
-<article class="product-card">
+<article class="product-card" style="color:@ColorHelpers.ChangeColorBrightness(currentColor.ColorCode, -0.5f)">
 	<div class="swiper" id="image-carousel-@Product.ProductId">
 		<div class="swiper-wrapper">
-			@foreach (var image in CurrentColor.Images)
+			@foreach (var image in currentColor.Images)
 			{
 				<div class="swiper-slide">
 					<img loading="lazy" class="product-card-image" src="@image.StringFileUri" alt="@image.Alt" />
@@ -18,7 +19,7 @@
 	<article class="product-card-body">
 		<ColorSelector ProductColors="Product.ProductColors" ColorChosen="ColorChosen" />
 		<header class="product-card-body-title" title="@Product.Name">
-			<a href="#">
+			<a href="/product/@Product.ProductId/@(SlugUrlHelper.URLFriendly(Product.Name))">
 				<h5>@Product.Name</h5>
 			</a>
 		</header>
@@ -29,7 +30,7 @@
 	<div class="product-card-controls">
 		<div class="action-btn-group">
 			<button class="action-btn action-btn--primary action-btn--small" type="button">
-				<i class="las la-cart-plus"></i>
+				<i class="las la-shopping-bag"></i>
 			</button>
 			<button class="action-btn action-btn--primary action-btn--small" type="button">
 				<i class="las la-heart"></i>
@@ -55,17 +56,17 @@
 		}
 	}
 
-	private ProductColorDto CurrentColor { get; set; }
+	private ProductColorDto currentColor { get; set; }
 
 	protected override void OnInitialized()
 	{
-		CurrentColor = Product.GetMainColor();
+		currentColor = Product.GetMainColor();
 		CreateImageCarousel();
 	}
 
 	private void ColorChosen(string colorCode)
 	{
-		CurrentColor = Product.ProductColors.Where(pc => pc.ColorCode == colorCode).First();
+		currentColor = Product.ProductColors.Where(pc => pc.ColorCode == colorCode).First();
 
 		if (ShouldRender())
 		{
