@@ -4,6 +4,12 @@ $accent2: #FFFFFF;
 $accent3: #000000;
 $accent4: #E5E5E5;
 
+/*===CSS Colors===*/
+:root {
+    --product-card-box-shadow-color: #{$accent3};
+}
+
+
 /*===Navbar===*/
 $navLinksColor: $accent3;
 

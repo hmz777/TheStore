@@ -71,3 +71,30 @@
 @mixin makeUnclickable() {
     pointer-events: none;
 }
+
+@mixin addSeparator($direction) {
+    @if $direction == right {
+        display: flex;
+
+        &:after {
+            display: inline-block;
+            content: '';
+            width: .2em;
+            height: 1em;
+            background: color.scale($accent2, $lightness: -60%);
+            margin: auto 1em auto 1em;
+            border-radius: 1em;
+        }
+    }
+    @else {
+        &:before {
+            display: inline-block;
+            content: '';
+            width: .2em;
+            height: 1em;
+            background: color.scale($accent2, $lightness: -60%);
+            margin: auto 1em auto 1em;
+            border-radius: 1em;
+        }
+    }
+}

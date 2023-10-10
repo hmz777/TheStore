@@ -21,6 +21,27 @@
     width: 100%;
     z-index: 15000;
 
+    .upper-navbar {
+        display: flex;
+        align-items: center;
+        padding: .2em 1em;
+
+        .upper-navbar-section {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            font-size: .8em;
+
+            a, button {
+                font-weight: bold;
+
+                &:not(:last-child) {
+                    @include addSeparator("right");
+                }
+            }
+        }
+    }
+
     .top-navbar {
         padding: 1.7em $layoutHorizontalPadding;
         display: flex;

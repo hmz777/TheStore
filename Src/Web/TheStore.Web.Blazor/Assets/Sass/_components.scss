@@ -64,10 +64,20 @@
     }
 
     &--secondary {
-        @include makeButtonHoverable($accent4);
+        background-color: white;
+        color: black;
+        border: 1px solid $accent1;
+
+        span, i {
+            color: black;
+        }
+
+        &:hover {
+            border: 1px solid color.scale($accent1, $lightness: -50%);
+        }
 
         &:disabled {
-            background: color.scale($accent4, $lightness: -30%)
+            background-color: $accent4;
         }
     }
 
