@@ -1,9 +1,10 @@
 ﻿@using TheStore.Blazor.Models.ValueObjectsDtos;
+@using TheStore.Web.Blazor.Models;
 
-<div class="color-selector">
+<div class="color-selector @GetSizeClass(ControlSize)">
 	@foreach (var color in ProductColors)
 	{
-		<button class="color-selection @(ActiveColor == color.ColorCode ? "active" : "")"
+		<button class="color-selection @(activeColor == color.ColorCode ? "active" : "")"
 				type="button"
 				style="background:@color.ColorCode"
 		@onclick="() => ChooseColor(color.ColorCode)"
@@ -18,18 +19,29 @@
 	[Parameter]
 	public EventCallback<string> ColorChosen { get; set; }
 
-	private string ActiveColor { get; set; }
+	[Parameter]
+	public ControlSize ControlSize { get; set; } = ControlSize.Small;
+
+	private string activeColor { get; set; }
 
 	protected override void OnInitialized()
 	{
-		ActiveColor = ProductColors.First().ColorCode;
+		activeColor = ProductColors.First().ColorCode;
 	}
+
+	private string GetSizeClass(ControlSize controlSize) => controlSize switch
+	{
+		ControlSize.Small => "color-selector--small",
+		ControlSize.Normal => "color-selector--normal",
+		ControlSize.Large => "color-selector--large",
+		_ =>  "color-selector--small"
+	};
 
 	private async Task ChooseColor(string colorCode)
 	{
 		await ColorChosen.InvokeAsync(colorCode);
 
-		ActiveColor = colorCode;
+		activeColor = colorCode;
 
 		if (ShouldRender())
 		{
