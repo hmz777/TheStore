@@ -3,41 +3,44 @@
 @inject NavigationManager Navigation
 
 <header id="top-header">
+	<div class="upper-navbar">
+		<div class="upper-navbar-section">
+			<NavLink href="#" class="nav-link">Find a Store</NavLink>
+			<NavLink href="#" class="nav-link">Help</NavLink>
+			<AuthorizeView>
+				<Authorized>
+					<NavLink href="/user/profile">
+						@(context.User?.FindFirst("email")?.Value ?? "Error")
+					</NavLink>
+					<button type="button" @onclick="BeginLogout">Logout</button>
+				</Authorized>
+				<NotAuthorized>
+					<div class="action-btn-group">
+						<button type="button" @onclick="BeginLogin">Login</button>
+						<NavLink href="/authentication/register">Register</NavLink>
+					</div>
+				</NotAuthorized>
+				<Authorizing>
+					<i class="las la-circle-notch la-spin la-2x"></i>
+				</Authorizing>
+			</AuthorizeView>
+		</div>
+	</div>
 	<nav class="top-navbar">
 		<div class="logo-container">
 			<Logo />
 		</div>
 		<ul class="top-navbar-inner">
 			<li>
-				<NavLink ActiveClass="active" href="/catalog">Catalog</NavLink>
+				<NavLink class="nav-btn--primary" ActiveClass="active" href="/catalog">Catalog</NavLink>
 			</li>
 			<li>
-				<NavLink ActiveClass="active" href="/contact">Contact</NavLink>
-			</li>
-			<li>
-				<NavLink ActiveClass="active" href="/about">About</NavLink>
-			</li>
-			<li>
-				<hr class="vertical-separator" />
-			</li>
-			<li class="d-flex">
-				<AuthorizeView>
-					<Authorized>
-						<NavLink class="action-btn action-btn--primary action-btn--small mr-2" href="/user/profile">
-							@(context.User?.FindFirst("email")?.Value ?? "Error")
-						</NavLink>
-						<button class="action-btn action-btn--secondary action-btn--small" type="button" @onclick="BeginLogout">Logout</button>
-					</Authorized>
-					<NotAuthorized>
-						<div class="action-btn-group">
-							<button class="action-btn action-btn--primary action-btn--small" type="button" @onclick="BeginLogin">Login</button>
-							<NavLink class="action-btn action-btn--primary action-btn--small" href="/authentication/register">Register</NavLink>
-						</div>
-					</NotAuthorized>
-					<Authorizing>
-						<i class="las la-circle-notch la-spin la-2x"></i>
-					</Authorizing>
-				</AuthorizeView>
+				<div>
+					<input class="global-search-field" type="text" value="" />
+					<button>
+						<i class="las la-search la-2x"></i>
+					</button>
+				</div>
 			</li>
 		</ul>
 	</nav>
