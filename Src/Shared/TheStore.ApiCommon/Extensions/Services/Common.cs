@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using FluentValidation;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -122,30 +123,14 @@ namespace TheStore.ApiCommon.Extensions.Services
 			{
 				case Constants.RunningPlatform.Standalone:
 					// If we reach here, then we're running the API independent of any infrastructure
-					Log.Information("Connect to database on local machine without infrastructure");
-
 					services.AddDbContext<TContext>(options =>
 					{
 						options
-						 .UseSqlServer($"Server=HMZ\\SQLEXPRESS2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+						 .UseSqlServer($"Server=HMZ\\MSSQLSERVER2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
 					});
-
 					break;
 				case Constants.RunningPlatform.DockerCompose:
-					Log.Information("Connect to database on Docker Compose");
-
-					services.AddDbContext<TContext>(options =>
-					{
-						options
-						 .UseSqlServer(connectionString
-										.Replace("{DbUser}", dbUser)
-										.Replace("{DbPass}", dbPass));
-					});
-
-					break;
 				case Constants.RunningPlatform.Kubernetes:
-					Log.Information("Connect to database on Kubernetes");
-
 					services.AddDbContext<TContext>(options =>
 					{
 						options
@@ -153,7 +138,6 @@ namespace TheStore.ApiCommon.Extensions.Services
 										.Replace("{DbUser}", dbUser)
 										.Replace("{DbPass}", dbPass));
 					});
-
 					break;
 				default:
 					break;
@@ -251,7 +235,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					  case Constants.RunningPlatform.Kubernetes:
 						  authority = configuration
 									  .GetValue<string>(Identity.IdentityServer);
-						  break;					 
+						  break;
 					  default:
 						  break;
 				  }
@@ -296,6 +280,8 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 		public static WebApplicationBuilder AddFileUploader(this WebApplicationBuilder webApplicationBuilder)
 		{
+			Log.Information("Add File Uploader");
+
 			webApplicationBuilder.Services.AddSingleton<IFileUploader, FileUploader>();
 
 			return webApplicationBuilder;
@@ -303,14 +289,89 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 		public static WebApplicationBuilder AddFileSystem(this WebApplicationBuilder webApplicationBuilder)
 		{
+			Log.Information("Add File System");
+
 			webApplicationBuilder.Services.AddSingleton<IFileSystem, FileSystem>();
 
 			return webApplicationBuilder;
 		}
 
-		public static WebApplicationBuilder AddMediatR(this WebApplicationBuilder webApplicationBuilder, Assembly assembly)
+		public static WebApplicationBuilder AddMediatR(this WebApplicationBuilder webApplicationBuilder,
+			params Assembly[] assemblies)
 		{
-			webApplicationBuilder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+			webApplicationBuilder.Services.AddMediatR(config =>
+			{
+				config.RegisterServicesFromAssemblies(assemblies);
+			});
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder AddEventDispatcher(this WebApplicationBuilder webApplicationBuilder)
+		{
+			Log.Information("Add Event Dispatcher");
+
+			webApplicationBuilder.Services.AddScoped<EventDispatcher>();
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder ConfigureMassTransitForRabbitMq(
+			this WebApplicationBuilder webApplicationBuilder)
+		{
+			Log.Information("Add Masstransit on RabbitMQ");
+
+			switch (RunningPlatform)
+			{
+				case Constants.RunningPlatform.Standalone:
+					webApplicationBuilder.Services.AddMassTransit(config =>
+					{
+						var configuration = webApplicationBuilder.Configuration;
+
+						var host = "localhost";
+						var username = "guest";
+						var password = "guest";
+
+						config.UsingRabbitMq((context, rabbitMqConfig) =>
+						{
+							rabbitMqConfig.Host(host, "/", rabbitMqHostConfig =>
+							{
+								rabbitMqHostConfig.Username(username);
+								rabbitMqHostConfig.Password(password);
+							});
+
+							rabbitMqConfig.ConfigureEndpoints(context);
+						});
+					});
+					break;
+				case Constants.RunningPlatform.DockerCompose:
+				case Constants.RunningPlatform.Kubernetes:
+					webApplicationBuilder.Services.AddMassTransit(config =>
+					{
+						var configuration = webApplicationBuilder.Configuration;
+
+						var host = configuration
+										.GetValue<string>(RabbitMqConfig.RabbitMqHost);
+						var username = configuration
+										.GetValue<string>(RabbitMqConfig.RabbitMqUsername);
+						var password = configuration
+										.GetValue<string>(RabbitMqConfig.RabbitMqPassword);
+
+						config.UsingRabbitMq((context, rabbitMqConfig) =>
+						{
+							rabbitMqConfig.Host(host, "/", rabbitMqHostConfig =>
+							{
+								rabbitMqHostConfig.Username(username);
+								rabbitMqHostConfig.Password(password);
+							});
+
+							rabbitMqConfig.ConfigureEndpoints(context);
+						});
+					});
+					break;
+				default:
+					break;
+			}
 
 			return webApplicationBuilder;
 		}
