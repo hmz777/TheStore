@@ -1,6 +1,7 @@
-﻿@page "/catalog/{catalogName?}/{manufacture?}/{priceRange?}/{sortDirection?}/{page:int?}"
+﻿@page "/catalog/{catalogName?}/{manufacturer?}/{priceRange?}/{sortDirection?}/{page:int?}"
 @using TheStore.Blazor.Models.Products;
 @using TheStore.Blazor.Models.ValueObjectsDtos;
+@using TheStore.Web.Blazor.Helpers;
 @using TheStore.Web.Blazor.Pages.Catalog.Components
 @using TheStore.Web.Blazor.Shared.Result
 
@@ -24,17 +25,12 @@
 				</div>
 			}
 
-			<div class="col-12 catalog-pagination">
-				<div class="action-btn-group mx-auto">
-					<button class="action-btn action-btn--primary" disabled="@(!canGoPrev)" @onclick="PrevPage" type="button">Prev</button>
-					@for (int i = 1; i <= NumberOfPages; i++)
-					{
-						var index = i;
-
-						<button class="action-btn action-btn--primary" disabled="@(Page == index)" @onclick="() => NavigateToPage(index)" type="button" @key="index">@index</button>
-					}
-					<button class="action-btn action-btn--primary" disabled="@(!canGoNext)" @onclick="NextPage" type="button">Next</button>
-				</div>
+			<div class="col-12 position-sticky" style="bottom:1em;z-index:3;">
+				<CatalogPagination CurrentPage="Page"
+								   NumberOfPages="numberOfPages"
+								   OnNavigateToPreviousPage="NavigateToPreviousPage"
+								   OnNavigateToNumberedPage="NavigateToNumberedPage"
+								   OnNavigateToNextPage="NavigateToNextPage" />
 			</div>
 		}
 		else
@@ -53,7 +49,7 @@
 	public string? CatalogDescription { get; set; }
 
 	[Parameter]
-	public string? Manufacture { get; set; }
+	public string? Manufacturer { get; set; }
 
 	[Parameter]
 	public string? PriceRange { get; set; }
@@ -63,11 +59,10 @@
 
 	[Parameter]
 	public int Page { get; set; }
+
 	private int take { get; set; } = 6;
 	private int count { get; set; }
-	private int NumberOfPages => (int)Math.Ceiling(count / (decimal)take);
-	private bool canGoNext => Page < NumberOfPages;
-	private bool canGoPrev => Page > 1;
+	private int numberOfPages => (int)Math.Ceiling(count / (decimal)take);
 
 	private bool dataLoading = true;
 
@@ -109,98 +104,10 @@
 	{
 		dataSource.Clear();
 
-		var rand = new Random();
-		int randNum = 0;
 		for (int i = 0; i < 15; i++)
 		{
-			randNum = rand.Next(5, 5000);
-
-			dataSource.Add(new ProductDto
-				{
-					Description = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-					Name = $"Lorem ipsum dolor sit amet {randNum}",
-					Inventory = new InventoryRecordDto()
-					{
-						AvailableStock = randNum
-					},
-					Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
-					ProductColors = new List<ProductColorDto>
-					{
-						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
-						{
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
-						}},
-						new ProductColorDto { ColorCode = "#F62449", Images = new List<ImageDto>
-						{
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+1" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+2" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+3" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/1280x720/png?text=F62449+Image+4" }
-						}}
-					},
-					ProductId = randNum,
-					ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
-					Sku = $"SKU{randNum}"
-				});
+			dataSource.Add(DummyDataHelper.GenerateDummyProduct());
 		}
-
-		dataSource.Insert(0, new ProductDto
-			{
-				Description = $"Lorem SSS ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-				Name = $"Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS",
-				Inventory = new InventoryRecordDto()
-				{
-					AvailableStock = randNum
-				},
-				Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
-				ProductColors = new List<ProductColorDto>
-					{
-						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
-						{
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
-						}},
-						new ProductColorDto { ColorCode = "#FFFFFF", Images = new List<ImageDto>
-						{
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+1" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+2" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+3" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=FFFFFF+Image+4" }
-						}}
-					},
-				ProductId = rand.Next(5, 5000),
-				ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
-				Sku = $"SKU{randNum}"
-			});
-
-		dataSource.Insert(1, new ProductDto
-			{
-				Description = $"Lorem SSS ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-				Name = $"Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS Lorem ipsum dolor sit amet SSS",
-				Inventory = new InventoryRecordDto()
-				{
-					AvailableStock = randNum
-				},
-				Price = new MoneyDto() { Amount = randNum, Currency = new CurrencyDto() { CurrencyCode = "USD" } },
-				ProductColors = new List<ProductColorDto>
-					{
-						new ProductColorDto { ColorCode = "#000000", Images = new List<ImageDto>
-						{
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+1" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+2" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+3" },
-							new ImageDto() { Alt = $"Lorem ipsum dolor sit amet {randNum}", StringFileUri = "https://placehold.co/600x400/png?text=000000+Image+4" }
-						}}
-					},
-				ProductId = rand.Next(5, 5000),
-				ShortDescription = $"Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit Lorem {randNum} ipsum dolor sit amet, consectetur adipiscing elit",
-				Sku = $"SKU{randNum}"
-			});
 	}
 
 	private void QueryDataSource(int page, int take)
@@ -208,7 +115,7 @@
 		products = dataSource.Skip((page - 1) * take).Take(take).ToList();
 	}
 
-	private void NavigateToPage(int page)
+	private void NavigateToNumberedPage(int page)
 	{
 		Page = page;
 
@@ -220,13 +127,8 @@
 		}
 	}
 
-	private void NextPage()
+	private void NavigateToNextPage()
 	{
-		if (canGoNext == false)
-		{
-			return;
-		}
-
 		QueryDataSource(++Page, take);
 
 		if (ShouldRender())
@@ -235,13 +137,8 @@
 		}
 	}
 
-	private void PrevPage()
+	private void NavigateToPreviousPage()
 	{
-		if (canGoPrev == false)
-		{
-			return;
-		}
-
 		QueryDataSource(--Page, take);
 
 		if (ShouldRender())
