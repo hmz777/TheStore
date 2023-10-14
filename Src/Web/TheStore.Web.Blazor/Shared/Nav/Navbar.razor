@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 
 <header id="top-header">
-	<div class="upper-navbar">
+	<div id="upper-navbar" class="@(searchExpanded ? "d-none" : "")">
 		<div class="upper-navbar-section">
 			<NavLink href="#" class="nav-link">Find a Store</NavLink>
 			<NavLink href="#" class="nav-link">Help</NavLink>
@@ -26,30 +26,36 @@
 			</AuthorizeView>
 		</div>
 	</div>
-	<nav class="top-navbar">
-		<div class="logo-container">
-			<Logo />
-		</div>
+	<nav id="top-navbar" class="@(searchExpanded ? "nav-search-expanded" : "")">
 		<ul class="top-navbar-inner">
-			<li>
-				<NavLink class="nav-btn--primary" ActiveClass="active" href="/catalog">Catalog</NavLink>
-			</li>
-			<li>
-				<div>
-					<input class="global-search-field" type="text" value="" />
-					<button>
-						<i class="las la-search la-2x"></i>
-					</button>
+			<li class="nav-item me-auto">
+				<div class="logo-container">
+					<Logo />
 				</div>
 			</li>
+			<li class="nav-item">
+				<NavLink class="nav-btn catalog-btn" ActiveClass="active" href="/catalog">Catalog</NavLink>
+			</li>
+			<li class="nav-item nav-item-search">
+				<GlobalSearch OnSearch="OnSearch" @bind-SearchTerm="searchTerm" />
+			</li>
+			@if (searchExpanded)
+			{
+				<li id="search-cancel">
+					<button class="nav-btn" @onclick="OnCancelSearch" type="button">Cancel</button>
+				</li>
+			}
 		</ul>
 	</nav>
+	<div id="lower-navbar" class="@(searchExpanded ? "d-none" : "")">
+		Announcements go here!
+	</div>
 </header>
 
 @code {
+	private bool searchExpanded = false;
 
-	[CascadingParameter]
-	public Task<AuthenticationState>? AuthenticationState { get; set; }
+	private string searchTerm = string.Empty;
 
 	private void BeginLogin(MouseEventArgs args)
 	{
@@ -59,5 +65,29 @@
 	private void BeginLogout(MouseEventArgs args)
 	{
 		Navigation.NavigateToLogout("authentication/logout");
+	}
+
+	private void OnSearch()
+	{
+		if (searchExpanded == false)
+		{
+			searchExpanded = true;
+
+			if (ShouldRender())
+			{
+				StateHasChanged();
+			}
+		}
+	}
+
+	private void OnCancelSearch()
+	{
+		searchExpanded = false;
+		searchTerm = string.Empty;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
 	}
 }
