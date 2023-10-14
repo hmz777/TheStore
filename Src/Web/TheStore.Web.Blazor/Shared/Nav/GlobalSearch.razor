@@ -1,0 +1,34 @@
+﻿<div class="global-search">
+	<button class="global-search-btn">
+		<i class="las la-search la-2x"></i>
+	</button>
+	<input class="global-search-field"
+	@oninput="OnSearchTermChanged"
+	@bind-value="SearchTerm"
+	@onkeydown="OnKeyDown" placeholder="Search" type="text" />
+</div>
+
+@code {
+	[Parameter]
+	public EventCallback OnSearch { get; set; }
+
+	[Parameter]
+	public string SearchTerm { get; set; }
+
+	[Parameter]
+	public EventCallback<string> SearchTermChanged { get; set; }
+
+	private bool searchExpanded = false;
+
+	private async Task OnKeyDown(KeyboardEventArgs args)
+	{
+		await OnSearch.InvokeAsync();
+
+		searchExpanded = true;
+	}
+
+	private async Task OnSearchTermChanged(ChangeEventArgs args)
+	{
+		await SearchTermChanged.InvokeAsync(args.Value?.ToString() ?? string.Empty);
+	}
+}
