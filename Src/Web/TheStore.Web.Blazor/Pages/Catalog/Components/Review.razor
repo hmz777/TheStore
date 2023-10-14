@@ -1,0 +1,36 @@
+﻿<article class="product-review">
+	<header class="product-review-title">@Title</header>
+	<div class="product-review-info">
+		<StarRating ReadOnly="true" Rating="Rating" OnReviewRated="ReviewRated" />
+		<div class="product-review-info-meta">
+			<span class="product-review-meta-user">@User</span>
+			<span class="mx-2">-</span>
+			<span class="product-review-meta-date">@Date.ToString("MMM dd, yyyy")</span>
+		</div>
+	</div>
+	<div class="product-review-body">
+		<p>@Content</p>
+	</div>
+</article>
+
+@code {
+	[Parameter]
+	public string Title { get; set; }
+
+	[Parameter]
+	public int Rating { get; set; }
+
+	[Parameter]
+	public string User { get; set; }
+
+	[Parameter]
+	public DateTimeOffset Date { get; set; }
+
+	[Parameter]
+	public string Content { get; set; }
+
+	private void ReviewRated(int rating)
+	{
+		Console.WriteLine($"Review rated with rating: {rating}");
+	}
+}
