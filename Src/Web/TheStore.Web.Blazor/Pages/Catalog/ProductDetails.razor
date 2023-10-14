@@ -19,9 +19,14 @@ else
 				</div>
 				<div class="row">
 					<div class="col-12">
-						<div class="product-reviews">
-							<h2>Reviews</h2>
-						</div>
+						<article class="product-reviews-section">
+							<header>
+								<h2>Reviews</h2>
+							</header>
+							<article class="product-reviews">
+								<Reviews />
+							</article>
+						</article>
 					</div>
 				</div>
 			</div>
@@ -53,13 +58,18 @@ else
 						</button>
 					</div>
 					<div class="info-cell">
-						<span class="product-shipping">Shipping</span>
-					</div>
-					<div class="info-cell">
 						<p class="product-description">@product.Description</p>
 					</div>
 				</div>
 				<div class="product-attributes">
+					<div class="product-attribute">
+						<h3>Shipping</h3>
+						<ul>
+							<li>
+								Shipping details...
+							</li>
+						</ul>
+					</div>
 					<div class="product-attribute">
 						<h3>Dimentions</h3>
 						<ul>
