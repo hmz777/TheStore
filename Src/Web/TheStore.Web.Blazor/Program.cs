@@ -9,14 +9,15 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOidcAuthentication(config =>
 {
+	// TODO: W e get the auth server url from a configuration endpoint
 	var authority = "https://localhost:5001";
+	config.ProviderOptions.Authority = authority;
 
-	config.AuthenticationPaths.RemoteRegisterPath = authority + "/account/register";
-	config.AuthenticationPaths.RemoteProfilePath = authority + "/account/profile";
+	config.AuthenticationPaths.RemoteRegisterPath = config.ProviderOptions.Authority + "/account/register";
+	config.AuthenticationPaths.RemoteProfilePath = config.ProviderOptions.Authority + "/account/profile";
 	config.AuthenticationPaths.LogOutSucceededPath = "/";
 	config.ProviderOptions.PostLogoutRedirectUri = config.AuthenticationPaths.LogOutCallbackPath;
 
-	config.ProviderOptions.Authority = authority;
 	config.ProviderOptions.ResponseType = "code";
 	config.ProviderOptions.ClientId = "TheStore.Web.Blazor";
 	config.ProviderOptions.DefaultScopes.Clear();
