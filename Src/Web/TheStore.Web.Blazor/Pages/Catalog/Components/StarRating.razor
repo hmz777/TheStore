@@ -1,0 +1,79 @@
+﻿<div class="star-rating" @onmouseleave="OnComponentLeave">
+	@if (ReadOnly)
+	{
+		for (int i = 1; i <= 5; i++)
+		{
+			var index = i;
+
+			<span class="star-btn star-btn-@(index)">
+				<i class="@(index <= numberOfActiveStars ? "las" : "lar") la-star"></i>
+			</span>
+		}
+	}
+	else
+	{
+		for (int i = 1; i <= 5; i++)
+		{
+			var index = i;
+
+			<button class="star-btn star-btn-@(index) @(index <= numberOfHoveredStars ? "star-hovered" : "")" type="button"
+			@onmouseover="(args) => OnStarHover(index, args)"
+			@onclick="(args) => OnStarClick(index, args)">
+				<i class="@(index <= numberOfActiveStars ? "las" : "lar") la-star"></i>
+			</button>
+		}
+	}
+</div>
+
+@code {
+	[Parameter]
+	public int Rating { get; set; }
+
+	[Parameter]
+	public bool ReadOnly { get; set; }
+
+	[Parameter]
+	public EventCallback<int> OnReviewRated { get; set; }
+
+	private int numberOfHoveredStars = 0;
+	private int numberOfActiveStars = 0;
+
+	protected override void OnParametersSet()
+	{
+		base.OnParametersSet();
+
+		numberOfActiveStars = Rating;
+	}
+
+	private void OnComponentLeave(MouseEventArgs args)
+	{
+		numberOfHoveredStars = 0;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private void OnStarHover(int starNumber, MouseEventArgs args)
+	{
+		numberOfHoveredStars = starNumber;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private async Task OnStarClick(int starNumber, MouseEventArgs args)
+	{
+		numberOfActiveStars = starNumber;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+
+		await OnReviewRated.InvokeAsync(starNumber);
+	}
+}
