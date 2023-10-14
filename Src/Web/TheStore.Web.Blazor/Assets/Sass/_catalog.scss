@@ -16,7 +16,7 @@
 .product-card {
     border-radius: $globalBorderRadius;
     margin-bottom: 1em;
-    transition: box-shadow $globalTransitionDuration ease-in-out, transform $globalTransitionDuration ease-in-out;
+    transition: box-shadow $globalTransition, transform $globalTransition;
     position: relative;
 
     &:hover {
@@ -57,7 +57,7 @@
     .product-card-body {
         padding: 1em;
         overflow: hidden;
-        transition: border-color $globalTransitionDuration ease-in-out;
+        transition: border-color $globalTransition;
         border-bottom-left-radius: $globalBorderRadius;
         border-bottom-right-radius: $globalBorderRadius;
         border-bottom: 2px solid transparent;
@@ -65,7 +65,7 @@
 
         .product-card-body-title {
             @include line-truncate(2);
-            transition: color $globalTransitionDuration ease-in-out;
+            transition: color $globalTransition;
             margin-bottom: 1em;
             @include makeUnselectable;
         }
@@ -197,7 +197,7 @@
     flex-flow: column;
 
     .info-cell {
-        display: block;
+        display: flex;
 
         &:not(:last-of-type) {
             margin-bottom: 1em;
@@ -231,5 +231,70 @@
 
     .spec-value {
         padding: 0 .5em;
+    }
+}
+
+.product-reviews-section {
+    .product-reviews {
+        display: flex;
+        flex-flow: column;
+
+        .product-review {
+            display: flex;
+            flex-flow: column;
+
+            &:not(:last-of-type) {
+                margin-bottom: 2em;
+            }
+
+            .product-review-title {
+                font-weight: bold;
+            }
+
+            .product-review-info {
+                display: flex;
+                margin: .5em 0;
+
+                .product-review-info-meta {
+                    display: flex;
+                    margin: 0 .5em;
+
+                    .product-review-meta-user {
+                        margin-left: .5em;
+                    }
+
+                    .product-review-meta-date {
+                    }
+                }
+            }
+
+            .product-review-body {
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+.star-rating {
+    display: flex;
+
+    .star-btn {
+        i {
+            font-size: 1.3em;
+        }
+
+        &:not(:last-of-type) {
+            margin-right: .5em;
+        }
+
+        &.star-hovered {
+            color: $accent1;
+        }
+
+        .las.la-star {
+            color: $accent1;
+        }
     }
 }

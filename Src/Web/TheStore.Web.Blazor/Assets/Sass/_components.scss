@@ -2,11 +2,7 @@
 
 /*===Separators===*/
 .vertical-separator {
-    width: .2em;
-    height: 2em;
-    background: color.scale($accent2, $lightness: -60%);
-    margin: 0;
-    border-radius: 1em;
+   @include addSeparator("right", 1em);
 }
 
 .horizontal-separator {
@@ -45,7 +41,7 @@
     color: $accent2 !important;
     padding: 1em 2em;
     border-radius: $globalBorderRadius;
-    transition: $globalTransitionDuration ease-in-out background;
+    transition: $globalTransition background;
 
     &--block {
         width: 100%;

@@ -8,10 +8,7 @@
     background-color: $accent2;
     padding: .25em .5em;
     border-radius: $globalBorderRadius;
-
-    &.active {
-        border: $globalBorderWidth solid $accent3;
-    }
+    border: $globalNavItemBorderWidth solid $accent4;
 }
 
 #top-header {
@@ -21,10 +18,11 @@
     width: 100%;
     z-index: 15000;
 
-    .upper-navbar {
+    #upper-navbar {
         display: flex;
         align-items: center;
-        padding: .2em 1em;
+        padding: .2em $layoutHorizontalPadding;
+        background: $accent4;
 
         .upper-navbar-section {
             display: flex;
@@ -36,59 +34,98 @@
                 font-weight: bold;
 
                 &:not(:last-child) {
-                    @include addSeparator("right");
+                    @include addSeparator("right", 1em);
                 }
             }
         }
     }
 
-    .top-navbar {
-        padding: 1.7em $layoutHorizontalPadding;
+    #top-navbar {
+        padding: .5em $layoutHorizontalPadding;
         display: flex;
         flex-flow: row;
-        background: rgba($accent4,0.7);
-
-        .logo-container {
-            margin-right: auto;
-        }
+        align-items: center;
+        background: white;
 
         .top-navbar-inner {
             padding: 0;
             margin: 0;
             display: flex;
             flex-flow: row;
+            width: 100%;
             align-items: center;
             list-style: none;
 
             li {
-                a {
-                    color: $navLinksColor;
-                    position: relative;
-
-                    &:after {
-                        display: none;
-                        position: absolute;
-                        bottom: -1em;
-                        content: "";
-                        background-image: url(/media/system/underline.svg);
-                        background-size: 100% 100%;
-                        max-width: 100%;
-                        width: 100%;
-                        height: 1em;
-                    }
-
-
-                    &.active {
-                        &:after {
-                            display: block;
-                        }
-                    }
+                &:not(:last-of-type) {
+                    margin-right: .5em;
                 }
 
-                &:not(:last-of-type) {
-                    margin-right: 1em;
+                &.nav-item-search {
+                    width: 15em;
+                    transition: width $globalTransition;
                 }
             }
         }
+
+        &.nav-search-expanded {
+            .top-navbar-inner {
+                margin: auto;
+
+                li {
+                    &.nav-item:not(.nav-item-search) {
+                        display: none;
+                    }
+
+                    &.nav-item-search {
+                        width: 40em;
+                        margin: auto;
+                    }
+                }
+            }
+        }
+    }
+
+    #lower-navbar {
+        padding: 1em;
+        background: $accent4;
+        text-align: center;
+    }
+}
+
+.global-search {
+    display: flex;
+    border-radius: $globalBorderRadius;
+    padding: $globalVerticalNavItemPadding;
+    background: $accent4;
+    overflow: hidden;
+    transition: background $globalTransition;
+    width: 100%;
+
+    &:hover {
+        background: color.scale($accent4, $lightness: -5%);
+    }
+
+    .global-search-field {
+        background: transparent;
+        outline: none;
+    }
+
+    .global-search-btn {
+        background: transparent;
+        border-radius: 50%;
+        margin-right: .5em;
+    }
+}
+
+.nav-btn {
+    padding: $globalVerticalNavItemPadding .5em;
+    border-radius: $globalBorderRadius;
+    color: $navLinksColor;
+    border: $globalNavItemBorderWidth solid $accent4;
+
+    &.catalog-btn {
+        display: flex;
+        flex-flow: column;
     }
 }

@@ -5,7 +5,7 @@ $la-font-path: "../../wwwroot/vendor/line-awesome/fonts" !default;
 $mainFont: 'Poppins', sans-serif;
 
 /*===Layout===*/
-$layoutHorizontalPadding: 4em;
+$layoutHorizontalPadding: 3em;
 $contentTopMargin: 15em;
 
 /*===Borders===*/
@@ -13,7 +13,11 @@ $globalBorderWidth: 4px;
 $globalBorderRadius: 1em;
 
 /*===Transitions===*/
-$globalTransitionDuration: .3s;
+$globalTransition: .3s ease-in-out;
 
 /*===Animations===*/
-$globalAnimationDuration: .3s;
+$globalAnimation: .3s ease-in-out;
+
+/*===Nav===*/
+$globalVerticalNavItemPadding: .7em;
+$globalNavItemBorderWidth: 3px;

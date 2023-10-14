@@ -37,7 +37,7 @@ $inputPadding: .3em;
         position: relative;
         padding: $inputPadding;
         background: $accent2;
-        transition: background $globalTransitionDuration ease-in-out;
+        transition: background $globalTransition;
 
         &:focus {
             border-color: $accent1;
@@ -68,7 +68,7 @@ $inputPadding: .3em;
                 width: 100%;
                 height: 100%;
                 z-index: 1;
-                transition: opacity $globalTransitionDuration ease-in-out;
+                transition: opacity $globalTransition;
 
                 &:after {
                     @include makeSolidIcon($la-check);
@@ -101,7 +101,7 @@ $inputPadding: .3em;
         background: $formLabelBackColor;
         color: $formLabelColor;
         border-radius: $globalBorderRadius;
-        transition: background $globalTransitionDuration ease-in-out;
+        transition: background $globalTransition;
         white-space: nowrap;
         align-self: flex-start;
         font-size: .8em;
@@ -144,7 +144,7 @@ $inputPadding: .3em;
         padding: .5em 1em;
         border-radius: $globalBorderRadius;
         font-size: .8em;
-        animation: fadeDown $globalAnimationDuration forwards ease-in-out;
+        animation: fadeDown $globalAnimation forwards;
 
         &.asp-validation-message {
             display: none;
