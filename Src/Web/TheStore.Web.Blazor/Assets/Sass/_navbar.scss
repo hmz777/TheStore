@@ -114,6 +114,7 @@
     overflow: hidden;
     transition: background $globalTransition;
     width: 100%;
+    height: $globalNavItemHeight;
 
     &:hover {
         background: color.scale($accent4, $lightness: -5%);
@@ -132,10 +133,14 @@
 }
 
 .nav-btn {
-    padding: $globalVerticalNavItemPadding .5em;
     border-radius: $globalBorderRadius;
     color: $navLinksColor;
     border: $globalNavItemBorderWidth solid $accent4;
+    height: $globalNavItemHeight;
+    padding: 0 .5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &.catalog-btn {
         display: flex;

@@ -2,7 +2,7 @@
 
 /*===Separators===*/
 .vertical-separator {
-   @include addSeparator("right", 1em);
+    @include addSeparator("right", 1em);
 }
 
 .horizontal-separator {
@@ -226,5 +226,22 @@
 
     &.nav-search-expanded {
         transform: translateY(-200%);
+    }
+}
+
+#cart {
+    position: relative;
+    display: flex;
+
+    #cart-count {
+        position: absolute;
+        z-index: 2;
+        bottom: 0;
+        right: 0;
+        font-size: .8em;
+        border-radius: calc($globalBorderRadius/4);
+        background: $accent1;
+        width: 1.3em;
+        height: 1.3em;
     }
 }

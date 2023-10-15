@@ -1,0 +1,32 @@
+﻿@using TheStore.Web.Blazor.Services;
+@inject CartService CartService;
+@implements IDisposable;
+
+<button id="cart" class="nav-btn" type="button">
+	<i class="las la-shopping-bag la-2x"></i>
+	<span id="cart-count">@cartCount</span>
+</button>
+
+@code {
+	private int cartCount = 0;
+
+	protected override void OnInitialized()
+	{
+		CartService.ItemAddedToCart += CartItemAdded;
+	}
+
+	private void CartItemAdded(object? sender, int itemId)
+	{
+		cartCount++;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	public void Dispose()
+	{
+		CartService.ItemAddedToCart -= CartItemAdded;
+	}
+}

@@ -4,6 +4,8 @@
 @using TheStore.Web.Blazor.Helpers;
 @using TheStore.Web.Blazor.Models;
 @using TheStore.Web.Blazor.Pages.Catalog.Components
+@using TheStore.Web.Blazor.Services;
+@inject CartService CartService;
 
 @if (dataLoading)
 {
@@ -46,7 +48,7 @@ else
 						<ColorSelector ProductColors="product.ProductColors" ColorChosen="ColorChosen" ControlSize="ControlSize.Normal" />
 					</div>
 					<div class="info-cell">
-						<button class="action-btn action-btn--primary action-btn--block" type="button">
+						<button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
 							<span class="px-2">Add to Cart</span>
 							<i class="las la-shopping-bag"></i>
 						</button>
@@ -131,5 +133,13 @@ else
 		{
 			StateHasChanged();
 		}
+	}
+
+	private async Task AddToCart()
+	{
+		await InvokeAsync(() =>
+			{
+				CartService.AddItemToCartAsync(ProductId);
+			});
 	}
 }
