@@ -33,7 +33,6 @@
     }
 }
 
-
 /*===Buttons===*/
 .action-btn {
     display: flex;
@@ -105,7 +104,6 @@
 }
 
 /*===Links===*/
-
 .link-primary {
     @include makeLinkHoverable($accent1);
 }
@@ -215,5 +213,18 @@
     .result-image {
         width: 100%;
         height: auto;
+    }
+}
+
+#announcements {
+    padding: 1em;
+    background: $accent4;
+    text-align: center;
+    transition: transform $globalTransition;
+    position: relative;
+    z-index: 1;
+
+    &.nav-search-expanded {
+        transform: translateY(-200%);
     }
 }

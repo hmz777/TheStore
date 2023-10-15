@@ -1,33 +1,36 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @using System.Security.Claims;
+@using System.Timers;
+@inject IJSRuntime JS;
 @inject NavigationManager Navigation
 
-<header id="top-header">
-	<div id="upper-navbar" class="@(searchExpanded ? "d-none" : "")">
-		<div class="upper-navbar-section">
-			<NavLink href="#" class="nav-link">Find a Store</NavLink>
-			<NavLink href="#" class="nav-link">Help</NavLink>
-			<AuthorizeView>
-				<Authorized>
-					<NavLink href="/user/profile">
-						@(context.User?.FindFirst("email")?.Value ?? "Error")
-					</NavLink>
-					<button type="button" @onclick="BeginLogout">Logout</button>
-				</Authorized>
-				<NotAuthorized>
-					<div class="action-btn-group">
-						<button type="button" @onclick="BeginLogin">Login</button>
-						<NavLink href="/authentication/register">Register</NavLink>
-					</div>
-				</NotAuthorized>
-				<Authorizing>
-					<i class="las la-circle-notch la-spin la-2x"></i>
-				</Authorizing>
-			</AuthorizeView>
-		</div>
+<div id="upper-navbar" class="@(navExpanded ? "nav-search-expanded" : "")">
+	<div class="upper-navbar-section">
+		<NavLink href="#" class="nav-link">Find a Store</NavLink>
+		<NavLink href="#" class="nav-link">Help</NavLink>
+		<AuthorizeView>
+			<Authorized>
+				<NavLink href="/user/profile">
+					@(context.User?.FindFirst("email")?.Value ?? "Error")
+				</NavLink>
+				<button type="button" @onclick="BeginLogout">Logout</button>
+			</Authorized>
+			<NotAuthorized>
+				<div class="action-btn-group">
+					<button type="button" @onclick="BeginLogin">Login</button>
+					<NavLink href="/authentication/register">Register</NavLink>
+				</div>
+			</NotAuthorized>
+			<Authorizing>
+				<i class="las la-circle-notch la-spin la-2x"></i>
+			</Authorizing>
+		</AuthorizeView>
 	</div>
-	<nav id="top-navbar" class="@(searchExpanded ? "nav-search-expanded" : "")">
-		<ul class="top-navbar-inner">
+</div>
+
+<header id="top-header">
+	<nav id="navbar" class="@(navExpanded ? "nav-search-expanded" : "") @(navDetached ? "nav-detached" : "")">
+		<ul class="lower-navbar-inner">
 			<li class="nav-item me-auto">
 				<div class="logo-container">
 					<Logo />
@@ -39,7 +42,7 @@
 			<li class="nav-item nav-item-search">
 				<GlobalSearch OnSearch="OnSearch" @bind-SearchTerm="searchTerm" />
 			</li>
-			@if (searchExpanded)
+			@if (navExpanded)
 			{
 				<li id="search-cancel">
 					<button class="nav-btn" @onclick="OnCancelSearch" type="button">Cancel</button>
@@ -47,15 +50,27 @@
 			}
 		</ul>
 	</nav>
-	<div id="lower-navbar" class="@(searchExpanded ? "d-none" : "")">
-		Announcements go here!
-	</div>
 </header>
 
-@code {
-	private bool searchExpanded = false;
+<div id="page-blur" class="@(navExpanded ? "" : "d-none")"></div>
 
+@code {
+	private IJSObjectReference? navModule;
+
+	private bool navExpanded = false;
+	private bool navDetached = false;
 	private string searchTerm = string.Empty;
+
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			navModule = await JS.InvokeAsync<IJSObjectReference>("import",
+					"./modules/NavModule.js");
+
+			await navModule.InvokeVoidAsync("InitNavbarObservability", DotNetObjectReference.Create(this));
+		}
+	}
 
 	private void BeginLogin(MouseEventArgs args)
 	{
@@ -69,9 +84,9 @@
 
 	private void OnSearch()
 	{
-		if (searchExpanded == false)
+		if (navExpanded == false)
 		{
-			searchExpanded = true;
+			navExpanded = true;
 
 			if (ShouldRender())
 			{
@@ -82,8 +97,19 @@
 
 	private void OnCancelSearch()
 	{
-		searchExpanded = false;
+		navExpanded = false;
 		searchTerm = string.Empty;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	[JSInvokable]
+	public void DetachNavBar(bool toggle)
+	{
+		navDetached = toggle;
 
 		if (ShouldRender())
 		{

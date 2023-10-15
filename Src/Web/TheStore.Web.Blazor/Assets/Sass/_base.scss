@@ -34,10 +34,8 @@
 html, body {
     font-family: $mainFont !important;
     font-size: 1em !important;
-    height: 100vh;
     display: flex;
     flex-flow: column;
-    overflow-y: auto;
 }
 
 #app {
