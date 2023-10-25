@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MudBlazor.Services;
+using System.Reflection;
 using TheStore.Web.Blazor;
 using TheStore.Web.Blazor.Services;
 
@@ -26,8 +26,7 @@ builder.Services.AddOidcAuthentication(config =>
 	config.ProviderOptions.DefaultScopes.Add("profile");
 });
 
-builder.Services.AddMudServices();
-
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<CartService>();
 
