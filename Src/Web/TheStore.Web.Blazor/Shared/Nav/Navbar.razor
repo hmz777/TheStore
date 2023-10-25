@@ -2,12 +2,14 @@
 @using System.Security.Claims;
 @using System.Timers;
 @inject IJSRuntime JS;
-@inject NavigationManager Navigation
+@inject NavigationManager Navigation;
+@implements IAsyncDisposable
 
 <div id="upper-navbar" class="@(navExpanded ? "nav-search-expanded" : "")">
 	<div class="upper-navbar-section">
 		<NavLink href="#" class="nav-link">Find a Store</NavLink>
 		<NavLink href="#" class="nav-link">Help</NavLink>
+		<NavLink href="/contact" class="nav-link">Contact Us</NavLink>
 		<AuthorizeView>
 			<Authorized>
 				<NavLink href="/user/profile">
@@ -30,14 +32,14 @@
 
 <header id="top-header">
 	<nav id="navbar" class="@(navExpanded ? "nav-search-expanded" : "") @(navDetached ? "nav-detached" : "")">
-		<ul class="lower-navbar-inner">
+		<ul class="navbar-inner">
 			<li class="nav-item me-auto">
 				<div class="logo-container">
 					<Logo />
 				</div>
 			</li>
 			<li class="nav-item">
-				<NavLink class="nav-btn catalog-btn" ActiveClass="active" href="/catalog">Catalog</NavLink>
+				<NavLink id="catalog-btn" class="nav-btn" ActiveClass="nav-active" href="/catalog">Catalog</NavLink>
 			</li>
 			<li class="nav-item nav-item-search">
 				<GlobalSearch OnSearch="OnSearch" @bind-SearchTerm="searchTerm" />
@@ -55,9 +57,8 @@
 	</nav>
 </header>
 
-<div id="page-blur" class="@(navExpanded ? "" : "d-none")"></div>
-
 @code {
+	private IJSObjectReference? appUtilsModule;
 	private IJSObjectReference? navModule;
 
 	private bool navExpanded = false;
@@ -68,6 +69,9 @@
 	{
 		if (firstRender)
 		{
+			appUtilsModule = await JS.InvokeAsync<IJSObjectReference>("import",
+					"./modules/AppUtilsModule.js");
+
 			navModule = await JS.InvokeAsync<IJSObjectReference>("import",
 					"./modules/NavModule.js");
 
@@ -85,11 +89,12 @@
 		Navigation.NavigateToLogout("authentication/logout");
 	}
 
-	private void OnSearch()
+	private async Task OnSearch()
 	{
 		if (navExpanded == false)
 		{
 			navExpanded = true;
+			await appUtilsModule!.InvokeVoidAsync("ToggleBackdrop", true);
 
 			if (ShouldRender())
 			{
@@ -98,9 +103,10 @@
 		}
 	}
 
-	private void OnCancelSearch()
+	private async Task OnCancelSearch()
 	{
 		navExpanded = false;
+		await appUtilsModule!.InvokeVoidAsync("ToggleBackdrop", false);
 		searchTerm = string.Empty;
 
 		if (ShouldRender())
@@ -117,6 +123,19 @@
 		if (ShouldRender())
 		{
 			StateHasChanged();
+		}
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		if (appUtilsModule is not null)
+		{
+			await appUtilsModule.DisposeAsync();
+		}
+
+		if (navModule is not null)
+		{
+			await navModule.DisposeAsync();
 		}
 	}
 }
