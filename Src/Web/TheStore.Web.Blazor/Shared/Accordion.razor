@@ -1,0 +1,36 @@
+﻿<div class="c-accordion @OtherAttributes?.GetValueOrDefault("class") @(accordionCollapsed ? "c-accordion-collapsed" : "")">
+	<div class="c-accordion-header">
+		<button @onclick="() => Collapse(!accordionCollapsed)" type="button">
+			<span class="c-accordion-header-title">@Title</span>
+			<i class="las la-caret-down @(accordionCollapsed ? "" : "la-rotate-180")"></i>
+		</button>
+	</div>
+	<div class="c-accordion-content">
+		<div class="c-accordion-content-inner">
+			@ChildContent
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	[Parameter(CaptureUnmatchedValues = true)]
+	public Dictionary<string, object>? OtherAttributes { get; set; }
+
+	private bool accordionCollapsed = true;
+
+	private void Collapse(bool state)
+	{
+		accordionCollapsed = state;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+}
