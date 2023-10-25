@@ -1,0 +1,60 @@
+﻿@typeparam T
+
+<button @onclick="OnOptionSelected"
+		class="c-select-option @(Selected ? "selected" : "") @(Disabled ? "disabled" : "")"
+		disabled="@Disabled"
+		type="button">
+	@Text
+</button>
+
+@code {
+	[Parameter]
+	public bool Selected { get; set; }
+
+	[Parameter]
+	public bool Disabled { get; set; }
+
+	[Parameter, EditorRequired]
+	public T Value { get; set; }
+
+	[Parameter, EditorRequired]
+	public string Text { get; set; }
+
+	[CascadingParameter(Name = "Parent")]
+	public Select<T> Parent { get; set; }
+
+	protected override void OnInitialized()
+	{
+		if (Disabled)
+		{
+			return;
+		}
+
+		Parent.AddOption(this);
+	}
+
+	private void OnOptionSelected()
+	{
+		Parent.ChangeValue(this);
+	}
+
+	public void Select(bool toggle)
+	{
+		Selected = toggle;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	public void Disable(bool toggle)
+	{
+		Disabled = toggle;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+}
