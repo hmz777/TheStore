@@ -1,8 +1,12 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /*===Fonts===*/
 $la-font-path: "../../wwwroot/vendor/line-awesome/fonts" !default;
 $mainFont: 'Poppins', sans-serif;
+
+/*===Bootstrap Overrides===*/
+$placeholder-opacity-max: .2;
+$placeholder-opacity-min: .1;
 
 /*===Layout===*/
 $layoutHorizontalPadding: 3em;

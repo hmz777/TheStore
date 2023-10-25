@@ -57,19 +57,20 @@ a {
     margin: 0;
 }
 
-input, textarea {
+input, textarea, select, button {
     border: none;
+    outline: none;
 }
 
 button {
     border: none;
     background: none;
     margin: 0;
+    padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
-    margin: .5em 0;
 }
 
 h1 {

@@ -72,7 +72,7 @@
     pointer-events: none;
 }
 
-@mixin addSeparator($direction, $height) {
+@mixin addVerticalSeparator($direction, $height) {
     @if $direction == right {
         display: flex;
 
@@ -94,6 +94,33 @@
             height: $height;
             background: color.scale($accent2, $lightness: -60%);
             margin: auto 1em auto 1em;
+            border-radius: 1em;
+        }
+    }
+}
+
+@mixin addHorizontalSeparator($direction, $width) {
+    display: flex;
+
+    @if $direction == after {
+        &:after {
+            display: inline-block;
+            content: '';
+            width: $width;
+            height: .1em;
+            background: color.scale($accent4, $lightness: -10%);
+            margin: 1em auto 1em auto;
+            border-radius: 1em;
+        }
+    }
+    @else {
+        &:before {
+            display: inline-block;
+            content: '';
+            width: $width;
+            height: .1em;
+            background: color.scale($accent4, $lightness: -10%);
+            margin: 1em auto 1em auto;
             border-radius: 1em;
         }
     }
