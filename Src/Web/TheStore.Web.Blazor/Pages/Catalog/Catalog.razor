@@ -89,9 +89,9 @@
 			// Simulate the loading process process
 			await Task.Delay(3000);
 
-			dataLoading = false;
-
 			QueryDataSource(1, 6);
+
+			dataLoading = false;
 
 			if (ShouldRender())
 			{
