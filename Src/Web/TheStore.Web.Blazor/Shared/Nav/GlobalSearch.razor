@@ -18,13 +18,9 @@
 	[Parameter]
 	public EventCallback<string> SearchTermChanged { get; set; }
 
-	private bool searchExpanded = false;
-
 	private async Task OnKeyDown(KeyboardEventArgs args)
 	{
 		await OnSearch.InvokeAsync();
-
-		searchExpanded = true;
 	}
 
 	private async Task OnSearchTermChanged(ChangeEventArgs args)
