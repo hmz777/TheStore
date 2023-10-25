@@ -1,11 +1,13 @@
 ﻿@page "/product/{productId:int}/{productName}/"
+@using MediatR;
 @using TheStore.Blazor.Models.Products;
 @using TheStore.Blazor.Models.ValueObjectsDtos;
 @using TheStore.Web.Blazor.Helpers;
+@using TheStore.Web.Blazor.Mediator.Commands;
 @using TheStore.Web.Blazor.Models;
 @using TheStore.Web.Blazor.Pages.Catalog.Components
 @using TheStore.Web.Blazor.Services;
-@inject CartService CartService;
+@inject IMediator Mediator;
 
 @if (dataLoading)
 {
@@ -23,7 +25,7 @@ else
 					<div class="col-12">
 						<article class="product-reviews-section">
 							<header>
-								<h2>Reviews</h2>
+								<h2 class="my-4">Reviews</h2>
 							</header>
 							<article class="product-reviews">
 								<Reviews />
@@ -65,7 +67,7 @@ else
 				</div>
 				<div class="product-attributes">
 					<div class="product-attribute">
-						<h3>Shipping</h3>
+						<h3 class="my-4">Shipping</h3>
 						<ul>
 							<li>
 								Shipping details...
@@ -73,7 +75,7 @@ else
 						</ul>
 					</div>
 					<div class="product-attribute">
-						<h3>Dimentions</h3>
+						<h3 class="my-4">Dimentions</h3>
 						<ul>
 							<li>
 								<span class="spec-label">Height</span>:<span class="spec-value">75cm</span>
@@ -87,7 +89,7 @@ else
 						</ul>
 					</div>
 					<div class="product-attribute">
-						<h3>Specification</h3>
+						<h3 class="my-4">Specification</h3>
 						<ul>
 							<li>High quality materials</li>
 							<li>Durable wood</li>
@@ -137,9 +139,9 @@ else
 
 	private async Task AddToCart()
 	{
-		await InvokeAsync(() =>
+		await InvokeAsync(async () =>
 			{
-				CartService.AddItemToCartAsync(ProductId);
+				await Mediator.Send(new AddItemToCartCommand(ProductId));
 			});
 	}
 }

@@ -4,7 +4,7 @@
 	{
 		public event EventHandler<int> ItemAddedToCart = null!;
 
-		public void AddItemToCartAsync(int itemId)
+		public void AddItemToCart(int itemId)
 		{
 			ItemAddedToCart?.Invoke(this, itemId);
 		}
