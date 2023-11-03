@@ -2,9 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using TheStore.Catalog.Core.Exceptions;
-using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
 
@@ -12,90 +10,47 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class Product : BaseEntity<ProductId>, IAggregateRoot
 	{
+		private readonly List<ProductVariant> variants = new();
+
 		public CategoryId CategoryId { get; set; }
 		public string Name { get; set; }
-		public string Description { get; set; }
-		public string ShortDescription { get; set; }
-		public string Sku { get; set; }
-		public virtual Money Price { get; set; }
-		public virtual InventoryRecord Inventory { get; set; }
-
-		private List<ProductColor> productColors = new();
+		public bool Published { get; set; }
 
 		[NotMapped]
-		public virtual ReadOnlyCollection<ProductColor> ProductColors => productColors.AsReadOnly();
+		public ReadOnlyCollection<ProductVariant> Variants => variants.AsReadOnly();
 
-		// Ef Core
-		protected Product() { }
-
-		public Product(
-		CategoryId categoryId,
-		string name,
-		string description,
-		string shortDescription,
-		string sku,
-		Money price,
-		InventoryRecord inventory)
+		public Product(CategoryId categoryId, string name, bool published, List<ProductVariant> variants = null!)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
-			Guard.Against.NullOrWhiteSpace(name, nameof(name));
-			Guard.Against.NullOrWhiteSpace(description, nameof(description));
-			Guard.Against.NullOrWhiteSpace(shortDescription, nameof(shortDescription));
-			Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
-			Guard.Against.Null(price, nameof(price));
-			Guard.Against.Null(inventory, nameof(inventory));
+			Guard.Against.NullOrEmpty(name, nameof(name));
 
 			CategoryId = categoryId;
 			Name = name;
-			Description = description;
-			ShortDescription = shortDescription;
-			Sku = sku;
-			Price = price;
-			Inventory = inventory;
-		}
-
-		public Product(
-			CategoryId categoryId,
-			string name,
-			string description,
-			string shortDescription,
-			string sku,
-			Money price,
-			InventoryRecord inventory,
-			List<ProductColor> productColors)
-			: this(
-				  categoryId,
-				  name,
-				  description,
-				  shortDescription,
-				  sku,
-				  price,
-				  inventory)
-		{
-			this.productColors = productColors ?? new();
+			Published = published;
+			this.variants = variants ?? new();
 		}
 
 		#region API
 
-		public bool HasColors() => ProductColors.Any();
+		public bool HasVariants => Variants.Any();
 
-		public void AddColor(ProductColor productColor)
+		public void AddVariant(ProductVariant productVariant)
 		{
-			Guard.Against.Null(productColor, nameof(productColor));
+			Guard.Against.Null(productVariant, nameof(productVariant));
 
-			if (productColors.Any(c => c == productColor))
+			if (variants.Any(c => c == productVariant))
 			{
 				throw new ColorAlreadyExistsException();
 			}
 
-			productColors.Add(productColor);
+			variants.Add(productVariant);
 		}
 
-		public void RemoveColor(ProductColor productColor)
+		public void RemoveVariant(ProductVariant productVariant)
 		{
-			Guard.Against.Null(productColor, nameof(productColor));
+			Guard.Against.Null(productVariant, nameof(productVariant));
 
-			productColors.Remove(productColor);
+			variants.Remove(productVariant);
 		}
 
 		#endregion
