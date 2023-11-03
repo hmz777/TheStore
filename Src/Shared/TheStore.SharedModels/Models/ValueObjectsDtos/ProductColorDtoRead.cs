@@ -2,10 +2,10 @@
 
 namespace TheStore.SharedModels.Models.ValueObjectsDtos
 {
-	[DisplayName(nameof(ProductColorDto))]
-	public class ProductColorDto : DtoBase
+	[DisplayName(nameof(ProductColorDtoRead))]
+	public class ProductColorDtoRead : DtoBase
 	{
-		public string ColorName { get; set; }
+		public MultilanguageStringDto ColorName { get; set; }
 		public string ColorCode { get; set; }
 		public List<ImageDto> Images { get; set; }
 		public bool IsMainColor { get; set; }
