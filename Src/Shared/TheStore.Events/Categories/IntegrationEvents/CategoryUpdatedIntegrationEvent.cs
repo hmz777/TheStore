@@ -1,14 +1,16 @@
-﻿namespace TheStore.Events.Categories.IntegrationEvents
-{
-    public class CategoryUpdatedIntegrationEvent : IIntegrationEvent
-    {
-		public DateTimeOffset DateOccurred { get; }
-		public string Name { get; }
+﻿using TheStore.SharedKernel.ValueObjects;
 
-        public CategoryUpdatedIntegrationEvent(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+namespace TheStore.Events.Categories.IntegrationEvents
+{
+	public class CategoryUpdatedIntegrationEvent : IIntegrationEvent
+	{
+		public DateTimeOffset DateOccurred { get; }
+		public MultilanguageString Name { get; }
+
+		public CategoryUpdatedIntegrationEvent(MultilanguageString name)
+		{
+			Name = name ?? throw new ArgumentNullException(nameof(name));
 			DateOccurred = DateTimeOffset.UtcNow;
 		}
-    }
+	}
 }
