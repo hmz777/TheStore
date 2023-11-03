@@ -14,12 +14,15 @@ namespace TheStore.SharedModels.Models.Branches
 		public int BranchId { get; set; }
 
 		[FromBody]
-		public string Name { get; set; }
+		public MultilanguageStringDto Name { get; set; }
 
 		[FromBody]
-		public string Description { get; set; }
+		public MultilanguageStringDto Description { get; set; }
 
 		[FromBody]
 		public AddressDto Address { get; set; }
+
+		[FromBody]
+		public bool Published { get; set; }
 	}
 }

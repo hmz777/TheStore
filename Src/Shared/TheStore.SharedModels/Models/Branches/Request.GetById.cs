@@ -11,11 +11,6 @@ namespace TheStore.SharedModels.Models.Branches
 
 		public int BranchId { get; set; }
 
-		public GetByIdRequest()
-		{
-
-		}
-
 		public GetByIdRequest(int branchId)
 		{
 			BranchId = branchId;
