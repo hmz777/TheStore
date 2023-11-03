@@ -3,9 +3,9 @@ using TheStore.Catalog.Core.Aggregates.Products;
 
 namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 {
-	public class ListProductsPaginationReadSpec : Specification<Product>
+	public class ListProductsPaginationDefaultOrderReadSpec : Specification<Product>
 	{
-		public ListProductsPaginationReadSpec(int take, int page)
+		public ListProductsPaginationDefaultOrderReadSpec(int take, int page)
 		{
 			Query
 				.OrderBy(x => x.Id)
@@ -15,7 +15,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 
 			// Cache if it's the first page
 			if (page == 1)
-				Query.EnableCache(nameof(ListProductsPaginationReadSpec), 1);
+				Query.EnableCache(nameof(ListProductsPaginationDefaultOrderReadSpec), 1);
 		}
 	}
 }
