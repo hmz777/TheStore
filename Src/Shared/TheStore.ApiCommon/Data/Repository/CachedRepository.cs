@@ -45,7 +45,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.AnyAsync(specification, cancellationToken);
@@ -75,7 +75,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.CountAsync(specification, cancellationToken);
@@ -100,7 +100,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.FirstOrDefaultAsync(specification, cancellationToken);
@@ -114,7 +114,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.FirstOrDefaultAsync(specification, cancellationToken);
@@ -139,7 +139,7 @@ namespace TheStore.ApiCommon.Data.Repository
 			throw new NotImplementedException();
 		}
 
-		public Task<List<T>?> ListAsync(CancellationToken cancellationToken = default)
+		public Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
 		{
 			string cacheKey = $"{nameof(T)}-{nameof(ListAsync)}";
 
@@ -147,18 +147,18 @@ namespace TheStore.ApiCommon.Data.Repository
 			{
 				entry.SetOptions(memoryCacheEntryOptions);
 				return dataRepository.ListAsync(cancellationToken);
-			});
+			})!;
 		}
 
-		public Task<List<T>?> ListAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+		public Task<List<T>> ListAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.ListAsync(specification, cancellationToken);
-				});
+				})!;
 			}
 
 			return dataRepository.ListAsync(specification, cancellationToken);
@@ -168,11 +168,11 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.ListAsync(specification, cancellationToken);
-				});
+				})!;
 			}
 
 			return dataRepository.ListAsync(specification, cancellationToken);
@@ -182,7 +182,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.SingleOrDefaultAsync(specification, cancellationToken);
@@ -196,7 +196,7 @@ namespace TheStore.ApiCommon.Data.Repository
 		{
 			if (specification.CacheEnabled)
 			{
-				return memoryCache.GetOrCreateAsync(specification.CacheKey, entry =>
+				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
 					entry.SetOptions(memoryCacheEntryOptions);
 					return dataRepository.SingleOrDefaultAsync(specification, cancellationToken);
