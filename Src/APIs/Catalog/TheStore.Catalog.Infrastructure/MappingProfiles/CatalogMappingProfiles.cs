@@ -5,6 +5,7 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
+using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models.Branches;
 using TheStore.SharedModels.Models.Categories;
 using TheStore.SharedModels.Models.Products;
@@ -29,12 +30,10 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ForMember(dest => dest.ProductColors, opt => opt.MapFrom("productColors"));
 
 			CreateMap<SharedModels.Models.Products.CreateRequest, Product>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
-				.ForMember(dest => dest.ProductColors, opt => opt.Ignore());
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
 
 			CreateMap<SharedModels.Models.Products.UpdateRequest, Product>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
-				.ForMember(dest => dest.ProductColors, opt => opt.Ignore());
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
 
 			// Assembled Products
 			CreateMap<AssembledProduct, AssembledProductDto>()
@@ -49,6 +48,11 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
 
 			// Value Objects
+			CreateMap<MultilanguageString, MultilanguageStringDto>()
+				.ForMember(dest => dest.LocalizedStrings, opt => opt.MapFrom("localizedStrings"))
+				.ReverseMap()
+				.ForMember("localizedStrings", opt => opt.MapFrom(src => src.LocalizedStrings));
+
 			CreateMap<Money, MoneyDto>().ReverseMap();
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
@@ -56,7 +60,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<AddImageDto, Image>();
 			CreateMap<UpdateImageDto, Image>();
 
-			CreateMap<ProductColor, ProductColorDto>()
+			CreateMap<ProductColor, ProductColorDtoUpdate>()
 				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
 				.ReverseMap()
 				.ForMember("images", opt => opt.MapFrom(src => src.Images));
