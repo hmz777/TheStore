@@ -1,28 +1,88 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TheStore.ApiCommon.Services;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Infrastructure.Data.ValueConverters;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Infrastructure.Data
 {
 	public class CatalogDbContext : DbContext
 	{
-		public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions) : base(dbContextOptions) { }
+		private readonly EventDispatcher eventDispatcher;
+
+		public CatalogDbContext(
+			DbContextOptions<CatalogDbContext> dbContextOptions,
+			EventDispatcher eventDispatcher) : base(dbContextOptions)
+		{
+			this.eventDispatcher = eventDispatcher;
+		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
+			#region Value Objects
+
+			modelBuilder.Entity<MultilanguageString>()
+				.OwnsMany<LocalizedString>("localizedStrings", opt =>
+				{
+					opt.OwnsOne(ls => ls.CultureCode);
+				});
+
+			modelBuilder.Entity<Address>()
+				.OwnsOne(ad => ad.Coordinate);
+
+			modelBuilder.Entity<ProductVariant>(opt =>
+			{
+				opt.OwnsOne(v => v.Description);
+				opt.OwnsOne(v => v.ShortDescription);
+				opt.OwnsOne(v => v.Price);
+				opt.OwnsOne(v => v.Inventory);
+				opt.OwnsOne(v => v.Color);
+				opt.OwnsOne(v => v.Dimentions);
+				opt.OwnsOne(v => v.Sepcifications);
+				opt.OwnsMany<ProductReview>("reviews");
+			});
+
+			modelBuilder.Entity<ProductColor>(opt =>
+			{
+				opt.OwnsMany<Image>("images")
+				   .OwnsOne(i => i.Alt);
+			});
+
+			#endregion
+
 			#region Branch
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Address, ad => ad.OwnsOne(add => add.Coordinate));
+				.OwnsOne(b => b.Address);
 
 			modelBuilder.Entity<Branch>()
 				.OwnsOne(b => b.Image);
+
+			modelBuilder.Entity<Branch>()
+				.OwnsOne(b => b.Name);
+
+			modelBuilder.Entity<Branch>()
+				.OwnsOne(b => b.Description);
+
+			#endregion
+
+			#region Category
+
+			modelBuilder.Entity<Category>()
+				.Property(c => c.Id)
+				.HasConversion<CategoryIdValueConverter>();
+
+			modelBuilder.Entity<Category>()
+				.HasKey(c => c.Id);
+
+			modelBuilder.Entity<Category>()
+				.OwnsOne(c => c.Name);
 
 			#endregion
 
@@ -40,22 +100,13 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasConversion<CategoryIdValueConverter>();
 
 			modelBuilder.Entity<Product>()
-				.OwnsOne(s => s.Price, p =>
-				{
-					p.Property(m => m.Amount)
-					 .HasPrecision(precision: 16, scale: 3);
-
-					p.OwnsOne(pp => pp.Currency);
-				});
+				.OwnsOne(p => p.Name);
 
 			modelBuilder.Entity<Product>()
-				.OwnsOne(s => s.Inventory);
+				.OwnsMany(p => p.Variants);
 
 			modelBuilder.Entity<Product>()
-				.OwnsMany<ProductColor>("productColors", pc =>
-				{
-					pc.OwnsMany<Image>("images");
-				});
+				.OwnsMany<ProductColor>("productColors");
 
 			#endregion
 
@@ -66,17 +117,20 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasConversion<CategoryIdValueConverter>();
 
 			#endregion
+		}
 
-			#region Category
+		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			await eventDispatcher.PublishDomainEventsAsync(cancellationToken);
 
-			modelBuilder.Entity<Category>()
-				.Property(c => c.Id)
-				.HasConversion<CategoryIdValueConverter>();
+			// We trigger domain events before saving in order to
+			// commit changes as a single transaction
 
-			modelBuilder.Entity<Category>()
-				.HasKey(c => c.Id);
+			var result = await base.SaveChangesAsync(cancellationToken);
 
-			#endregion
+			await eventDispatcher.PublishIntegrationEventsAsync(cancellationToken);
+
+			return result;
 		}
 
 		public DbSet<Category> Categories => Set<Category>();
