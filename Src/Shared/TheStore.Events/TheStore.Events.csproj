@@ -15,4 +15,7 @@
 		<PackageReference Include="MassTransit" Version="8.1.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\TheStore.SharedKernel\TheStore.SharedKernel.csproj" />
+	</ItemGroup>
 </Project>
