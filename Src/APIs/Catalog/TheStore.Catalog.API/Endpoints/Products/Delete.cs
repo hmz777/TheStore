@@ -51,9 +51,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			var singleProduct = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (singleProduct == null)
-			{
 				return NotFound();
-			}
 
 			await apiRepository.ExecuteDeleteAsync<Product, ProductId>(singleProduct.Id, cancellationToken);
 

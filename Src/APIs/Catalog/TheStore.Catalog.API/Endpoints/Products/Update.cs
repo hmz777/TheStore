@@ -55,9 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			var singleProduct = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (singleProduct == null)
-			{
 				return NotFound();
-			}
 
 			await RepositoryHelpers.PropertyUpdateAsync(request, singleProduct, mapper, apiRepository);
 

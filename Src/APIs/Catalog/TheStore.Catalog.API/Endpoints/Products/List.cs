@@ -52,7 +52,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 				return BadRequest(validation.AsErrors());
 
 			var products = (await repository
-				.ListAsync(new ListProductsPaginationReadSpec(request.Take, request.Page), cancellationToken))
+				.ListAsync(new ListProductsPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
 				.Map<Product, ProductDto>(mapper);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))

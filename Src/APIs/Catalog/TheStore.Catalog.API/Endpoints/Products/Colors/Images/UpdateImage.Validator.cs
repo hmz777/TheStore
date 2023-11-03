@@ -11,7 +11,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
-			RuleFor(x => x.ColorCode)
+			RuleFor(x => x.Sku)
 				.NotEmpty();
 
 			RuleFor(x => x.ImagePath)
@@ -19,7 +19,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 			RuleFor(x => x.Image)
 				.NotEmpty()
-				.SetValidator(x => new UpdateImageDtoValidator());
+				.SetValidator(ModelValidators.UploadImageDtoValidator);
 		}
 	}
 }

@@ -15,6 +15,7 @@ using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
 
@@ -27,20 +28,20 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 		private readonly IValidator<UpdateImageOfColorRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
-		private readonly IMapper mapper;
 		private readonly IMediator mediator;
+		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<UpdateImage>();
 
 		public UpdateImage(
 			IValidator<UpdateImageOfColorRequest> validator,
 			IApiRepository<CatalogDbContext, Product> apiRepository,
-			IMapper mapper,
-			IMediator mediator)
+			IMediator mediator,
+			IMapper mapper)
 		{
 			this.validator = validator;
 			this.apiRepository = apiRepository;
-			this.mapper = mapper;
 			this.mediator = mediator;
+			this.mapper = mapper;
 		}
 
 		[HttpPut(UpdateImageOfColorRequest.RouteTemplate)]
@@ -48,12 +49,12 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[SwaggerOperation(
-		   Summary = "Updates an image of a color of a single product",
-		   Description = "Updates an image of a color of a single product",
-		   OperationId = "Product.Single.Color.Image.Update",
+		   Summary = "Updates an image of a variant of a single product",
+		   Description = "Updates an image of a variant of a single product",
+		   OperationId = "Product.Single.Variant.Color.Image.Update",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-		[FromForm] UpdateImageOfColorRequest request,
+			UpdateImageOfColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -66,25 +67,27 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
-			if (color == null)
-				return NotFound("Color not found");
+			var variant = singleProduct.Variants.FirstOrDefault(v => v.Sku == request.Sku);
+			if (variant == null)
+				return NotFound("Variant not found");
+
+			var color = variant.Color;
 
 			var decodedImagePath = HttpUtility.UrlDecode(request.ImagePath);
 
-			var image = color.Images.FirstOrDefault(x => x.StringFileUri == decodedImagePath);
+			var image = color.Images.FirstOrDefault(x => x.FileNameWithExtension == decodedImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 
-			var newImageDto = request.Image;
+			var imagePath = await mediator
+				.Send(new UploadImageRequest(request.Image.File, ResourceFilePaths.ProductsImages, request.ImagePath), cancellationToken);
 
-			await mediator.Send(new UpdateImageRequest(image.StringFileUri, newImageDto, ResourceFilePaths.ProductsImages), cancellationToken);
-
-			image = new Image(newImageDto.StringFileUri, request.Image.Alt);
+			image = new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage);
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update an image with path: {ImagePath} in color with code: {ColorCode} in single product with id: {Id}", request.ImagePath, color.ColorCode, request.ProductId);
+				log.Information("Update an image with path: {ImagePath} in variant with SKU: {Sku} in product with id: {Id}",
+					request.ImagePath, request.Sku, request.ProductId);
 
 			return NoContent();
 		}

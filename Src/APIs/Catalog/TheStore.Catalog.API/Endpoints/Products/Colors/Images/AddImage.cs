@@ -14,6 +14,7 @@ using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
 
@@ -23,7 +24,6 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		.WithRequest<AddImageToColorRequest>
 		.WithActionResult
 	{
-
 		private readonly IValidator<AddImageToColorRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly IMapper mapper;
@@ -44,14 +44,15 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 		[HttpPost(AddImageToColorRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[SwaggerOperation(
-		   Summary = "Adds an image to a single product color",
-		   Description = "Adds an image to a single product color",
-		   OperationId = "Product.Single.Color.Image.Add",
+		   Summary = "Adds an image to a single product variant",
+		   Description = "Adds an image to a single product variant",
+		   OperationId = "Product.Single.Variant.Color.Image.Add",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-		   [FromForm] AddImageToColorRequest request,
+			AddImageToColorRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -62,19 +63,23 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (singleProduct == null)
-				return NotFound();
+				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
-			if (color == null)
-				return NotFound("Color not found");
+			var variant = singleProduct.Variants.FirstOrDefault(v => v.Sku == request.Sku);
+			if (variant == null)
+				return NotFound("Variant not found");
 
-			await mediator.Send(new AddImageRequest(request.Image, ResourceFilePaths.ProductsImages), cancellationToken);
+			var color = variant.Color;
 
-			color.AddImage(mapper.Map<Image>(request.Image));
+			var imagePath = await mediator
+				.Send(new UploadImageRequest(request.Image.File, ResourceFilePaths.ProductsImages, null!), cancellationToken);
+
+			color.AddImage(new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage));
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Add an image to the color with code: {ColorCode} in single product with id: {Id}", color.ColorCode, request.ProductId);
+				log.Information("Add an image to variant with SKU: {Sku} in product with id: {Id}",
+					request.Sku, request.ProductId);
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,

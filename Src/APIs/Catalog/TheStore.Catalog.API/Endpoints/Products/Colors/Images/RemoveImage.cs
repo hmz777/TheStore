@@ -19,10 +19,9 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		.WithRequest<RemoveImageFromColorRequest>
 		.WithActionResult
 	{
-
 		private readonly IValidator<RemoveImageFromColorRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
-		private readonly Serilog.ILogger log = Log.ForContext<RemoveColor>();
+		private readonly Serilog.ILogger log = Log.ForContext<RemoveImage>();
 
 		public RemoveImage(
 			IValidator<RemoveImageFromColorRequest> validator,
@@ -37,9 +36,9 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[SwaggerOperation(
-		   Summary = "Removes an image from a single product color",
-		   Description = "Removes an image from a single product color",
-		   OperationId = "Product.Single.Color.Image.Remove",
+		   Summary = "Removes an image from a single product variant",
+		   Description = "Removes an image from a single product variant",
+		   OperationId = "Product.Single.Variant.Color.Image.Remove",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
 			[FromRoute] RemoveImageFromColorRequest request,
@@ -55,9 +54,11 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var color = singleProduct.ProductColors.FirstOrDefault(x => x.ColorCode == request.ColorCode);
-			if (color == null)
-				return NotFound("Color not found");
+			var variant = singleProduct.Variants.FirstOrDefault(v => v.Sku == request.Sku);
+			if (variant == null)
+				return NotFound("Variant not found");
+
+			var color = variant.Color;
 
 			var decodedImagePath = HttpUtility.UrlDecode(request.ImagePath);
 
@@ -69,7 +70,8 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Remove an image with path: {ImagePath} from color with code: {ColorCode} from single product with id: {Id}", image.StringFileUri, color.ColorCode, request.ProductId);
+				log.Information("Remove an image with path: {ImagePath} from variant with SKU: {Sku} from product with id: {Id}",
+					request.ImagePath, request.Sku, request.ProductId);
 
 			return NoContent();
 		}
