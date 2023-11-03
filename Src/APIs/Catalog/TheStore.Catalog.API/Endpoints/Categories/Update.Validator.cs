@@ -11,12 +11,11 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 				.NotEmpty();
 
 			RuleFor(x => x.Name)
-				.NotEmpty()
-				.MinimumLength(2);
+				.NotEmpty();
 
 			RuleFor(x => x.Order)
 				.NotEmpty()
-				.GreaterThanOrEqualTo(1);
+				.GreaterThanOrEqualTo(0);
 		}
 	}
 }

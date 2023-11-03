@@ -50,9 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			var category = await apiRepository.GetByIdAsync(new CategoryId(request.CategoryId), cancellationToken);
 
 			if (category == null)
-			{
 				return NotFound();
-			}
 
 			await apiRepository.ExecuteDeleteAsync<Category, CategoryId>(category.Id, cancellationToken);
 

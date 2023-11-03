@@ -54,7 +54,10 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Create category with name: {Name}", request.Name, request.CorrelationId);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { CategoryId = category.Id.Id }, mapper.Map<CategoryDto>(category));
+			return CreatedAtRoute(
+				GetByIdRequest.RouteName,
+				routeValues: new { CategoryId = category.Id.Id },
+				mapper.Map<CategoryDto>(category));
 		}
 	}
 }

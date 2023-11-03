@@ -8,8 +8,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		public CreateValidator()
 		{
 			RuleFor(x => x.Name)
-				.NotEmpty()
-				.MinimumLength(2);
+				.NotEmpty();
 
 			RuleFor(x => x.Order)
 				.NotEmpty()
