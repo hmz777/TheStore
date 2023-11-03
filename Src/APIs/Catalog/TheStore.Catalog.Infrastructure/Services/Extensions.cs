@@ -26,7 +26,9 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.ConfigureMemoryCache();
 			webApplicationBuilder.AddFileUploader();
 			webApplicationBuilder.AddFileSystem();
-			webApplicationBuilder.AddMediatR(InfrastructureAssembly);
+			webApplicationBuilder.AddMediatR(assembly, InfrastructureAssembly);
+			webApplicationBuilder.ConfigureMassTransitForRabbitMq();
+			webApplicationBuilder.AddEventDispatcher();
 
 			// Api specific services and configuration
 			webApplicationBuilder.Services.AddGrpc();
