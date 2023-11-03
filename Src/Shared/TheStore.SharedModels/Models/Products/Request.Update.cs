@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Products
 {
@@ -9,38 +9,20 @@ namespace TheStore.SharedModels.Models.Products
 		public const string RouteTemplate = "products/{ProductId:int}";
 		public override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
 
+		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
+
+		[FromBody]
 		public int CategoryId { get; set; }
+
+		[FromBody]
 		public string Name { get; set; }
-		public string Description { get; set; }
-		public string ShortDescription { get; set; }
-		public string Sku { get; set; }
-		public MoneyDto Price { get; set; }
-		public InventoryRecordDto Inventory { get; set; }
 
-		public UpdateRequest()
-		{
-
-		}
-
-		public UpdateRequest(
-			int productId,
-			int categoryId,
-			string name,
-			string description,
-			string shortDescription,
-			string sku,
-			MoneyDto price,
-			InventoryRecordDto inventory)
+		public UpdateRequest(int productId, int categoryId, string name)
 		{
 			ProductId = productId;
 			CategoryId = categoryId;
 			Name = name;
-			Description = description;
-			ShortDescription = shortDescription;
-			Sku = sku;
-			Price = price;
-			Inventory = inventory;
 		}
 	}
 }

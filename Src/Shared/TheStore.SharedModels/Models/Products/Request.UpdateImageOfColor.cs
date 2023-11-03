@@ -8,22 +8,23 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(UpdateImageOfColorRequest))]
 	public class UpdateImageOfColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}/images/{ImagePath}";
+		public const string RouteTemplate = "products/{ProductId:int}/variants/{Sku}/images/{ImagePath}";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
-			.Replace("{ColorCode}", ColorCode)
+			.Replace("{Sku}", Sku)
 			.Replace("{ImagePath}", HttpUtility.UrlEncode(ImagePath));
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
 
-		[FromRoute(Name = nameof(ColorCode))]
-		public string ColorCode { get; set; }
+		[FromRoute(Name = nameof(Sku))]
+		public string Sku { get; set; }
 
 		[FromRoute(Name = nameof(ImagePath))]
 		public string ImagePath { get; set; }
 
-		public UpdateImageDto Image { get; set; }
+		[FromForm]
+		public UploadImageDto Image { get; set; }
 	}
 }

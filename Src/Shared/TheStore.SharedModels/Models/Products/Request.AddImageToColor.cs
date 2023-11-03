@@ -7,18 +7,19 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName("Product.Single." + nameof(AddImageToColorRequest))]
 	public class AddImageToColorRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}/images";
+		public const string RouteTemplate = "products/{ProductId:int}/variants/{Sku}/images";
 		public override string Route =>
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
-			.Replace("{ColorCode}", ColorCode);
+			.Replace("{Sku}", Sku);
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
 
-		[FromRoute(Name = nameof(ColorCode))]
-		public string ColorCode { get; set; }
+		[FromRoute(Name = nameof(Sku))]
+		public string Sku { get; set; }
 
-		public AddImageDto Image { get; set; }
+		[FromForm]
+		public UploadImageDto Image { get; set; }
 	}
 }
