@@ -12,8 +12,4 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TheStore.Events\TheStore.Events.csproj" />
-  </ItemGroup>
-
 </Project>
