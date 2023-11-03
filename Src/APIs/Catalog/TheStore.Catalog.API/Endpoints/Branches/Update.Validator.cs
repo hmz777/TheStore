@@ -19,7 +19,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 
 			RuleFor(x => x.Address)
 				.NotEmpty()
-				.SetValidator(x => new AddressValidator());
+				.SetValidator(x => new AddressDtoValidator());
 		}
 	}
 }

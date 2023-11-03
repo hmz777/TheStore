@@ -49,9 +49,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			var branch = await apiRepository.GetByIdAsync(request.BranchId, cancellationToken);
 
 			if (branch == null)
-			{
 				return NotFound();
-			}
 
 			await apiRepository.ExecuteDeleteAsync<Branch, int>(branch.Id, cancellationToken);
 
