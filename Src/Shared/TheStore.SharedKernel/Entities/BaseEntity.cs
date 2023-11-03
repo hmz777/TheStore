@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TheStore.SharedKernel.DomainEvents;
 
 namespace TheStore.SharedKernel.Entities
 {
@@ -9,11 +8,8 @@ namespace TheStore.SharedKernel.Entities
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public TId Id { get; set; }
-        public DateTimeOffset DateCreated { get; set; }
-        public DateTimeOffset DateUpdated { get; set; }
-
-        [NotMapped]
-		public List<BaseDomainEvent> Events { get; private set; } = new();
+		public DateTimeOffset DateCreated { get; set; }
+		public DateTimeOffset DateUpdated { get; set; }
 
 		public override bool Equals(object? obj)
 		{
