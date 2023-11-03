@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Categories
 {
@@ -10,16 +11,11 @@ namespace TheStore.SharedModels.Models.Categories
 
 		public int Order { get; set; }
 
-		public string Name { get; set; }
+		public MultilanguageStringDto Name { get; set; }
 
 		public bool Active { get; set; }
 
-		public CreateRequest()
-		{
-
-		}
-
-		public CreateRequest(int order, string name, bool active)
+		public CreateRequest(int order, MultilanguageStringDto name, bool active)
 		{
 			Order = order;
 			Name = name;
