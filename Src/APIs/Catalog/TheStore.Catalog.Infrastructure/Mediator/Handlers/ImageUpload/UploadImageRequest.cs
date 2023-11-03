@@ -1,31 +1,23 @@
-﻿using MediatR;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using Ardalis.GuardClauses;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload
 {
-	public class AddImageRequest : IRequest
+	public class UploadImageRequest : IRequest<string>
 	{
-		public AddImageDto Image { get; set; }
-		public string Location { get; set; }
+		public IFormFile Image { get; }
+		public string Location { get; }
+		public string OldPath { get; }
 
-		public AddImageRequest(AddImageDto image, string location)
+		public UploadImageRequest(IFormFile image, string location, string oldPath)
 		{
+			Guard.Against.Null(image, nameof(image));
+			Guard.Against.NullOrEmpty(location, nameof(location));
+
 			Image = image;
 			Location = location;
-		}
-	}
-
-	public class UpdateImageRequest : IRequest
-	{
-		public string OldPath { get; set; }
-		public UpdateImageDto Image { get; set; }
-		public string Location { get; set; }
-
-		public UpdateImageRequest(string oldPath, UpdateImageDto image, string location)
-		{
 			OldPath = oldPath;
-			Image = image;
-			Location = location;
 		}
 	}
 }
