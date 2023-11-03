@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using System.ComponentModel.DataAnnotations.Schema;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
@@ -8,27 +9,29 @@ namespace TheStore.Catalog.Core.ValueObjects
 	{
 		[NotMapped]
 		public Uri FileUri { get; }
-		public string StringFileUri { get; private set; }
+		public string StringFileUri { get; }
 
 		[NotMapped]
-		public string FileNameWithExtension => Path.GetFileName(FileUri.AbsoluteUri);
-		public string Alt { get; private set; }
+		public string FileNameWithExtension =>
+			Path.GetFileName(FileUri.ToString());
+
+		public MultilanguageString Alt { get; }
+
+		public bool IsMainImage { get; }
 
 		// Ef Core
-		private Image()
-		{
+		private Image() { }
 
-		}
-
-		public Image(string stringFileUri, string alt)
+		public Image(string stringFileUri, MultilanguageString alt, bool isMainImage)
 		{
 			Guard.Against.Null(stringFileUri, nameof(stringFileUri));
-			Guard.Against.NullOrEmpty(alt, nameof(alt));
+			Guard.Against.Null(alt, nameof(alt));
 
 			FileUri = new Uri(stringFileUri, UriKind.RelativeOrAbsolute);
 
 			StringFileUri = stringFileUri;
 			Alt = alt;
+			IsMainImage = isMainImage;
 		}
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()
