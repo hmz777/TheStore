@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Branches
 {
@@ -14,15 +13,6 @@ namespace TheStore.SharedModels.Models.Branches
 		public int BranchId { get; set; }
 
 		[FromBody]
-		public MultilanguageStringDto Name { get; set; }
-
-		[FromBody]
-		public MultilanguageStringDto Description { get; set; }
-
-		[FromBody]
-		public AddressDto Address { get; set; }
-
-		[FromBody]
-		public bool Published { get; set; }
+		public BranchDtoUpdate Branch { get; set; }
 	}
 }

@@ -14,6 +14,6 @@ namespace TheStore.SharedModels.Models.Branches
 		public int BranchId { get; set; }
 
 		[FromForm]
-		public UpdateImageDto Image { get; set; }
+		public UploadImageDto Image { get; set; }
 	}
 }

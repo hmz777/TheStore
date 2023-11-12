@@ -11,10 +11,10 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
-using UpdateImageRequest = TheStore.SharedModels.Models.Branches.UpdateImageRequest;
+using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Catalog.API.Endpoints.Branches.Image
 {
@@ -65,31 +65,20 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 			var image = request.Image;
 			string imagePath;
 
-			if (branch.Image != null)
-			{
-				imagePath = await mediator
-					.Send(new Infrastructure
-					.Mediator
-					.Handlers
-					.ImageUpload
-					.UpdateImageRequest(branch.Image.StringFileUri, image, ResourceFilePaths.BranchesImages), cancellationToken);
-			}
-			else
-			{
-				imagePath = await mediator
-					.Send(new Infrastructure
-					.Mediator
-					.Handlers
-					.ImageUpload
-					.AddImageRequest(new AddImageDto(image.File, image.Alt), ResourceFilePaths.BranchesImages), cancellationToken);
-			}
+			imagePath = await mediator
+				.Send(
+				new UploadImageRequest(
+					image.File,
+					ResourceFilePaths.BranchesImages,
+					branch.Image != null ? branch.Image.StringFileUri : null!),
+					cancellationToken);
 
 			branch.Image = new Core.ValueObjects.Image(imagePath, mapper.Map<MultilanguageString>(image.Alt), image.IsMainImage);
 
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update branch image with id: {Id}", request.BranchId);
+				log.Information("Update the image of branch with id: {Id}", request.BranchId);
 
 			return NoContent();
 		}

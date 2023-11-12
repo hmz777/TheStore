@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<BranchDto>>
+		.WithActionResult<List<BranchDtoRead>>
 	{
 		private readonly IValidator<ListRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Branch> repository;
@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			Description = "Lists catalog branches with pagination using skip and take",
 			OperationId = "Branch.List",
 			Tags = new[] { "Branches" })]
-		public async override Task<ActionResult<List<BranchDto>>> HandleAsync(
+		public async override Task<ActionResult<List<BranchDtoRead>>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -53,7 +53,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 
 			var branches = (await repository
 				.ListAsync(new ListBranchesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<Branch, BranchDto>(mapper);
+				.Map<Branch, BranchDtoRead>(mapper);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("List branches with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);

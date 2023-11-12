@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Branches
 {
@@ -9,9 +9,7 @@ namespace TheStore.SharedModels.Models.Branches
 		public const string RouteTemplate = "branches";
 		public override string Route => RouteTemplate;
 
-		public MultilanguageStringDto Name { get; set; }
-		public MultilanguageStringDto Description { get; set; }
-		public AddressDto Address { get; set; }
-        public bool Published { get; set; }
-    }
+		[FromBody]
+		public BranchDtoUpdate Branch { get; set; }
+	}
 }

@@ -8,15 +8,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 	{
 		public CreateValidator()
 		{
-			RuleFor(x => x.Name)
-				.NotEmpty();
-
-			RuleFor(x => x.Description)
-				.NotEmpty();
-
-			RuleFor(x => x.Address)
+			RuleFor(x => x.Branch)
 				.NotEmpty()
-				.SetValidator(x => new AddressDtoValidator());
+				.SetValidator(x => ModelValidators.BranchDtoUpdateValidator);
 		}
 	}
 }

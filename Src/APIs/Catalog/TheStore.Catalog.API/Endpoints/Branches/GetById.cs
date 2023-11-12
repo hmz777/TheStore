@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetByIdRequest>
-		.WithActionResult<BranchDto>
+		.WithActionResult<BranchDtoUpdate>
 	{
 		private readonly IValidator<GetByIdRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Branch> repository;
@@ -44,7 +44,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			Description = "Gets a branch by id",
 			OperationId = "Branch.GetById",
 			Tags = new[] { "Branches" })]
-		public async override Task<ActionResult<BranchDto>> HandleAsync(
+		public async override Task<ActionResult<BranchDtoUpdate>> HandleAsync(
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 
 			var branch = (await repository
 				.FirstOrDefaultAsync(new GetBranchByIdReadSpec(request.BranchId), cancellationToken))
-				.Map<Branch, BranchDto>(mapper);
+				.Map<Branch, BranchDtoUpdate>(mapper);
 
 			if (branch == null)
 				return NotFound();

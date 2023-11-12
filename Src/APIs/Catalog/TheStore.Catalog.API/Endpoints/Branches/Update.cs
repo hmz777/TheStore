@@ -56,7 +56,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			if (branch == null)
 				return NotFound();
 
-			await RepositoryHelpers.PropertyUpdateAsync(request, branch, mapper, apiRepository);
+			await RepositoryHelpers.PropertyUpdateAsync(request.Branch, branch, mapper, apiRepository);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Update branch with id: {Id}", request.BranchId);

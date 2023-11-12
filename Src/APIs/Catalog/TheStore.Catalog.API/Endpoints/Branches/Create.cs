@@ -16,7 +16,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 {
 	public class Create : EndpointBaseAsync
 		.WithRequest<CreateRequest>
-		.WithActionResult<BranchDto>
+		.WithActionResult<BranchDtoUpdate>
 	{
 		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Branch> apiRepository;
@@ -41,20 +41,20 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		   Description = "Creates a branch",
 		   OperationId = "Branch.Create",
 		   Tags = new[] { "Branches" })]
-		public async override Task<ActionResult<BranchDto>> HandleAsync(
-		[FromBody] CreateRequest request,
+		public async override Task<ActionResult<BranchDtoUpdate>> HandleAsync(
+			CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var branch = await apiRepository.AddAsync(mapper.Map<Branch>(request), cancellationToken);
+			var branch = await apiRepository.AddAsync(mapper.Map<Branch>(request.Branch), cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create branch with name: {Name}", request.Name, request.CorrelationId);
+				log.Information("Create branch with name: {Name}", request.Branch.Name, request.CorrelationId);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { BranchId = branch.Id }, mapper.Map<BranchDto>(branch));
+			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { BranchId = branch.Id }, mapper.Map<BranchDtoUpdate>(branch));
 		}
 	}
 }

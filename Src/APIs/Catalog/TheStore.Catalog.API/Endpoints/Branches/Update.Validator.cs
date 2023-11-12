@@ -11,15 +11,9 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 			RuleFor(x => x.BranchId)
 				.NotEmpty();
 
-			RuleFor(x => x.Name)
-				.NotEmpty();
-
-			RuleFor(x => x.Description)
-				.NotEmpty();
-
-			RuleFor(x => x.Address)
+			RuleFor(x => x.Branch)
 				.NotEmpty()
-				.SetValidator(x => new AddressDtoValidator());
+				.SetValidator(ModelValidators.BranchDtoUpdateValidator);
 		}
 	}
 }
