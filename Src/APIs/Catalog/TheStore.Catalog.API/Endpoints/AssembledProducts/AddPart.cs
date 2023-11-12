@@ -64,25 +64,26 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 				return NotFound("Part not found");
 
 			var assembledProduct = await assembledProductRepository
-				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
+				.GetByIdAsync(request.ProductId, cancellationToken);
 
 			if (assembledProduct == null)
 				return NotFound("Assembled product not found");
 
-			if (assembledProduct.Parts.Contains(partId))
+			if (assembledProduct.Parts.TryGetValue(partId, out _))
 				return Conflict("Part already exists");
 
-			assembledProduct.AddPart(partId);
+			assembledProduct.AddPart(partId, request.Sku);
 
 			await assembledProductRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Add part with id: {PartId} to assembled product with id: {Id}", request.PartId, request.ProductId);
+				log.Information("Add part with id: {PartId} and SKU: {Sku} to assembled product with id: {Id}",
+					request.PartId, request.Sku, request.ProductId);
 
 			return CreatedAtRoute(
 			GetByIdRequest.RouteName,
-				routeValues: new { ProductId = assembledProduct.Id.Id },
-				mapper.Map<AssembledProductDto>(assembledProduct));
+				routeValues: new { ProductId = assembledProduct.Id },
+				mapper.Map<AssembledProductDtoRead>(assembledProduct));
 		}
 	}
 }

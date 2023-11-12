@@ -10,11 +10,6 @@ namespace TheStore.SharedModels.Models.Products
 
 		public int ProductId { get; set; }
 
-		public DeleteAssembledRequest()
-		{
-
-		}
-
 		public DeleteAssembledRequest(int productId)
 		{
 			ProductId = productId;

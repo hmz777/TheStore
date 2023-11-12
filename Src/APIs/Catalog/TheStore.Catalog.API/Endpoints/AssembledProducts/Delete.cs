@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 				return NotFound();
 			}
 
-			await apiRepository.ExecuteDeleteAsync<AssembledProduct, ProductId>(assembledProduct.Id, cancellationToken);
+			await apiRepository.ExecuteDeleteAsync<AssembledProduct, int>(assembledProduct.Id, cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Delete assembled product with id: {Id}", request.ProductId);

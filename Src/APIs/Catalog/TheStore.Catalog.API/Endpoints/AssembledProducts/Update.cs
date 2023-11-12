@@ -53,14 +53,14 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 				return BadRequest(validation.AsErrors());
 
 			var assembledProduct = await apiRepository
-				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
+				.GetByIdAsync(request.ProductId, cancellationToken);
 
 			if (assembledProduct == null)
 			{
 				return NotFound();
 			}
 
-			await RepositoryHelpers.PropertyUpdateAsync(request, assembledProduct, mapper, apiRepository);
+			await RepositoryHelpers.PropertyUpdateAsync(request.AssembledProduct, assembledProduct, mapper, apiRepository);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Update assembled product with id: {Id}", request.ProductId);

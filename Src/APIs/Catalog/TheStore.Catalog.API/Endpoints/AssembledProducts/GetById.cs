@@ -19,7 +19,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetAssembledByIdRequest>
-		.WithActionResult<AssembledProductDto>
+		.WithActionResult<AssembledProductDtoRead>
 	{
 		private readonly IValidator<GetAssembledByIdRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, AssembledProduct> repository;
@@ -45,7 +45,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			Description = "Gets an assembled product by id",
 			OperationId = "Product.Assembled.GetById",
 			Tags = new[] { "AssembledProducts" })]
-		public async override Task<ActionResult<AssembledProductDto>> HandleAsync(
+		public async override Task<ActionResult<AssembledProductDtoRead>> HandleAsync(
 		[FromRoute] GetAssembledByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -56,7 +56,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			var assembledProduct = (await repository
 				.FirstOrDefaultAsync(
 				new GetAssembledProductByIdReadSpec(new ProductId(request.ProductId)), cancellationToken))
-				.Map<AssembledProduct, AssembledProductDto>(mapper);
+				.Map<AssembledProduct, AssembledProductDtoRead>(mapper);
 
 			if (assembledProduct == null)
 				return NotFound();

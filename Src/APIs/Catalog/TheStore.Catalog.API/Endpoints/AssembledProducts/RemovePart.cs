@@ -50,12 +50,12 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			var partId = new ProductId(request.PartId);
 
 			var assembledProduct = await assembledProductRepository
-				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
+				.GetByIdAsync(request.ProductId, cancellationToken);
 
 			if (assembledProduct == null)
 				return NotFound("Assembled product not found");
 
-			if (assembledProduct.Parts.Contains(partId) == false)
+			if (assembledProduct.Parts.TryGetValue(partId, out _) == false)
 				return NotFound("Part not found");
 
 			assembledProduct.RemovePart(partId);

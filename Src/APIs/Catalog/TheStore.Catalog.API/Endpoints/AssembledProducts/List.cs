@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListAssembledRequest>
-		.WithActionResult<List<AssembledProductDto>>
+		.WithActionResult<List<AssembledProductDtoRead>>
 	{
 		private readonly IValidator<ListAssembledRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, AssembledProduct> repository;
@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			Description = "Lists assembled products with pagination using skip and take",
 			OperationId = "Product.Assembled.List",
 			Tags = new[] { "AssembledProducts" })]
-		public async override Task<ActionResult<List<AssembledProductDto>>> HandleAsync(
+		public async override Task<ActionResult<List<AssembledProductDtoRead>>> HandleAsync(
 			[FromQuery] ListAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -53,7 +53,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 
 			var assembledProducts = (await repository
 				.ListAsync(new ListAssembledProductsPaginationReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<AssembledProduct, AssembledProductDto>(mapper);
+				.Map<AssembledProduct, AssembledProductDtoRead>(mapper);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("List assembled products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);

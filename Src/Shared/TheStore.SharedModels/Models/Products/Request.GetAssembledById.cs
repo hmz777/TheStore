@@ -11,8 +11,6 @@ namespace TheStore.SharedModels.Models.Products
 
 		public int ProductId { get; set; }
 
-		public GetAssembledByIdRequest() { }
-
 		public GetAssembledByIdRequest(int productId)
 		{
 			ProductId = productId;

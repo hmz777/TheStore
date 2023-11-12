@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TheStore.Catalog.API.Validators;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.AssembledProducts
@@ -10,20 +11,9 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
-			RuleFor(x => x.CategoryId)
-				.NotEmpty();
-
-			RuleFor(x => x.Name)
-				 .NotEmpty();
-
-			RuleFor(x => x.Description)
-				.NotEmpty();
-
-			RuleFor(x => x.ShortDescription)
-				.NotEmpty();
-
-			RuleFor(x => x.Sku)
-				.NotEmpty();
+			RuleFor(x => x.AssembledProduct)
+				.NotEmpty()
+				.SetValidator(ModelValidators.AssembledProductDtoUpdateValidator);
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 {
 	public class Create : EndpointBaseAsync
 		.WithRequest<CreateAssembledRequest>
-		.WithActionResult<AssembledProductDto>
+		.WithActionResult<AssembledProductDtoRead>
 	{
 		private readonly IValidator<CreateAssembledRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, AssembledProduct> apiRepository;
@@ -41,8 +41,8 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 		   Description = "Creates a single product",
 		   OperationId = "Product.Single.Create",
 		   Tags = new[] { "AssembledProducts" })]
-		public async override Task<ActionResult<AssembledProductDto>> HandleAsync(
-		[FromBody] CreateAssembledRequest request,
+		public async override Task<ActionResult<AssembledProductDtoRead>> HandleAsync(
+			CreateAssembledRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -50,15 +50,15 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 				return BadRequest(validation.AsErrors());
 
 			var assembledProduct = await apiRepository
-				.AddAsync(mapper.Map<AssembledProduct>(request), cancellationToken);
+				.AddAsync(mapper.Map<AssembledProduct>(request.AssembledProduct), cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create assembled product with name: {Name}", request.Name);
+				log.Information("Create assembled product with name: {Name}", request.AssembledProduct.Name);
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,
-				routeValues: new { ProductId = assembledProduct.Id.Id },
-				mapper.Map<AssembledProductDto>(assembledProduct));
+				routeValues: new { ProductId = assembledProduct.Id },
+				mapper.Map<AssembledProductDtoRead>(assembledProduct));
 		}
 	}
 }
