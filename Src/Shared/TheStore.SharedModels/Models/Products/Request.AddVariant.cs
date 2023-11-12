@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Products
 {
+	[DisplayName("Product." + nameof(AddVariantRequest))]
 	public class AddVariantRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/variants";
@@ -13,6 +14,6 @@ namespace TheStore.SharedModels.Models.Products
 		public int ProductId { get; set; }
 
 		[FromBody]
-		public ProductVariantDto ProductVariant { get; set; }
+		public ProductVariantDtoUpdate ProductVariant { get; set; }
 	}
 }

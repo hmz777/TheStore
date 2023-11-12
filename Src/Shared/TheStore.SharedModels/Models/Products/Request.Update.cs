@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(UpdateRequest))]
+	[DisplayName("Product." + nameof(UpdateRequest))]
 	public class UpdateRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}";
@@ -13,16 +13,6 @@ namespace TheStore.SharedModels.Models.Products
 		public int ProductId { get; set; }
 
 		[FromBody]
-		public int CategoryId { get; set; }
-
-		[FromBody]
-		public string Name { get; set; }
-
-		public UpdateRequest(int productId, int categoryId, string name)
-		{
-			ProductId = productId;
-			CategoryId = categoryId;
-			Name = name;
-		}
+        public ProductDtoUpdate Product { get; set; }
 	}
 }

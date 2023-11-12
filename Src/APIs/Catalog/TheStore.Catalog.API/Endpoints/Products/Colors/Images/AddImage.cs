@@ -21,17 +21,17 @@ using TheStore.SharedModels.Models.Products;
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
 	public class AddImage : EndpointBaseAsync
-		.WithRequest<AddImageToColorRequest>
+		.WithRequest<AddImageToVariantRequest>
 		.WithActionResult
 	{
-		private readonly IValidator<AddImageToColorRequest> validator;
+		private readonly IValidator<AddImageToVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly IMapper mapper;
 		private readonly IMediator mediator;
 		private readonly Serilog.ILogger log = Log.ForContext<AddImage>();
 
 		public AddImage(
-			IValidator<AddImageToColorRequest> validator,
+			IValidator<AddImageToVariantRequest> validator,
 			IApiRepository<CatalogDbContext, Product> apiRepository,
 			IMapper mapper,
 			IMediator mediator)
@@ -42,7 +42,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			this.mediator = mediator;
 		}
 
-		[HttpPost(AddImageToColorRequest.RouteTemplate)]
+		[HttpPost(AddImageToVariantRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
@@ -52,7 +52,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		   OperationId = "Product.Single.Variant.Color.Image.Add",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			AddImageToColorRequest request,
+			AddImageToVariantRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -84,7 +84,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,
 				routeValues: new { ProductId = singleProduct.Id.Id },
-				mapper.Map<ProductDto>(singleProduct));
+				mapper.Map<ProductDtoRead>(singleProduct));
 		}
 	}
 }

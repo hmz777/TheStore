@@ -3,7 +3,7 @@ using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
-	public class RemoveImageValidator : AbstractValidator<RemoveImageFromColorRequest>
+	public class RemoveImageValidator : AbstractValidator<RemoveImageFromVariantRequest>
 	{
 		public RemoveImageValidator()
 		{

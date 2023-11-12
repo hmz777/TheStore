@@ -13,10 +13,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public Currency Currency { get; private set; }
 
 		// Ef Core
-		private Money()
-		{
-
-		}
+		private Money() { }
 
 		public Money(decimal amount, Currency currency)
 		{

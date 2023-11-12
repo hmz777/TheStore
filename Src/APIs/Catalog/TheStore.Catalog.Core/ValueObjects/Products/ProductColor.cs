@@ -40,7 +40,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 				image
 			};
 
-			return new ProductColor(ColorCode, IsMainColor, newImages);
+			return new ProductColor(ColorName, ColorCode, IsMainColor, newImages);
 		}
 
 		public ProductColor RemoveImage(Image image)
@@ -50,7 +50,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 			var newImages = new List<Image>(images);
 			newImages.Remove(image);
 
-			return new ProductColor(ColorCode, IsMainColor, newImages);
+			return new ProductColor(ColorName, ColorCode, IsMainColor, newImages);
 		}
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()

@@ -4,8 +4,8 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(AddImageToColorRequest))]
-	public class AddImageToColorRequest : RequestBase
+	[DisplayName("Product." + nameof(AddImageToVariantRequest))]
+	public class AddImageToVariantRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/variants/{Sku}/images";
 		public override string Route =>

@@ -5,6 +5,7 @@ using TheStore.Catalog.Core.Exceptions;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
@@ -14,18 +15,31 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 		public CategoryId CategoryId { get; set; }
 		public string Name { get; set; }
+		public MultilanguageString ShortDescription { get; set; }
+		public MultilanguageString Description { get; set; }
 		public bool Published { get; set; }
 
 		[NotMapped]
 		public ReadOnlyCollection<ProductVariant> Variants => variants.AsReadOnly();
 
-		public Product(CategoryId categoryId, string name, bool published, List<ProductVariant> variants = null!)
+		public Product(
+			CategoryId categoryId,
+			string name,
+			MultilanguageString shortDescription,
+			MultilanguageString description,
+			bool published,
+			List<ProductVariant> variants = null!)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
+			Guard.Against.NegativeOrZero(categoryId.Id, nameof(categoryId.Id));
 			Guard.Against.NullOrEmpty(name, nameof(name));
+			Guard.Against.Null(shortDescription, nameof(shortDescription));
+			Guard.Against.Null(description, nameof(description));
 
 			CategoryId = categoryId;
 			Name = name;
+			ShortDescription = shortDescription;
+			Description = description;
 			Published = published;
 			this.variants = variants ?? new();
 		}

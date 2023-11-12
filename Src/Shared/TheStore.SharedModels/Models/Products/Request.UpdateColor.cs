@@ -4,7 +4,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(UpdateColorRequest))]
+	[DisplayName("Product." + nameof(UpdateColorRequest))]
 	public class UpdateColorRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}";
@@ -24,8 +24,6 @@ namespace TheStore.SharedModels.Models.Products
 
 		[FromBody]
 		public InventoryRecordDto InventoryRecord { get; set; }
-
-		public UpdateColorRequest() { }
 
 		public UpdateColorRequest(int productId, string colorCode, UpdateProductColorDto color, InventoryRecordDto inventoryRecord)
 		{

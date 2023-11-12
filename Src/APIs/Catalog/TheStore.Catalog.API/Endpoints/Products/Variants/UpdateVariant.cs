@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
-using TheStore.ApiCommon.Data.Helpers;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -14,19 +13,19 @@ using TheStore.Catalog.Infrastructure.Data;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
 
-namespace TheStore.Catalog.API.Endpoints.Products
+namespace TheStore.Catalog.API.Endpoints.Products.Variants
 {
-	public class Update : EndpointBaseAsync
-		.WithRequest<UpdateRequest>
+	public class UpdateVariant : EndpointBaseAsync
+		.WithRequest<UpdateVariantRequest>
 		.WithActionResult
 	{
-		private readonly IValidator<UpdateRequest> validator;
+		private readonly IValidator<UpdateVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly IMapper mapper;
-		private readonly Serilog.ILogger log = Log.ForContext<Update>();
+		private readonly Serilog.ILogger log = Log.ForContext<UpdateVariant>();
 
-		public Update(
-			IValidator<UpdateRequest> validator,
+		public UpdateVariant(
+			IValidator<UpdateVariantRequest> validator,
 			IApiRepository<CatalogDbContext, Product> apiRepository,
 			IMapper mapper)
 		{
@@ -35,17 +34,17 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			this.mapper = mapper;
 		}
 
-		[HttpPut(UpdateRequest.RouteTemplate)]
+		[HttpPut(UpdateVariantRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[SwaggerOperation(
-		   Summary = "Updates a single product",
-		   Description = "Updates a single product",
-		   OperationId = "Product.Single.Update",
+		   Summary = "Updates a product variant",
+		   Description = "Updates a product variant",
+		   OperationId = "Product.Variant.Update",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			UpdateRequest request,
+			UpdateVariantRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -55,12 +54,18 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			var product = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
 			if (product == null)
-				return NotFound();
+				return NotFound("Product not found");
 
-			await RepositoryHelpers.PropertyUpdateAsync(request.Product, product, mapper, apiRepository);
+			var variant = product.Variants.FirstOrDefault(p => p.Sku == request.Sku);
+
+			if (variant == null)
+				return NotFound("Variant not found");
+
+			mapper.Map(request.Variant, variant);
+			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Update single product with id: {Id}", request.ProductId);
+				log.Information("Update variant with SKU: {Sku} in product with id: {Id}", request.Sku, request.ProductId);
 
 			return NoContent();
 		}

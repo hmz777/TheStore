@@ -2,7 +2,7 @@
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(GetByIdRequest))]
+	[DisplayName("Product." + nameof(GetByIdRequest))]
 	public class GetByIdRequest : RequestBase
 	{
 		public const string RouteName = "Products.Id";

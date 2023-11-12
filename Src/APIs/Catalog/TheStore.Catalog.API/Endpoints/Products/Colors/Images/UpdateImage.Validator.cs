@@ -4,7 +4,7 @@ using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
-	public class UpdateImageValidator : AbstractValidator<UpdateImageOfColorRequest>
+	public class UpdateImageValidator : AbstractValidator<UpdateImageOfVariantRequest>
 	{
 		public UpdateImageValidator()
 		{

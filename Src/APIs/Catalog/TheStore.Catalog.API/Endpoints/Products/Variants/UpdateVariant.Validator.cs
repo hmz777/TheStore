@@ -4,14 +4,17 @@ using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Variants
 {
-	public class AddVariantValidator : AbstractValidator<AddVariantRequest>
+	public class UpdateVariantValidator : AbstractValidator<UpdateVariantRequest>
 	{
-		public AddVariantValidator()
+		public UpdateVariantValidator()
 		{
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
-			RuleFor(x => x.ProductVariant)
+			RuleFor(x => x.Sku)
+				.NotEmpty();
+
+			RuleFor(x => x.Variant)
 				.NotEmpty()
 				.SetValidator(ModelValidators.ProductVariantDtoUpdateValidator);
 		}

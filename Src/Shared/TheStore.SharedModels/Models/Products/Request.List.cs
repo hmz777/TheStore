@@ -2,7 +2,7 @@
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(ListRequest))]
+	[DisplayName("Product." + nameof(ListRequest))]
 	public class ListRequest : RequestBase
 	{
 		public const string RouteTemplate = "products";

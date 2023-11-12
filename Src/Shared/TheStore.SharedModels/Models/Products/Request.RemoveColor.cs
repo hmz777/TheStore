@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(RemoveColorRequest))]
+	[DisplayName("Product." + nameof(RemoveColorRequest))]
 	public class RemoveColorRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}";

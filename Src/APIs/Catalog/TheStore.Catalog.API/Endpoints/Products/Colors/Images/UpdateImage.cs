@@ -22,18 +22,18 @@ using TheStore.SharedModels.Models.Products;
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
 	public class UpdateImage : EndpointBaseAsync
-		.WithRequest<UpdateImageOfColorRequest>
+		.WithRequest<UpdateImageOfVariantRequest>
 		.WithActionResult
 	{
 
-		private readonly IValidator<UpdateImageOfColorRequest> validator;
+		private readonly IValidator<UpdateImageOfVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly IMediator mediator;
 		private readonly IMapper mapper;
 		private readonly Serilog.ILogger log = Log.ForContext<UpdateImage>();
 
 		public UpdateImage(
-			IValidator<UpdateImageOfColorRequest> validator,
+			IValidator<UpdateImageOfVariantRequest> validator,
 			IApiRepository<CatalogDbContext, Product> apiRepository,
 			IMediator mediator,
 			IMapper mapper)
@@ -44,7 +44,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			this.mapper = mapper;
 		}
 
-		[HttpPut(UpdateImageOfColorRequest.RouteTemplate)]
+		[HttpPut(UpdateImageOfVariantRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		   OperationId = "Product.Single.Variant.Color.Image.Update",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			UpdateImageOfColorRequest request,
+			UpdateImageOfVariantRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

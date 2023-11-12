@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using CSharpFunctionalExtensions;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using TheStore.Catalog.Core.ValueObjects;
@@ -8,7 +7,7 @@ using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-	public class ProductVariant : ValueObject
+	public class ProductVariant
 	{
 		private List<ProductReview> reviews = new();
 
@@ -16,15 +15,19 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public ReadOnlyCollection<ProductReview> Reviews => reviews.AsReadOnly();
 
 		public string Name { get; set; }
-		public string Sku { get; }
-		public MultilanguageString Description { get; }
-		public MultilanguageString ShortDescription { get; }
-		public Money Price { get; }
-		public InventoryRecord Inventory { get; }
-		public ProductColor Color { get; }
+		public string Sku { get; set; }
+		public MultilanguageString Description { get; set; }
+		public MultilanguageString ShortDescription { get; set; }
+		public Money Price { get; set; }
+		public InventoryRecord Inventory { get; set; }
+		public ProductColor Color { get; set; }
 		public VariantOptions Options { get; set; }
-		public Dimentions Dimentions { get; }
-		public ProductSpecifications Sepcifications { get; }
+		public Dimentions Dimentions { get; set; }
+		public ProductSpecifications Sepcifications { get; set; }
+		public bool Published { get; set; }
+
+		// EF Core
+		public ProductVariant() { }
 
 		public ProductVariant(
 			string name,
@@ -37,6 +40,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			VariantOptions options,
 			Dimentions dimentions,
 			ProductSpecifications sepcifications,
+			bool published,
 			List<ProductReview> reviews = null!)
 		{
 			Guard.Against.NullOrEmpty(sku, nameof(sku));
@@ -58,12 +62,8 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Options = options;
 			Dimentions = dimentions;
 			Sepcifications = sepcifications;
+			Published = published;
 			this.reviews = reviews ?? new();
-		}
-
-		protected override IEnumerable<IComparable> GetEqualityComponents()
-		{
-			yield return Sku;
 		}
 	}
 }

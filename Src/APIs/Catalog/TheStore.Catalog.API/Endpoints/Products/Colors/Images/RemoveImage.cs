@@ -16,22 +16,22 @@ using TheStore.SharedModels.Models.Products;
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
 	public class RemoveImage : EndpointBaseAsync
-		.WithRequest<RemoveImageFromColorRequest>
+		.WithRequest<RemoveImageFromVariantRequest>
 		.WithActionResult
 	{
-		private readonly IValidator<RemoveImageFromColorRequest> validator;
+		private readonly IValidator<RemoveImageFromVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly Serilog.ILogger log = Log.ForContext<RemoveImage>();
 
 		public RemoveImage(
-			IValidator<RemoveImageFromColorRequest> validator,
+			IValidator<RemoveImageFromVariantRequest> validator,
 			IApiRepository<CatalogDbContext, Product> apiRepository)
 		{
 			this.validator = validator;
 			this.apiRepository = apiRepository;
 		}
 
-		[HttpDelete(RemoveImageFromColorRequest.RouteTemplate)]
+		[HttpDelete(RemoveImageFromVariantRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -41,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		   OperationId = "Product.Single.Variant.Color.Image.Remove",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
-			[FromRoute] RemoveImageFromColorRequest request,
+			[FromRoute] RemoveImageFromVariantRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

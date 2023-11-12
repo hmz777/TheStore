@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TheStore.Catalog.API.Validators;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products
@@ -10,11 +11,9 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			RuleFor(x => x.ProductId)
 				.NotEmpty();
 
-			RuleFor(x => x.CategoryId)
-				.NotEmpty();
-
-			RuleFor(x => x.Name)
-				 .NotEmpty();
+			RuleFor(x => x.Product)
+				.NotEmpty()
+				.SetValidator(ModelValidators.ProductDtoUpdateValidator);
 		}
 	}
 }
