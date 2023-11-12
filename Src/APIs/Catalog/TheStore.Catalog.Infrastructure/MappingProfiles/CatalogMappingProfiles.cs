@@ -18,65 +18,58 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 		public CatalogMappingProfiles()
 		{
 			// Categories
-			CreateMap<Category, CategoryDto>()
+			CreateMap<Category, CategoryDtoRead>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id.Id));
 
-			CreateMap<SharedModels.Models.Categories.CreateRequest, Category>();
-			CreateMap<SharedModels.Models.Categories.UpdateRequest, Category>();
+			CreateMap<Category, CategoryDtoUpdate>().ReverseMap();
 
-			// Single Products
-			CreateMap<Product, ProductDto>()
+			// Products
+			CreateMap<Product, ProductDtoRead>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
-				.ForMember(dest => dest.ProductColors, opt => opt.MapFrom("productColors"));
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id))
+				.ForMember(dest => dest.Variants, opt => opt.MapFrom("variants"));
 
-			CreateMap<SharedModels.Models.Products.CreateRequest, Product>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
-
-			CreateMap<SharedModels.Models.Products.UpdateRequest, Product>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+			CreateMap<ProductDtoUpdate, Product>()
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
+				.ReverseMap()
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
 			// Assembled Products
-			CreateMap<AssembledProduct, AssembledProductDto>()
-				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
+			CreateMap<AssembledProduct, AssembledProductDtoRead>()
 				.ForMember(dest => dest.Parts,
-					opt => opt.MapFrom(src => src.Parts.Select(x => x.Id).ToList()));
+					opt => opt.MapFrom(src => src.Parts.ToDictionary(x => x.Key.Id, x => x.Value)));
 
-			CreateMap<CreateAssembledRequest, AssembledProduct>()
+			CreateMap<AssembledProductDtoUpdate, AssembledProduct>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
 
-			CreateMap<UpdateAssembledRequest, AssembledProduct>()
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)));
+			// Branches
+			CreateMap<Branch, BranchDtoRead>();
+			CreateMap<BranchDtoUpdate, Branch>().ReverseMap();
 
 			// Value Objects
+
+			CreateMap<LocalizedString, LocalizedStringDto>().ReverseMap();
+			CreateMap<CultureCode, CultureCodeDto>().ReverseMap();
+
 			CreateMap<MultilanguageString, MultilanguageStringDto>()
 				.ForMember(dest => dest.LocalizedStrings, opt => opt.MapFrom("localizedStrings"))
 				.ReverseMap()
-				.ForMember("localizedStrings", opt => opt.MapFrom(src => src.LocalizedStrings));
+				.ForMember("localizedStrings", opt => opt.MapFrom(src => src.LocalizedStrings))
+				.ForMember(dest => dest.LocalizedStrings, opt => opt.Ignore());
 
 			CreateMap<Money, MoneyDto>().ReverseMap();
 			CreateMap<Currency, CurrencyDto>().ReverseMap();
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
-			CreateMap<AddImageDto, Image>();
-			CreateMap<UpdateImageDto, Image>();
 
-			CreateMap<ProductColor, ProductColorDtoUpdate>()
+			CreateMap<ProductColor, ProductColorDtoRead>()
 				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
 				.ReverseMap()
 				.ForMember("images", opt => opt.MapFrom(src => src.Images));
 
-			CreateMap<AddProductColorDto, ProductColor>()
-				.ForMember(dest => dest.Images, opt => opt.Ignore());
-
 			CreateMap<UpdateProductColorDto, ProductColor>()
 				.ForMember(dest => dest.Images, opt => opt.Ignore());
 
-			// Branches
-			CreateMap<Branch, BranchDto>();
-			CreateMap<SharedModels.Models.Branches.CreateRequest, Branch>();
-			CreateMap<SharedModels.Models.Branches.UpdateRequest, Branch>();
-
-			// Value Objects
 			CreateMap<Address, AddressDto>().ReverseMap();
 			CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 		}
