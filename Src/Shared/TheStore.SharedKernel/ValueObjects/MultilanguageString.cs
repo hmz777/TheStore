@@ -7,12 +7,14 @@ namespace TheStore.SharedKernel.ValueObjects
 {
 	public class MultilanguageString : ValueObject
 	{
-		private readonly List<LocalizedString> localizedStrings = new();
+		private List<LocalizedString> localizedStrings = new();
 
 		[NotMapped]
 		public ReadOnlyCollection<LocalizedString> LocalizedStrings => localizedStrings.AsReadOnly();
 
-		public MultilanguageString(List<LocalizedString> localizedStrings = null!)
+		public MultilanguageString() { }
+
+		public MultilanguageString(List<LocalizedString> localizedStrings)
 		{
 			this.localizedStrings = localizedStrings ?? new();
 		}
@@ -20,9 +22,40 @@ namespace TheStore.SharedKernel.ValueObjects
 		public string? GetString(CultureCode cultureCode)
 			=> localizedStrings.Where(ls => ls.CultureCode == cultureCode).FirstOrDefault()?.Value;
 
+		public MultilanguageString(LocalizedString initialString)
+		{
+			Guard.Against.Null(initialString, nameof(initialString));
+
+			localizedStrings.Add(initialString);
+		}
+
+		public MultilanguageString(string value, CultureCode cultureCode)
+		{
+			Guard.Against.NullOrEmpty(value, nameof(value));
+			Guard.Against.Null(cultureCode, nameof(cultureCode));
+
+			var initialLocalizedString = new LocalizedString(value, cultureCode);
+			localizedStrings.Add(initialLocalizedString);
+		}
+
 		public void AddLocalizedString(LocalizedString localizedString)
 		{
 			Guard.Against.Null(localizedString, nameof(localizedString));
+
+			if (localizedStrings.Contains(localizedString))
+			{
+				return;
+			}
+
+			localizedStrings.Add(localizedString);
+		}
+
+		public void AddLocalizedString(string value, CultureCode cultureCode)
+		{
+			Guard.Against.NullOrEmpty(value, nameof(value));
+			Guard.Against.Null(cultureCode, nameof(cultureCode));
+
+			var localizedString = new LocalizedString(value, cultureCode);
 
 			if (localizedStrings.Contains(localizedString))
 			{
@@ -71,6 +104,9 @@ namespace TheStore.SharedKernel.ValueObjects
 
 	public class CultureCode : ValueObject
 	{
+		public static readonly CultureCode English = new("en-US");
+		public static readonly CultureCode Arabic = new("ar-SY");
+
 		public string Code { get; }
 
 		public CultureCode(string code)
