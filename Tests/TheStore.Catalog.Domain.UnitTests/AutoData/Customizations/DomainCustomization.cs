@@ -11,6 +11,7 @@ namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 			fixture.Customize(new InventoryRecordCustomization());
 			fixture.Customize(new CurrencyCustomization());
 			fixture.Customize(new MoneyCustomization());
+			fixture.Customize(new MultilanguageStringCustomization());
 		}
 	}
 }
