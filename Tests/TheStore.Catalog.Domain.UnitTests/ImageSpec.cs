@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using TheStore.Catalog.Core.ValueObjects;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Domain.UnitTests
 {
@@ -12,7 +13,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData("http://www.imageuri.com/image", "Image alt")]
 		public void Should_Create_Valid_Image(string uri, string alt)
 		{
-			var action = () => new Image(uri, alt, false);
+			var action = () => new Image(uri, new MultilanguageString(alt, CultureCode.English), false);
 
 			action.Should().NotThrow<Exception>();
 		}

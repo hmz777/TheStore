@@ -5,6 +5,7 @@ using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Domain.UnitTests
 {
@@ -34,10 +35,12 @@ namespace TheStore.Catalog.Domain.UnitTests
 		#region Product Color
 
 		[Theory]
-		[InlineData("notAHexColor")]
-		public void Cant_Create_Invalid_Product_Color(string colorCode)
+		[InlineData(null, "notAHexColor")]
+		[InlineData(null, "#000000")]
+		[InlineData("Black", null)]
+		public void Cant_Create_Invalid_Product_Color(string colorName, string colorCode)
 		{
-			var action = () => new ProductColor(colorCode, false, InventoryRecord.Empty, new List<Image>());
+			var action = () => new ProductColor(colorName, colorCode, false, new List<Image>());
 
 			action.Should().Throw<ArgumentException>();
 		}
@@ -45,7 +48,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[Fact]
 		public void Can_Create_Valid_Product_Color()
 		{
-			var action = () => new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
+			var action = () => new ProductColor("Black", "000000", false, new List<Image>());
 
 			action.Should().NotThrow();
 		}
@@ -57,7 +60,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
+			var sut = new ProductColor("Black", "000000", false, new List<Image>());
 
 			sut = sut.AddImage(image);
 
@@ -71,7 +74,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("000000", false, InventoryRecord.Empty, new List<Image>());
+			var sut = new ProductColor("Black", "000000", false, new List<Image>());
 
 			sut = sut.AddImage(image);
 			sut = sut.RemoveImage(image);
@@ -84,23 +87,21 @@ namespace TheStore.Catalog.Domain.UnitTests
 		#region Product
 
 		[Theory]
-		[InlineData(0, null, "desc", "sdesc", "sku")]
-		[InlineData(1, null, "desc", "sdesc", "sku")]
-		[InlineData(1, "name", null, "sdesc", "sku")]
-		[InlineData(1, "name", "desc", null, "sku")]
-		[InlineData(1, "name", "desc", "sdesc", null)]
-		public void Cant_Create_Valid_Product(int categoryId, string name, string description, string shortDescription, string sku)
+		[InlineData(0, null)]
+		[InlineData(1, null)]
+		[InlineData(0, "name")]
+		public void Cant_Create_Valid_Product(int categoryId, string name)
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
 			var action = () => new Product(
 				new CategoryId(categoryId),
-				name, description,
-				shortDescription,
-				sku,
-				fixture.Create<Money>(),
-				fixture.CreateMany<ProductColor>().ToList());
+				name,
+				fixture.Create<MultilanguageString>(),
+				fixture.Create<MultilanguageString>(),
+				false,
+				fixture.CreateMany<ProductVariant>().ToList());
 
 			action.Should().Throw<Exception>();
 		}
@@ -117,31 +118,31 @@ namespace TheStore.Catalog.Domain.UnitTests
 		}
 
 		[Fact]
-		public void Can_Add_Color_To_Product()
+		public void Can_Add_Variant_To_Product()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
-			var color = fixture.Create<ProductColor>();
+			var variant = fixture.Create<ProductVariant>();
 
 			var sut = fixture.Create<Product>();
 
-			sut.AddColor(color);
+			sut.AddVariant(variant);
 
-			sut.ProductColors.Should().Contain(color);
+			sut.Variants.Should().Contain(variant);
 		}
 
 		[Fact]
-		public void Can_Remove_Color_To_Product()
+		public void Can_Remove_Variant_From_Product()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
-			var color = fixture.Create<ProductColor>();
+			var variant = fixture.Create<ProductVariant>();
 
 			var sut = fixture.Create<Product>();
 
-			sut.RemoveColor(color);
+			sut.RemoveVariant(variant);
 
-			sut.ProductColors.Should().NotContain(color);
+			sut.Variants.Should().NotContain(variant);
 		}
 
 		#endregion
@@ -153,13 +154,14 @@ namespace TheStore.Catalog.Domain.UnitTests
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
-			var newPartId = new ProductId(1);
+			var partId = new ProductId(1);
+			var variantSku = fixture.Create<string>();
 
 			var sut = fixture.Create<AssembledProduct>();
 
-			sut.AddPart(newPartId);
+			sut.AddPart(partId, variantSku);
 
-			sut.Parts.Should().Contain(newPartId);
+			sut.Parts.Should().Contain(KeyValuePair.Create(partId, variantSku));
 		}
 
 		[Fact]
@@ -167,15 +169,16 @@ namespace TheStore.Catalog.Domain.UnitTests
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
-			var newPartId = new ProductId(1);
+			var partId = new ProductId(1);
+			var variantSku = fixture.Create<string>();
 
 			var sut = fixture.Create<AssembledProduct>();
-			sut.AddPart(newPartId);
+			sut.AddPart(partId, variantSku);
 
-			var result = sut.RemovePart(newPartId);
+			var result = sut.RemovePart(partId);
 
 			result.Should().Be(true);
-			sut.Parts.Should().NotContain(newPartId);
+			sut.Parts.Should().NotContain(KeyValuePair.Create(partId, variantSku));
 		}
 
 		#endregion
