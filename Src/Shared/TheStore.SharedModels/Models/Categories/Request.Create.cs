@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace TheStore.SharedModels.Models.Categories
 {
@@ -9,17 +9,7 @@ namespace TheStore.SharedModels.Models.Categories
 		public const string RouteTemplate = "categories";
 		public override string Route => RouteTemplate;
 
-		public int Order { get; set; }
-
-		public MultilanguageStringDto Name { get; set; }
-
-		public bool Active { get; set; }
-
-		public CreateRequest(int order, MultilanguageStringDto name, bool active)
-		{
-			Order = order;
-			Name = name;
-			Active = active;
-		}
+		[FromBody]
+		public CategoryDtoUpdate Category { get; set; }
 	}
 }

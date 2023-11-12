@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TheStore.Catalog.API.Validators;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
@@ -10,12 +11,9 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			RuleFor(x => x.CategoryId)
 				.NotEmpty();
 
-			RuleFor(x => x.Name)
-				.NotEmpty();
-
-			RuleFor(x => x.Order)
+			RuleFor(x => x.Category)
 				.NotEmpty()
-				.GreaterThanOrEqualTo(0);
+				.SetValidator(ModelValidators.CategoryDtoUpdateValidator);
 		}
 	}
 }

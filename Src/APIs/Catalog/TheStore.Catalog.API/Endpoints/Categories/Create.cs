@@ -16,7 +16,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 {
 	public class Create : EndpointBaseAsync
 		.WithRequest<CreateRequest>
-		.WithActionResult<CategoryDto>
+		.WithActionResult<CategoryDtoRead>
 	{
 		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Category> apiRepository;
@@ -41,23 +41,23 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		   Description = "Creates a category",
 		   OperationId = "Category.Create",
 		   Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<CategoryDto>> HandleAsync(
-		[FromBody] CreateRequest request,
+		public async override Task<ActionResult<CategoryDtoRead>> HandleAsync(
+		    CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var category = await apiRepository.AddAsync(mapper.Map<Category>(request), cancellationToken);
+			var category = await apiRepository.AddAsync(mapper.Map<Category>(request.Category), cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Create category with name: {Name}", request.Name, request.CorrelationId);
+				log.Information("Create category with name: {Name}", request.Category.Name, request.CorrelationId);
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,
 				routeValues: new { CategoryId = category.Id.Id },
-				mapper.Map<CategoryDto>(category));
+				mapper.Map<CategoryDtoRead>(category));
 		}
 	}
 }

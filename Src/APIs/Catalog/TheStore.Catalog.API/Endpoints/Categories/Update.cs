@@ -64,7 +64,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 
 			eventDispatcher.AddEvent(new CategoryUpdatedIntegrationEvent(category.Name));
 
-			await RepositoryHelpers.PropertyUpdateAsync(request, category, mapper, apiRepository);
+			await RepositoryHelpers.PropertyUpdateAsync(request.Category, category, mapper, apiRepository);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Update category with id: {Id}", request.CategoryId);

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Categories
 {
@@ -14,20 +13,6 @@ namespace TheStore.SharedModels.Models.Categories
 		public int CategoryId { get; set; }
 
 		[FromBody]
-		public int Order { get; set; }
-
-		[FromBody]
-		public MultilanguageStringDto Name { get; set; }
-
-		[FromBody]
-		public bool Published { get; set; }
-
-		public UpdateRequest(int categoryId, int order, MultilanguageStringDto name, bool published)
-		{
-			CategoryId = categoryId;
-			Order = order;
-			Name = name;
-			Published = published;
-		}
+		public CategoryDtoUpdate Category { get; set; }
 	}
 }

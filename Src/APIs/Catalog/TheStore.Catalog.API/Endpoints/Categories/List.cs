@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<CategoryDto>>
+		.WithActionResult<List<CategoryDtoRead>>
 	{
 		private readonly IValidator<ListRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			Description = "Lists catalog categories with pagination using skip and take",
 			OperationId = "Category.List",
 			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<List<CategoryDto>>> HandleAsync(
+		public async override Task<ActionResult<List<CategoryDtoRead>>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -53,7 +53,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 
 			var categories = (await repository
 				.ListAsync(new ListCategoriesPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+				.Map<Category, CategoryDtoRead>(mapper);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("List categories with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);

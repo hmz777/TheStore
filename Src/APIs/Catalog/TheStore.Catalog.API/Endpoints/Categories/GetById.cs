@@ -19,7 +19,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 {
 	public class GetById : EndpointBaseAsync
 		.WithRequest<GetByIdRequest>
-		.WithActionResult<CategoryDto>
+		.WithActionResult<CategoryDtoRead>
 	{
 		private readonly IValidator<GetByIdRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Category> repository;
@@ -45,7 +45,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 			Description = "Gets a catalog category by id",
 			OperationId = "Category.GetById",
 			Tags = new[] { "Categories" })]
-		public async override Task<ActionResult<CategoryDto>> HandleAsync(
+		public async override Task<ActionResult<CategoryDtoRead>> HandleAsync(
 			[FromRoute] GetByIdRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 
 			var category = (await repository
 				.FirstOrDefaultAsync(new GetCategoryByIdReadSpec(new CategoryId(request.CategoryId)), cancellationToken))
-				.Map<Category, CategoryDto>(mapper);
+				.Map<Category, CategoryDtoRead>(mapper);
 
 			if (category == null)
 				return NotFound();
