@@ -4,6 +4,7 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Infrastructure.Data
 {
@@ -36,7 +37,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			for (int i = 0; i < 20; i++)
 			{
-				var category = new Category(i + 1, $"Category {i + 1}", true);
+				var category = new Category(i + 1, new MultilanguageString($"Category {i + 1}", CultureCode.English), true);
 
 				categories.Add(category);
 			}
@@ -52,9 +53,9 @@ namespace TheStore.Catalog.Infrastructure.Data
 			{
 				var branch = new Branch(
 					$"Branch {i + 1}",
-					GenerateRandomString(),
+					new MultilanguageString(GenerateRandomString(), CultureCode.English),
 					new Address("Syria", "Tartus", "Barranieh", $"ZIP{i}", new Coordinate(0, 0)),
-					new Image($"https://placehold.co/600x400.png", "Placeholder image", false));
+					true);
 
 				branches.Add(branch);
 			}
@@ -88,19 +89,22 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 						images.Add(
 							new Image($"https://placehold.co/600x400/{imageColor}/{(imageColor == "FFFFFF" ? "000000" : "FFFFFF")}/png?text=Image+{j}",
-							GenerateRandomSmallString(),
+							new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
 							false));
 					}
 
 					var variant = new ProductVariant(
-								Guid.NewGuid(),
-								GenerateRandomString(),
-								GenerateRandomString(),
+								GenerateRandomSmallString(),
+								GenerateRandomSmallString(),
+								new MultilanguageString(GenerateRandomString(), CultureCode.English),
+								new MultilanguageString(GenerateRandomString(), CultureCode.English),
 								new Money((j + 1) * 500, Currency.Usd),
 								new InventoryRecord((i + 1) * 2, 5, 100, 0, false),
-								new ProductColor(color, false, images),
+								new ProductColor(GenerateRandomString(), color, false, images),
+								new VariantOptions(true, true),
 								new Dimentions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
-								new ProductSpecifications(new Dictionary<string, string>() { { "Name", "Value" } }));
+								new ProductSpecifications(new Dictionary<string, string>() { { "Name", "Value" } }),
+								true);
 
 					variants.Add(variant);
 				}
@@ -108,6 +112,9 @@ namespace TheStore.Catalog.Infrastructure.Data
 				var product = new Product(
 								new CategoryId(i + 1),
 								GenerateRandomSmallString(),
+								new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
+								new MultilanguageString(GenerateRandomString(), CultureCode.English),
+								true,
 								variants);
 
 				products.Add(product);
