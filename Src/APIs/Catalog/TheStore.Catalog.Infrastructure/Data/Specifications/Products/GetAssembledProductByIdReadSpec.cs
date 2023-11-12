@@ -9,7 +9,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 	{
 		public GetAssembledProductByIdReadSpec(ProductId productId)
 		{
-			Query.Where(product => product.Id == productId)
+			Query.Where(product => product.Id == productId.Id)
 				.AsNoTracking();
 		}
 	}

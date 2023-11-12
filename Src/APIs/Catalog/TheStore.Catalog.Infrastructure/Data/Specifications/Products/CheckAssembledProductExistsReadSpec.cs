@@ -6,10 +6,10 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 {
 	public class CheckAssembledProductExistsReadSpec : Specification<AssembledProduct>
 	{
-		public CheckAssembledProductExistsReadSpec(ProductId id)
+		public CheckAssembledProductExistsReadSpec(ProductId productId)
 		{
 			Query
-				.Where(product => product.Id == id)
+				.Where(product => product.Id == productId.Id)
 				.AsNoTracking();
 		}
 	}
