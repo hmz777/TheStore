@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Core.ValueObjects.Products;
+using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints
 {
@@ -10,16 +10,16 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints
 	{
 		public void Customize(IFixture fixture)
 		{
+			fixture.Customize(new MultilanguageStringCustomization());
 			fixture.Register(() =>
 			{
 				var singleProduct = new Product(
 					new CategoryId(fixture.Create<int>()),
 					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<string>(),
-					fixture.Create<Money>(),
-					fixture.CreateMany<ProductColor>().ToList());
+					fixture.Create<MultilanguageString>(),
+					fixture.Create<MultilanguageString>(),
+					false,
+					fixture.CreateMany<ProductVariant>().ToList());
 
 				return singleProduct;
 			});

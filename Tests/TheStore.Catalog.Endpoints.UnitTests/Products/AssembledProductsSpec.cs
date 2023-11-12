@@ -48,7 +48,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<GetAssembledByIdRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(request.ProductId);
+			assembledProduct.Id = request.ProductId;
 
 			var mockRepository = new Mock<IReadApiRepository<CatalogDbContext, AssembledProduct>>();
 			mockRepository.Setup(x => x.FirstOrDefaultAsync(It.IsAny<Specification<AssembledProduct>>(), default))
@@ -70,7 +70,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<DeleteAssembledRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(request.ProductId);
+			assembledProduct.Id = request.ProductId;
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
 			mockRepository.Setup(x => x.GetByIdAsync(It.IsAny<ProductId>(), default))
@@ -92,7 +92,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<UpdateAssembledRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(request.ProductId);
+			assembledProduct.Id = request.ProductId;
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
 			mockRepository.Setup(x => x.GetByIdAsync(assembledProduct.Id, default))
@@ -114,7 +114,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<CreateAssembledRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(fixture.Create<int>());
+			assembledProduct.Id = fixture.Create<int>();
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
 			mockRepository.Setup(x => x.AddAsync(It.IsAny<AssembledProduct>(), default))
@@ -136,7 +136,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<AddPartRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(request.ProductId);
+			assembledProduct.Id = request.ProductId;
 
 			var singleProduct = fixture.Create<Product>();
 			singleProduct.Id = new ProductId(request.PartId);
@@ -169,9 +169,9 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<RemovePartRequest>();
 			var assembledProduct = fixture.Create<AssembledProduct>();
-			assembledProduct.Id = new ProductId(request.ProductId);
+			assembledProduct.Id = request.ProductId;
 
-			assembledProduct.AddPart(new ProductId(request.PartId));
+			assembledProduct.AddPart(new ProductId(request.PartId), request.Sku);
 
 			var assembledProductRepository = new Mock<IApiRepository<CatalogDbContext, AssembledProduct>>();
 			assembledProductRepository.Setup(x => x.GetByIdAsync(assembledProduct.Id, default))

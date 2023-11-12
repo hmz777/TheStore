@@ -13,6 +13,7 @@ using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
+using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.SharedModels.Models.Branches;
 using TheStore.TestHelpers.AutoData.Services;
 using UpdateImageRequest = TheStore.SharedModels.Models.Branches.UpdateImageRequest;
@@ -148,7 +149,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 				.ReturnsAsync(branch);
 
 			var mockMediator = new Mock<IMediator>();
-			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default))
+			mockMediator.Setup(x => x.Send(It.IsAny<UploadImageRequest>(), default))
 				.ReturnsAsync(fixture.Create<string>());
 
 			var sut = new UpdateImage(
@@ -159,7 +160,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 
 			var result = await sut.HandleAsync(request);
 
-			mockMediator.Verify(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.AddImageRequest>(), default), Times.Once);
+			mockMediator.Verify(x => x.Send(It.IsAny<UploadImageRequest>(), default), Times.Once);
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 
@@ -178,14 +179,14 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 				.ReturnsAsync(branch);
 
 			var mockMediator = new Mock<IMediator>();
-			mockMediator.Setup(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.UpdateImageRequest>(), default))
+			mockMediator.Setup(x => x.Send(It.IsAny<UploadImageRequest>(), default))
 				.ReturnsAsync(fixture.Create<string>());
 
 			var sut = new UpdateImage(new UpdateImageValidator(), mockRepository.Object, fixture.Create<IMapper>(), mockMediator.Object);
 
 			var result = await sut.HandleAsync(request);
 
-			mockMediator.Verify(x => x.Send(It.IsAny<Infrastructure.Mediator.Handlers.ImageUpload.UpdateImageRequest>(), default), Times.Once);
+			mockMediator.Verify(x => x.Send(It.IsAny<UploadImageRequest>(), default), Times.Once);
 			result.Should().BeOfType(typeof(NoContentResult));
 		}
 	}
