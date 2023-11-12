@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Validators
 {
-	public class ProductVariantDtoValidator : AbstractValidator<ProductVariantDto>
+    public class ProductVariantDtoUpdateValidator : AbstractValidator<ProductVariantDtoUpdate>
 	{
-        public ProductVariantDtoValidator()
+        public ProductVariantDtoUpdateValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty();

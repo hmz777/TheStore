@@ -2,17 +2,21 @@
 {
 	public static class ModelValidators
 	{
-		public static AddressDtoValidator AddressDtoValidator { get; } = new();
-		public static CurrencyDtoValidator CurrencyDtoValidator { get; } = new();
-		public static UploadImageDtoValidator UploadImageDtoValidator { get; } = new();
-		public static MoneyDtoValidator MoneyDtoValidator { get; } = new();
-		public static InventoryRecordDtoValidator InventoryRecordDtoValidator { get; } = new();
-		public static MultilanguageStringDtoValidator MultilanguageStringDtoValidator { get; } = new();
-		public static ProductColorDtoUpdateValidator ProductColorDtoUpdateValidator { get; } = new();
-		public static ProductVariantDtoValidator ProductVariantDtoValidator { get; } = new();
-		public static FormFileValidator FormFileValidator { get; } = new();
-		public static CoordinateDtoValidator CoordinateDtoValidator { get; } = new();
-		public static CultureCodeDtoValidator CultureCodeDtoValidator { get; } = new();
-		public static LocalizedStringDtoValidator LocalizedStringDtoValidator { get; } = new();
+		public static CurrencyDtoValidator CurrencyDtoValidator => new();
+		public static UploadImageDtoValidator UploadImageDtoValidator => new();
+		public static MoneyDtoValidator MoneyDtoValidator => new();
+		public static InventoryRecordDtoValidator InventoryRecordDtoValidator => new();
+		public static MultilanguageStringDtoValidator MultilanguageStringDtoValidator => new();
+		public static ProductDtoUpdateValidator ProductDtoUpdateValidator => new();
+		public static ProductColorDtoUpdateValidator ProductColorDtoUpdateValidator => new();
+		public static ProductVariantDtoUpdateValidator ProductVariantDtoUpdateValidator => new();
+		public static FormFileValidator FormFileValidator => new();
+		public static CoordinateDtoValidator CoordinateDtoValidator => new();
+		public static CultureCodeDtoValidator CultureCodeDtoValidator => new();
+		public static LocalizedStringDtoValidator LocalizedStringDtoValidator => new();
+		public static AddressDtoValidator AddressDtoValidator => new();
+		public static BranchDtoUpdateValidator BranchDtoUpdateValidator => new();
+		public static CategoryDtoUpdateValidator CategoryDtoUpdateValidator => new();
+		public static AssembledProductDtoUpdateValidator AssembledProductDtoUpdateValidator => new();
 	}
 }
