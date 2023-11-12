@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using NCrunch.Framework;
+using System.Text.Json;
 using TheStore.Catalog.Endpoints.IntegrationTests.AutoData;
 using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
@@ -22,7 +23,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 			var request = new ListRequest(1, 10);
 
 			var response = await _client
-				.GetFromJsonAsync<List<BranchDto>>(request.Route);
+				.GetFromJsonAsync<List<BranchDtoUpdate>>(request.Route);
 
 			response.Should().NotBeNull();
 			response.Should().HaveCount(request.Take);
@@ -34,7 +35,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 			var request = new GetByIdRequest(1);
 
 			var response = await _client
-				.GetFromJsonAsync<BranchDto>(request.Route);
+				.GetFromJsonAsync<BranchDtoUpdate>(request.Route);
 
 			response.Should().NotBeNull();
 		}
@@ -79,7 +80,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 			using (var formData = new MultipartFormDataContent())
 			{
 				formData.Add(new StringContent(request.BranchId.ToString()), nameof(request.BranchId));
-				formData.Add(new StringContent(request.Image.Alt), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}");
+				formData.Add(new StringContent(JsonSerializer.Serialize(request.Image.Alt)), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}");
 				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
 
 				var response = await _client

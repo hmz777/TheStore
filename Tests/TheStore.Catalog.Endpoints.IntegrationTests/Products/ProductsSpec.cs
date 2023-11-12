@@ -22,7 +22,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new ListRequest(1, 10);
 
 			var response = await _client
-				.GetFromJsonAsync<List<ProductDto>>(request.Route);
+				.GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
 
 			response.Should().NotBeNull();
 			response.Should().HaveCount(request.Take);
@@ -34,7 +34,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new GetByIdRequest(1);
 
 			var response = await _client
-				.GetFromJsonAsync<ProductDto>(request.Route);
+				.GetFromJsonAsync<ProductDtoRead>(request.Route);
 
 			response.Should().NotBeNull();
 		}
@@ -78,24 +78,23 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		}
 
 		[Fact]
-		public async Task Can_Add_Colors_To_Product()
+		public async Task Can_Add_Variant_To_Product()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 
-			var request = fixture.Create<AddColorRequest>();
+			var request = fixture.Create<AddVariantRequest>();
 			request.ProductId = 1;
 
 			var response = await _client.PostAsJsonAsync(request.Route, request);
-			var responseObject = JsonSerializer
-				.Deserialize<ProductDto>(
+			var responseObject = JsonSerializer.Deserialize<ProductDtoRead>(
 				await response.Content.ReadAsStringAsync(),
 				new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 			response.Headers.Location.Should().NotBeNull();
 
-			responseObject?.ProductColors.Should().Contain(x => x.ColorCode == request.Color.ColorCode);
+			responseObject?.Variants.Should().Contain(x => x.Name == request.ProductVariant.Name);
 		}
 
 		[Fact]
@@ -129,54 +128,48 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 
-			var request = fixture.Create<AddImageToColorRequest>();
+			var request = fixture.Create<AddImageToVariantRequest>();
 			request.ProductId = 4;
-			request.ColorCode = "000000";
 
 			using (var formData = new MultipartFormDataContent())
 			{
-				formData.Add(new StringContent(request.Image.Alt), "Image.Alt");
+				formData.Add(new StringContent(JsonSerializer.Serialize(request.Image.Alt)), "Image.Alt");
 				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
 					"Image.File", "TestImage.jpg");
 
 				var response = await _client.PostAsync(request.Route, formData);
 
-				var responseObject = JsonSerializer
-					.Deserialize<ProductDto>(
+				var responseObject = JsonSerializer.Deserialize<ProductDtoRead>(
 					await response.Content.ReadAsStringAsync(),
 					new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
 				((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 				response.Headers.Location.Should().NotBeNull();
 
-				responseObject?.ProductColors.Should().Contain(x => x.ColorCode == request.ColorCode);
+				responseObject?.Variants.Where(p => p.Sku == request.Sku).First().Color.Should();
 			}
 		}
 
 		[Fact]
-		public async Task Can_Update_Image_In_Color()
+		public async Task Can_Update_Image_In_Variant()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 
-			//var listRequest = new ListRequest(1, 1);
-			//var listResponse = await _client.
-			//	GetFromJsonAsync<List<ProductDto>>(listRequest.Route);
+			var listRequest = new ListRequest(1, 1);
+			var listResponse = await _client.
+				GetFromJsonAsync<List<ProductDtoRead>>(listRequest.Route);
 
-			//var product = listResponse!.First();
-			//var color = product.GetMainColor();
+			var product = listResponse!.First();
 
-			var request = fixture.Create<UpdateImageOfColorRequest>();
-			//request.ProductId = product.ProductId;
-			//request.ColorCode = color.ColorCode;
-			//request.ImagePath = color.GetMainImage().StringFileUri;
-			request.ProductId = 4;
-			request.ColorCode = "000000";
-			request.ImagePath = "file.png";
+			var request = fixture.Create<UpdateImageOfVariantRequest>();
+			request.ProductId = product.ProductId;
+			request.Sku = product.Variants[0].Sku;
+			request.ImagePath = product.Variants.First().Color.GetMainImage().StringFileUri;
 
 			using (var formData = new MultipartFormDataContent())
 			{
-				formData.Add(new StringContent(request.Image.Alt), "Image.Alt");
+				formData.Add(new StringContent(JsonSerializer.Serialize(request.Image.Alt)), "Image.Alt");
 				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
 					"Image.File", "TestImage.jpg");
 
@@ -192,13 +185,13 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new ListRequest(1, 10);
 
 			var response = await _client.
-				GetFromJsonAsync<List<ProductDto>>(request.Route);
+				GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
 
-			var imageToRemove = response!.First();
-			var color = imageToRemove.GetMainColor();
+			var product = response!.First();
+			var color = product.Variants[0].Color;
 
-			var removeRequest = new RemoveImageFromColorRequest(
-				imageToRemove.ProductId,
+			var removeRequest = new RemoveImageFromVariantRequest(
+				product.ProductId,
 				color.ColorCode,
 				color.GetMainImage().StringFileUri);
 

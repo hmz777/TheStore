@@ -21,7 +21,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 			var request = new ListRequest(1, 10);
 
 			var response = await _client
-				.GetFromJsonAsync<List<CategoryDto>>(request.Route);
+				.GetFromJsonAsync<List<CategoryDtoRead>>(request.Route);
 
 			response.Should().NotBeNull();
 			response.Should().HaveCount(request.Take);
@@ -33,7 +33,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 			var request = new GetByIdRequest(1);
 
 			var response = await _client
-				.GetFromJsonAsync<CategoryDto>(request.Route);
+				.GetFromJsonAsync<CategoryDtoRead>(request.Route);
 
 			response.Should().NotBeNull();
 		}

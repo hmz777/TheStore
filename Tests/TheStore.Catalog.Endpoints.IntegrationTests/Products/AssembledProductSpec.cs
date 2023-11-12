@@ -18,7 +18,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new ListAssembledRequest(1, 10);
 
 			var response = await _client
-				.GetFromJsonAsync<List<AssembledProductDto>>(request.Route);
+				.GetFromJsonAsync<List<AssembledProductDtoRead>>(request.Route);
 
 			response.Should().NotBeNull();
 			response.Should().HaveCount(request.Take);
@@ -29,7 +29,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new GetAssembledByIdRequest(1);
 
 			var response = await _client
-				.GetFromJsonAsync<AssembledProductDto>(request.Route);
+				.GetFromJsonAsync<AssembledProductDtoRead>(request.Route);
 
 			response.Should().NotBeNull();
 		}
