@@ -12,7 +12,6 @@ using TheStore.Catalog.API.Endpoints.Products.Variants;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
 using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
@@ -151,12 +150,12 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			// Setup request and entity
 			var request = fixture.Create<AddVariantRequest>();
-			var singleProduct = fixture.Create<Product>();
-			singleProduct.Id = new ProductId(request.ProductId);
+			var product = fixture.Create<Product>();
+			product.Id = new ProductId(request.ProductId);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
-				.ReturnsAsync(singleProduct);
+				.ReturnsAsync(product);
 
 			var sut = new AddVariant(new AddVariantValidator(), mockRepository.Object, fixture.Create<IMapper>());
 
@@ -166,8 +165,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		}
 
 		[Fact]
-		// TODO: Change to variant
-		public async Task Can_Update_Variant_Color()
+		public async Task Can_Update_Variant_In_Product()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new EndpointsCustomization());
@@ -241,6 +239,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			product.Id = new ProductId(request.ProductId);
 
 			var variant = fixture.Create<ProductVariant>();
+			variant.Sku = request.Sku;
 
 			// Add the color so we simulate the addition process
 			product.AddVariant(variant);
@@ -274,11 +273,12 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var variant = fixture.Create<ProductVariant>();
 			variant.Sku = request.Sku;
-			product.AddVariant(variant);
+
 
 			var image = new Image(request.ImagePath, fixture.Create<MultilanguageString>(), false);
 
-			product.Variants[0].Color.AddImage(image);
+			variant.Color = variant.Color.AddImage(image);
+			product.AddVariant(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(product.Id, default))
@@ -307,13 +307,13 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var product = fixture.Create<Product>();
 			product.Id = new ProductId(request.ProductId);
 
-			var variant = fixture.Create<ProductVariant>();
-			variant.Sku = request.Sku;
-			product.AddVariant(variant);
-
 			var image = new Image(request.ImagePath, fixture.Create<MultilanguageString>(), false);
 
-			product.Variants[0].Color.AddImage(image);
+			var variant = fixture.Create<ProductVariant>();
+			variant.Sku = request.Sku;
+
+			variant.Color = variant.Color.AddImage(image);
+			product.AddVariant(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(product.Id, default))

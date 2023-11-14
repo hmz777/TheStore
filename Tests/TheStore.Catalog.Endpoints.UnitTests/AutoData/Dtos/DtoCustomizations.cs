@@ -13,6 +13,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos
 			fixture.Customize(new InventoryRecordDtoCustomization());
 			fixture.Customize(new MoneyDtoCustomization());
 			fixture.Customize(new ProductColorDtoCustomization());
+			fixture.Customize(new MultilanguageStringDtoCustomization());
+			fixture.Customize(new ProductReviewDtoCustomization());
 		}
 	}
 }

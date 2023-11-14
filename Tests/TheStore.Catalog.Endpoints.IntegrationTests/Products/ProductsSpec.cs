@@ -98,31 +98,6 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		}
 
 		[Fact]
-		public async Task Can_Update_Color_In_Product()
-		{
-			var fixture = new Fixture();
-			fixture.Customize(new DtoCustomizations());
-
-			var request = fixture.Create<UpdateColorRequest>();
-			request.ProductId = 2;
-			request.ColorCode = "000000";
-
-			var response = await _client.PutAsJsonAsync(request.Route, request);
-
-			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
-		}
-
-		[Fact]
-		public async Task Can_Remove_Color_From_Product()
-		{
-			var request = new RemoveColorRequest(3, "000000");
-
-			var response = await _client.DeleteAsync(request.Route);
-
-			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
-		}
-
-		[Fact]
 		public async Task Can_Add_Image_To_Color()
 		{
 			var fixture = new Fixture();
