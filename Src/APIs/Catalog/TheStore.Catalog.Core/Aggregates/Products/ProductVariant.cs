@@ -21,7 +21,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public Money Price { get; set; }
 		public InventoryRecord Inventory { get; set; }
 		public ProductColor Color { get; set; }
-		public VariantOptions Options { get; set; }
+		public ProductVariantOptions Options { get; set; }
 		public Dimentions Dimentions { get; set; }
 		public ProductSpecifications Sepcifications { get; set; }
 		public bool Published { get; set; }
@@ -37,7 +37,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Money price,
 			InventoryRecord inventory,
 			ProductColor color,
-			VariantOptions options,
+			ProductVariantOptions options,
 			Dimentions dimentions,
 			ProductSpecifications sepcifications,
 			bool published,

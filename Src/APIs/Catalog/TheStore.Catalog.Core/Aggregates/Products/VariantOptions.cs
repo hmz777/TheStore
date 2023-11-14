@@ -2,12 +2,12 @@
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-	public class VariantOptions : ValueObject
+	public class ProductVariantOptions : ValueObject
 	{
 		public bool CanBePurchased { get; set; }
 		public bool CanBeFavorited { get; set; }
 
-		public VariantOptions(bool canBePurchased, bool canBeFavorited)
+		public ProductVariantOptions(bool canBePurchased, bool canBeFavorited)
 		{
 			CanBePurchased = canBePurchased;
 			CanBeFavorited = canBeFavorited;

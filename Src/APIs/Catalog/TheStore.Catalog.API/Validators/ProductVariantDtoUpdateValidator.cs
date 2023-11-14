@@ -10,9 +10,6 @@ namespace TheStore.Catalog.API.Validators
             RuleFor(x => x.Name)
                 .NotEmpty();
 
-            RuleFor(x => x.Sku)
-                .NotEmpty();
-
 			RuleFor(x => x.Description)
 				.NotEmpty()
 				.SetValidator(ModelValidators.MultilanguageStringDtoValidator);
