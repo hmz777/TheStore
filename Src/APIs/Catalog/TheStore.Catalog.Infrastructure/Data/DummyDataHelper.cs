@@ -101,7 +101,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 								new Money((j + 1) * 500, Currency.Usd),
 								new InventoryRecord((i + 1) * 2, 5, 100, 0, false),
 								new ProductColor(GenerateRandomString(), color, false, images),
-								new VariantOptions(true, true),
+								new ProductVariantOptions(true, true),
 								new Dimentions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
 								new ProductSpecifications(new Dictionary<string, string>() { { "Name", "Value" } }),
 								true);
