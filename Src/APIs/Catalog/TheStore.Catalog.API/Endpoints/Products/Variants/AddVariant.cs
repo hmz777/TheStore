@@ -40,9 +40,9 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[SwaggerOperation(
-		   Summary = "Adds a variant to a single product",
-		   Description = "Adds a variant to a single product",
-		   OperationId = "Product.Single.Variant.Add",
+		   Summary = "Adds a variant to a product",
+		   Description = "Adds a variant to a product",
+		   OperationId = "Product.Variant.Add",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
 			AddVariantRequest request,

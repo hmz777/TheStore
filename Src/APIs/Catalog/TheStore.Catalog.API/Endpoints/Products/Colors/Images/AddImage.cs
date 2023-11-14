@@ -47,9 +47,9 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[SwaggerOperation(
-		   Summary = "Adds an image to a single product variant",
-		   Description = "Adds an image to a single product variant",
-		   OperationId = "Product.Single.Variant.Color.Image.Add",
+		   Summary = "Adds an image to a product variant",
+		   Description = "Adds an image to a product variant",
+		   OperationId = "Product.Variant.Color.Image.Add",
 		   Tags = new[] { "Products" })]
 		public async override Task<ActionResult> HandleAsync(
 			AddImageToVariantRequest request,
@@ -59,13 +59,13 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var singleProduct = await apiRepository
+			var product = await apiRepository
 				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
-			if (singleProduct == null)
+			if (product == null)
 				return NotFound("Product not found");
 
-			var variant = singleProduct.Variants.FirstOrDefault(v => v.Sku == request.Sku);
+			var variant = product.Variants.FirstOrDefault(v => v.Sku == request.Sku);
 			if (variant == null)
 				return NotFound("Variant not found");
 
@@ -83,8 +83,8 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,
-				routeValues: new { ProductId = singleProduct.Id.Id },
-				mapper.Map<ProductDtoRead>(singleProduct));
+				routeValues: new { ProductId = product.Id.Id },
+				mapper.Map<ProductDtoRead>(product));
 		}
 	}
 }
