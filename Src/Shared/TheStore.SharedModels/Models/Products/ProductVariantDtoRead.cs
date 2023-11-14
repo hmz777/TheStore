@@ -11,7 +11,7 @@ namespace TheStore.SharedModels.Models.Products
         public MoneyDto Price { get; }
         public InventoryRecordDto Inventory { get; }
         public ProductColorDtoRead Color { get; }
-        public VariantOptionsDto Options { get; set; }
+        public ProductVariantOptionsDto Options { get; set; }
         public DimentionsDto Dimentions { get; }
         public ProductSpecificationsDto Sepcifications { get; }
         public List<ProductReviewDto> Reviews { get; set; }
