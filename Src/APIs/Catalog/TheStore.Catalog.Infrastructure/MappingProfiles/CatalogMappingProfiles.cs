@@ -34,6 +34,15 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ReverseMap()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
+			CreateMap<ProductVariant, ProductVariantDtoRead>()
+				.ForMember(dest => dest.Reviews, opt => opt.MapFrom("reviews"));
+
+			CreateMap<ProductVariantDtoUpdate, ProductVariant>()
+				.ForMember("reviews", opt => opt.MapFrom(src => src.Reviews))
+				.ForMember(dest => dest.Reviews, opt => opt.Ignore());
+
+			CreateMap<ProductVariantOptions, ProductVariantOptionsDto>().ReverseMap();
+
 			// Assembled Products
 			CreateMap<AssembledProduct, AssembledProductDtoRead>()
 				.ForMember(dest => dest.Parts,
@@ -67,11 +76,17 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ReverseMap()
 				.ForMember("images", opt => opt.MapFrom(src => src.Images));
 
-			CreateMap<UpdateProductColorDto, ProductColor>()
+			CreateMap<ProductColorDtoUpdate, ProductColor>()
 				.ForMember(dest => dest.Images, opt => opt.Ignore());
 
 			CreateMap<Address, AddressDto>().ReverseMap();
 			CreateMap<Coordinate, CoordinateDto>().ReverseMap();
+			CreateMap<Dimentions, DimentionsDto>().ReverseMap();
+			CreateMap<ProductReview, ProductReviewDto>().ReverseMap();
+			CreateMap<UnitOfMeasure, UnitOfMeasureDto>().ReverseMap();
+			CreateMap<ProductSpecifications, ProductSpecificationsDto>()
+				.ForMember(dest => dest.Specs, opt => opt.MapFrom(src => src.GetSpecifications()))
+				.ReverseMap();
 		}
 	}
 }
