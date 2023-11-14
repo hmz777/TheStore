@@ -33,9 +33,9 @@
 		Parent.AddOption(this);
 	}
 
-	private void OnOptionSelected()
+	private async Task OnOptionSelected()
 	{
-		Parent.ChangeValue(this);
+		await Parent.ChangeValue(this);
 	}
 
 	public void Select(bool toggle)
