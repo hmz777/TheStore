@@ -15,9 +15,9 @@ namespace TheStore.Catalog.Domain.UnitTests
 
 		[Theory]
 		[InlineData(null, null)]
-		public void Cant_Create_Invalid_Product_Attribute(string name, string description)
+		public void Cant_Create_Invalid_Product_Attribute(string? name, string? description)
 		{
-			var action = () => new ProductAttribute(name, description);
+			var action = () => new ProductAttribute(name!, description!);
 
 			action.Should().Throw<ArgumentException>();
 		}
@@ -38,9 +38,9 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData(null, "notAHexColor")]
 		[InlineData(null, "#000000")]
 		[InlineData("Black", null)]
-		public void Cant_Create_Invalid_Product_Color(string colorName, string colorCode)
+		public void Cant_Create_Invalid_Product_Color(string? colorName, string? colorCode)
 		{
-			var action = () => new ProductColor(colorName, colorCode, false, new List<Image>());
+			var action = () => new ProductColor(colorName!, colorCode!, false, []);
 
 			action.Should().Throw<ArgumentException>();
 		}
@@ -48,7 +48,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[Fact]
 		public void Can_Create_Valid_Product_Color()
 		{
-			var action = () => new ProductColor("Black", "000000", false, new List<Image>());
+			var action = () => new ProductColor("Black", "000000", false, []);
 
 			action.Should().NotThrow();
 		}
@@ -60,7 +60,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("Black", "000000", false, new List<Image>());
+			var sut = new ProductColor("Black", "000000", false, []);
 
 			sut = sut.AddImage(image);
 
@@ -74,7 +74,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor("Black", "000000", false, new List<Image>());
+			var sut = new ProductColor("Black", "000000", false, []);
 
 			sut = sut.AddImage(image);
 			sut = sut.RemoveImage(image);
@@ -90,14 +90,14 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData(0, null)]
 		[InlineData(1, null)]
 		[InlineData(0, "name")]
-		public void Cant_Create_Valid_Product(int categoryId, string name)
+		public void Cant_Create_Valid_Product(int categoryId, string? name)
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
 
 			var action = () => new Product(
 				new CategoryId(categoryId),
-				name,
+				name!,
 				fixture.Create<MultilanguageString>(),
 				fixture.Create<MultilanguageString>(),
 				false,
