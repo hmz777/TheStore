@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
@@ -24,14 +25,16 @@ namespace TheStore.Cart.Infrastructure.Services
 			webApplicationBuilder.ConfigureFluentValidation(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureMemoryCache();
 			webApplicationBuilder.AddFileSystem();
-			webApplicationBuilder.AddMediatR(InfrastructureAssembly);
 			//webApplicationBuilder.ConfigureJwtAuthorization();
 
 			// Api specific services and configuration
 			webApplicationBuilder.Services.AddScoped<ICatalogEntityCheckService, CatalogEntityCheckService>();
 			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>(options =>
 			{
-				string address = "http://localhost:7272";
+				//string address = "http://localhost:7272";CatalogService
+				var address = webApplicationBuilder.Configuration.GetSection("CatalogService")
+								.GetValue<string>("Uri");
+
 				options.Address = new Uri(address);
 			});
 
