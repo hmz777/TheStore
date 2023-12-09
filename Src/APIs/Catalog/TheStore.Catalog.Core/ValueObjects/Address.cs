@@ -1,22 +1,22 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Address : ValueObject
 	{
-		public string Country { get; private set; }
-		public string City { get; private set; }
-		public string Street { get; private set; }
-		public string ZipCode { get; private set; }
-		public Coordinate Coordinate { get; private set; }
+		public required string Country { get; init; }
+		public required string City { get; init; }
+		public required string Street { get; init; }
+		public required string ZipCode { get; init; }
+		public required Coordinate Coordinate { get; init; }
 
 		// Ef Core
-		private Address()
-		{
+		private Address() { }
 
-		}
-
+		[SetsRequiredMembers]
 		public Address(string country, string city, string street, string zipCode, Coordinate coordinate)
 		{
 			Guard.Against.NullOrWhiteSpace(country, nameof(country));
