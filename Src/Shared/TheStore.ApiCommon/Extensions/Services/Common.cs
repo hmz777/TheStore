@@ -381,5 +381,10 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 			return webApplicationBuilder;
 		}
+
+		private static bool IsRunningInTestingEnvironment()
+		{
+			return Environment.GetEnvironmentVariable("NCrunch") == "1";
+		}
 	}
 }
