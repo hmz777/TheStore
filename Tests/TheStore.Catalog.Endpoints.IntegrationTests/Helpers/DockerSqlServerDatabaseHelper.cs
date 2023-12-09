@@ -18,8 +18,8 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
 			dockerClient = new DockerClientConfiguration().CreateClient();
 
 			Port = 1433;
-			Password = "testpass@12345";
-			containerName = "SQLServer_Test";
+			Password = "P@ss12345";
+			containerName = "SQLServer_Tests";
 		}
 
 		public async Task StartDatabaseServer(CancellationToken cancellationToken = default)
