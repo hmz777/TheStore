@@ -131,6 +131,12 @@ namespace TheStore.ApiCommon.Extensions.Services
 					break;
 				case Constants.RunningPlatform.DockerCompose:
 				case Constants.RunningPlatform.Kubernetes:
+
+					if (string.IsNullOrEmpty(connectionString))
+					{
+						throw new NullReferenceException("Connection string is null");
+					}
+
 					services.AddDbContext<TContext>(options =>
 					{
 						options
