@@ -2,25 +2,29 @@
 using CSharpFunctionalExtensions;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace TheStore.SharedKernel.ValueObjects
 {
 	public class MultilanguageString : ValueObject
 	{
+		[NotMapped]
+		private bool dataDeserialized = false;
+
+		[NotMapped]
 		private List<LocalizedString> localizedStrings = new();
 
 		[NotMapped]
 		public ReadOnlyCollection<LocalizedString> LocalizedStrings => localizedStrings.AsReadOnly();
 
+		public string? Json { get; private set; }
+
 		public MultilanguageString() { }
 
-		public MultilanguageString(List<LocalizedString> localizedStrings)
+		public MultilanguageString(List<LocalizedString>? localizedStrings = null!)
 		{
 			this.localizedStrings = localizedStrings ?? new();
 		}
-
-		public string? GetString(CultureCode cultureCode)
-			=> localizedStrings.Where(ls => ls.CultureCode == cultureCode).FirstOrDefault()?.Value;
 
 		public MultilanguageString(LocalizedString initialString)
 		{
@@ -36,6 +40,33 @@ namespace TheStore.SharedKernel.ValueObjects
 
 			var initialLocalizedString = new LocalizedString(value, cultureCode);
 			localizedStrings.Add(initialLocalizedString);
+		}
+
+		private void LoadJsonIfNotLoaded()
+		{
+			if (dataDeserialized == false && string.IsNullOrEmpty(Json) == false)
+			{
+				localizedStrings = JsonSerializer.Deserialize<List<LocalizedString>>(Json)!;
+
+				if (localizedStrings == null)
+				{
+					throw new Exception("Error deserializing json");
+				}
+
+				dataDeserialized = true;
+			}
+		}
+
+		private void SaveJson()
+		{
+			Json = JsonSerializer.Serialize(localizedStrings);
+		}
+
+		public string? GetString(CultureCode cultureCode)
+		{
+			LoadJsonIfNotLoaded();
+
+			return localizedStrings.Where(ls => ls.CultureCode == cultureCode).FirstOrDefault()?.Value;
 		}
 
 		public void AddLocalizedString(LocalizedString localizedString)
@@ -63,6 +94,8 @@ namespace TheStore.SharedKernel.ValueObjects
 			}
 
 			localizedStrings.Add(localizedString);
+
+			SaveJson();
 		}
 
 		public void RemoveLocalizedString(LocalizedString localizedString)
@@ -70,21 +103,24 @@ namespace TheStore.SharedKernel.ValueObjects
 			Guard.Against.Null(localizedString, nameof(localizedString));
 
 			localizedStrings.Remove(localizedString);
+
+			SaveJson();
 		}
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			foreach (var @string in localizedStrings)
-			{
-				yield return @string;
-			}
+			yield return Json!;
 		}
 	}
 
+	[NotMapped]
 	public class LocalizedString : ValueObject
 	{
 		public CultureCode CultureCode { get; }
 		public string Value { get; }
+
+		// Ef Core
+		private LocalizedString() { }
 
 		public LocalizedString(string value, CultureCode cultureCode)
 		{
@@ -102,12 +138,16 @@ namespace TheStore.SharedKernel.ValueObjects
 		}
 	}
 
+	[NotMapped]
 	public class CultureCode : ValueObject
 	{
 		public static readonly CultureCode English = new("en-US");
 		public static readonly CultureCode Arabic = new("ar-SY");
 
 		public string Code { get; }
+
+		// Ef Core
+		private CultureCode() { }
 
 		public CultureCode(string code)
 		{
