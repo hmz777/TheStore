@@ -79,7 +79,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 				for (int j = 0; j < randomVariantNumber; j++)
 				{
-					var color = GenerateRandomHexColor();
+					var color = GenerateRandomHexColor().Replace("#", "");
 
 					var images = new List<Image>();
 
@@ -100,9 +100,9 @@ namespace TheStore.Catalog.Infrastructure.Data
 								new MultilanguageString(GenerateRandomString(), CultureCode.English),
 								new Money((j + 1) * 500, Currency.Usd),
 								new InventoryRecord((i + 1) * 2, 5, 100, 0, false),
-								new ProductColor(GenerateRandomString(), color, false, images),
+								new ProductColor(new MultilanguageString(GenerateRandomString(), CultureCode.English), color, false, images),
 								new ProductVariantOptions(true, true),
-								new Dimentions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
+								new Dimensions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
 								new ProductSpecifications(new Dictionary<string, string>() { { "Name", "Value" } }),
 								true);
 
