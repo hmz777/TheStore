@@ -10,7 +10,8 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 	public class CustomWebApplicationFactory<TProgram> :
 		WebApplicationFactory<TProgram> where TProgram : class
 	{
-		private DockerSqlServerDatabaseHelper dockerSqlServerDatabase;
+		private DockerSqlServerDatabaseHelper? dockerSqlServerDatabase;
+		private DockerRabbitMqHelper? dockerRabbitMqHelper;
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{
@@ -42,12 +43,24 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 							options.EnableRetryOnFailure();
 						});
 				});
+
+				dockerRabbitMqHelper = new DockerRabbitMqHelper();
+				dockerRabbitMqHelper.StartDatabaseServer().Wait();
 			});
 		}
 
 		public async override ValueTask DisposeAsync()
 		{
-			await dockerSqlServerDatabase.DisposeAsync();
+			if (dockerSqlServerDatabase != null)
+			{
+				await dockerSqlServerDatabase.DisposeAsync();
+			}
+
+			if (dockerRabbitMqHelper != null)
+			{
+				await dockerRabbitMqHelper.DisposeAsync();
+			}
+
 			await base.DisposeAsync();
 		}
 	}
