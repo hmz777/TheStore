@@ -11,6 +11,9 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public int Rating { get; }
 		public string User { get; }
 
+		// Ef Core
+		private ProductReview() { }
+
 		public ProductReview(string title, DateTimeOffset date, string content, int rating, string user)
 		{
 			Guard.Against.NullOrEmpty(title, nameof(title));

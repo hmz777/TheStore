@@ -8,6 +8,9 @@ namespace TheStore.Catalog.Core.ValueObjects
 	{
 		private string JsonSpecs { get; }
 
+		// Ef Core
+		private ProductSpecifications() { }
+
 		public ProductSpecifications(Dictionary<string, string> specs)
 		{
 			Guard.Against.Null(specs, nameof(specs));

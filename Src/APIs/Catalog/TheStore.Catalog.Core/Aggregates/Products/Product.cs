@@ -11,7 +11,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class Product : BaseEntity<ProductId>, IAggregateRoot
 	{
-		private readonly List<ProductVariant> variants = new();
+		private List<ProductVariant> variants = new();
 
 		public CategoryId CategoryId { get; set; }
 		public string Name { get; set; }
@@ -21,6 +21,9 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 
 		[NotMapped]
 		public ReadOnlyCollection<ProductVariant> Variants => variants.AsReadOnly();
+
+		// Ef Core
+		private Product() { }
 
 		public Product(
 			CategoryId categoryId,
