@@ -81,7 +81,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			CreateMap<Address, AddressDto>().ReverseMap();
 			CreateMap<Coordinate, CoordinateDto>().ReverseMap();
-			CreateMap<Dimentions, DimentionsDto>().ReverseMap();
+			CreateMap<Dimensions, DimentionsDto>().ReverseMap();
 			CreateMap<ProductReview, ProductReviewDto>().ReverseMap();
 			CreateMap<UnitOfMeasure, UnitOfMeasureDto>().ReverseMap();
 			CreateMap<ProductSpecifications, ProductSpecificationsDto>()

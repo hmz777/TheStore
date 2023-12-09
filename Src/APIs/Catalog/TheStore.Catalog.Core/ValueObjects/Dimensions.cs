@@ -3,14 +3,17 @@ using CSharpFunctionalExtensions;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
-	public class Dimentions : ValueObject
+	public class Dimensions : ValueObject
 	{
 		public decimal Width { get; }
 		public decimal Height { get; }
 		public decimal Length { get; }
 		public UnitOfMeasure Unit { get; }
 
-		public Dimentions(decimal width, decimal height, decimal length, UnitOfMeasure unit)
+		// Ef Core
+		private Dimensions() { }
+
+		public Dimensions(decimal width, decimal height, decimal length, UnitOfMeasure unit)
 		{
 			Guard.Against.NegativeOrZero(width, nameof(width));
 			Guard.Against.NegativeOrZero(height, nameof(height));

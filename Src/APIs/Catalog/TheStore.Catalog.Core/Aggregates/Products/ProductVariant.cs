@@ -22,7 +22,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public InventoryRecord Inventory { get; set; }
 		public ProductColor Color { get; set; }
 		public ProductVariantOptions Options { get; set; }
-		public Dimentions Dimentions { get; set; }
+		public Dimensions Dimentions { get; set; }
 		public ProductSpecifications Sepcifications { get; set; }
 		public bool Published { get; set; }
 
@@ -38,7 +38,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			InventoryRecord inventory,
 			ProductColor color,
 			ProductVariantOptions options,
-			Dimentions dimentions,
+			Dimensions dimentions,
 			ProductSpecifications sepcifications,
 			bool published,
 			List<ProductReview> reviews = null!)
