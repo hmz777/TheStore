@@ -4,7 +4,6 @@ using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
-using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Infrastructure.Data.ValueConverters;
 using TheStore.SharedKernel.ValueObjects;
 
@@ -27,48 +26,12 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			#region Value Objects
 
-			modelBuilder.Entity<MultilanguageString>()
-				.OwnsMany<LocalizedString>("localizedStrings", opt =>
-				{
-					opt.OwnsOne(ls => ls.CultureCode);
-				});
-
-			modelBuilder.Entity<Address>()
-				.OwnsOne(ad => ad.Coordinate);
-
-			modelBuilder.Entity<ProductVariant>(opt =>
-			{
-				opt.OwnsOne(v => v.Description);
-				opt.OwnsOne(v => v.ShortDescription);
-				opt.OwnsOne(v => v.Price);
-				opt.OwnsOne(v => v.Inventory);
-				opt.OwnsOne(v => v.Color);
-				opt.OwnsOne(v => v.Dimentions);
-				opt.OwnsOne(v => v.Sepcifications);
-				opt.OwnsMany<ProductReview>("reviews");
-			});
-
-			modelBuilder.Entity<ProductColor>(opt =>
-			{
-				opt.OwnsMany<Image>("images")
-				   .OwnsOne(i => i.Alt);
-			});
-
 			#endregion
 
 			#region Branch
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Address);
-
-			modelBuilder.Entity<Branch>()
 				.OwnsOne(b => b.Image);
-
-			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Name);
-
-			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Description);
 
 			#endregion
 
@@ -80,9 +43,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			modelBuilder.Entity<Category>()
 				.HasKey(c => c.Id);
-
-			modelBuilder.Entity<Category>()
-				.OwnsOne(c => c.Name);
 
 			#endregion
 
@@ -100,13 +60,30 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasConversion<CategoryIdValueConverter>();
 
 			modelBuilder.Entity<Product>()
-				.OwnsOne(p => p.Name);
+				.HasMany<ProductVariant>("variants")
+				.WithOne()
+				.IsRequired();
 
-			modelBuilder.Entity<Product>()
-				.OwnsMany(p => p.Variants);
+			modelBuilder.Entity<ProductVariant>(opt =>
+			{
+				opt.Property<int>("ID")
+					.HasColumnType("int")
+					.ValueGeneratedOnAdd()
+					.HasAnnotation("Key", 0);
 
-			modelBuilder.Entity<Product>()
-				.OwnsMany<ProductColor>("productColors");
+				opt.OwnsOne(v => v.Price, priceOpt =>
+				{
+					priceOpt.OwnsOne(pOpt => pOpt.Currency);
+					priceOpt.Property(c => c.Amount).HasColumnType("decimal").HasPrecision(8, 2); ;
+				});
+
+				opt.OwnsOne(v => v.Inventory);
+				opt.OwnsOne(v => v.Color, cOpt => cOpt.OwnsMany<Image>("images"));
+				opt.OwnsOne(v => v.Options);
+				opt.OwnsOne(v => v.Dimentions);
+				opt.OwnsOne(v => v.Sepcifications);
+				opt.OwnsMany<ProductReview>("reviews");
+			});
 
 			#endregion
 
@@ -117,6 +94,15 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasConversion<CategoryIdValueConverter>();
 
 			#endregion
+		}
+
+		protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+		{
+			configurationBuilder.ComplexProperties<Address>();
+			configurationBuilder.ComplexProperties<Coordinate>();
+			configurationBuilder.ComplexProperties<MultilanguageString>();
+			//configurationBuilder.ComplexProperties<LocalizedString>();
+			//configurationBuilder.ComplexProperties<CultureCode>();
 		}
 
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
