@@ -9,11 +9,12 @@ namespace TheStore.Catalog.Core.ValueObjects
 	{
 		[NotMapped]
 		public Uri FileUri { get; }
-		public string StringFileUri { get; }
 
 		[NotMapped]
 		public string FileNameWithExtension =>
 			Path.GetFileName(FileUri.ToString());
+
+		public string StringFileUri { get; }
 
 		public MultilanguageString Alt { get; }
 
