@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.ValueObjects.Products
 {
@@ -9,7 +10,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 	{
 		private readonly List<Image> images = new();
 
-		public string ColorName { get; }
+		public MultilanguageString ColorName { get; }
 		public string ColorCode { get; }
 		public bool IsMainColor { get; }
 
@@ -19,9 +20,9 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		// Ef Core
 		private ProductColor() { }
 
-		public ProductColor(string colorName, string colorCode, bool isMainColor, List<Image> images)
+		public ProductColor(MultilanguageString colorName, string colorCode, bool isMainColor, List<Image> images)
 		{
-			Guard.Against.NullOrEmpty(colorName, nameof(colorName));
+			Guard.Against.Null(colorName, nameof(colorName));
 			Guard.Against.NullOrEmpty(colorCode, nameof(colorCode));
 			Guard.Against.InvalidFormat(colorCode, nameof(colorCode), regexPattern: "^(?:[0-9a-fA-F]{3,4}){1,2}$");
 
