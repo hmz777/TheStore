@@ -167,7 +167,11 @@ namespace TheStore.ApiCommon.Extensions.Services
 		{
 			Log.Information("Add controllers");
 
-			webApplicationBuilder.Services.AddControllers();
+			webApplicationBuilder.Services.AddControllers().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+				options.JsonSerializerOptions.PropertyNamingPolicy = null;
+			});
 
 			return webApplicationBuilder;
 		}
