@@ -42,7 +42,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		   OperationId = "Branch.Create",
 		   Tags = new[] { "Branches" })]
 		public async override Task<ActionResult<BranchDtoUpdate>> HandleAsync(
-			CreateRequest request,
+		    CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

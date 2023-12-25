@@ -50,7 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		   OperationId = "Category.Update",
 		   Tags = new[] { "Categories" })]
 		public async override Task<ActionResult> HandleAsync(
-			UpdateRequest request,
+		    UpdateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

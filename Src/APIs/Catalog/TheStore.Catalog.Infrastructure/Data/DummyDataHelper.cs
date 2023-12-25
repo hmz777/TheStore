@@ -99,7 +99,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 								new MultilanguageString(GenerateRandomString(), CultureCode.English),
 								new MultilanguageString(GenerateRandomString(), CultureCode.English),
 								new Money((j + 1) * 500, Currency.Usd),
-								new InventoryRecord((i + 1) * 2, 5, 100, 0, false),
+								new InventoryRecord(i, 5, 100, 0, false),
 								new ProductColor(new MultilanguageString(GenerateRandomString(), CultureCode.English), color, false, images),
 								new ProductVariantOptions(true, true),
 								new Dimensions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
