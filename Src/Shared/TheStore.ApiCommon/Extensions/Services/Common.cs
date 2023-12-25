@@ -130,7 +130,8 @@ namespace TheStore.ApiCommon.Extensions.Services
 					services.AddDbContext<TContext>(options =>
 					{
 						options
-						 .UseSqlServer($"Server=HMZ\\MSSQLSERVER2019;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+						 //.UseSqlServer($"Server=localhost;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+						 .UseSqlServer($"Server=localhost;Database={dbName};User Id=SA;Password=myp@ssword123;MultipleActiveResultSets=true;TrustServerCertificate=true");
 					});
 					break;
 				case Constants.RunningPlatform.DockerCompose:
