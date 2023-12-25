@@ -122,6 +122,10 @@ namespace TheStore.ApiCommon.Extensions.Services
 			switch (RunningPlatform)
 			{
 				case Constants.RunningPlatform.Standalone:
+					// Trigger runtime database migration
+					Environment.SetEnvironmentVariable(
+						TheStore.ApiCommon.Constants.ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
+
 					// If we reach here, then we're running the API independent of any infrastructure
 					services.AddDbContext<TContext>(options =>
 					{
