@@ -50,7 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 		   OperationId = "Branch.Image.Update",
 		   Tags = new[] { "Branches" })]
 		public async override Task<ActionResult> HandleAsync(
-			UpdateImageRequest request,
+		    UpdateImageRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
