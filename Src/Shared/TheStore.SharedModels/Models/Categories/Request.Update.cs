@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace TheStore.SharedModels.Models.Categories
 {
@@ -9,7 +10,7 @@ namespace TheStore.SharedModels.Models.Categories
 		public const string RouteTemplate = "categories/{CategoryId:int}";
 		public override string Route => RouteTemplate.Replace("{CategoryId:int}", CategoryId.ToString());
 
-		[FromRoute(Name = nameof(CategoryId))]
+		[FromRoute]
 		public int CategoryId { get; set; }
 
 		[FromBody]
