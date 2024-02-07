@@ -28,7 +28,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
 			{
 				await dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
 				{
-					Image = "mcr.microsoft.com/mssql/server:2019-latest",
+					Image = "mcr.microsoft.com/mssql/server:2022-latest",
 					Env = new List<string>()
 					{
 						"ACCEPT_EULA=Y",
@@ -102,8 +102,9 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
 		public async ValueTask DisposeAsync()
 		{
 			await dockerClient.Containers.StopContainerAsync(containerName, new ContainerStopParameters());
-			await dockerClient.Containers.RemoveContainerAsync(containerName,
-				new ContainerRemoveParameters() { Force = true });
+			//await dockerClient.Containers.RemoveContainerAsync(containerName,
+			//	new ContainerRemoveParameters() { Force = true });
+
 			dockerClient.Dispose();
 		}
 	}
