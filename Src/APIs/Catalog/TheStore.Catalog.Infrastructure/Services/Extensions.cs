@@ -31,6 +31,8 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.ConfigureMassTransitForRabbitMq();
 			webApplicationBuilder.AddEventDispatcher();
 
+			webApplicationBuilder.Services.AddScoped<SkuService>();
+
 			// Api specific services and configuration
 			webApplicationBuilder.Services.AddGrpc();
 
