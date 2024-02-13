@@ -8,6 +8,7 @@ namespace TheStore.Catalog.Domain.UnitTests.AutoData.Customizations
 		{
 			fixture.Customize(new ImageCustomization());
 			fixture.Customize(new ProductColorCustomization());
+			fixture.Customize(new ProductReviewCustomization());
 			fixture.Customize(new InventoryRecordCustomization());
 			fixture.Customize(new CurrencyCustomization());
 			fixture.Customize(new MoneyCustomization());
