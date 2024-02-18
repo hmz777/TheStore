@@ -7,11 +7,11 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Address : ValueObject
 	{
-		public required string Country { get; init; }
-		public required string City { get; init; }
-		public required string Street { get; init; }
-		public required string ZipCode { get; init; }
-		public required Coordinate Coordinate { get; init; }
+		public string Country { get; init; }
+		public string City { get; init; }
+		public string Street { get; init; }
+		public string ZipCode { get; init; }
+		public Coordinate Coordinate { get; init; }
 
 		// Ef Core
 		private Address() { }
