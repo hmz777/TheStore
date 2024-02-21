@@ -6,7 +6,7 @@ namespace TheStore.Catalog.API.Validators
 	{
 		// TODO: For starters, file settings are hardcoded but later we'll grab them from the database
 		private string[] allowedExtensions = new[] { ".jpg", ".png" };
-		private long allowedSize = 10240;
+		private long allowedSize = 50000000;
 
 		public FormFileValidator()
 		{
