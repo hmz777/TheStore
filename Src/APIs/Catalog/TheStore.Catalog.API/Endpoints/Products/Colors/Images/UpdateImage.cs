@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Web;
+using System.Net;
 using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
@@ -25,7 +25,6 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 		.WithRequest<UpdateImageOfVariantRequest>
 		.WithActionResult
 	{
-
 		private readonly IValidator<UpdateImageOfVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
 		private readonly IMediator mediator;
@@ -73,9 +72,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 			var color = variant.Color;
 
-			var decodedImagePath = HttpUtility.UrlDecode(request.ImagePath);
-
-			var image = color.Images.FirstOrDefault(x => x.FileNameWithExtension == decodedImagePath);
+			var image = color.Images.FirstOrDefault(x => x.FileNameWithExtension == request.DecodedImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 

@@ -10,7 +10,6 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 using TheStore.Catalog.Infrastructure.Services;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
@@ -20,7 +19,6 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 	public class AddVariant : EndpointBaseAsync
 		.WithRequest<AddVariantRequest>
 		.WithActionResult
-
 	{
 		private readonly IValidator<AddVariantRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;

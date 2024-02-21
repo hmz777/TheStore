@@ -53,17 +53,17 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var singleProduct = (await repository
+			var product = (await repository
 				.FirstOrDefaultAsync(new GetProductByIdReadSpec(new ProductId(request.ProductId)), cancellationToken))
 				.Map<Product, ProductDtoRead>(mapper);
 
-			if (singleProduct == null)
+			if (product == null)
 				return NotFound();
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Get a single product with Id: {Id}", request.ProductId);
 
-			return singleProduct;
+			return product;
 		}
 	}
 }

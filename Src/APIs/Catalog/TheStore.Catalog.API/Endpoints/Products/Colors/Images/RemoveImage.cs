@@ -60,9 +60,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 			var color = variant.Color;
 
-			var decodedImagePath = HttpUtility.UrlDecode(request.ImagePath);
-
-			var image = color.Images.FirstOrDefault(x => x.StringFileUri == decodedImagePath);
+			var image = color.Images.FirstOrDefault(x => x.StringFileUri == request.DecodedImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 

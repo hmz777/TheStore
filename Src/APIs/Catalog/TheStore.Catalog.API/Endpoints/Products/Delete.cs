@@ -48,12 +48,12 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var singleProduct = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
+			var product = await apiRepository.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
 
-			if (singleProduct == null)
+			if (product == null)
 				return NotFound();
 
-			await apiRepository.ExecuteDeleteAsync<Product, ProductId>(singleProduct.Id, cancellationToken);
+			await apiRepository.DeleteAsync(product, cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Delete a single product with id: {Id}", request.ProductId);
