@@ -10,12 +10,12 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOidcAuthentication(config =>
 {
-	// TODO: W e get the auth server url from a configuration endpoint
+	// TODO: We get the auth server url from a configuration endpoint
 	var authority = "https://localhost:5001";
 	config.ProviderOptions.Authority = authority;
 
 	config.AuthenticationPaths.RemoteRegisterPath = config.ProviderOptions.Authority + "/account/register";
-	config.AuthenticationPaths.RemoteProfilePath = config.ProviderOptions.Authority + "/account/profile";
+	config.AuthenticationPaths.RemoteProfilePath = config.ProviderOptions.Authority + "/account/profile/information";
 	config.AuthenticationPaths.LogOutSucceededPath = "/";
 	config.ProviderOptions.PostLogoutRedirectUri = config.AuthenticationPaths.LogOutCallbackPath;
 
