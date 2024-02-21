@@ -18,7 +18,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 		[Fact]
 		public async Task Can_List_Categories()
 		{
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var response = await _client
 				.GetFromJsonAsync<List<CategoryDtoRead>>(request.Route);
@@ -30,7 +30,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 		[Fact]
 		public async Task Can_Get_Category_By_Id()
 		{
-			var request = new GetByIdRequest(1);
+			var request = new GetByIdRequest() { CategoryId = 1 };
 
 			var response = await _client
 				.GetFromJsonAsync<CategoryDtoRead>(request.Route);
@@ -46,7 +46,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
-				.PostAsJsonAsync(request.Route, request);
+				.PostAsJsonAsync(request.Route, request.Category);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 			response.Headers.Location.Should().NotBeNull();
@@ -61,7 +61,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 			request.CategoryId = 1;
 
 			var response = await _client
-				.PutAsJsonAsync(request.Route, request);
+				.PutAsJsonAsync(request.Route, request.Category);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
 		}
@@ -69,7 +69,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Categories
 		[Fact]
 		public async Task Can_Delete_Category()
 		{
-			var request = new DeleteRequest(20);
+			var request = new DeleteRequest() { CategoryId = 20 };
 
 			var response = await _client.DeleteAsync(request.Route);
 

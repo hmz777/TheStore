@@ -40,7 +40,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[InlineData("Black", null)]
 		public void Cant_Create_Invalid_Product_Color(string? colorName, string? colorCode)
 		{
-			var action = () => new ProductColor(new MultilanguageString(colorName!, CultureCode.English), colorCode!, false, []);
+			var action = () => new ProductColor(colorName, colorCode!, false, []);
 
 			action.Should().Throw<ArgumentException>();
 		}
@@ -48,7 +48,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 		[Fact]
 		public void Can_Create_Valid_Product_Color()
 		{
-			var action = () => new ProductColor(new MultilanguageString("Black", CultureCode.English), "000000", false, []);
+			var action = () => new ProductColor("Black", "000000", false, []);
 
 			action.Should().NotThrow();
 		}
@@ -60,7 +60,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor(new MultilanguageString("Black", CultureCode.English), "000000", false, []);
+			var sut = new ProductColor("Black", "000000", false, []);
 
 			sut = sut.AddImage(image);
 
@@ -74,7 +74,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			fixture.Customize(new DomainCustomization());
 			var image = fixture.Create<Image>();
 
-			var sut = new ProductColor(new MultilanguageString("Black", CultureCode.English), "000000", false, []);
+			var sut = new ProductColor("Black", "000000", false, []);
 
 			sut = sut.AddImage(image);
 			sut = sut.RemoveImage(image);

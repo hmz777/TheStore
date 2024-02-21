@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Sinks.InMemory;
 using TheStore.ApiCommon.Constants;
 using TheStore.Catalog.Endpoints.IntegrationTests.Helpers;
 using TheStore.Catalog.Infrastructure.Data;
@@ -18,6 +23,8 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 			// Trigger runtime database migration
 			Environment.SetEnvironmentVariable(ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
 
+			builder.UseTestServer(o => o.PreserveExecutionContext = true);
+
 			builder.ConfigureServices(services =>
 			{
 				var descriptor = services.SingleOrDefault(
@@ -25,6 +32,24 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.WebApplication
 
 				if (descriptor != null)
 					services.Remove(descriptor);
+
+				services.AddHttpLogging(o => { });
+
+				services.Configure<AntiforgeryOptions>(o => o.SuppressXFrameOptionsHeader = true);
+				services.Configure<AntiforgeryOptions>(o => o.Cookie.Expiration = TimeSpan.Zero);
+
+				services.AddControllers(options =>
+				{
+					options.Filters.Add<IgnoreAntiforgeryTokenAttribute>(0);
+				});
+
+				services.AddSerilog(o =>
+				{
+					o.WriteTo.InMemory();
+					o.MinimumLevel.Override("Default", Serilog.Events.LogEventLevel.Information);
+					o.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Information);
+					o.MinimumLevel.Override("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware", Serilog.Events.LogEventLevel.Information);
+				});
 
 				services.AddDbContext<CatalogDbContext>((container, options) =>
 				{

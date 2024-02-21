@@ -29,7 +29,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var mockRepository = new Mock<IReadApiRepository<CatalogDbContext, Branch>>();
 			mockRepository.Setup(x => x.ListAsync(It.IsAny<Specification<Branch>>(), default))

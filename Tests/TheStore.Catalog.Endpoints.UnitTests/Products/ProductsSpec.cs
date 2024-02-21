@@ -18,6 +18,7 @@ using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.Catalog.Infrastructure.Services;
 using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models.Products;
 using TheStore.TestHelpers.AutoData.Services;
@@ -35,7 +36,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var mockRepository = new Mock<IReadApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.ListAsync(It.IsAny<Specification<Product>>(), default))
@@ -144,6 +145,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 		[Fact]
 		public async Task Can_Add_Variant_To_Product()
 		{
+			// TODO: Fix the sku service resolving in this test
+
 			var fixture = new Fixture();
 			fixture.Customize(new EndpointsCustomization());
 			fixture.Customize(new DtoCustomizations());
@@ -157,7 +160,14 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
 				.ReturnsAsync(product);
 
-			var sut = new AddVariant(new AddVariantValidator(), mockRepository.Object, fixture.Create<IMapper>());
+			mockRepository.Setup(x => x.ListAsync(It.IsAny<ISpecification<Product>>(), default))
+				.ReturnsAsync(DummyDataHelper.GenerateDummyProducts(5));
+
+			var sut = new AddVariant(
+				new AddVariantValidator(),
+				mockRepository.Object,
+				new SkuService(mockRepository.Object),
+				fixture.Create<IMapper>());
 
 			var result = await sut.HandleAsync(request);
 

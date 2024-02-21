@@ -26,7 +26,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var mockRepository = new Mock<IReadApiRepository<CatalogDbContext, Category>>();
 			mockRepository.Setup(x => x.ListAsync(It.IsAny<Specification<Category>>(), default))

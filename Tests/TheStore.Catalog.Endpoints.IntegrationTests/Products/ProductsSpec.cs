@@ -19,7 +19,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_List_Products()
 		{
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var response = await _client
 				.GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
@@ -31,7 +31,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_Get_Product_By_Id()
 		{
-			var request = new GetByIdRequest(1);
+			var request = new GetByIdRequest() { ProductId = 1 };
 
 			var response = await _client
 				.GetFromJsonAsync<ProductDtoRead>(request.Route);
@@ -47,7 +47,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = fixture.Create<CreateRequest>();
 
 			var response = await _client
-				.PostAsJsonAsync(request.Route, request);
+				.PostAsJsonAsync(request.Route, request.Product);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 			response.Headers.Location.Should().NotBeNull();
@@ -62,7 +62,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			request.ProductId = 1;
 
 			var response = await _client
-				.PutAsJsonAsync(request.Route, request);
+				.PutAsJsonAsync(request.Route, request.Product);
 
 			((int)response.StatusCode).Should().Be(StatusCodes.Status204NoContent);
 		}
@@ -70,7 +70,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_Delete_Product()
 		{
-			var request = new DeleteRequest(20);
+			var request = new DeleteRequest { ProductId = 1 };
 
 			var response = await _client.DeleteAsync(request.Route);
 
@@ -86,7 +86,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = fixture.Create<AddVariantRequest>();
 			request.ProductId = 1;
 
-			var response = await _client.PostAsJsonAsync(request.Route, request);
+			var response = await _client.PostAsJsonAsync(request.Route, request.ProductVariant);
 			var responseObject = JsonSerializer.Deserialize<ProductDtoRead>(
 				await response.Content.ReadAsStringAsync(),
 				new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -104,24 +104,20 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			fixture.Customize(new DtoCustomizations());
 
 			var request = fixture.Create<AddImageToVariantRequest>();
-			request.ProductId = 4;
+			request.ProductId = 1;
+			request.Sku = "SKU 0";
 
 			using (var formData = new MultipartFormDataContent())
 			{
-				formData.Add(new StringContent(JsonSerializer.Serialize(request.Image.Alt)), "Image.Alt");
-				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
-					"Image.File", "TestImage.jpg");
+				formData.Add(new StringContent("en-US"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].CultureCode.Code");
+				formData.Add(new StringContent("Lorem Ipsum"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].Value");
+				formData.Add(new StringContent("True"), $"{nameof(request.Image)}.{nameof(request.Image.IsMainImage)}");
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
 
 				var response = await _client.PostAsync(request.Route, formData);
 
-				var responseObject = JsonSerializer.Deserialize<ProductDtoRead>(
-					await response.Content.ReadAsStringAsync(),
-					new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
 				((int)response.StatusCode).Should().Be(StatusCodes.Status201Created);
 				response.Headers.Location.Should().NotBeNull();
-
-				responseObject?.Variants.Where(p => p.Sku == request.Sku).First().Color.Should();
 			}
 		}
 
@@ -131,7 +127,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var fixture = new Fixture();
 			fixture.Customize(new DtoCustomizations());
 
-			var listRequest = new ListRequest(1, 1);
+			var listRequest = new ListRequest() { Page = 1, Take = 1 };
 			var listResponse = await _client.
 				GetFromJsonAsync<List<ProductDtoRead>>(listRequest.Route);
 
@@ -144,9 +140,10 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 
 			using (var formData = new MultipartFormDataContent())
 			{
-				formData.Add(new StringContent(JsonSerializer.Serialize(request.Image.Alt)), "Image.Alt");
-				formData.Add(new StreamContent(File.OpenRead("TestResources/TestImages/TestImage.jpg")),
-					"Image.File", "TestImage.jpg");
+				formData.Add(new StringContent("en-US"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].CultureCode.Code");
+				formData.Add(new StringContent("Lorem Ipsum"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].Value");
+				formData.Add(new StringContent("True"), $"{nameof(request.Image)}.{nameof(request.Image.IsMainImage)}");
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
 
 				var response = await _client.PutAsync(request.Route, formData);
 
@@ -157,18 +154,19 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_Remove_Image_From_Color()
 		{
-			var request = new ListRequest(1, 10);
+			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var response = await _client.
 				GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
 
 			var product = response!.First();
-			var color = product.Variants[0].Color;
 
-			var removeRequest = new RemoveImageFromVariantRequest(
-				product.ProductId,
-				color.ColorCode,
-				color.GetMainImage().StringFileUri);
+			var removeRequest = new RemoveImageFromVariantRequest
+			{
+				ProductId = product.ProductId,
+				Sku = product.Variants[0].Sku,
+				ImagePath = product.Variants.First().Color.GetMainImage().StringFileUri
+			};
 
 			var removeResponse = await _client.DeleteAsync(removeRequest.Route);
 

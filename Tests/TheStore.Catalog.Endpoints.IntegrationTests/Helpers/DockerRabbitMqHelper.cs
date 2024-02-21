@@ -110,8 +110,9 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Helpers
 		public async ValueTask DisposeAsync()
 		{
 			await dockerClient.Containers.StopContainerAsync(containerName, new ContainerStopParameters());
-			await dockerClient.Containers.RemoveContainerAsync(containerName,
-				new ContainerRemoveParameters() { Force = true });
+			//await dockerClient.Containers.RemoveContainerAsync(containerName,
+			//	new ContainerRemoveParameters() { Force = true });
+
 			dockerClient.Dispose();
 		}
 	}
