@@ -12,7 +12,7 @@
 		<NavLink href="/contact" class="nav-link">Contact Us</NavLink>
 		<AuthorizeView>
 			<Authorized>
-				<NavLink href="/user/profile">
+				<NavLink href="/authentication/profile">
 					@(context.User?.FindFirst("email")?.Value ?? "Error")
 				</NavLink>
 				<button type="button" @onclick="BeginLogout">Logout</button>
