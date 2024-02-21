@@ -2,7 +2,7 @@
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-	public class ProductVariantOptions : ValueObject
+	public class ProductVariantOptions
 	{
 		public bool CanBePurchased { get; set; }
 		public bool CanBeFavorited { get; set; }
@@ -11,12 +11,6 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		{
 			CanBePurchased = canBePurchased;
 			CanBeFavorited = canBeFavorited;
-		}
-
-		protected override IEnumerable<IComparable> GetEqualityComponents()
-		{
-			yield return CanBePurchased;
-			yield return CanBeFavorited;
 		}
 	}
 }
