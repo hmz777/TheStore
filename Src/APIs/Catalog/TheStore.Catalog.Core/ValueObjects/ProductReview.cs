@@ -18,7 +18,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 		{
 			Guard.Against.NullOrEmpty(title, nameof(title));
 			Guard.Against.NullOrEmpty(content, nameof(content));
-			Guard.Against.OutOfRange(rating, nameof(content), 1, 5);
+			Guard.Against.OutOfRange(rating, nameof(rating), 1, 5);
 			Guard.Against.NullOrEmpty(user, nameof(user));
 
 			Title = title;
@@ -34,6 +34,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 			yield return Content;
 			yield return Rating;
 			yield return User;
+			yield return Date;
 		}
 	}
 }

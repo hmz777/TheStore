@@ -8,17 +8,17 @@ namespace TheStore.Catalog.Core.ValueObjects
 	public class Image : ValueObject
 	{
 		[NotMapped]
-		public Uri FileUri { get; }
+		public Uri FileUri => new(StringFileUri, UriKind.RelativeOrAbsolute);
 
 		[NotMapped]
 		public string FileNameWithExtension =>
-			Path.GetFileName(FileUri.ToString());
+			FileUri.ToString();
 
-		public string StringFileUri { get; }
+		public string StringFileUri { get; private set; }
 
-		public MultilanguageString Alt { get; }
+		public MultilanguageString Alt { get; private set; }
 
-		public bool IsMainImage { get; }
+		public bool IsMainImage { get; private set; }
 
 		// Ef Core
 		private Image() { }
@@ -27,8 +27,6 @@ namespace TheStore.Catalog.Core.ValueObjects
 		{
 			Guard.Against.Null(stringFileUri, nameof(stringFileUri));
 			Guard.Against.Null(alt, nameof(alt));
-
-			FileUri = new Uri(stringFileUri, UriKind.RelativeOrAbsolute);
 
 			StringFileUri = stringFileUri;
 			Alt = alt;

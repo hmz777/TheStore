@@ -10,9 +10,9 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 	{
 		private readonly List<Image> images = new();
 
-		public MultilanguageString ColorName { get; }
-		public string ColorCode { get; }
-		public bool IsMainColor { get; }
+		public string ColorName { get; private set; }
+		public string ColorCode { get; private set; }
+		public bool IsMainColor { get; private set; }
 
 		[NotMapped]
 		public ReadOnlyCollection<Image> Images => images.AsReadOnly();
@@ -20,9 +20,9 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 		// Ef Core
 		private ProductColor() { }
 
-		public ProductColor(MultilanguageString colorName, string colorCode, bool isMainColor, List<Image> images)
+		public ProductColor(string colorName, string colorCode, bool isMainColor, List<Image> images)
 		{
-			Guard.Against.Null(colorName, nameof(colorName));
+			Guard.Against.NullOrEmpty(colorName, nameof(colorName));
 			Guard.Against.NullOrEmpty(colorCode, nameof(colorCode));
 			Guard.Against.InvalidFormat(colorCode, nameof(colorCode), regexPattern: "^(?:[0-9a-fA-F]{3,4}){1,2}$");
 

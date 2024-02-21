@@ -5,10 +5,10 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Dimensions : ValueObject
 	{
-		public decimal Width { get; }
-		public decimal Height { get; }
-		public decimal Length { get; }
-		public UnitOfMeasure Unit { get; }
+		public decimal Width { get; private set; }
+		public decimal Height { get; private set; }
+		public decimal Length { get; private set; }
+		public UnitOfMeasure Unit { get; private set; }
 
 		// Ef Core
 		private Dimensions() { }

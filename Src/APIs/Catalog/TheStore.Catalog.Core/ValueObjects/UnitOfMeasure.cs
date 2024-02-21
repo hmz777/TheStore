@@ -5,11 +5,14 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class UnitOfMeasure : ValueObject
 	{
-		public static UnitOfMeasure Mm => new ("Mm");
-		public static UnitOfMeasure Cm => new ("cm");
-		public static UnitOfMeasure M => new ("m");
+		public static UnitOfMeasure Mm => new("Mm");
+		public static UnitOfMeasure Cm => new("cm");
+		public static UnitOfMeasure M => new("m");
 
-		public string Unit { get; }
+		public string Unit { get; private set; }
+
+		// Ef Core
+		private UnitOfMeasure() { }
 
 		public UnitOfMeasure(string unit)
 		{
