@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args)
 
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>(Testing.ApplyMigrationsAtRuntime))
+if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
 {
 	Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CartDbContext)}");
 
