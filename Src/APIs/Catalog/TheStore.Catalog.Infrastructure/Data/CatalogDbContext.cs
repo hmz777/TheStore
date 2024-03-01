@@ -103,6 +103,32 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 				opt.OwnsMany(v => v.Reviews);
 			});
+
+			modelBuilder.Entity<ProductColor>(opt =>
+			{
+				opt.Property<int>("ID")
+				.HasColumnType("int")
+				.ValueGeneratedOnAdd()
+				.HasAnnotation("Key", 0);
+
+				opt.HasMany<Image>("images");
+				opt.Navigation("images").AutoInclude();
+			});
+
+			modelBuilder.Entity<Image>(opt =>
+			{
+				opt.Property<int>("ID")
+				.HasColumnType("int")
+				.ValueGeneratedOnAdd()
+				.HasAnnotation("Key", 0);
+			});
+
+			modelBuilder.Entity<ProductSpecification>(opt =>
+			{
+				opt.Property<int>("ID")
+				.HasColumnType("int")
+				.ValueGeneratedOnAdd()
+				.HasAnnotation("Key", 0);
 			});
 
 			#endregion
