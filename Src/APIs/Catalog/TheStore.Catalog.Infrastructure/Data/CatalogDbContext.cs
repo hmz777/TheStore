@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using TheStore.ApiCommon.Services;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
+using TheStore.Catalog.Core.ValueObjects.Products;
 using TheStore.Catalog.Infrastructure.Data.ValueConverters;
 using TheStore.SharedKernel.ValueObjects;
 
@@ -24,14 +27,14 @@ namespace TheStore.Catalog.Infrastructure.Data
 		{
 			base.OnModelCreating(modelBuilder);
 
-			#region Value Objects
-
-			#endregion
-
 			#region Branch
 
 			modelBuilder.Entity<Branch>()
-				.OwnsOne(b => b.Image);
+				.HasOne(b => b.Image);
+
+			modelBuilder.Entity<Branch>()
+				.Navigation(b => b.Image)
+				.AutoInclude();
 
 			#endregion
 
