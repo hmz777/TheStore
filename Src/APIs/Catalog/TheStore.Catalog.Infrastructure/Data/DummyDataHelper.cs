@@ -63,11 +63,11 @@ namespace TheStore.Catalog.Infrastructure.Data
 			return branches;
 		}
 
-		public static List<Product> GenerateDummyProducts()
+		public static List<Product> GenerateDummyProducts(int? number = null)
 		{
 			var rand = new Random();
-			var randomNumeber = rand.Next(5, 5000);
-			var randomProductNumber = rand.Next(1, 100);
+			var randomNumber = rand.Next(5, 999);
+			var randomProductNumber = rand.Next(1, number ?? 100);
 			var randomVariantNumber = rand.Next(1, 5);
 			var randomImageNumber = rand.Next(1, 10);
 
@@ -93,18 +93,25 @@ namespace TheStore.Catalog.Infrastructure.Data
 							false));
 					}
 
-					var variant = new ProductVariant(
-								GenerateRandomSmallString(),
-								GenerateRandomSmallString(),
-								new MultilanguageString(GenerateRandomString(), CultureCode.English),
-								new MultilanguageString(GenerateRandomString(), CultureCode.English),
-								new Money((j + 1) * 500, Currency.Usd),
-								new InventoryRecord(i, 5, 100, 0, false),
-								new ProductColor(new MultilanguageString(GenerateRandomString(), CultureCode.English), color, false, images),
-								new ProductVariantOptions(true, true),
-								new Dimensions(randomNumeber, randomNumeber, randomNumeber, UnitOfMeasure.Cm),
-								new ProductSpecifications(new Dictionary<string, string>() { { "Name", "Value" } }),
-								true);
+					var variant = new ProductVariant()
+					{
+						Name = GenerateRandomSmallString(),
+						Sku = $"SKU {j}",
+						Description = new MultilanguageString(GenerateRandomString(), CultureCode.English),
+						ShortDescription = new MultilanguageString(GenerateRandomString(), CultureCode.English),
+						Price = new Money((j + 1) * 500, Currency.Usd),
+						Inventory = new InventoryRecord(i, 5, 100, 0, false),
+						Color = new ProductColor(GenerateRandomString(), color, false, images),
+						Options = new ProductVariantOptions(true, true),
+						Dimentions = new Dimensions(randomNumber, randomNumber, randomNumber, UnitOfMeasure.Cm),
+						Sepcifications = [
+							new(new MultilanguageString("Name", CultureCode.English), new MultilanguageString("Value", CultureCode.English))
+						],
+						Published = true,
+						Reviews = [
+							new(GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack")
+						]
+					};
 
 					variants.Add(variant);
 				}
