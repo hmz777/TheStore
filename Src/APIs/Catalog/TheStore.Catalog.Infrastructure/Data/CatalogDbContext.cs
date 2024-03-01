@@ -67,6 +67,10 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.WithOne()
 				.IsRequired();
 
+			modelBuilder.Entity<Product>()
+				.Navigation("variants")
+				.AutoInclude();
+
 			modelBuilder.Entity<ProductVariant>(opt =>
 			{
 				opt.Property<int>("ID")
