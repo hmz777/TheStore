@@ -8,6 +8,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 		public ListProductsPaginationDefaultOrderReadSpec(int take, int page)
 		{
 			Query
+				.Include("variants")
 				.OrderBy(x => x.Id)
 				.Skip((page - 1) * take)
 				.Take(take)
