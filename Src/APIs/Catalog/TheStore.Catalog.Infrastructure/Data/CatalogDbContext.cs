@@ -147,8 +147,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 			configurationBuilder.ComplexProperties<Address>();
 			configurationBuilder.ComplexProperties<Coordinate>();
 			configurationBuilder.ComplexProperties<MultilanguageString>();
-			//configurationBuilder.ComplexProperties<LocalizedString>();
-			//configurationBuilder.ComplexProperties<CultureCode>();
 		}
 
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
