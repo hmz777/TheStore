@@ -85,11 +85,24 @@ namespace TheStore.Catalog.Infrastructure.Data
 				});
 
 				opt.OwnsOne(v => v.Inventory);
-				opt.OwnsOne(v => v.Color, cOpt => cOpt.OwnsMany<Image>("images"));
+
+				opt.HasOne(v => v.Color);
+				opt.Navigation(v => v.Color).AutoInclude();
+
 				opt.OwnsOne(v => v.Options);
-				opt.OwnsOne(v => v.Dimentions);
-				opt.OwnsOne(v => v.Sepcifications);
-				opt.OwnsMany<ProductReview>("reviews");
+				opt.OwnsOne(v => v.Dimentions, opt =>
+				{
+					opt.OwnsOne(d => d.Unit);
+					opt.Property(d => d.Width).HasColumnType("decimal").HasPrecision(5, 2);
+					opt.Property(d => d.Height).HasColumnType("decimal").HasPrecision(5, 2);
+					opt.Property(d => d.Length).HasColumnType("decimal").HasPrecision(5, 2);
+				});
+
+				opt.HasMany(v => v.Sepcifications);
+				opt.Navigation(v => v.Sepcifications).AutoInclude();
+
+				opt.OwnsMany(v => v.Reviews);
+			});
 			});
 
 			#endregion
