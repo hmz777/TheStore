@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Protobuf.Reflection;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -34,12 +35,9 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ReverseMap()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
-			CreateMap<ProductVariant, ProductVariantDtoRead>()
-				.ForMember(dest => dest.Reviews, opt => opt.MapFrom("reviews"));
-
+			CreateMap<ProductVariant, ProductVariantDtoRead>();
 			CreateMap<ProductVariantDtoUpdate, ProductVariant>()
-				.ForMember("reviews", opt => opt.MapFrom(src => src.Reviews))
-				.ForMember(dest => dest.Reviews, opt => opt.Ignore());
+				.ForMember(dest => dest.Sku, opt => opt.Ignore());
 
 			CreateMap<ProductVariantOptions, ProductVariantOptionsDto>().ReverseMap();
 
@@ -84,9 +82,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Dimensions, DimentionsDto>().ReverseMap();
 			CreateMap<ProductReview, ProductReviewDto>().ReverseMap();
 			CreateMap<UnitOfMeasure, UnitOfMeasureDto>().ReverseMap();
-			CreateMap<ProductSpecifications, ProductSpecificationsDto>()
-				.ForMember(dest => dest.Specs, opt => opt.MapFrom(src => src.GetSpecifications()))
-				.ReverseMap();
+			CreateMap<ProductSpecification, ProductSpecificationDto>().ReverseMap();
 		}
 	}
 }
