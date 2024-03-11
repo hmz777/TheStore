@@ -1,4 +1,6 @@
 ﻿using AuthServer;
+using AuthServer.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -19,6 +21,17 @@ try
 	var app = builder
 		.ConfigureServices()
 		.ConfigurePipeline();
+
+	if (builder.Environment.IsDevelopment())
+	{
+		using (var scope = app.Services.CreateScope())
+		{
+			var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.Migrate();
+		}
+	}
 
 	// this seeding is only for the template to bootstrap the DB and users.
 	// in production you will likely want a different approach.
