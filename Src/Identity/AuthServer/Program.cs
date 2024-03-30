@@ -1,5 +1,5 @@
 ﻿using AuthServer;
-using AuthServer.Data;
+using AuthServer.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -24,13 +24,7 @@ try
 
 	if (builder.Environment.IsDevelopment())
 	{
-		using (var scope = app.Services.CreateScope())
-		{
-			var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-			dbContext.Database.EnsureDeleted();
-			dbContext.Database.Migrate();
-		}
+		await app.MigrateAndSeed();
 	}
 
 	// this seeding is only for the template to bootstrap the DB and users.
