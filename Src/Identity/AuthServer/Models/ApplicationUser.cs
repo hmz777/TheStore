@@ -10,6 +10,7 @@ namespace AuthServer.Models
 	// Add profile data for application users by adding properties to the ApplicationUser class
 	public class ApplicationUser : IdentityUser
 	{
+		public bool Active { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateTimeOffset BirthDate { get; set; }
