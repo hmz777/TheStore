@@ -1,50 +1,54 @@
 ﻿using Duende.IdentityServer.Models;
+using IdentityModel;
 
 namespace AuthServer
 {
 	public static class Config
 	{
 		public static IEnumerable<IdentityResource> IdentityResources =>
-			new IdentityResource[]
-			{
+			[
 				new IdentityResources.OpenId(),
 				new IdentityResources.Profile()
 				{
-					UserClaims = { "name", "first name", "last name", "email" }
+					UserClaims = {
+						JwtClaimTypes.PreferredUserName,
+						JwtClaimTypes.Email,
+						"first_name",
+						"last_name",
+						JwtClaimTypes.PhoneNumber,
+						JwtClaimTypes.BirthDate,
+						"active"
+					}
 				}
-			};
+			];
 
-		public static IEnumerable<ApiScope> ApiScopes =>
-			Array.Empty<ApiScope>();
+		public static IEnumerable<ApiScope> ApiScopes => [];
 
-		public static IEnumerable<ApiResource> ApiResources =>
-			Array.Empty<ApiResource>();
+		public static IEnumerable<ApiResource> ApiResources => [];
 
 		public static IEnumerable<Client> Clients =>
-			new Client[]
-			{
+			[
 				// Interactive client using code flow + PKCE
-				new Client
-				{
+				new Client() {
 					ClientName = "TheStore SPA",
 					ClientId = "TheStore.Web.Blazor",
-					ClientUri = "https://localhost:7074",
-					LogoUri = "https://localhost:7074/media/system/logo.png",
+					ClientUri = "https://localhost:7676",
+					LogoUri = "https://localhost:7676/media/system/logo.png",
 					ClientSecrets = { new Secret("secret".Sha256()) },
 					AllowedGrantTypes = GrantTypes.Code,
-					AllowedCorsOrigins = { "https://localhost:7074" },
+					AllowedCorsOrigins = { "https://localhost:7676" },
 					RedirectUris = {
-						"https://localhost:7074/signin-oidc",
-						"https://localhost:7074/authentication/login-callback",
+						"https://localhost:7676/signin-oidc"
 					},
-					FrontChannelLogoutUri = "https://localhost:7074/signout-oidc",
+					FrontChannelLogoutUri = "https://localhost:7676/signout-oidc",
 					PostLogoutRedirectUris = {
-						"https://localhost:7074/signout-callback-oidc",
-						"https://localhost:7074/authentication/logout-callback",
+						"https://localhost:7676/signout-callback-oidc"
 					},
 					AllowedScopes = { "openid", "profile" },
-					RequireClientSecret = false
+					RequireConsent = false,
+					AllowOfflineAccess = false,
+					AlwaysIncludeUserClaimsInIdToken = true
 				}
-			};
+			];
 	}
 }
