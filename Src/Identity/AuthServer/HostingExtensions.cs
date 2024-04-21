@@ -4,17 +4,16 @@ using AuthServer.Localization;
 using AuthServer.Models;
 using AuthServer.Routing;
 using AuthServer.Services.Emails;
+using AuthServer.Services.Profile;
 using AuthServer.Services.StatusMessages;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Serilog;
 using System.Globalization;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace AuthServer
 {
@@ -45,7 +44,8 @@ namespace AuthServer
 				.AddInMemoryIdentityResources(Config.IdentityResources)
 				.AddInMemoryApiScopes(Config.ApiScopes)
 				.AddInMemoryClients(Config.Clients)
-				.AddAspNetIdentity<ApplicationUser>();
+				.AddAspNetIdentity<ApplicationUser>()
+				.AddProfileService<ProfileService>();
 
 			builder.Services.AddAuthentication()
 				.AddGoogle(options =>
