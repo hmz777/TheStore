@@ -18,7 +18,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 {
 	public class List : EndpointBaseAsync
 		.WithRequest<ListRequest>
-		.WithActionResult<List<ProductDtoRead>>
+		.WithActionResult<ProductsPaginatedResult>
 	{
 		private readonly IValidator<ListRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Product> repository;
@@ -43,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			Description = "Lists single products with pagination using skip and take",
 			OperationId = "Product.Single.List",
 			Tags = new[] { "Products" })]
-		public async override Task<ActionResult<List<ProductDtoRead>>> HandleAsync(
+		public async override Task<ActionResult<ProductsPaginatedResult>> HandleAsync(
 			[FromQuery] ListRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -51,14 +51,23 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
+			var spec = new ListProductsPaginationDefaultOrderReadSpec(request.Take, request.Page);
+
 			var products = (await repository
-				.ListAsync(new ListProductsPaginationDefaultOrderReadSpec(request.Take, request.Page), cancellationToken))
+				.ListAsync(spec, cancellationToken))
 				.Map<Product, ProductDtoRead>(mapper);
+
+			var productscount = await repository.CountAsync(spec, cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("List products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
 
-			return products;
+			return new ProductsPaginatedResult
+			{
+				Products = products,
+				Count = productscount,
+				PageNumber = request.Page
+			};
 		}
 	}
 }
