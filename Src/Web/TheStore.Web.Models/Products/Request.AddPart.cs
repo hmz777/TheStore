@@ -1,7 +1,8 @@
-﻿using TheStore.Web.Models;
+﻿using System.ComponentModel;
 
 namespace TheStore.Web.Models.Products
 {
+	[DisplayName("Product.Assembled." + nameof(AddPartRequest))]
 	public class AddPartRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/assembledproducts/{ProductId:int}/parts";
@@ -10,5 +11,7 @@ namespace TheStore.Web.Models.Products
 		public int ProductId { get; set; }
 
 		public int PartId { get; set; }
+
+		public string Sku { get; set; }
 	}
 }

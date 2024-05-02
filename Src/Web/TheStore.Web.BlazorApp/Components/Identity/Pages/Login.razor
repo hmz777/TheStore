@@ -1,0 +1,27 @@
+﻿@page "/Identity/Login"
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@using Microsoft.AspNetCore.Authorization
+
+<h1>Loading...</h1>
+
+@code {
+	[CascadingParameter]
+	private HttpContext? HttpContext { get; set; }
+
+	[SupplyParameterFromQuery]
+	private string? ReturnUrl { get; set; }
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (HttpContext == null)
+		{
+			return;
+		}
+
+		await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+			{
+				RedirectUri = ReturnUrl
+			});
+	}
+}

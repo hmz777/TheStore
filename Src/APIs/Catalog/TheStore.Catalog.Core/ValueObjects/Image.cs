@@ -11,14 +11,13 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public Uri FileUri => new(StringFileUri, UriKind.RelativeOrAbsolute);
 
 		[NotMapped]
-		public string FileNameWithExtension =>
-			FileUri.ToString();
+		public string FileNameWithExtension => FileUri.ToString();
 
-		public string StringFileUri { get; private set; }
+		public string StringFileUri { get; }
 
-		public MultilanguageString Alt { get; private set; }
+		public MultilanguageString Alt { get; }
 
-		public bool IsMainImage { get; private set; }
+		public bool IsMainImage { get; }
 
 		// Ef Core
 		private Image() { }

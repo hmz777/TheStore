@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
+using TheStore.ApiCommon.Interfaces;
 using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.ApiCommon.Data.Repository
@@ -10,16 +11,19 @@ namespace TheStore.ApiCommon.Data.Repository
 		 IReadApiRepository<TContext, T> where TContext : DbContext where T : class, IAggregateRoot
 	{
 		private readonly IApiRepository<TContext, T> dataRepository;
+		private readonly ICacheConfiguration appConfiguration;
 		private readonly IMemoryCache memoryCache;
 		private readonly IHostEnvironment hostEnvironment;
 		private readonly MemoryCacheEntryOptions memoryCacheEntryOptions;
 
 		public CachedRepository(
 			IApiRepository<TContext, T> dataRepository,
+			ICacheConfiguration appConfiguration,
 			IMemoryCache memoryCache,
 			IHostEnvironment hostEnvironment)
 		{
 			this.dataRepository = dataRepository;
+			this.appConfiguration = appConfiguration;
 			this.memoryCache = memoryCache;
 			this.hostEnvironment = hostEnvironment;
 
@@ -27,8 +31,8 @@ namespace TheStore.ApiCommon.Data.Repository
 			{
 				memoryCacheEntryOptions = new MemoryCacheEntryOptions()
 				{
-					AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60),
-					SlidingExpiration = TimeSpan.FromSeconds(45)
+					AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(appConfiguration.MemoryCacheAbsoluteExpirationRelativeToNowInSeconds),
+					SlidingExpiration = TimeSpan.FromSeconds(appConfiguration.MemoryCacheSlidingExpirationInSeconds)
 				};
 			}
 			else
@@ -43,7 +47,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -57,13 +61,18 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<bool> AnyAsync(CancellationToken cancellationToken = default)
 		{
-			string cacheKey = $"{nameof(T)}-{nameof(AnyAsync)}";
-
-			return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+			if (appConfiguration.MemoryCacheEnabled)
 			{
-				entry.SetOptions(memoryCacheEntryOptions);
-				return dataRepository.AnyAsync(cancellationToken);
-			});
+				string cacheKey = $"{nameof(T)}-{nameof(AnyAsync)}";
+
+				return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+				{
+					entry.SetOptions(memoryCacheEntryOptions);
+					return dataRepository.AnyAsync(cancellationToken);
+				});
+			}
+
+			return dataRepository.AnyAsync(cancellationToken);
 		}
 
 		public IAsyncEnumerable<T> AsAsyncEnumerable(ISpecification<T> specification)
@@ -73,7 +82,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -87,18 +96,23 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<int> CountAsync(CancellationToken cancellationToken = default)
 		{
-			string cacheKey = $"{nameof(T)}-{nameof(CountAsync)}";
-
-			return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+			if (appConfiguration.MemoryCacheEnabled)
 			{
-				entry.SetOptions(memoryCacheEntryOptions);
-				return dataRepository.CountAsync(cancellationToken);
-			});
+				string cacheKey = $"{nameof(T)}-{nameof(CountAsync)}";
+
+				return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+				{
+					entry.SetOptions(memoryCacheEntryOptions);
+					return dataRepository.CountAsync(cancellationToken);
+				});
+			}
+
+			return dataRepository.CountAsync(cancellationToken);
 		}
 
 		public Task<T?> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -112,7 +126,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -141,18 +155,23 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
 		{
-			string cacheKey = $"{nameof(T)}-{nameof(ListAsync)}";
-
-			return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+			if (appConfiguration.MemoryCacheEnabled)
 			{
-				entry.SetOptions(memoryCacheEntryOptions);
-				return dataRepository.ListAsync(cancellationToken);
-			})!;
+				string cacheKey = $"{nameof(T)}-{nameof(ListAsync)}";
+
+				return memoryCache.GetOrCreateAsync(cacheKey, entry =>
+				{
+					entry.SetOptions(memoryCacheEntryOptions);
+					return dataRepository.ListAsync(cancellationToken);
+				})!;
+			}
+
+			return dataRepository.ListAsync(cancellationToken);
 		}
 
 		public Task<List<T>> ListAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -166,7 +185,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<List<TResult>> ListAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -180,7 +199,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<T?> SingleOrDefaultAsync(ISingleResultSpecification<T> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{
@@ -194,7 +213,7 @@ namespace TheStore.ApiCommon.Data.Repository
 
 		public Task<TResult?> SingleOrDefaultAsync<TResult>(ISingleResultSpecification<T, TResult> specification, CancellationToken cancellationToken = default)
 		{
-			if (specification.CacheEnabled)
+			if (appConfiguration.MemoryCacheEnabled && specification.CacheEnabled)
 			{
 				return memoryCache.GetOrCreateAsync(specification.CacheKey!, entry =>
 				{

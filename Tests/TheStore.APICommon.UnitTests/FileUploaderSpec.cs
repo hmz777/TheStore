@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using System.IO.Abstractions.TestingHelpers;
 using TheStore.ApiCommon.Services;
-using TheStore.APICommon.UnitTests.AutoData;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.APICommon.UnitTests
 {

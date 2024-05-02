@@ -1,0 +1,34 @@
+﻿@using TheStore.Web.BlazorApp.Client.Shared
+@using TheStore.Web.BlazorApp.Client.Shared.Result
+
+<Router AppAssembly="@typeof(Program).Assembly">
+	<Found Context="routeData">
+		<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+			<Authorizing>
+				<div class="m-auto w-100 h-100">
+					<Result Type="ResultType.Info"
+							Message="Loading..." />
+				</div>
+			</Authorizing>
+			<NotAuthorized>
+				@if (context.User.Identity?.IsAuthenticated != true)
+				{
+					<RedirectToLogin />
+				}
+				else
+				{
+					<Result Type="ResultType.Error"
+							Message="You are not authorized to access this resource" />
+				}
+			</NotAuthorized>
+		</AuthorizeRouteView>
+		<FocusOnNavigate RouteData="@routeData" Selector="h1" />
+	</Found>
+	<NotFound>
+		<PageTitle>Not found</PageTitle>
+		<LayoutView Layout="@typeof(MainLayout)">
+			<Result Type="ResultType.NotFound"
+					Message="It looks like there's nothing here &#x1F615;" />
+		</LayoutView>
+	</NotFound>
+</Router>

@@ -4,8 +4,8 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Core.ValueObjects.Products;
-using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 using TheStore.SharedKernel.ValueObjects;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Domain.UnitTests
 {
@@ -61,8 +61,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			var image = fixture.Create<Image>();
 
 			var sut = new ProductColor("Black", "000000", false, []);
-
-			sut = sut.AddImage(image);
+			sut.Images.Add(image);
 
 			sut.Images.Should().Contain(image);
 		}
@@ -76,8 +75,8 @@ namespace TheStore.Catalog.Domain.UnitTests
 
 			var sut = new ProductColor("Black", "000000", false, []);
 
-			sut = sut.AddImage(image);
-			sut = sut.RemoveImage(image);
+			sut.Images.Add(image);
+			sut.Images.Remove(image);
 
 			sut.Images.Should().NotContain(image);
 		}
@@ -126,7 +125,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 
 			var sut = fixture.Create<Product>();
 
-			sut.AddVariant(variant);
+			sut.Variants.Add(variant);
 
 			sut.Variants.Should().Contain(variant);
 		}
@@ -140,7 +139,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 
 			var sut = fixture.Create<Product>();
 
-			sut.RemoveVariant(variant);
+			sut.Variants.Remove(variant);
 
 			sut.Variants.Should().NotContain(variant);
 		}

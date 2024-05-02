@@ -17,20 +17,37 @@ namespace TheStore.SharedKernel.ValueObjects
 		[NotMapped]
 		public ReadOnlyCollection<LocalizedString> LocalizedStrings => localizedStrings.AsReadOnly();
 
-		public string? Json { get; private set; }
+		private string? jsonBack;
 
-		public MultilanguageString() { }
+		public string? Json
+		{
+			get { return jsonBack; }
+			set
+			{
+				jsonBack = value;
+				LoadJsonIfNotLoaded();
+			}
+		}
+
+		// Ef Core
+		private MultilanguageString() { }
 
 		public MultilanguageString(List<LocalizedString>? localizedStrings = null!)
 		{
-			this.localizedStrings = localizedStrings ?? new();
+			if (localizedStrings != null)
+			{
+				this.localizedStrings = localizedStrings;
+				SaveJson();
+			}
 		}
 
-		public MultilanguageString(LocalizedString initialString)
+		public MultilanguageString(LocalizedString initialLocalizedString)
 		{
-			Guard.Against.Null(initialString, nameof(initialString));
+			Guard.Against.Null(initialLocalizedString, nameof(initialLocalizedString));
 
-			localizedStrings.Add(initialString);
+			localizedStrings.Add(initialLocalizedString);
+
+			SaveJson();
 		}
 
 		public MultilanguageString(string value, CultureCode cultureCode)
@@ -40,6 +57,8 @@ namespace TheStore.SharedKernel.ValueObjects
 
 			var initialLocalizedString = new LocalizedString(value, cultureCode);
 			localizedStrings.Add(initialLocalizedString);
+
+			SaveJson();
 		}
 
 		private void LoadJsonIfNotLoaded()
@@ -64,9 +83,7 @@ namespace TheStore.SharedKernel.ValueObjects
 
 		public string? GetString(CultureCode cultureCode)
 		{
-			LoadJsonIfNotLoaded();
-
-			return localizedStrings.Where(ls => ls.CultureCode == cultureCode).FirstOrDefault()?.Value;
+			return localizedStrings.Find(ls => ls.CultureCode == cultureCode)?.Value;
 		}
 
 		public void AddLocalizedString(LocalizedString localizedString)
@@ -79,6 +96,8 @@ namespace TheStore.SharedKernel.ValueObjects
 			}
 
 			localizedStrings.Add(localizedString);
+
+			SaveJson();
 		}
 
 		public void AddLocalizedString(string value, CultureCode cultureCode)

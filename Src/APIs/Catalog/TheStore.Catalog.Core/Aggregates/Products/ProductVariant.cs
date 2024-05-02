@@ -17,9 +17,5 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public Dimensions Dimentions { get; set; }
 		public List<ProductSpecification> Sepcifications { get; set; }
 		public List<ProductReview> Reviews { get; set; }
-		public bool Published { get; set; }
-
-		// EF Core
-		//private ProductVariant() { }
 	}
 }

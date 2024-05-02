@@ -1,0 +1,134 @@
+﻿@page "/catalog/{catalogName?}/{manufacturer?}/{priceRange?}/{sortDirection?}/{page:int?}"
+@using TheStore.Web.BlazorApp.Client.Services
+@using TheStore.Web.Models.Products;
+@using TheStore.Web.Models.ValueObjectsDtos;
+@using TheStore.Web.BlazorApp.Client.Helpers;
+@using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
+@using TheStore.Web.BlazorApp.Client.Shared.Result;
+
+@inject CatalogService CatalogService
+
+<CatalogHeader Header="@CatalogName" Description="@CatalogDescription" />
+
+<div class="container my-5">
+	<div class="row">
+		@if (dataLoading)
+		{
+			<ProductCardsSkeleton />
+		}
+		else if (products.Count > 0)
+		{
+			@foreach (var product in products)
+			{
+				<div class="col-12 col-md-6 col-lg-4">
+					<ProductCard @key="product.ProductId"
+								 Product="product" />
+				</div>
+			}
+
+			<div class="col-12 position-sticky" style="bottom:1em;z-index:3;">
+				<CatalogPagination CurrentPage="Page"
+								   NumberOfPages="numberOfPages"
+								   OnNavigateToPreviousPage="NavigateToPreviousPage"
+								   OnNavigateToNumberedPage="NavigateToNumberedPage"
+								   OnNavigateToNextPage="NavigateToNextPage" />
+			</div>
+		}
+		else
+		{
+			<div class="col-12 col-lg-6 offset-lg-3">
+				<Result Type="ResultType.NoProducts"
+						Message="No products available with the current filter" />
+			</div>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public string? CatalogName { get; set; }
+
+	[Parameter]
+	public string? Manufacturer { get; set; }
+
+	[Parameter]
+	public string? PriceRange { get; set; }
+
+	[Parameter]
+	public string? SortDirection { get; set; }
+
+	[Parameter]
+	public int Page { get; set; } = 1;
+
+	private string? CatalogDescription { get; set; }
+	private int take { get; set; } = 6;
+	private int count { get; set; }
+	private int numberOfPages => (int)Math.Ceiling(count / (decimal)take);
+
+	private bool dataLoading = true;
+	private List<ProductDtoRead> products { get; set; } = new();
+
+	protected override void OnParametersSet()
+	{
+		CatalogName = CatalogName ?? "Product Catalog";
+		CatalogDescription = CatalogDescription ?? "A variety of products to choose from!";
+
+		SortDirection = SortDirection ?? "asc";
+		Page = Page == default ? 1 : Page;
+	}
+
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await FetchData(take, Page);
+
+			dataLoading = false;
+
+			if (ShouldRender())
+			{
+				StateHasChanged();
+			}
+		}
+	}
+
+	private async Task FetchData(int take, int page)
+	{
+		var result = await CatalogService.GetProductsPaginated(take, page);
+
+		products = result.Products;
+		count = result.Count;
+	}
+
+	private async Task NavigateToNumberedPage(int page)
+	{
+		Page = page;
+
+		await FetchData(Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private async Task NavigateToNextPage()
+	{
+		await FetchData(++Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private async Task NavigateToPreviousPage()
+	{
+		await FetchData(--Page, take);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+}

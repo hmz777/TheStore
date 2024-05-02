@@ -18,7 +18,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -236,11 +236,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Published")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -280,29 +277,33 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<bool>("IsMainImage")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("ProductColorID")
                         .HasColumnType("int");
-
-                    b.Property<string>("StringFileUri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Alt", "TheStore.Catalog.Core.ValueObjects.Image.Alt#MultilanguageString", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Json")
-                                .HasColumnType("nvarchar(max)");
-                        });
 
                     b.HasKey("ID");
 
                     b.HasIndex("ProductColorID");
 
                     b.ToTable("Image");
+                });
+
+            modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.ProductReview", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Key", 0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ProductVariantID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductVariantID");
+
+                    b.ToTable("ProductReview");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.ProductSpecification", b =>
@@ -316,22 +317,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.Property<int?>("ProductVariantID")
                         .HasColumnType("int");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Name#MultilanguageString", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Json")
-                                .HasColumnType("nvarchar(max)");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Value", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Value#MultilanguageString", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Json")
-                                .HasColumnType("nvarchar(max)");
-                        });
 
                     b.HasKey("ID");
 
@@ -348,17 +333,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .HasAnnotation("Key", 0);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("ColorCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ColorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsMainColor")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -383,10 +357,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.Product", null)
-                        .WithMany("variants")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Variants")
+                        .HasForeignKey("ProductId");
 
                     b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariantOptions", "Options", b1 =>
                         {
@@ -397,6 +369,9 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 .HasColumnType("bit");
 
                             b1.Property<bool>("CanBePurchased")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("Published")
                                 .HasColumnType("bit");
 
                             b1.HasKey("ProductVariantID");
@@ -517,25 +492,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 .IsRequired();
                         });
 
-                    b.OwnsMany("TheStore.Catalog.Core.ValueObjects.ProductReview", "Reviews", b1 =>
-                        {
-                            b1.Property<int>("ProductVariantID")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.HasKey("ProductVariantID", "Id");
-
-                            b1.ToTable("ProductReview");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductVariantID");
-                        });
-
                     b.Navigation("Color");
 
                     b.Navigation("Dimentions")
@@ -549,15 +505,20 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.Navigation("Price")
                         .IsRequired();
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Image", b =>
                 {
                     b.HasOne("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", null)
-                        .WithMany("images")
+                        .WithMany("Images")
                         .HasForeignKey("ProductColorID");
+                });
+
+            modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.ProductReview", b =>
+                {
+                    b.HasOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductVariantID");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.ProductSpecification", b =>
@@ -569,17 +530,19 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>
                 {
-                    b.Navigation("variants");
+                    b.Navigation("Variants");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("Sepcifications");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", b =>
                 {
-                    b.Navigation("images");
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

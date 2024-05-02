@@ -12,12 +12,14 @@ namespace TheStore.Catalog.Infrastructure.Services
 		public async Task<string> CreateSkuAsync()
 		{
 			// Check if it's taken
+			// TODO: Use a Stored Procedure to access variants directly for better performance.
 			var products = await apiRepository.ListAsync(new GetAllProductsReadSpec());
 
 			string sku = string.Empty;
 
 			while (string.IsNullOrEmpty(sku) ||
-				   products.Any(p => p.Variants.Where(v => v.Sku == sku).Any())) { sku = GenerateSku(); }
+				   products.Any(p => p.Variants.Where(v => v.Sku.Equals(sku, StringComparison.InvariantCulture)).Any()))
+			{ sku = GenerateSku(); }
 
 			return sku;
 		}

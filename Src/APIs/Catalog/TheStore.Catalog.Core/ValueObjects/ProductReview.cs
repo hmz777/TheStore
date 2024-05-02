@@ -1,9 +1,8 @@
 ﻿using Ardalis.GuardClauses;
-using CSharpFunctionalExtensions;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
-	public class ProductReview : ValueObject
+	public class ProductReview
 	{
 		public string Title { get; }
 		public DateTimeOffset Date { get; }
@@ -26,15 +25,6 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Content = content;
 			Rating = rating;
 			User = user;
-		}
-
-		protected override IEnumerable<IComparable> GetEqualityComponents()
-		{
-			yield return Title;
-			yield return Content;
-			yield return Rating;
-			yield return User;
-			yield return Date;
 		}
 	}
 }

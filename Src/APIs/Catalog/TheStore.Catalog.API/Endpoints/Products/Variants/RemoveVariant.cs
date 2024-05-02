@@ -58,7 +58,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 			if (variant == null)
 				return NotFound("Variant not found");
 
-			product.RemoveVariant(variant);
+			product.Variants.Remove(variant);
 
 			await apiRepository.SaveChangesAsync(cancellationToken);
 

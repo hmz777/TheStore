@@ -1,16 +1,10 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace TheStore.Catalog.Core.Aggregates.Products
+﻿namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class ProductVariantOptions
 	{
+		public bool Published { get; set; }
 		public bool CanBePurchased { get; set; }
 		public bool CanBeFavorited { get; set; }
-
-		public ProductVariantOptions(bool canBePurchased, bool canBeFavorited)
-		{
-			CanBePurchased = canBePurchased;
-			CanBeFavorited = canBeFavorited;
-		}
+		public bool IsMainVariant { get; set; }
 	}
 }

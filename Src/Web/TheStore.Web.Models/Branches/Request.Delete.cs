@@ -10,15 +10,5 @@ namespace TheStore.Web.Models.Branches
 		public override string Route => RouteTemplate.Replace("{BranchId:int}", BranchId.ToString());
 
 		public int BranchId { get; set; }
-
-		public DeleteRequest()
-		{
-
-		}
-
-		public DeleteRequest(int branchId)
-		{
-			BranchId = branchId;
-		}
 	}
 }

@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Web.Models;
-using TheStore.Web.Models.ValueObjectsDtos;
 
 namespace TheStore.Web.Models.Branches
 {
@@ -10,8 +8,7 @@ namespace TheStore.Web.Models.Branches
 		public const string RouteTemplate = "branches";
 		public override string Route => RouteTemplate;
 
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public AddressDto Address { get; set; }
+
+		public BranchDtoUpdate Branch { get; set; }
 	}
 }

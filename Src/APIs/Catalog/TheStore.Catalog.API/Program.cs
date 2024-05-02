@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args)
 // Pipeline
 var app = builder.Build();
 
+app.UseCors("Cors");
+
 if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
 {
 	Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CatalogDbContext)}");
@@ -43,7 +45,7 @@ if (app.Environment.IsProduction())
 	app.UseHttpsRedirection();
 }
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapGrpcServices();
 

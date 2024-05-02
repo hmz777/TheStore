@@ -9,12 +9,5 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 		public IFormFile File { get; set; }
 		public MultilanguageStringDto Alt { get; set; }
 		public bool IsMainImage { get; set; }
-
-		public UploadImageDto(IFormFile file, MultilanguageStringDto alt, bool isMainImage)
-		{
-			File = file;
-			Alt = alt;
-			IsMainImage = isMainImage;
-		}
 	}
 }

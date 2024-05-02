@@ -1,10 +1,13 @@
 ﻿<ProjectConfiguration>
-	<Settings>
-		<AdditionalFilesToIncludeForProject>
-			<Value>wwwroot\*</Value>
-		</AdditionalFilesToIncludeForProject>
-		<IgnoredTests>
-			<AllTestsSelector />
-		</IgnoredTests>
-	</Settings>
+  <Settings>
+    <AdditionalFilesToIncludeForProject>
+      <Value>wwwroot\*</Value>
+    </AdditionalFilesToIncludeForProject>
+    <HiddenComponentWarnings>
+      <Value>UnnecessaryFileIncludeWarning</Value>
+    </HiddenComponentWarnings>
+    <IgnoredTests>
+      <AllTestsSelector />
+    </IgnoredTests>
+  </Settings>
 </ProjectConfiguration>

@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<base href="/" />
+	<link rel="stylesheet" href="css/main.min.css" />
+	<link rel="icon" type="image/png" href="favicon.png" />
+	<HeadOutlet @rendermode="RenderMode" />
+</head>
+
+<body>
+	<Routes @rendermode="RenderMode" />
+	<script src="_framework/blazor.web.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+</body>
+
+</html>
+
+@code {
+	[CascadingParameter]
+	private HttpContext HttpContext { get; set; } = default!;
+
+	private IComponentRenderMode PreferredRenderMode { get; set; } = InteractiveWebAssembly;
+	private IComponentRenderMode? RenderMode =>
+				HttpContext.Request.Path.StartsWithSegments("/Identity") ? null : PreferredRenderMode;
+}

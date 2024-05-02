@@ -14,7 +14,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Infrastructure.MappingProfiles
 {
-	public class CatalogMappingProfiles : Profile
+    public class CatalogMappingProfiles : Profile
 	{
 		public CatalogMappingProfiles()
 		{
@@ -25,7 +25,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Category, CategoryDtoUpdate>().ReverseMap();
 
 			// Products
-			CreateMap<Product, ProductDtoRead>()
+			CreateMap<Product, ProductCatalogDtoRead>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id))
 				.ForMember(dest => dest.Variants, opt => opt.MapFrom("variants"));
@@ -35,7 +35,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 				.ReverseMap()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
-			CreateMap<ProductVariant, ProductVariantDtoRead>();
+			CreateMap<ProductVariant, ProductVariantDetailsDtoRead>();
 			CreateMap<ProductVariantDtoUpdate, ProductVariant>()
 				.ForMember(dest => dest.Sku, opt => opt.Ignore());
 

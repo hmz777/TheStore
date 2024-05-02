@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
 using TheStore.ApiCommon.Services;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
@@ -63,13 +61,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasConversion<CategoryIdValueConverter>();
 
 			modelBuilder.Entity<Product>()
-				.HasMany<ProductVariant>("variants")
-				.WithOne()
-				.IsRequired();
-
-			modelBuilder.Entity<Product>()
-				.Navigation("variants")
-				.AutoInclude();
+				.HasMany(p => p.Variants)
+				.WithOne();
 
 			modelBuilder.Entity<ProductVariant>(opt =>
 			{
@@ -90,6 +83,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 				opt.Navigation(v => v.Color).AutoInclude();
 
 				opt.OwnsOne(v => v.Options);
+
 				opt.OwnsOne(v => v.Dimentions, opt =>
 				{
 					opt.OwnsOne(d => d.Unit);
@@ -98,10 +92,11 @@ namespace TheStore.Catalog.Infrastructure.Data
 					opt.Property(d => d.Length).HasColumnType("decimal").HasPrecision(5, 2);
 				});
 
-				opt.HasMany(v => v.Sepcifications);
-				opt.Navigation(v => v.Sepcifications).AutoInclude();
+				opt.HasMany(v => v.Sepcifications)
+				   .WithOne();
 
-				opt.OwnsMany(v => v.Reviews);
+				opt.HasMany(v => v.Reviews)
+				   .WithOne();
 			});
 
 			modelBuilder.Entity<ProductColor>(opt =>
@@ -111,11 +106,18 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.ValueGeneratedOnAdd()
 				.HasAnnotation("Key", 0);
 
-				opt.HasMany<Image>("images");
-				opt.Navigation("images").AutoInclude();
+				opt.Navigation(pc => pc.Images).AutoInclude();
 			});
 
 			modelBuilder.Entity<Image>(opt =>
+			{
+				opt.Property<int>("ID")
+				.HasColumnType("int")
+				.ValueGeneratedOnAdd()
+				.HasAnnotation("Key", 0);
+			});
+
+			modelBuilder.Entity<ProductReview>(opt =>
 			{
 				opt.Property<int>("ID")
 				.HasColumnType("int")

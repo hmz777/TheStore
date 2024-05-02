@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using TheStore.Catalog.Core.Aggregates.Categories;
-using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 using TheStore.SharedKernel.ValueObjects;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Domain.UnitTests
 {

@@ -16,7 +16,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 {
 	public class Create : EndpointBaseAsync
 		.WithRequest<CreateRequest>
-		.WithActionResult<ProductDtoRead>
+		.WithActionResult<ProductCatalogDtoRead>
 	{
 		private readonly IValidator<CreateRequest> validator;
 		private readonly IApiRepository<CatalogDbContext, Product> apiRepository;
@@ -41,7 +41,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 		   Description = "Creates a single product",
 		   OperationId = "Product.Single.Create",
 		   Tags = new[] { "Products" })]
-		public async override Task<ActionResult<ProductDtoRead>> HandleAsync(
+		public async override Task<ActionResult<ProductCatalogDtoRead>> HandleAsync(
 			CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Create a single product with name: {Name}", request.Product.Name);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductDtoRead>(singleProduct));
+			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductCatalogDtoRead>(singleProduct));
 		}
 	}
 }

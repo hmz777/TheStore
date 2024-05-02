@@ -6,8 +6,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class ProductSpecification : ValueObject
 	{
-		public MultilanguageString Name { get; private set; }
-		public MultilanguageString Value { get; private set; }
+		public MultilanguageString Name { get; }
+		public MultilanguageString Value { get; }
 
 		// Ef Core
 		private ProductSpecification() { }

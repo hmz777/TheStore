@@ -2,8 +2,8 @@
 using FluentAssertions;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.ValueObjects;
-using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
 using TheStore.SharedKernel.ValueObjects;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Domain.UnitTests
 {

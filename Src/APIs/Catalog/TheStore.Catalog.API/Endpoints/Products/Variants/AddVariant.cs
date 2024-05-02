@@ -65,7 +65,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 			var variant = mapper.Map<ProductVariant>(request.ProductVariant);
 			variant.Sku = await skuService.CreateSkuAsync();
 
-			product.AddVariant(variant);
+			product.Variants.Add(variant);
 
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
@@ -73,7 +73,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 				log.Information("Create a variant of product with id: {Id}", request.ProductId);
 
 			return CreatedAtRoute(GetByIdRequest.RouteName,
-				routeValues: new { ProductId = product.Id.Id }, mapper.Map<ProductDtoRead>(product));
+				routeValues: new { ProductId = product.Id.Id }, mapper.Map<ProductCatalogDtoRead>(product));
 		}
 	}
 }

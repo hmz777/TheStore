@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Reflection;
+using TheStore.ApiCommon.Extensions.Security;
 using TheStore.ApiCommon.Extensions.Services;
+using TheStore.ApiCommon.Interfaces;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Catalog.Infrastructure.Services.Cache;
 
 namespace TheStore.Catalog.Infrastructure.Services
 {
@@ -19,9 +23,11 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.PlatformDetect();
 			webApplicationBuilder.ConfigureDataAccess<TContext>(Constants.DatabaseName);
 			webApplicationBuilder.ConfigureApi();
+			webApplicationBuilder.ConfigureCors();
 			webApplicationBuilder.ConfigureJsonSerializerOptions();
 			webApplicationBuilder.ConfigureSwagger();
-			//webApplicationBuilder.ConfigureJwtAuthorization();
+			webApplicationBuilder.ConfigureJwtAuthorization();
+			webApplicationBuilder.ConfigureAuthorizationPolicies();
 			webApplicationBuilder.ConfigureAutoMapper<TContext>(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureFluentValidation(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureMemoryCache();
@@ -39,6 +45,10 @@ namespace TheStore.Catalog.Infrastructure.Services
 			// Temporary fix until the binding sources issue is fixed in .NET 8
 			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
 			//webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
+			// Register Cache Configuration as interface
+			webApplicationBuilder.Services.Configure<CacheConfiguration>(webApplicationBuilder.Configuration);
+			webApplicationBuilder.Services.AddSingleton<ICacheConfiguration>(sProvider => sProvider.GetRequiredService<IOptions<CacheConfiguration>>().Value);
 
 			return webApplicationBuilder;
 		}

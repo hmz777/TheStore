@@ -12,16 +12,13 @@ using TheStore.Catalog.API.Endpoints.Products.Variants;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Domain.UnitTests.AutoData.Customizations;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.Catalog.Infrastructure.Services;
 using TheStore.SharedKernel.ValueObjects;
 using TheStore.SharedModels.Models.Products;
-using TheStore.TestHelpers.AutoData.Services;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {
@@ -46,7 +43,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var result = (await sut.HandleAsync(request)).Value;
 
-			result.Should().HaveCount(request.Take);
+			result.Should().Be(request.Take);
 		}
 
 		[Fact]
@@ -190,7 +187,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			variant.Sku = request.Sku;
 
 			// Add the variant so we simulate the deletion process
-			product.AddVariant(variant);
+			product.Variants.Add(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
@@ -220,7 +217,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			variant.Sku = request.Sku;
 
 			// Add the variant so we simulate the deletion process
-			product.AddVariant(variant);
+			product.Variants.Add(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(new ProductId(request.ProductId), default))
@@ -252,7 +249,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			variant.Sku = request.Sku;
 
 			// Add the color so we simulate the addition process
-			product.AddVariant(variant);
+			product.Variants.Add(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(product.Id, default))
@@ -287,8 +284,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var image = new Image(request.ImagePath, fixture.Create<MultilanguageString>(), false);
 
-			variant.Color = variant.Color.AddImage(image);
-			product.AddVariant(variant);
+			variant.Color.Images.Add(image);
+			product.Variants.Add(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(product.Id, default))
@@ -322,8 +319,8 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			var variant = fixture.Create<ProductVariant>();
 			variant.Sku = request.Sku;
 
-			variant.Color = variant.Color.AddImage(image);
-			product.AddVariant(variant);
+			variant.Color.Images.Add(image);
+			product.Variants.Add(variant);
 
 			var mockRepository = new Mock<IApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.GetByIdAsync(product.Id, default))

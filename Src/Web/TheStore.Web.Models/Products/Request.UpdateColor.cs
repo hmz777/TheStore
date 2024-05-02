@@ -4,7 +4,7 @@ using TheStore.Web.Models.ValueObjectsDtos;
 
 namespace TheStore.Web.Models.Products
 {
-	[DisplayName("Product.Single." + nameof(UpdateColorRequest))]
+    [DisplayName("Product.Single." + nameof(UpdateColorRequest))]
 	public class UpdateColorRequest : RequestBase
 	{
 		public const string RouteTemplate = "products/{ProductId:int}/colors/{ColorCode}";

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Web.Models;
 
 namespace TheStore.Web.Models.Products
 {
@@ -11,8 +10,6 @@ namespace TheStore.Web.Models.Products
 		public override string Route => RouteTemplate.Replace("{ProductId:int}", ProductId.ToString());
 
 		public int ProductId { get; set; }
-
-		public GetAssembledByIdRequest() { }
 
 		public GetAssembledByIdRequest(int productId)
 		{

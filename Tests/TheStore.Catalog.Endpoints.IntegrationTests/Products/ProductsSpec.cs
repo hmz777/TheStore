@@ -2,19 +2,25 @@
 using FluentAssertions;
 using NCrunch.Framework;
 using System.Text.Json;
-using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
+using TheStore.Catalog.API;
+using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.Data.Configuration;
 using TheStore.SharedModels.Models.Products;
+using TheStore.TestHelpers.AutoData.Customizations;
+using TheStore.TestHelpers.WebApplication;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 {
 	[Atomic]
-	public class ProductsSpec : IClassFixture<CustomWebApplicationFactory<Program>>
+	public class ProductsSpec : IClassFixture<CustomWebApplicationFactory<Program, CatalogDbContext>>
 	{
 		private readonly HttpClient _client;
 
-		public ProductsSpec(CustomWebApplicationFactory<Program> factory)
-				=> _client = factory.CreateClient();
+		public ProductsSpec(CustomWebApplicationFactory<Program, CatalogDbContext> factory)
+		{
+			factory.DbName = Constants.DatabaseName;
+			_client = factory.CreateClient();
+		}
 
 		[Fact]
 		public async Task Can_List_Products()
@@ -22,7 +28,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var response = await _client
-				.GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
+				.GetFromJsonAsync<List<ProductCatalogDtoRead>>(request.Route);
 
 			response.Should().NotBeNull();
 			response.Should().HaveCount(request.Take);
@@ -34,7 +40,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new GetByIdRequest() { ProductId = 1 };
 
 			var response = await _client
-				.GetFromJsonAsync<ProductDtoRead>(request.Route);
+				.GetFromJsonAsync<ProductCatalogDtoRead>(request.Route);
 
 			response.Should().NotBeNull();
 		}
@@ -87,7 +93,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			request.ProductId = 1;
 
 			var response = await _client.PostAsJsonAsync(request.Route, request.ProductVariant);
-			var responseObject = JsonSerializer.Deserialize<ProductDtoRead>(
+			var responseObject = JsonSerializer.Deserialize<ProductCatalogDtoRead>(
 				await response.Content.ReadAsStringAsync(),
 				new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
@@ -129,7 +135,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 
 			var listRequest = new ListRequest() { Page = 1, Take = 1 };
 			var listResponse = await _client.
-				GetFromJsonAsync<List<ProductDtoRead>>(listRequest.Route);
+				GetFromJsonAsync<List<ProductCatalogDtoRead>>(listRequest.Route);
 
 			var product = listResponse!.First();
 
@@ -157,7 +163,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var request = new ListRequest() { Page = 1, Take = 10 };
 
 			var response = await _client.
-				GetFromJsonAsync<List<ProductDtoRead>>(request.Route);
+				GetFromJsonAsync<List<ProductCatalogDtoRead>>(request.Route);
 
 			var product = response!.First();
 

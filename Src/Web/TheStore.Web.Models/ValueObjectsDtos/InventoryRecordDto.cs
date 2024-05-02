@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using TheStore.Web.Models;
 
 namespace TheStore.Web.Models.ValueObjectsDtos
 {

@@ -1,0 +1,52 @@
+﻿@using TheStore.Web.Models.ValueObjectsDtos;
+@using TheStore.Web.BlazorApp.Client.Models;
+@using TheStore.Web.Models.Products;
+
+<div class="color-selector @GetSizeClass(ControlSize)">
+	@foreach (var variant in Variants)
+	{
+		<button class="color-selection @(ActiveVariantSku == variant.Sku ? "active" : "")"
+				type="button"
+				style="background-size:100% 100%;background-image:@variant.Color.GetMainImage().StringFileUri"
+				@onclick="() => ChooseVariant(variant.Sku)"
+				@key="variant.Sku"></button>
+	}
+</div>
+
+@code {
+	[Parameter]
+	public List<ProductVariantCatalogDtoRead> Variants { get; set; } = [];
+
+	[Parameter]
+	public EventCallback<string> VariantChosen { get; set; }
+
+	[Parameter]
+	public ControlSize ControlSize { get; set; } = ControlSize.Small;
+
+	private string ActiveVariantSku { get; set; }
+
+	protected override void OnInitialized()
+	{
+		ActiveVariantSku = Variants.FirstOrDefault(v => v.Options.IsMainVariant)?.Sku ?? Variants.First().Sku;
+	}
+
+	private string GetSizeClass(ControlSize controlSize) => controlSize switch
+	{
+		ControlSize.Small => "color-selector--small",
+		ControlSize.Normal => "color-selector--normal",
+		ControlSize.Large => "color-selector--large",
+		_ => "color-selector--small"
+	};
+
+	private async Task ChooseVariant(string variantSku)
+	{
+		await VariantChosen.InvokeAsync(variantSku);
+
+		ActiveVariantSku = variantSku;
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+}

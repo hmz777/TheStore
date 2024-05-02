@@ -1,26 +1,19 @@
 ﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.ValueObjects.Products
 {
 	public class ProductColor : ValueObject
 	{
-		private readonly List<Image> images = new();
-
-		public string ColorName { get; private set; }
-		public string ColorCode { get; private set; }
-		public bool IsMainColor { get; private set; }
-
-		[NotMapped]
-		public ReadOnlyCollection<Image> Images => images.AsReadOnly();
+		public List<Image> Images { get; set; }
+		public string ColorName { get; }
+		public string ColorCode { get; }
+		public bool IsMainColor { get; }
 
 		// Ef Core
 		private ProductColor() { }
 
-		public ProductColor(string colorName, string colorCode, bool isMainColor, List<Image> images)
+		public ProductColor(string colorName, string colorCode, bool isMainColor, List<Image> images = default!)
 		{
 			Guard.Against.NullOrEmpty(colorName, nameof(colorName));
 			Guard.Against.NullOrEmpty(colorCode, nameof(colorCode));
@@ -29,29 +22,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 			ColorName = colorName;
 			ColorCode = colorCode;
 			IsMainColor = isMainColor;
-			this.images = images ?? new List<Image>();
-		}
-
-		public ProductColor AddImage(Image image)
-		{
-			Guard.Against.Null(image, nameof(image));
-
-			var newImages = new List<Image>(images)
-			{
-				image
-			};
-
-			return new ProductColor(ColorName, ColorCode, IsMainColor, newImages);
-		}
-
-		public ProductColor RemoveImage(Image image)
-		{
-			Guard.Against.Null(image, nameof(image));
-
-			var newImages = new List<Image>(images);
-			newImages.Remove(image);
-
-			return new ProductColor(ColorName, ColorCode, IsMainColor, newImages);
+			Images = images ?? [];
 		}
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()

@@ -11,7 +11,7 @@ using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.MappingProfiles;
 using TheStore.Cart.Infrastructure.Services;
 using TheStore.SharedModels.Models.Cart;
-using TheStore.TestHelpers.AutoData.Services;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Cart.Endpoints.UnitTests
 {

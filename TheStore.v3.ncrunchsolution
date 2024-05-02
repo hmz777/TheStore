@@ -1,7 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>False</AllowParallelTestExecution>
-    <AllowTestsToRunInParallelWithThemselves>False</AllowTestsToRunInParallelWithThemselves>
+    <EnableRDI>False</EnableRDI>
+    <RdiConfigured>True</RdiConfigured>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Web.Models;
 
 namespace TheStore.Web.Models.Wishlist
 {
@@ -11,7 +10,9 @@ namespace TheStore.Web.Models.Wishlist
 			.Replace("{WishlistId}", WishlistId.ToString())
 			.Replace("{ProductId:int}", ProductId.ToString());
 
+
 		public Guid WishlistId { get; set; }
+
 
 		public int ProductId { get; set; }
 

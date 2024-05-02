@@ -2,7 +2,7 @@
 using FluentAssertions;
 using TheStore.ApiCommon.Services;
 using TheStore.Events;
-using TheStore.TestHelpers.AutoData.Services;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.APICommon.UnitTests
 {

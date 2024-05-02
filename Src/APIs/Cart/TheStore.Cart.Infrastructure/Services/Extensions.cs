@@ -19,19 +19,18 @@ namespace TheStore.Cart.Infrastructure.Services
 			webApplicationBuilder.PlatformDetect();
 			webApplicationBuilder.ConfigureDataAccess<TContext>(Constants.DatabaseName);
 			webApplicationBuilder.ConfigureApi();
+			webApplicationBuilder.ConfigureJwtAuthorization();
 			webApplicationBuilder.ConfigureJsonSerializerOptions();
 			webApplicationBuilder.ConfigureSwagger();
 			webApplicationBuilder.ConfigureAutoMapper<TContext>(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureFluentValidation(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureMemoryCache();
 			webApplicationBuilder.AddFileSystem();
-			//webApplicationBuilder.ConfigureJwtAuthorization();
 
 			// Api specific services and configuration
 			webApplicationBuilder.Services.AddScoped<ICatalogEntityCheckService, CatalogEntityCheckService>();
 			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>(options =>
 			{
-				//string address = "http://localhost:7272";CatalogService
 				var address = webApplicationBuilder.Configuration.GetSection("CatalogService")
 								.GetValue<string>("Uri");
 

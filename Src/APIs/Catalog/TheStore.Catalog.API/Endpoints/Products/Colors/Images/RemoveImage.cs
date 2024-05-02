@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Web;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -64,7 +63,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			if (image == null)
 				return NotFound("Image not found");
 
-			color.RemoveImage(image);
+			color.Images.Remove(image);
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))

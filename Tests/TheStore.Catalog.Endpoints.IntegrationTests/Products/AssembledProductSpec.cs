@@ -1,17 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
+using TheStore.Catalog.API;
+using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.Data.Configuration;
 using TheStore.SharedModels.Models.Products;
+using TheStore.TestHelpers.AutoData.Customizations;
+using TheStore.TestHelpers.WebApplication;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 {
-	public class AssembledProductSpec : IClassFixture<CustomWebApplicationFactory<Program>>
+	public class AssembledProductSpec : IClassFixture<CustomWebApplicationFactory<Program, CatalogDbContext>>
 	{
 		private readonly HttpClient _client;
 
-		public AssembledProductSpec(CustomWebApplicationFactory<Program> factory)
-				=> _client = factory.CreateClient();
+		public AssembledProductSpec(CustomWebApplicationFactory<Program, CatalogDbContext> factory)
+		{
+			factory.DbName = Constants.DatabaseName;
+			_client = factory.CreateClient();
+		}
 
 		public async Task Can_List_Assembled_Products()
 		{

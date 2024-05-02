@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel;
-using System.Web;
+using System.Net;
 using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
@@ -13,7 +14,7 @@ namespace TheStore.SharedModels.Models.Products
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{Sku}", Sku)
-			.Replace("{ImagePath}", HttpUtility.UrlEncode(ImagePath));
+			.Replace("{ImagePath}", WebUtility.UrlEncode(ImagePath));
 
 		[FromRoute(Name = nameof(ProductId))]
 		public int ProductId { get; set; }
@@ -23,6 +24,9 @@ namespace TheStore.SharedModels.Models.Products
 
 		[FromRoute(Name = nameof(ImagePath))]
 		public string ImagePath { get; set; }
+
+		[BindNever]
+		public string DecodedImagePath => WebUtility.UrlDecode(ImagePath).Replace(" ", "+");
 
 		[FromForm]
 		public UploadImageDto Image { get; set; }

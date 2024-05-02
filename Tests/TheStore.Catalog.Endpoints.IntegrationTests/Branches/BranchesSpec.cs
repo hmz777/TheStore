@@ -1,20 +1,24 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using NCrunch.Framework;
-using TheStore.Catalog.Endpoints.IntegrationTests.AutoData;
-using TheStore.Catalog.Endpoints.IntegrationTests.WebApplication;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
+using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.Data.Configuration;
 using TheStore.SharedModels.Models.Branches;
+using TheStore.TestHelpers.AutoData.Customizations;
+using TheStore.TestHelpers.WebApplication;
 
 namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 {
 	[Atomic]
-	public class BranchesSpec : IClassFixture<CustomWebApplicationFactory<Program>>
+	public class BranchesSpec : IClassFixture<CustomWebApplicationFactory<Program, CatalogDbContext>>
 	{
 		private readonly HttpClient _client;
 
-		public BranchesSpec(CustomWebApplicationFactory<Program> factory)
-				=> _client = factory.CreateClient();
+		public BranchesSpec(CustomWebApplicationFactory<Program, CatalogDbContext> factory)
+		{
+			factory.DbName = Constants.DatabaseName;
+			_client = factory.CreateClient();
+		}
 
 		[Fact]
 		public async Task Can_List_Branches()

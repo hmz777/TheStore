@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.ValueObjectsDtos;
+using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Validators
 {
-	public class ProductColorDtoUpdateValidator : AbstractValidator<ProductColorDtoUpdate>
+    public class ProductColorDtoUpdateValidator : AbstractValidator<ProductColorDtoUpdate>
 	{
 		public ProductColorDtoUpdateValidator()
 		{

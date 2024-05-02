@@ -74,7 +74,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			var imagePath = await mediator
 				.Send(new UploadImageRequest(request.Image.File, ResourceFilePaths.ProductsImages, null!), cancellationToken);
 
-			color.AddImage(new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage));
+			color.Images.Add(new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage));
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
@@ -84,7 +84,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			return CreatedAtRoute(
 				GetByIdRequest.RouteName,
 				routeValues: new { ProductId = product.Id.Id },
-				mapper.Map<ProductDtoRead>(product));
+				mapper.Map<ProductCatalogDtoRead>(product));
 		}
 	}
 }

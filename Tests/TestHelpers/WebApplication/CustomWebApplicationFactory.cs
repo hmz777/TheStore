@@ -12,83 +12,83 @@ using TheStore.TestHelpers.Docker;
 
 namespace TheStore.TestHelpers.WebApplication
 {
-	public class CustomWebApplicationFactory<TProgram, TContext>() :
-		WebApplicationFactory<TProgram> where TProgram : class where TContext : DbContext
-	{
-		private DockerSqlServerDatabaseHelper? dockerSqlServerDatabase;
-		private DockerRabbitMqHelper? dockerRabbitMqHelper;
+    public class CustomWebApplicationFactory<TProgram, TContext>() :
+        WebApplicationFactory<TProgram> where TProgram : class where TContext : DbContext
+    {
+        private DockerSqlServerDatabaseHelper? dockerSqlServerDatabase;
+        private DockerRabbitMqHelper? dockerRabbitMqHelper;
 
-		public string? DbName { get; set; }
+        public string? DbName { get; set; }
 
-		protected override void ConfigureWebHost(IWebHostBuilder builder)
-		{
-			// Trigger runtime database migration
-			Environment.SetEnvironmentVariable(ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            // Trigger runtime database migration
+            Environment.SetEnvironmentVariable(ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
 
-			builder.UseTestServer(o => o.PreserveExecutionContext = true);
+            builder.UseTestServer(o => o.PreserveExecutionContext = true);
 
-			builder.ConfigureServices((services) =>
-			{
-				var descriptor = services.SingleOrDefault(
-					d => d.ServiceType == typeof(DbContextOptions<TContext>));
+            builder.ConfigureServices((services) =>
+            {
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(DbContextOptions<TContext>));
 
-				if (descriptor != null)
-					services.Remove(descriptor);
+                if (descriptor != null)
+                    services.Remove(descriptor);
 
-				services.AddHttpLogging(o => { });
+                services.AddHttpLogging(o => { });
 
-				services.Configure<AntiforgeryOptions>(o => o.SuppressXFrameOptionsHeader = true);
-				services.Configure<AntiforgeryOptions>(o => o.Cookie.Expiration = TimeSpan.Zero);
+                services.Configure<AntiforgeryOptions>(o => o.SuppressXFrameOptionsHeader = true);
+                services.Configure<AntiforgeryOptions>(o => o.Cookie.Expiration = TimeSpan.Zero);
 
-				services.AddControllers(options =>
-				{
-					options.Filters.Add<IgnoreAntiforgeryTokenAttribute>(0);
-				});
+                services.AddControllers(options =>
+                {
+                    options.Filters.Add<IgnoreAntiforgeryTokenAttribute>(0);
+                });
 
-				services.AddSerilog(o =>
-				{
-					o.WriteTo.InMemory();
-					o.MinimumLevel.Override("Default", Serilog.Events.LogEventLevel.Information);
-					o.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Information);
-					o.MinimumLevel.Override("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware", Serilog.Events.LogEventLevel.Information);
-				});
+                services.AddSerilog(o =>
+                {
+                    o.WriteTo.InMemory();
+                    o.MinimumLevel.Override("Default", Serilog.Events.LogEventLevel.Information);
+                    o.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Information);
+                    o.MinimumLevel.Override("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware", Serilog.Events.LogEventLevel.Information);
+                });
 
-				services.AddDbContext<TContext>((container, options) =>
-				{
-					dockerSqlServerDatabase = new DockerSqlServerDatabaseHelper();
-					dockerSqlServerDatabase.StartDatabaseServer().Wait();
+                services.AddDbContext<TContext>((container, options) =>
+                {
+                    dockerSqlServerDatabase = new DockerSqlServerDatabaseHelper();
+                    dockerSqlServerDatabase.Start().Wait();
 
-					options.UseSqlServer(
-						$"Server=localhost,{dockerSqlServerDatabase.Port}" +
-						$";Database={DbName}" +
-						$";User Id=SA" +
-						$";Password={dockerSqlServerDatabase.Password}" +
-						$";MultipleActiveResultSets=true" +
-						$";TrustServerCertificate=true",
-						options =>
-						{
-							options.EnableRetryOnFailure();
-						});
-				});
+                    options.UseSqlServer(
+                        $"Server=localhost,{dockerSqlServerDatabase.Port}" +
+                        $";Database={DbName}" +
+                        $";User Id=SA" +
+                        $";Password={dockerSqlServerDatabase.Password}" +
+                        $";MultipleActiveResultSets=true" +
+                        $";TrustServerCertificate=true",
+                        options =>
+                        {
+                            options.EnableRetryOnFailure();
+                        });
+                });
 
-				dockerRabbitMqHelper = new DockerRabbitMqHelper();
-				dockerRabbitMqHelper.StartDatabaseServer().Wait();
-			});
-		}
+                dockerRabbitMqHelper = new DockerRabbitMqHelper();
+                dockerRabbitMqHelper.Start().Wait();
+            });
+        }
 
-		public async override ValueTask DisposeAsync()
-		{
-			if (dockerSqlServerDatabase != null)
-			{
-				await dockerSqlServerDatabase.DisposeAsync();
-			}
+        public async override ValueTask DisposeAsync()
+        {
+            if (dockerSqlServerDatabase != null)
+            {
+                await dockerSqlServerDatabase.DisposeAsync();
+            }
 
-			if (dockerRabbitMqHelper != null)
-			{
-				await dockerRabbitMqHelper.DisposeAsync();
-			}
+            if (dockerRabbitMqHelper != null)
+            {
+                await dockerRabbitMqHelper.DisposeAsync();
+            }
 
-			await base.DisposeAsync();
-		}
-	}
+            await base.DisposeAsync();
+        }
+    }
 }

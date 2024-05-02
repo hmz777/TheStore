@@ -9,15 +9,5 @@ namespace TheStore.Web.Models.Categories
 		public override string Route => RouteTemplate.Replace("{CategoryId:int}", CategoryId.ToString());
 
 		public int CategoryId { get; set; }
-
-		public DeleteRequest()
-		{
-
-		}
-
-		public DeleteRequest(int categoryId)
-		{
-			CategoryId = categoryId;
-		}
 	}
 }

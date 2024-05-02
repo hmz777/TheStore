@@ -1,5 +1,6 @@
-﻿using System.ComponentModel;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel;
+using System.Net;
 
 namespace TheStore.SharedModels.Models.Products
 {
@@ -11,17 +12,13 @@ namespace TheStore.SharedModels.Models.Products
 			RouteTemplate
 			.Replace("{ProductId:int}", ProductId.ToString())
 			.Replace("{Sku}", Sku)
-			.Replace("{ImagePath}", HttpUtility.UrlEncode(ImagePath));
+			.Replace("{ImagePath}", WebUtility.UrlEncode(ImagePath));
 
 		public int ProductId { get; set; }
 		public string Sku { get; set; }
 		public string ImagePath { get; set; }
 
-		public RemoveImageFromVariantRequest(int productId, string sku, string imagePath)
-		{
-			ProductId = productId;
-			Sku = sku;
-			ImagePath = imagePath;
-		}
+		[BindNever]
+		public string DecodedImagePath => WebUtility.UrlDecode(ImagePath).Replace(" ", "+");
 	}
 }

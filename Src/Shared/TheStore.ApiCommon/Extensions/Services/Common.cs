@@ -45,7 +45,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			}
 			else
 			{
-				Log.Information("Deployment: No infrastructure");
+				Log.Information("Deployment: No Infrastructure");
 				RunningPlatform = Constants.RunningPlatform.Standalone;
 			}
 
@@ -65,7 +65,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 				.WriteTo.Console()
 				.CreateBootstrapLogger();
 
-			Log.Information("Setup logging");
+			Log.Information("Setup Logging");
 			host.UseSerilog((context, config) =>
 			{
 				if (environment.IsProduction())
@@ -115,13 +115,14 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var dbUser = configuration.GetValue<string>(ConnectionStrings.DbUser);
 			var dbPass = configuration.GetValue<string>(ConnectionStrings.DbPassword);
 
-			Log.Information("Add database context");
+			Log.Information("Add Database Context");
 
 			var connectionString = configuration.GetValue<string>(ConnectionStrings.ConnectionString);
 
 			switch (RunningPlatform)
 			{
 				case Constants.RunningPlatform.Standalone:
+					// This mode is for testing purposes
 					// Trigger runtime database migration
 					Environment.SetEnvironmentVariable(
 						TheStore.ApiCommon.Constants.ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
@@ -130,8 +131,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					services.AddDbContext<TContext>(options =>
 					{
 						options
-						 //.UseSqlServer($"Server=localhost;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
-						 .UseSqlServer($"Server=localhost;Database={dbName};User Id=SA;Password=myp@ssword123;MultipleActiveResultSets=true;TrustServerCertificate=true");
+						 .UseSqlServer($"Server=localhost;Database={dbName};User Id=SA;Password=P@ss12345;MultipleActiveResultSets=true;TrustServerCertificate=true");
 					});
 					break;
 				case Constants.RunningPlatform.DockerCompose:
@@ -154,7 +154,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					break;
 			}
 
-			Log.Information("Add data repositories");
+			Log.Information("Add Data Repositories");
 
 			// Repository
 			services.AddScoped(typeof(IApiRepository<,>), typeof(DataRepository<,>));
@@ -165,7 +165,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 		public static WebApplicationBuilder ConfigureApi(this WebApplicationBuilder webApplicationBuilder)
 		{
-			Log.Information("Add controllers");
+			Log.Information("Add Controllers");
 
 			webApplicationBuilder.Services.AddControllers().AddJsonOptions(options =>
 			{
@@ -233,7 +233,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var configuration = webApplicationBuilder.Configuration;
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
 
-			Log.Information("Add authorization");
+			Log.Information("Add Authorization");
 
 			// Authorization
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -244,12 +244,11 @@ namespace TheStore.ApiCommon.Extensions.Services
 				  switch (RunningPlatform)
 				  {
 					  case Constants.RunningPlatform.Standalone:
-						  authority = "localhost:7575";
+						  authority = "https://localhost:7575";
 						  break;
 					  case Constants.RunningPlatform.DockerCompose:
 					  case Constants.RunningPlatform.Kubernetes:
-						  authority = configuration
-									  .GetValue<string>(Identity.IdentityServer);
+						  authority = configuration.GetValue<string>(Identity.IdentityServer);
 						  break;
 					  default:
 						  break;
@@ -260,13 +259,20 @@ namespace TheStore.ApiCommon.Extensions.Services
 					  throw new InvalidOperationException("Couldn't configure JWT authorization, authority is null!");
 				  }
 
-				  Log.Information("With authority:{Authority}", authority);
+				  Log.Information("Authorization added With authority: {Authority}", authority);
 
 				  options.Authority = authority;
 				  options.Audience = appName;
 				  options.SaveToken = true;
 				  options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+
+				  if (webApplicationBuilder.Environment.IsDevelopment())
+				  {
+					  options.RequireHttpsMetadata = false;
+				  }
 			  });
+
+			services.AddAuthorization();
 
 			return webApplicationBuilder;
 		}
@@ -285,7 +291,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 		{
 			var services = webApplicationBuilder.Services;
 
-			Log.Information("Add memory cache");
+			Log.Information("Add Memory Cache");
 
 			services.AddMemoryCache();
 			services.AddDistributedMemoryCache();
@@ -387,6 +393,23 @@ namespace TheStore.ApiCommon.Extensions.Services
 				default:
 					break;
 			}
+
+			return webApplicationBuilder;
+		}
+
+		public static WebApplicationBuilder ConfigureCors(this WebApplicationBuilder webApplicationBuilder)
+		{
+			webApplicationBuilder.Services.AddCors(options =>
+			{
+				// TODO: Define strict list of origins
+
+				options.AddPolicy("Cors", configure =>
+				{
+					configure.AllowAnyHeader()
+							 .AllowAnyMethod()
+							 .AllowAnyOrigin();
+				});
+			});
 
 			return webApplicationBuilder;
 		}

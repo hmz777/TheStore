@@ -8,12 +8,10 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.Catalog.API.Endpoints.AssembledProducts;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Dtos;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Products;
-using TheStore.TestHelpers.AutoData.Services;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products
 {

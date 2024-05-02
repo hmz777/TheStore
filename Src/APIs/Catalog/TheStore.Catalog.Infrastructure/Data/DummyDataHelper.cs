@@ -102,12 +102,11 @@ namespace TheStore.Catalog.Infrastructure.Data
 						Price = new Money((j + 1) * 500, Currency.Usd),
 						Inventory = new InventoryRecord(i, 5, 100, 0, false),
 						Color = new ProductColor(GenerateRandomString(), color, false, images),
-						Options = new ProductVariantOptions(true, true),
+						Options = new ProductVariantOptions { Published = true, CanBeFavorited = true, CanBePurchased = true },
 						Dimentions = new Dimensions(randomNumber, randomNumber, randomNumber, UnitOfMeasure.Cm),
 						Sepcifications = [
 							new(new MultilanguageString("Name", CultureCode.English), new MultilanguageString("Value", CultureCode.English))
 						],
-						Published = true,
 						Reviews = [
 							new(GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack")
 						]

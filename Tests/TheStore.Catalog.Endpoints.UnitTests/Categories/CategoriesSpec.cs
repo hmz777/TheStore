@@ -9,11 +9,10 @@ using TheStore.ApiCommon.Services;
 using TheStore.Catalog.API.Endpoints.Categories;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
-using TheStore.Catalog.Endpoints.UnitTests.AutoData.Endpoints;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.SharedModels.Models.Categories;
-using TheStore.TestHelpers.AutoData.Services;
+using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Categories
 {

@@ -1,0 +1,58 @@
+﻿@using TheStore.Web.Models.ValueObjectsDtos;
+    using TheStore.Web.Models.Products;
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<div class="image-gallery">
+	<div class="image-gallery-main">
+		<img loading="lazy" src="@mainImage.StringFileUri" alt="@mainImage.Alt" />
+	</div>
+	<div class="image-gallery-other">
+		<div class="swiper" id="product-details-image-gallery">
+			<div class="swiper-wrapper">
+				@foreach (var image in ProductColor.Images.Where(image => image != mainImage))
+				{
+					<div class="swiper-slide">
+						<button type="button">
+							<img loading="lazy" src="@image.StringFileUri" alt="@image.Alt" />
+						</button>
+					</div>
+				}
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public ProductColorDto ProductColor { get; set; }
+
+	private ImageDto mainImage => ProductColor.GetMainImage();
+
+	private IJSObjectReference? productDetailsModule;
+
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			productDetailsModule = await JS.InvokeAsync<IJSObjectReference>("import",
+					"./modules/ProductDetailsModule.js");
+
+			await CreateImageGalleryCarousel();
+		}
+	}
+
+	private ValueTask CreateImageGalleryCarousel()
+			=> productDetailsModule is not null ?
+						productDetailsModule.InvokeVoidAsync("CreateImageGalleryCarousel", "#product-details-image-gallery") :
+						ValueTask.CompletedTask;
+
+	public async ValueTask DisposeAsync()
+	{
+		if (productDetailsModule is not null)
+		{
+			await productDetailsModule.DisposeAsync();
+		}
+	}
+}

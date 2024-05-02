@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Web.Models;
 
 namespace TheStore.Web.Models.Cart
 {
@@ -11,6 +10,7 @@ namespace TheStore.Web.Models.Cart
 			Replace("{CartId}", CartId.ToString());
 
 		public Guid CartId { get; set; }
+
 
 		public int ProductId { get; set; }
 

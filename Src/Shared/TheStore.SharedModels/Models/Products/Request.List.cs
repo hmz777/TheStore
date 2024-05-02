@@ -12,11 +12,5 @@ namespace TheStore.SharedModels.Models.Products
 
 		public int Page { get; set; }
 		public int Take { get; set; }
-
-		public ListRequest(int page, int take)
-		{
-			Page = page;
-			Take = take;
-		}
 	}
 }
