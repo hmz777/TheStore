@@ -14,14 +14,14 @@
       "sourceMap": false
     },
     "sass": {
-      "autoPrefix": "last 6 versions",
+      "autoPrefix": "last 3 versions",
       "loadPaths": "",
-      "style": "nested",
+      "style": "expanded",
       "relativeUrls": true,
       "sourceMap": true
     },
     "nodesass": {
-      "autoPrefix": "last 6 versions",
+      "autoPrefix": "",
       "includePath": "",
       "indentType": "space",
       "indentWidth": 2,
@@ -30,7 +30,7 @@
       "relativeUrls": true,
       "sourceMapRoot": "",
       "lineFeed": "",
-      "sourceMap": true
+      "sourceMap": false
     },
     "stylus": {
       "sourceMap": false

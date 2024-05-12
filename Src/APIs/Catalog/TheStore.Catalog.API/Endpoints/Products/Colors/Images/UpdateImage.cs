@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net;
 using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
@@ -15,9 +14,9 @@ using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.Requests;
+using TheStore.Requests.Models.Products;
 using TheStore.SharedKernel.ValueObjects;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {
@@ -66,25 +65,28 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 			if (singleProduct == null)
 				return NotFound("Product not found");
 
-			var variant = singleProduct.Variants.FirstOrDefault(v => v.Sku == request.Sku);
+			var variant = singleProduct.Variants.Find(v => v.Sku == request.Sku);
 			if (variant == null)
 				return NotFound("Variant not found");
 
 			var color = variant.Color;
 
-			var image = color.Images.FirstOrDefault(x => x.FileNameWithExtension == request.DecodedImagePath);
+			var image = color.Images.Find(x => x.FileNameWithExtension == request.DecodedImagePath);
 			if (image == null)
 				return NotFound("Image not found");
 
 			var imagePath = await mediator
-				.Send(new UploadImageRequest(request.Image.File, ResourceFilePaths.ProductsImages, request.ImagePath), cancellationToken);
+				.Send(new UploadImageRequest(new FormFile(request.Image.File.OpenReadStream(cancellationToken: cancellationToken), 0, request.Image.File.Size, null!, request.Image.File.Name),
+											ResourceFilePaths.ProductsImages, request.ImagePath), cancellationToken);
 
 			image = new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage);
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+			{
 				log.Information("Update an image with path: {ImagePath} in variant with SKU: {Sku} in product with id: {Id}",
 					request.ImagePath, request.Sku, request.ProductId);
+			}
 
 			return NoContent();
 		}

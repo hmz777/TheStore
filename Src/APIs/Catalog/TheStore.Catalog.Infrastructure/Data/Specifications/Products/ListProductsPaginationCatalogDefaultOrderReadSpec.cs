@@ -8,10 +8,11 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 		public ListProductsPaginationCatalogDefaultOrderReadSpec(int take, int page)
 		{
 			Query
-				.Include(p => p.Variants)
-				.OrderBy(p => p.Id)
+				.Include(p => p.Variants.Where(v => v.Options.Published))
+				.OrderBy(p => p.Name)
 				.Skip((page - 1) * take)
 				.Take(take)
+				.Where(p => p.Published)
 				.AsNoTracking();
 
 			// Cache if it's the first page

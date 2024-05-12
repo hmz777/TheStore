@@ -12,9 +12,9 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.Requests;
+using TheStore.Requests.Models.Branches;
 using TheStore.SharedKernel.ValueObjects;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Catalog.API.Endpoints.Branches.Image
 {
@@ -50,7 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 		   OperationId = "Branch.Image.Update",
 		   Tags = new[] { "Branches" })]
 		public async override Task<ActionResult> HandleAsync(
-		    UpdateImageRequest request,
+			UpdateImageRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
@@ -63,14 +63,13 @@ namespace TheStore.Catalog.API.Endpoints.Branches.Image
 				return NotFound();
 
 			var image = request.Image;
-			string imagePath;
 
-			imagePath = await mediator
+			string imagePath = await mediator
 				.Send(
 				new UploadImageRequest(
-					image.File,
+					new FormFile(image.File.OpenReadStream(cancellationToken: cancellationToken), 0, image.File.Size, null!, image.File.Name),
 					ResourceFilePaths.BranchesImages,
-					branch.Image != null ? branch.Image.StringFileUri : null!),
+					branch.Image?.StringFileUri!),
 					cancellationToken);
 
 			branch.Image = new Core.ValueObjects.Image(imagePath, mapper.Map<MultilanguageString>(image.Alt), image.IsMainImage);

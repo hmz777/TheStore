@@ -10,12 +10,12 @@ using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueObjects;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
+using TheStore.Requests;
+using TheStore.Requests.Models.Products;
 using TheStore.SharedKernel.ValueObjects;
-using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
@@ -70,13 +70,14 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 				return NotFound("Variant not found");
 
 			var color = variant.Color;
+			var image = request.Image;
 
 			var imagePath = await mediator
-				.Send(new UploadImageRequest(request.Image.File, ResourceFilePaths.ProductsImages, null!), cancellationToken);
+			.Send(new UploadImageRequest(new FormFile(image.File.OpenReadStream(cancellationToken: cancellationToken), 0, image.File.Size, null!, image.File.Name),
+										 ResourceFilePaths.ProductsImages, null!), cancellationToken);
 
-			color.Images.Add(new Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage));
+			color.Images.Add(new Core.ValueObjects.Image(imagePath, mapper.Map<MultilanguageString>(request.Image.Alt), request.Image.IsMainImage));
 			await apiRepository.SaveChangesAsync(cancellationToken);
-
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Add an image to variant with SKU: {Sku} in product with id: {Id}",
 					request.Sku, request.ProductId);

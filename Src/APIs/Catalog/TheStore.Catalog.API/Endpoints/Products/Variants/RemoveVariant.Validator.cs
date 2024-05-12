@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.Products;
+using TheStore.Requests.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Variants
 {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.Requests.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {

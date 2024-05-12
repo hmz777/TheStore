@@ -11,7 +11,8 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Specifications.Categories;
-using TheStore.SharedModels.Models;
+using TheStore.Requests;
+using TheStore.Requests.Models.Categories;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories

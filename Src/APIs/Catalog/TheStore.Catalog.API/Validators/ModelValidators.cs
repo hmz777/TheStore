@@ -10,7 +10,7 @@
 		public static ProductDtoUpdateValidator ProductDtoUpdateValidator => new();
 		public static ProductColorDtoUpdateValidator ProductColorDtoUpdateValidator => new();
 		public static ProductVariantDtoUpdateValidator ProductVariantDtoUpdateValidator => new();
-		public static FormFileValidator FormFileValidator => new();
+		public static FileUploadValidator FileUploadValidator => new();
 		public static CoordinateDtoValidator CoordinateDtoValidator => new();
 		public static CultureCodeDtoValidator CultureCodeDtoValidator => new();
 		public static LocalizedStringDtoValidator LocalizedStringDtoValidator => new();

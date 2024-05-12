@@ -26,7 +26,7 @@ namespace TheStore.Web.BlazorApp.Client.Helpers
 		/// </returns>
 		public static string ChangeColorBrightness(string hexColor, float correctionFactor)
 		{
-			Color color = ColorTranslator.FromHtml(hexColor);
+			Color color = ColorTranslator.FromHtml("#" + hexColor);
 
 			float red = color.R;
 			float green = color.G;

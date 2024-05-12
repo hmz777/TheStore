@@ -9,7 +9,8 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.SharedModels.Models;
+using TheStore.Requests;
+using TheStore.Requests.Models.Categories;
 using TheStore.SharedModels.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
@@ -42,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		   OperationId = "Category.Create",
 		   Tags = new[] { "Categories" })]
 		public async override Task<ActionResult<CategoryDtoRead>> HandleAsync(
-		    CreateRequest request,
+			CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

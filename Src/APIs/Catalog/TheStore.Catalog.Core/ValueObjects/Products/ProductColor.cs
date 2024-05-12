@@ -6,9 +6,9 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 	public class ProductColor : ValueObject
 	{
 		public List<Image> Images { get; set; }
-		public string ColorName { get; }
-		public string ColorCode { get; }
-		public bool IsMainColor { get; }
+		public string ColorName { get; private set; }
+		public string ColorCode { get; private set; }
+		public bool IsMainColor { get; private set; }
 
 		// Ef Core
 		private ProductColor() { }

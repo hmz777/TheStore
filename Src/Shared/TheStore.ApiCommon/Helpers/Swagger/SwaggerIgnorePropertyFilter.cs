@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using TheStore.SharedModels.Swagger;
+using TheStore.Requests.Swagger;
 
 namespace TheStore.ApiCommon.Helpers.Swagger
 {

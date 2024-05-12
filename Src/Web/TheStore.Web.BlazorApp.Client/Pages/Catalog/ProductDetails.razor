@@ -1,13 +1,14 @@
 ﻿@page "/product/{productId:int}/{productName}/"
 @using MediatR;
-@using TheStore.Web.Models.Products;
-@using TheStore.Web.Models.ValueObjectsDtos;
+@using TheStore.SharedModels.Models.Products;
+@using TheStore.SharedModels.Models.ValueObjectsDtos;
 @using TheStore.Web.BlazorApp.Client.Helpers;
 @using TheStore.Web.BlazorApp.Client.Mediator.Commands;
 @using TheStore.Web.BlazorApp.Client.Models;
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Services;
 @inject IMediator Mediator;
+@inject CatalogService CatalogService;
 
 @if (dataLoading)
 {
@@ -19,7 +20,7 @@ else
 		<div class="row">
 			<div class="col-12 col-lg-6">
 				<div class="product-images">
-					<ImageGallery ProductColor="currentColor" />
+					<ImageGallery ProductColor="CurrentVariant.Color" />
 				</div>
 				<div class="row">
 					<div class="col-12">
@@ -37,17 +38,17 @@ else
 			<div class="col-12 col-lg-6 px-5">
 				<div class="product-details">
 					<div class="info-cell">
-						<h1 class="product-title">@product.Name</h1>
+						<h1 class="product-title">@Product.Name</h1>
 					</div>
 					<div class="info-cell">
 						<span class="product-category">Some Category</span>
 						@* TODO: Make Category required relationship for product in order to be pulled with the product *@
 					</div>
 					<div class="info-cell">
-						<span class="product-price">@Product.Price</span>
+						<span class="product-price">@CurrentVariant.Price</span>
 					</div>
 					<div class="info-cell">
-						<ColorSelector ProductColors="Colors" ColorChosen="ColorChosen" ControlSize="ControlSize.Normal" />
+						<VariantSelector Variants="Product.Variants" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
 					</div>
 					<div class="info-cell">
 						<button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
@@ -111,27 +112,27 @@ else
 	private ProductCatalogDtoRead Product { get; set; }
 
 	private List<ProductColorDtoRead> Colors => Product.Variants.Select(v => v.Color).ToList();
-	private ProductColorDtoRead CurrentColor { get; set; }
+
+	private ProductVariantCatalogDtoRead CurrentVariant { get; set; }
 
 	private bool dataLoading = true;
 
-	protected override async Task OnInitializedAsync()
+	protected async override Task OnAfterRenderAsync(bool firstRender)
 	{
 		// Get full UI product details
-		// Simulate data loading
-		await Task.Delay(2500);
 
-		// TODO: Fetch Product from Catalog
+		if (firstRender)
+		{
+			Product = await CatalogService.GetProductDetails(ProductId);
+			CurrentVariant = Product.MainVariant;
 
-		CurrentColor = Product.MainColor;
-
-		dataLoading = false;
+			dataLoading = false;
+		}
 	}
 
-
-	private void ColorChosen(string colorCode)
+	private void VariantChosen(string variantSku)
 	{
-		CurrentColor = Colors.Where(pc => pc.ColorCode == colorCode).First();
+		CurrentVariant = Product.Variants.First(v => v.Sku == variantSku);
 
 		if (ShouldRender())
 		{

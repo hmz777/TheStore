@@ -1,6 +1,6 @@
 ﻿@using TheStore.Web.BlazorApp.Client.Helpers
-@using TheStore.Web.Models.Products
-@using TheStore.Web.Models.ValueObjectsDtos;
+@using TheStore.SharedModels.Models.Products
+@using TheStore.SharedModels.Models.ValueObjectsDtos;
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
@@ -17,14 +17,17 @@
 		<div class="swiper-pagination"></div>
 	</div>
 	<article class="product-card-body">
-		<VariantSelector Variants="Product.Variants" VariantChosen="VariantChosen" />
+		<div class="d-flex flex-row">
+			<VariantSelector Variants="Product.Variants" VariantChosen="VariantChosen" />
+			<span class="product-card-body-dimentions">@CurrentVariant.Dimentions</span>
+		</div>
 		<header class="product-card-body-title" title="@Product.Name">
 			<a href="/product/@Product.ProductId/@(SlugUrlHelper.URLFriendly(Product.Name))">
 				<h5 class="m-0">@Product.Name</h5>
 			</a>
 		</header>
-		<article class="product-card-body-desc" title="@Product.Description">
-			<p>@Product.Description</p>
+		<article class="product-card-body-desc" title="@Product.ShortDescription">
+			<p class="product-price">@CurrentVariant.Price</p>
 		</article>
 	</article>
 	<div class="product-card-controls">

@@ -88,7 +88,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 						var imageColor = color.Replace("#", "");
 
 						images.Add(
-							new Image($"https://placehold.co/600x400/{imageColor}/{(imageColor == "FFFFFF" ? "000000" : "FFFFFF")}/png?text=Image+{j}",
+							new Image($"https://placehold.co/600x400/{imageColor}/{(imageColor == "FFFFFF" ? "000000" : "FFFFFF")}/png?text=Image+{m}",
 							new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
 							false));
 					}

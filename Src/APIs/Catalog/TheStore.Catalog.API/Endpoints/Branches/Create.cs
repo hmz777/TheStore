@@ -9,7 +9,8 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.SharedModels.Models;
+using TheStore.Requests;
+using TheStore.Requests.Models.Branches;
 using TheStore.SharedModels.Models.Branches;
 
 namespace TheStore.Catalog.API.Endpoints.Branches
@@ -26,7 +27,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		public Create(
 			IValidator<CreateRequest> validator,
 			IApiRepository<CatalogDbContext, Branch> apiRepository,
- 			IMapper mapper)
+			IMapper mapper)
 		{
 			this.validator = validator;
 			this.apiRepository = apiRepository;
@@ -42,7 +43,7 @@ namespace TheStore.Catalog.API.Endpoints.Branches
 		   OperationId = "Branch.Create",
 		   Tags = new[] { "Branches" })]
 		public async override Task<ActionResult<BranchDtoUpdate>> HandleAsync(
-		    CreateRequest request,
+			CreateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

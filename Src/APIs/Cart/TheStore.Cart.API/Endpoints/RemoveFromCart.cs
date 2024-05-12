@@ -6,10 +6,9 @@ using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
-using TheStore.Cart.Core.ValueObjects.Keys;
 using TheStore.Cart.Infrastructure.Data;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Cart;
+using TheStore.Requests;
+using TheStore.Requests.Models.Cart;
 
 namespace TheStore.Cart.API.Endpoints
 {

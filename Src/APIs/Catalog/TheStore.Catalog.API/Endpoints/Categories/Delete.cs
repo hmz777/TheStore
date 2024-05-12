@@ -9,8 +9,8 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.Requests;
+using TheStore.Requests.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {

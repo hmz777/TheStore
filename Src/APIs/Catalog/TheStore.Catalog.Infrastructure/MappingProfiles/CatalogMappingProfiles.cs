@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Google.Protobuf.Reflection;
 using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.Aggregates.Products;
@@ -14,7 +13,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Infrastructure.MappingProfiles
 {
-    public class CatalogMappingProfiles : Profile
+	public class CatalogMappingProfiles : Profile
 	{
 		public CatalogMappingProfiles()
 		{
@@ -27,14 +26,14 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			// Products
 			CreateMap<Product, ProductCatalogDtoRead>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
-				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id))
-				.ForMember(dest => dest.Variants, opt => opt.MapFrom("variants"));
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
 			CreateMap<ProductDtoUpdate, Product>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))
 				.ReverseMap()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 
+			CreateMap<ProductVariant, ProductVariantCatalogDtoRead>();
 			CreateMap<ProductVariant, ProductVariantDetailsDtoRead>();
 			CreateMap<ProductVariantDtoUpdate, ProductVariant>()
 				.ForMember(dest => dest.Sku, opt => opt.Ignore());
@@ -69,10 +68,7 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
 			CreateMap<Image, ImageDto>().ReverseMap();
 
-			CreateMap<ProductColor, ProductColorDtoRead>()
-				.ForMember(dest => dest.Images, opt => opt.MapFrom("images"))
-				.ReverseMap()
-				.ForMember("images", opt => opt.MapFrom(src => src.Images));
+			CreateMap<ProductColor, ProductColorDtoRead>();
 
 			CreateMap<ProductColorDtoUpdate, ProductColor>()
 				.ForMember(dest => dest.Images, opt => opt.Ignore());

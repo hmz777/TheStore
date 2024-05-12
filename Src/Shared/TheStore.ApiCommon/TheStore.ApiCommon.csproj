@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TheStore.Events\TheStore.Events.csproj" />
+    <ProjectReference Include="..\TheStore.Requests\TheStore.Requests.csproj" />
     <ProjectReference Include="..\TheStore.SharedKernel\TheStore.SharedKernel.csproj" />
     <ProjectReference Include="..\TheStore.SharedModels\TheStore.SharedModels.csproj" />
   </ItemGroup>

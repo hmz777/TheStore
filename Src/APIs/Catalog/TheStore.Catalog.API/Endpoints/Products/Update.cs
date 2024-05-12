@@ -11,8 +11,8 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Products;
+using TheStore.Requests;
+using TheStore.Requests.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products
 {

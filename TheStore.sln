@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{28D4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Gateway.Web", "Src\Gateway\TheStore.Gateway.Web\TheStore.Gateway.Web.csproj", "{AF8ECEDA-BCCF-4D38-8500-161DBBADAADE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.Models", "Src\Web\TheStore.Web.Models\TheStore.Web.Models.csproj", "{C46F64CA-3F8F-4C69-B2BF-BBBA7C56837A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.Requests", "Src\Web\TheStore.Web.Requests\TheStore.Web.Requests.csproj", "{C46F64CA-3F8F-4C69-B2BF-BBBA7C56837A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "Src\Identity\AuthServer\AuthServer.csproj", "{D2CCEC96-A420-4790-971E-6ABB593BCC39}"
 EndProject
@@ -68,6 +68,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.BlazorApp", "Src\Web\TheStore.Web.BlazorApp\TheStore.Web.BlazorApp.csproj", "{7B4975F4-81D2-40C5-A7CD-5ABDD887368D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.BlazorApp.Client", "Src\Web\TheStore.Web.BlazorApp.Client\TheStore.Web.BlazorApp.Client.csproj", "{E706ADCD-0D27-4A66-BFD4-D68D905057B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Requests", "Src\Shared\TheStore.Requests\TheStore.Requests.csproj", "{57404764-DADC-49DE-BA90-1DCBD5213A8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +169,10 @@ Global
 		{E706ADCD-0D27-4A66-BFD4-D68D905057B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E706ADCD-0D27-4A66-BFD4-D68D905057B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E706ADCD-0D27-4A66-BFD4-D68D905057B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57404764-DADC-49DE-BA90-1DCBD5213A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57404764-DADC-49DE-BA90-1DCBD5213A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57404764-DADC-49DE-BA90-1DCBD5213A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57404764-DADC-49DE-BA90-1DCBD5213A8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,6 +209,7 @@ Global
 		{82BA61FC-35CA-4C98-B6AE-05AB6DBB3E53} = {D9C2BBA7-B566-4A03-9832-39C43A9972A1}
 		{7B4975F4-81D2-40C5-A7CD-5ABDD887368D} = {0F861B9A-F1F2-4756-B61A-977A2F5C8EFD}
 		{E706ADCD-0D27-4A66-BFD4-D68D905057B4} = {0F861B9A-F1F2-4756-B61A-977A2F5C8EFD}
+		{57404764-DADC-49DE-BA90-1DCBD5213A8A} = {D9C2BBA7-B566-4A03-9832-39C43A9972A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7A7C7C9-F2EC-4506-971E-2184B411D9F6}

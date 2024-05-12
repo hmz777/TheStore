@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TheStore.SharedModels.Models.Branches;
+using TheStore.Requests.Models.Branches;
 
 namespace TheStore.Catalog.API.Endpoints.Branches.Image
 {

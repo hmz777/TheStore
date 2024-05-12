@@ -11,7 +11,8 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Data.Specifications;
-using TheStore.SharedModels.Models;
+using TheStore.Requests;
+using TheStore.Requests.Models.Wishlist;
 using TheStore.SharedModels.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints

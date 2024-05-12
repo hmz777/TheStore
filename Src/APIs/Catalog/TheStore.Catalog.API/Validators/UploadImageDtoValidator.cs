@@ -9,7 +9,7 @@ namespace TheStore.Catalog.API.Validators
 		{
 			RuleFor(x => x.File)
 				.NotEmpty()
-				.SetValidator(ModelValidators.FormFileValidator);
+				.SetValidator(ModelValidators.FileUploadValidator);
 
 			RuleFor(x => x.Alt)
 				.NotEmpty()

@@ -29,17 +29,15 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 
 		public static IServiceCollection AddClientConfiguration(this IServiceCollection services, IConfiguration configuration)
 		{
-			var s = configuration.GetRequiredSection(ClientAppConfig.Key);
-
 			services.AddOptions();
 			services.Configure<ClientAppConfig>(configuration.GetRequiredSection(ClientAppConfig.Key));
 
 			return services;
 		}
 
-		public static IServiceCollection ConfigureHelperServices(this IServiceCollection services)
+		public static IServiceCollection ConfigureHelperServices(this IServiceCollection services, params Assembly[] assemblies)
 		{
-			services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+			services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 
 			return services;
 		}

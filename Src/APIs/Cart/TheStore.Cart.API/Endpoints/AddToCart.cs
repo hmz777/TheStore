@@ -10,7 +10,8 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Services;
-using TheStore.SharedModels.Models;
+using TheStore.Requests;
+using TheStore.Requests.Models.Cart;
 using TheStore.SharedModels.Models.Cart;
 
 namespace TheStore.Cart.API.Endpoints

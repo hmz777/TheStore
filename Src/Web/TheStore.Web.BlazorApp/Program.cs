@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
+using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
 using TheStore.Web.BlazorApp.Auth;
 using TheStore.Web.BlazorApp.Client.Extensions;
@@ -22,12 +23,12 @@ try
 
 	builder.Services.AddAuthorization();
 	builder.Services.AddAuthentication().AddIdentityCookies();
-
 	builder.Services.AddCascadingAuthenticationState();
 	builder.Services.AddScoped<AuthenticationStateProvider, NoOpAuthenticationStateProvider>();
 
 	builder.ConfigureOidc();
 
+	builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(BffAuthenticationStateProvider))!);
 	builder.Services.ConfigureApis();
 
 	var app = builder.Build();

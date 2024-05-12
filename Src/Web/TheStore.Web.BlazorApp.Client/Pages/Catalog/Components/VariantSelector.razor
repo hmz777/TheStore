@@ -1,13 +1,13 @@
-﻿@using TheStore.Web.Models.ValueObjectsDtos;
+﻿@using TheStore.SharedModels.Models.ValueObjectsDtos;
 @using TheStore.Web.BlazorApp.Client.Models;
-@using TheStore.Web.Models.Products;
+@using TheStore.SharedModels.Models.Products;
 
-<div class="color-selector @GetSizeClass(ControlSize)">
+<div class="variant-selector @GetSizeClass(ControlSize)">
 	@foreach (var variant in Variants)
 	{
-		<button class="color-selection @(ActiveVariantSku == variant.Sku ? "active" : "")"
+		<button class="variant-selection @(ActiveVariantSku == variant.Sku ? "active" : "")"
 				type="button"
-				style="background-size:100% 100%;background-image:@variant.Color.GetMainImage().StringFileUri"
+				style="background-size:100% 100%;background-image:url(@variant.Color.GetMainImage().StringFileUri)"
 				@onclick="() => ChooseVariant(variant.Sku)"
 				@key="variant.Sku"></button>
 	}
@@ -21,7 +21,7 @@
 	public EventCallback<string> VariantChosen { get; set; }
 
 	[Parameter]
-	public ControlSize ControlSize { get; set; } = ControlSize.Small;
+	public ControlSize ControlSize { get; set; } = ControlSize.Normal;
 
 	private string ActiveVariantSku { get; set; }
 
@@ -32,10 +32,10 @@
 
 	private string GetSizeClass(ControlSize controlSize) => controlSize switch
 	{
-		ControlSize.Small => "color-selector--small",
-		ControlSize.Normal => "color-selector--normal",
-		ControlSize.Large => "color-selector--large",
-		_ => "color-selector--small"
+		ControlSize.Small => "variant-selector--small",
+		ControlSize.Normal => "variant-selector--normal",
+		ControlSize.Large => "variant-selector--large",
+		_ => "variant-selector--small"
 	};
 
 	private async Task ChooseVariant(string variantSku)

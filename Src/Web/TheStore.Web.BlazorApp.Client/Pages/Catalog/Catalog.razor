@@ -1,7 +1,7 @@
 ﻿@page "/catalog/{catalogName?}/{manufacturer?}/{priceRange?}/{sortDirection?}/{page:int?}"
 @using TheStore.Web.BlazorApp.Client.Services
-@using TheStore.Web.Models.Products;
-@using TheStore.Web.Models.ValueObjectsDtos;
+@using TheStore.SharedModels.Models.Products;
+@using TheStore.SharedModels.Models.ValueObjectsDtos;
 @using TheStore.Web.BlazorApp.Client.Helpers;
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Shared.Result;
@@ -16,9 +16,9 @@
 		{
 			<ProductCardsSkeleton />
 		}
-		else if (products.Count > 0)
+		else if (Products.Count > 0)
 		{
-			@foreach (var product in products)
+			@foreach (var product in Products)
 			{
 				<div class="col-12 col-md-6 col-lg-4">
 					<ProductCard @key="product.ProductId"
@@ -66,7 +66,7 @@
 	private int numberOfPages => (int)Math.Ceiling(count / (decimal)take);
 
 	private bool dataLoading = true;
-	private List<ProductDtoRead> products { get; set; } = new();
+	private List<ProductCatalogDtoRead> Products { get; set; } = [];
 
 	protected override void OnParametersSet()
 	{
@@ -96,7 +96,7 @@
 	{
 		var result = await CatalogService.GetProductsPaginated(take, page);
 
-		products = result.Products;
+		Products = result.Products;
 		count = result.Count;
 	}
 
@@ -104,7 +104,7 @@
 	{
 		Page = page;
 
-		await FetchData(Page, take);
+		await FetchData(take, Page);
 
 		if (ShouldRender())
 		{
@@ -114,7 +114,7 @@
 
 	private async Task NavigateToNextPage()
 	{
-		await FetchData(++Page, take);
+		await FetchData(take, ++Page);
 
 		if (ShouldRender())
 		{
@@ -124,7 +124,7 @@
 
 	private async Task NavigateToPreviousPage()
 	{
-		await FetchData(--Page, take);
+		await FetchData(take, --Page);
 
 		if (ShouldRender())
 		{

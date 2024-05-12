@@ -3,7 +3,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.SharedModels.Models.Products
 {
-    [DisplayName(nameof(ProductVariantCatalogDtoRead))]
+	[DisplayName(nameof(ProductVariantCatalogDtoRead))]
 	public class ProductVariantCatalogDtoRead : DtoBase
 	{
 		public string Name { get; set; }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using TheStore.Catalog.API.Validators;
-using TheStore.SharedModels.Models.Products;
+using TheStore.Requests.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 {

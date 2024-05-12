@@ -13,8 +13,8 @@ using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Events.Categories.IntegrationEvents;
-using TheStore.SharedModels.Models;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.Requests;
+using TheStore.Requests.Models.Categories;
 
 namespace TheStore.Catalog.API.Endpoints.Categories
 {
@@ -50,7 +50,7 @@ namespace TheStore.Catalog.API.Endpoints.Categories
 		   OperationId = "Category.Update",
 		   Tags = new[] { "Categories" })]
 		public async override Task<ActionResult> HandleAsync(
-		    UpdateRequest request,
+			UpdateRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);

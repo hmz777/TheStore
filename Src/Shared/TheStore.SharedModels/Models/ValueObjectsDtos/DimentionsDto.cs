@@ -9,5 +9,10 @@ namespace TheStore.SharedModels.Models.ValueObjectsDtos
 		public decimal Height { get; set; }
 		public decimal Length { get; set; }
 		public UnitOfMeasureDto Unit { get; set; }
+
+		public override string ToString()
+		{
+			return $"{Width}x{Height}x{Length} {Unit}";
+		}
 	}
 }

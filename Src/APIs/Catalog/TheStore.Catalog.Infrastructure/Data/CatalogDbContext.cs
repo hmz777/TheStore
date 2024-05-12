@@ -79,7 +79,11 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 				opt.OwnsOne(v => v.Inventory);
 
-				opt.HasOne(v => v.Color);
+				opt.HasOne(v => v.Color)
+				   .WithOne()
+				   .HasForeignKey<ProductColor>("variantId")
+				   .IsRequired();
+
 				opt.Navigation(v => v.Color).AutoInclude();
 
 				opt.OwnsOne(v => v.Options);
@@ -105,6 +109,10 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasColumnType("int")
 				.ValueGeneratedOnAdd()
 				.HasAnnotation("Key", 0);
+
+				opt.HasMany(pc => pc.Images)
+				   .WithOne()
+				   .IsRequired();
 
 				opt.Navigation(pc => pc.Images).AutoInclude();
 			});

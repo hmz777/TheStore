@@ -10,7 +10,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 		public GetProductByIdReadSpec(ProductId productId)
 		{
 			Query.Where(product => product.Id == productId)
-				.AsNoTracking();
+				 .Include(p => p.Variants)
+				 .AsNoTracking();
 		}
 	}
 }
