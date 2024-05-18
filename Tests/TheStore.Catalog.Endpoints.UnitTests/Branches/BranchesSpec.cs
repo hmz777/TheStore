@@ -12,9 +12,8 @@ using TheStore.Catalog.Core.Aggregates.Branches;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
-using TheStore.SharedModels.Models.Branches;
+using TheStore.Requests.Models.Branches;
 using TheStore.TestHelpers.AutoData.Customizations;
-using UpdateImageRequest = TheStore.SharedModels.Models.Branches.UpdateImageRequest;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Branches
 {

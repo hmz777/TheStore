@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TheStore.Requests.Models.Cart;
+using TheStore.Requests.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints
 {

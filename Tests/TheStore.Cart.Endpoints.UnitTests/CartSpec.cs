@@ -10,7 +10,7 @@ using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.MappingProfiles;
 using TheStore.Cart.Infrastructure.Services;
-using TheStore.SharedModels.Models.Cart;
+using TheStore.Requests.Models.Cart;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Cart.Endpoints.UnitTests

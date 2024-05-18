@@ -10,7 +10,7 @@
 @inject IMediator Mediator;
 @inject CatalogService CatalogService;
 
-@if (dataLoading)
+@if (DataLoading)
 {
 	<ProductDetailsSkeleton />
 }
@@ -115,7 +115,7 @@ else
 
 	private ProductVariantCatalogDtoRead CurrentVariant { get; set; }
 
-	private bool dataLoading = true;
+	private bool DataLoading { get; set; } = true;
 
 	protected async override Task OnAfterRenderAsync(bool firstRender)
 	{
@@ -126,7 +126,8 @@ else
 			Product = await CatalogService.GetProductDetails(ProductId);
 			CurrentVariant = Product.MainVariant;
 
-			dataLoading = false;
+			DataLoading = false;
+			StateHasChanged();
 		}
 	}
 

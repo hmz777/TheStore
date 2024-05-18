@@ -1,9 +1,9 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using NCrunch.Framework;
-using TheStore.Catalog.API;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Requests.Models.Categories;
 using TheStore.SharedModels.Models.Categories;
 using TheStore.TestHelpers.AutoData.Customizations;
 using TheStore.TestHelpers.WebApplication;

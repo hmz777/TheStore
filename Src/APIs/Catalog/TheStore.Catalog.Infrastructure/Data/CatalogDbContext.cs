@@ -64,6 +64,10 @@ namespace TheStore.Catalog.Infrastructure.Data
 				.HasMany(p => p.Variants)
 				.WithOne();
 
+			modelBuilder.Entity<Product>()
+				.HasMany(p => p.Reviews)
+				.WithOne();
+
 			modelBuilder.Entity<ProductVariant>(opt =>
 			{
 				opt.Property<int>("ID")
@@ -97,9 +101,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 				});
 
 				opt.HasMany(v => v.Sepcifications)
-				   .WithOne();
-
-				opt.HasMany(v => v.Reviews)
 				   .WithOne();
 			});
 

@@ -1,5 +1,4 @@
 ﻿@using TheStore.Web.BlazorApp.Client.Helpers;
-@using TheStore.Web.BlazorApp.Client.Helpers;
 
 @for (int i = 0; i < 5; i++)
 {
@@ -13,7 +12,11 @@
 			Content="@DummyDataHelper.GenerateRandomString()" />
 }
 
-@* TODO: Implement loading more reviews dynamically *@
+@* TODO: Implement loading more reviews dynamically, we need a reviews endpoint *@
 
 @code {
+	[Parameter]
+	public int ProductId { get; set; }
+
+	private bool DataLoading { get; set; }
 }

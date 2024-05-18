@@ -10,7 +10,7 @@ using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
-using TheStore.SharedModels.Models.Products;
+using TheStore.Requests.Models.Products;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products

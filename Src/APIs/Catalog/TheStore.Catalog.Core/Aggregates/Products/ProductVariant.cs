@@ -16,6 +16,5 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public ProductVariantOptions Options { get; set; }
 		public Dimensions Dimentions { get; set; }
 		public List<ProductSpecification> Sepcifications { get; set; }
-		public List<ProductReview> Reviews { get; set; }
 	}
 }

@@ -2,9 +2,9 @@
 using FluentAssertions;
 using NCrunch.Framework;
 using System.Text.Json;
-using TheStore.Catalog.API;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Requests.Models.Products;
 using TheStore.SharedModels.Models.Products;
 using TheStore.TestHelpers.AutoData.Customizations;
 using TheStore.TestHelpers.WebApplication;
@@ -118,7 +118,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 				formData.Add(new StringContent("en-US"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].CultureCode.Code");
 				formData.Add(new StringContent("Lorem Ipsum"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].Value");
 				formData.Add(new StringContent("True"), $"{nameof(request.Image)}.{nameof(request.Image.IsMainImage)}");
-				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.Name);
 
 				var response = await _client.PostAsync(request.Route, formData);
 
@@ -149,7 +149,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 				formData.Add(new StringContent("en-US"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].CultureCode.Code");
 				formData.Add(new StringContent("Lorem Ipsum"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].Value");
 				formData.Add(new StringContent("True"), $"{nameof(request.Image)}.{nameof(request.Image.IsMainImage)}");
-				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.Name);
 
 				var response = await _client.PutAsync(request.Route, formData);
 

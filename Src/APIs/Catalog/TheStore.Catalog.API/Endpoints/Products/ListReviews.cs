@@ -2,32 +2,29 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
-using TheStore.Requests;
 using TheStore.Requests.Models.Products;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products
 {
-	public class List : EndpointBaseAsync
-		.WithRequest<ListRequest>
-		.WithActionResult<ProductsPaginatedResult>
+	public class ListReviews : EndpointBaseAsync
+		.WithRequest<ListReviewsRequest>
+		.WithActionResult<ProductReviewsPaginatedResult>
 	{
-		private readonly IValidator<ListRequest> validator;
+		private readonly IValidator<ListReviewsRequest> validator;
 		private readonly IReadApiRepository<CatalogDbContext, Product> repository;
 		private readonly IMapper mapper;
-		private readonly Serilog.ILogger log = Log.ForContext<List>();
 
-		public List(
-			IValidator<ListRequest> validator,
+		public ListReviews(
+			IValidator<ListReviewsRequest> validator,
 			IReadApiRepository<CatalogDbContext, Product> repository,
 			IMapper mapper)
 		{
@@ -36,37 +33,33 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			this.mapper = mapper;
 		}
 
-		[HttpGet(ListRequest.RouteTemplate)]
+		[HttpGet(ListReviewsRequest.RouteTemplate)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[SwaggerOperation(
-			Summary = "Lists single products",
-			Description = "Lists single products with pagination using skip and take",
-			OperationId = "Product.Single.List",
+			Summary = "Lists product reviews",
+			Description = "Lists product reviews with pagination using skip and take",
+			OperationId = "Product.Single.Reviews.List",
 			Tags = ["Products"])]
-		public async override Task<ActionResult<ProductsPaginatedResult>> HandleAsync(
-			[FromQuery] ListRequest request,
+		public async override Task<ActionResult<ProductReviewsPaginatedResult>> HandleAsync(
+			ListReviewsRequest request,
 			CancellationToken cancellationToken = default)
 		{
 			var validation = await validator.ValidateAsync(request, cancellationToken);
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var spec = new ListProductsPaginationCatalogDefaultOrderReadSpec(request.Take, request.Page);
+			var spec = new ListProductReviewsWithPaginationReadSpec(new ProductId(request.ProductId), request.Page, request.Take);
 
-			var products = (await repository
-				.ListAsync(spec, cancellationToken))
-				.Map<Product, ProductCatalogDtoRead>(mapper);
+			var reviews = (await repository.ListAsync(spec, cancellationToken))
+						.Map<ProductReview, ProductReviewDto>(mapper);
 
-			var productscount = await repository.CountAsync(spec, cancellationToken);
+			var reviewsTotalCount = await repository.CountAsync(spec, cancellationToken);
 
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("List products with Page: {Page} and Take: {Take}", request.Page, request.Take, request.CorrelationId);
-
-			return new ProductsPaginatedResult
+			return new ProductReviewsPaginatedResult
 			{
-				Products = products ?? [],
-				Count = productscount,
+				Reviews = reviews ?? [],
+				Count = reviewsTotalCount,
 				PageNumber = request.Page
 			};
 		}

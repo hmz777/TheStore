@@ -106,9 +106,6 @@ namespace TheStore.Catalog.Infrastructure.Data
 						Dimentions = new Dimensions(randomNumber, randomNumber, randomNumber, UnitOfMeasure.Cm),
 						Sepcifications = [
 							new(new MultilanguageString("Name", CultureCode.English), new MultilanguageString("Value", CultureCode.English))
-						],
-						Reviews = [
-							new(GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack")
 						]
 					};
 
@@ -121,7 +118,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 								new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
 								new MultilanguageString(GenerateRandomString(), CultureCode.English),
 								true,
-								variants);
+								variants,
+								new List<ProductReview>() { new ProductReview(GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack", true) });
 
 				products.Add(product);
 			}

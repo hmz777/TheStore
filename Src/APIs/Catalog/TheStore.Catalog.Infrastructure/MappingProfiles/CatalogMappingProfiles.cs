@@ -13,7 +13,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Infrastructure.MappingProfiles
 {
-	public class CatalogMappingProfiles : Profile
+    public class CatalogMappingProfiles : Profile
 	{
 		public CatalogMappingProfiles()
 		{

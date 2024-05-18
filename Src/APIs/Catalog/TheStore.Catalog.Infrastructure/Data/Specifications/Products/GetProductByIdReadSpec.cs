@@ -11,6 +11,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 		{
 			Query.Where(product => product.Id == productId)
 				 .Include(p => p.Variants)
+				 .ThenInclude(v => v.Sepcifications)
 				 .AsNoTracking();
 		}
 	}

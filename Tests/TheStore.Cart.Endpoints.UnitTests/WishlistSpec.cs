@@ -11,7 +11,7 @@ using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.MappingProfiles;
 using TheStore.Cart.Infrastructure.Services;
-using TheStore.SharedModels.Models.Wishlist;
+using TheStore.Requests.Models.Wishlist;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Cart.Endpoints.UnitTests

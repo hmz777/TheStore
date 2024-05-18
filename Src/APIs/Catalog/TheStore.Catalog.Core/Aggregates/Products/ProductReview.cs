@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 
-namespace TheStore.Catalog.Core.ValueObjects
+namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class ProductReview
 	{
@@ -9,11 +9,12 @@ namespace TheStore.Catalog.Core.ValueObjects
 		public string Content { get; }
 		public int Rating { get; }
 		public string User { get; }
+		public bool Published { get; set; }
 
 		// Ef Core
 		private ProductReview() { }
 
-		public ProductReview(string title, DateTimeOffset date, string content, int rating, string user)
+		public ProductReview(string title, DateTimeOffset date, string content, int rating, string user, bool published)
 		{
 			Guard.Against.NullOrEmpty(title, nameof(title));
 			Guard.Against.NullOrEmpty(content, nameof(content));
@@ -25,6 +26,7 @@ namespace TheStore.Catalog.Core.ValueObjects
 			Content = content;
 			Rating = rating;
 			User = user;
+			Published = published;
 		}
 	}
 }

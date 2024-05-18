@@ -16,8 +16,8 @@ using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.Catalog.Infrastructure.Services;
+using TheStore.Requests.Models.Products;
 using TheStore.SharedKernel.ValueObjects;
-using TheStore.SharedModels.Models.Products;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Products

@@ -3,6 +3,7 @@ using FluentAssertions;
 using NCrunch.Framework;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Requests.Models.Branches;
 using TheStore.SharedModels.Models.Branches;
 using TheStore.TestHelpers.AutoData.Customizations;
 using TheStore.TestHelpers.WebApplication;
@@ -85,7 +86,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Branches
 				formData.Add(new StringContent("en-US"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].CultureCode.Code");
 				formData.Add(new StringContent("Lorem Ipsum"), $"{nameof(request.Image)}.{nameof(request.Image.Alt)}.LocalizedStrings[0].Value");
 				formData.Add(new StringContent("True"), $"{nameof(request.Image)}.{nameof(request.Image.IsMainImage)}");
-				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.FileName);
+				formData.Add(new StreamContent(request.Image.File.OpenReadStream()), $"{nameof(request.Image)}.{nameof(request.Image.File)}", request.Image.File.Name);
 
 				var response = await _client
 						.PutAsync(request.Route, formData);

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TheStore.Requests;
 
 namespace TheStore.Requests.Models.Products
 {

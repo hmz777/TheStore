@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using TheStore.Catalog.API;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Requests.Models.Products;
 using TheStore.SharedModels.Models.Products;
 using TheStore.TestHelpers.AutoData.Customizations;
 using TheStore.TestHelpers.WebApplication;

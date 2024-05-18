@@ -10,9 +10,9 @@ namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 			Query
 				.Include(p => p.Variants.Where(v => v.Options.Published))
 				.OrderBy(p => p.Name)
+				.Where(p => p.Published)
 				.Skip((page - 1) * take)
 				.Take(take)
-				.Where(p => p.Published)
 				.AsNoTracking();
 
 			// Cache if it's the first page

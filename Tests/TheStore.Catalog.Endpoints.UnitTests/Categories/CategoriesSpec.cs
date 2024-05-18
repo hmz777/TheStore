@@ -11,7 +11,7 @@ using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.MappingProfiles;
-using TheStore.SharedModels.Models.Categories;
+using TheStore.Requests.Models.Categories;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Catalog.Endpoints.UnitTests.Categories

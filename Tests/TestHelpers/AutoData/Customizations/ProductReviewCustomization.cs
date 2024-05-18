@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using TheStore.Catalog.Core.ValueObjects;
+using TheStore.Catalog.Core.Aggregates.Products;
 
 namespace TheStore.TestHelpers.AutoData.Customizations
 {
@@ -14,7 +14,7 @@ namespace TheStore.TestHelpers.AutoData.Customizations
 					fixture.Create<DateTimeOffset>(),
 					fixture.Create<string>(),
 					new Random().Next(1, 5),
-					fixture.Create<string>());
+					fixture.Create<string>(), true);
 			});
 		}
 	}

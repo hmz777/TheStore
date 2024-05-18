@@ -6,13 +6,14 @@ using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-	public class Product : BaseEntity<ProductId>, IAggregateRoot
+    public class Product : BaseEntity<ProductId>, IAggregateRoot
 	{
 		public CategoryId CategoryId { get; set; }
 		public string Name { get; set; }
 		public MultilanguageString ShortDescription { get; set; }
 		public MultilanguageString Description { get; set; }
 		public List<ProductVariant> Variants { get; set; }
+		public List<ProductReview> Reviews { get; set; }
 		public bool Published { get; set; }
 
 		// Ef Core
@@ -24,7 +25,8 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			MultilanguageString shortDescription,
 			MultilanguageString description,
 			bool published,
-			List<ProductVariant> variants = null!)
+			List<ProductVariant> variants = null!,
+			List<ProductReview> reviews = null!)
 		{
 			Guard.Against.Null(categoryId, nameof(categoryId));
 			Guard.Against.NegativeOrZero(categoryId.Id, nameof(categoryId.Id));
@@ -38,6 +40,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Description = description;
 			Published = published;
 			Variants = variants ?? [];
+			Reviews = reviews ?? [];
 		}
 	}
 }
