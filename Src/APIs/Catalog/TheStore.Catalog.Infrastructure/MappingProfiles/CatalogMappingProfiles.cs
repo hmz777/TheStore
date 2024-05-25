@@ -13,7 +13,7 @@ using TheStore.SharedModels.Models.ValueObjectsDtos;
 
 namespace TheStore.Catalog.Infrastructure.MappingProfiles
 {
-    public class CatalogMappingProfiles : Profile
+	public class CatalogMappingProfiles : Profile
 	{
 		public CatalogMappingProfiles()
 		{
@@ -25,6 +25,10 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 
 			// Products
 			CreateMap<Product, ProductCatalogDtoRead>()
+				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
+				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
+
+			CreateMap<Product, ProductDetailsDtoRead>()
 				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id))
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId.Id));
 

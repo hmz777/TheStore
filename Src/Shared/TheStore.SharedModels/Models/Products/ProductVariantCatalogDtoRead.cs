@@ -8,7 +8,6 @@ namespace TheStore.SharedModels.Models.Products
 	{
 		public string Name { get; set; }
 		public string Sku { get; set; }
-		public MultilanguageStringDto Description { get; set; }
 		public MultilanguageStringDto ShortDescription { get; set; }
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }

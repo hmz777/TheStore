@@ -1,4 +1,5 @@
 ﻿@page "/product/{productId:int}/{productName}/"
+@using AutoMapper
 @using MediatR;
 @using TheStore.SharedModels.Models.Products;
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
@@ -8,6 +9,7 @@
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Services;
 @inject IMediator Mediator;
+@inject IMapper Mapper;
 @inject CatalogService CatalogService;
 
 @if (DataLoading)
@@ -48,7 +50,7 @@ else
 						<span class="product-price">@CurrentVariant.Price</span>
 					</div>
 					<div class="info-cell">
-						<VariantSelector Variants="Product.Variants" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
+						<VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
 					</div>
 					<div class="info-cell">
 						<button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
@@ -79,21 +81,29 @@ else
 						<h3 class="my-4">Dimentions</h3>
 						<ul>
 							<li>
-								<span class="spec-label">Height</span>:<span class="spec-value">75cm</span>
+								<span class="spec-label">Height</span>:
+								<span class="spec-value">@CurrentVariant.Dimentions.Height @CurrentVariant.Dimentions.Unit</span>
 							</li>
 							<li>
-								<span class="spec-label">Width</span>:<span class="spec-value">150cm</span>
+								<span class="spec-label">Width</span>:
+								<span class="spec-value">@CurrentVariant.Dimentions.Width @CurrentVariant.Dimentions.Unit</span>
 							</li>
 							<li>
-								<span class="spec-label">Length</span>:<span class="spec-value">40cm</span>
+								<span class="spec-label">Length</span>:
+								<span class="spec-value">@CurrentVariant.Dimentions.Length @CurrentVariant.Dimentions.Unit</span>
 							</li>
 						</ul>
 					</div>
 					<div class="product-attribute">
 						<h3 class="my-4">Specification</h3>
 						<ul>
-							<li>High quality materials</li>
-							<li>Durable wood</li>
+							@foreach (var spec in CurrentVariant.Sepcifications)
+							{
+								<li>
+									<span class="spec-label">@spec.Name</span>
+									<span class="spec-value">@spec.Value</span>
+								</li>
+							}
 						</ul>
 					</div>
 				</div>
@@ -109,11 +119,11 @@ else
 	[Parameter]
 	public int ProductId { get; set; }
 
-	private ProductCatalogDtoRead Product { get; set; }
+	private ProductDetailsDtoRead Product { get; set; }
 
 	private List<ProductColorDtoRead> Colors => Product.Variants.Select(v => v.Color).ToList();
 
-	private ProductVariantCatalogDtoRead CurrentVariant { get; set; }
+	private ProductVariantDetailsDtoRead CurrentVariant { get; set; }
 
 	private bool DataLoading { get; set; } = true;
 
@@ -144,8 +154,8 @@ else
 	private async Task AddToCart()
 	{
 		await InvokeAsync(async () =>
-			{
-				await Mediator.Send(new AddItemToCartCommand(ProductId));
-			});
+		{
+			await Mediator.Send(new AddItemToCartCommand(ProductId));
+		});
 	}
 }

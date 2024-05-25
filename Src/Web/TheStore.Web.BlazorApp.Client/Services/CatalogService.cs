@@ -24,11 +24,11 @@ namespace TheStore.Web.BlazorApp.Client.Services
 			};
 		}
 
-		public async Task<ProductCatalogDtoRead> GetProductDetails(int id, CancellationToken cancellationToken = default)
+		public async Task<ProductDetailsDtoRead> GetProductDetails(int id, CancellationToken cancellationToken = default)
 		{
 			var request = new GetByIdRequest() { ProductId = id };
 
-			var product = await httpClient.GetFromJsonAsync<ProductCatalogDtoRead>(endpoint + request.Route, cancellationToken);
+			var product = await httpClient.GetFromJsonAsync<ProductDetailsDtoRead>(endpoint + request.Route, cancellationToken);
 
 			// TODO: Report errors to system usign some kind of reporting service
 			return product ?? throw new Exception("Couldn't fetch product details");

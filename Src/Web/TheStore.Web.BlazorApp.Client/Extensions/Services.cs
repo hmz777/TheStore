@@ -38,6 +38,7 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 		public static IServiceCollection ConfigureHelperServices(this IServiceCollection services, params Assembly[] assemblies)
 		{
 			services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
+			services.AddAutoMapper(assemblies);
 
 			return services;
 		}

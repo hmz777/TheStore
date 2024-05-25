@@ -1,7 +1,9 @@
-﻿@using TheStore.Web.BlazorApp.Client.Helpers
+﻿@using AutoMapper
+@using TheStore.Web.BlazorApp.Client.Helpers
 @using TheStore.SharedModels.Models.Products
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
 @implements IAsyncDisposable
+@inject IMapper Mapper
 @inject IJSRuntime JS
 
 <article class="product-card" style="color:@ColorHelpers.ChangeColorBrightness(CurrentVariant.Color.ColorCode, -0.5f)">
@@ -18,7 +20,7 @@
 	</div>
 	<article class="product-card-body">
 		<div class="d-flex flex-row">
-			<VariantSelector Variants="Product.Variants" VariantChosen="VariantChosen" />
+			<VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" />
 			<span class="product-card-body-dimentions">@CurrentVariant.Dimentions</span>
 		</div>
 		<header class="product-card-body-title" title="@Product.Name">

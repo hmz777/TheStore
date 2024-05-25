@@ -13,5 +13,8 @@ namespace TheStore.SharedModels.Models.Products
 		public MultilanguageStringDto Description { get; set; }
 		public List<ProductVariantDetailsDtoRead> Variants { get; set; }
 		public bool Published { get; set; }
+
+		public ProductVariantDetailsDtoRead MainVariant =>
+			Variants.Find(v => v.Options.IsMainVariant) ?? Variants[0];
 	}
 }
