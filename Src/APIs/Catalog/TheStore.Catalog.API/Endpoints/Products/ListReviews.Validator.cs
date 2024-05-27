@@ -9,6 +9,14 @@ namespace TheStore.Catalog.API.Endpoints.Products
 		{
 			RuleFor(r => r.ProductId)
 				.NotEmpty();
+
+			RuleFor(x => x.Page)
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
+
+			RuleFor(x => x.Take)
+				.NotEmpty()
+				.GreaterThanOrEqualTo(1);
 		}
 	}
 }

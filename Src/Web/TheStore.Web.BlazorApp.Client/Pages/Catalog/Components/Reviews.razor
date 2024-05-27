@@ -1,22 +1,53 @@
-﻿@using TheStore.Web.BlazorApp.Client.Helpers;
+﻿@using TheStore.SharedModels.Models.Products
+@using TheStore.Web.BlazorApp.Client.Helpers;
+@using TheStore.Web.BlazorApp.Client.Services
+@inject CatalogService CatalogService;
 
-@for (int i = 0; i < 5; i++)
+@if (DataLoading)
 {
-	var index = i;
-
-	<Review @key="@($"review-{index}")"
-			Title="@DummyDataHelper.GenerateRandomSmallString()"
-			Rating="@DummyDataHelper.GenerateRandomNumber(5)"
-			Date="DateTimeOffset.UtcNow"
-			User="@($"User {index}")"
-			Content="@DummyDataHelper.GenerateRandomString()" />
+	<ProductReviewsSkeleton />
 }
+else
+{
+	@foreach (var review in ProductReviewsResult.Reviews)
+	{
+		<Review @key="@($"review-{review.GetHashCode()}")"
+				Title="@review.Title"
+				Rating="@review.Rating"
+				Date="review.Date"
+				User="@review.User"
+				Content="@review.Content" />
+	}
 
-@* TODO: Implement loading more reviews dynamically, we need a reviews endpoint *@
+	@if (Page < NumberOfPages)
+	{
+		<button class="action-btn action-btn--block action-btn--secondary" type="button">Load More</button>
+	}
+}
 
 @code {
 	[Parameter]
 	public int ProductId { get; set; }
 
-	private bool DataLoading { get; set; }
+	private ProductReviewsPaginatedResult ProductReviewsResult { get; set; } = new();
+	private int Take { get; set; } = 6;
+	private int Page { get; set; } = 1;
+	private int Count { get; set; }
+	private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
+	private bool DataLoading { get; set; } = true;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await FetchData();
+			DataLoading = false;
+			StateHasChanged();
+		}
+	}
+
+	private async Task FetchData()
+	{
+		ProductReviewsResult = await CatalogService.ListProductReviewsPaginated(ProductId, Take, 1);
+	}
 }

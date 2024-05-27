@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Remove="Pages\Catalog\Components\ProductSpecifications.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Pages\Catalog\Components\ProductSpecifications.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,14 @@
     <Content Update="wwwroot\appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Catalog\Components\ProductSpecifications.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Catalog\Components\ProductSpecifications.razor" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
@@ -12,6 +13,8 @@ namespace TheStore.Catalog.Core.Aggregates.Categories
 		public MultilanguageString Name { get; set; }
 		public bool Published { get; set; }
 		public bool NeedsSynchronization { get; set; }
+
+		public List<Product> Products { get; set; }
 
 		// EF Core
 		private Category() { }

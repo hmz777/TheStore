@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheStore.Catalog.Infrastructure.Data;
 
@@ -12,9 +13,11 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    partial class CatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527214141_ReferenceCategoryInProduct")]
+    partial class ReferenceCategoryInProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,7 +220,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -275,7 +279,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("Sku")
@@ -348,7 +352,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("ProductVariantID")
+                    b.Property<int?>("ProductVariantID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -401,8 +405,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Categories.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
+                        .WithOne()
+                        .HasForeignKey("TheStore.Catalog.Core.Aggregates.Products.Product", "CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -420,9 +424,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.Product", null)
                         .WithMany("Variants")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariantOptions", "Options", b1 =>
                         {
@@ -585,9 +587,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", null)
                         .WithMany("Sepcifications")
-                        .HasForeignKey("ProductVariantID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductVariantID");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", b =>
@@ -597,11 +597,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .HasForeignKey("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", "variantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Categories.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>

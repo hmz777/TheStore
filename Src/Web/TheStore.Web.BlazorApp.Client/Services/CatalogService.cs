@@ -11,7 +11,7 @@ namespace TheStore.Web.BlazorApp.Client.Services
 		private readonly string endpoint = options.Value.Endpoints.First(e => e.Name == "Catalog Api").Url;
 		private readonly HttpClient httpClient = httpClient;
 
-		public async Task<ProductsPaginatedResult> GetProductsPaginated(int take, int page, CancellationToken cancellationToken = default)
+		public async Task<ProductsPaginatedResult> ListProductsPaginated(int take, int page, CancellationToken cancellationToken = default)
 		{
 			var request = new ListRequest() { Page = page, Take = take };
 
@@ -32,6 +32,19 @@ namespace TheStore.Web.BlazorApp.Client.Services
 
 			// TODO: Report errors to system usign some kind of reporting service
 			return product ?? throw new Exception("Couldn't fetch product details");
+		}
+
+		public async Task<ProductReviewsPaginatedResult> ListProductReviewsPaginated(int productId, int take, int page, CancellationToken cancellationToken = default)
+		{
+			var request = new ListReviewsRequest() { ProductId = productId, Page = page, Take = take };
+
+			var productReviewsResult = await httpClient.GetFromJsonAsync<ProductReviewsPaginatedResult>(endpoint + request.Route, cancellationToken);
+
+			return productReviewsResult ?? new ProductReviewsPaginatedResult()
+			{
+				Reviews = [],
+				PageNumber = page
+			};
 		}
 	}
 }

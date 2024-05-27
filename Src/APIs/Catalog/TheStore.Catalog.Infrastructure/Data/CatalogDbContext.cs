@@ -27,46 +27,67 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 			#region Branch
 
-			modelBuilder.Entity<Branch>()
+			modelBuilder.Entity<Branch>(entity =>
+			{
+				entity
 				.HasOne(b => b.Image);
 
-			modelBuilder.Entity<Branch>()
+				entity
 				.Navigation(b => b.Image)
 				.AutoInclude();
+			});
 
 			#endregion
 
 			#region Category
 
-			modelBuilder.Entity<Category>()
+			modelBuilder.Entity<Category>(entity =>
+			{
+				entity
 				.Property(c => c.Id)
 				.HasConversion<CategoryIdValueConverter>();
 
-			modelBuilder.Entity<Category>()
+				entity
 				.HasKey(c => c.Id);
+			});
 
 			#endregion
 
 			#region Product
 
-			modelBuilder.Entity<Product>()
+			modelBuilder.Entity<Product>(entity =>
+			{
+				entity
 				.Property(s => s.Id)
 				.HasConversion<ProductIdValueConverter>();
 
-			modelBuilder.Entity<Product>()
+				entity
 				.HasKey(s => s.Id);
 
-			modelBuilder.Entity<Product>()
+				entity
 				.Property(c => c.CategoryId)
-				.HasConversion<CategoryIdValueConverter>();
+				.HasConversion<CategoryIdValueConverter>()
+				.HasColumnType("int");
 
-			modelBuilder.Entity<Product>()
+				entity
+				.HasOne(p => p.Category)
+				.WithMany(c => c.Products)
+				.HasForeignKey(p => p.CategoryId)
+				.IsRequired();
+
+				entity
+				.Navigation(p => p.Category)
+				.AutoInclude();
+
+				entity
 				.HasMany(p => p.Variants)
-				.WithOne();
+				.WithOne()
+				.IsRequired();
 
-			modelBuilder.Entity<Product>()
+				entity
 				.HasMany(p => p.Reviews)
 				.WithOne();
+			});
 
 			modelBuilder.Entity<ProductVariant>(opt =>
 			{
@@ -78,7 +99,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 				opt.OwnsOne(v => v.Price, priceOpt =>
 				{
 					priceOpt.OwnsOne(pOpt => pOpt.Currency);
-					priceOpt.Property(c => c.Amount).HasColumnType("decimal").HasPrecision(8, 2); ;
+					priceOpt.Property(c => c.Amount).HasColumnType("decimal").HasPrecision(8, 2);
 				});
 
 				opt.OwnsOne(v => v.Inventory);
@@ -101,7 +122,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 				});
 
 				opt.HasMany(v => v.Sepcifications)
-				   .WithOne();
+				   .WithOne()
+				   .IsRequired();
 			});
 
 			modelBuilder.Entity<ProductColor>(opt =>

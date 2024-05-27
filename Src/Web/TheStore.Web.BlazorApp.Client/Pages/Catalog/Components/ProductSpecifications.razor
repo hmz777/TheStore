@@ -1,0 +1,24 @@
+﻿@using TheStore.SharedModels.Models.Products
+
+<h3 class="my-4">Specification</h3>
+@if (Specifications.Count <= 0)
+{
+	<span class="m-auto">No reviews yet!</span>
+}
+else
+{
+	<ul>
+		@foreach (var spec in Specifications)
+		{
+			<li>
+				<span class="spec-label">@spec.Name</span>
+				<span class="spec-value">@spec.Value</span>
+			</li>
+		}
+	</ul>
+}
+
+@code {
+	[Parameter]
+	public List<ProductSpecificationDto> Specifications { get; set; } = [];
+}

@@ -4,11 +4,11 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 {
 	public class ProductReview
 	{
-		public string Title { get; }
-		public DateTimeOffset Date { get; }
-		public string Content { get; }
-		public int Rating { get; }
-		public string User { get; }
+		public string Title { get; set; }
+		public DateTimeOffset Date { get; set; }
+		public string Content { get; set; }
+		public int Rating { get; set; }
+		public string User { get; set; }
 		public bool Published { get; set; }
 
 		// Ef Core

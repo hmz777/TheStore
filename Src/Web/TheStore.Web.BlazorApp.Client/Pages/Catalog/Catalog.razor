@@ -28,7 +28,7 @@
 
 			<div class="col-12 position-sticky" style="bottom:1em;z-index:3;">
 				<CatalogPagination CurrentPage="Page"
-								   NumberOfPages="numberOfPages"
+								   NumberOfPages="NumberOfPages"
 								   OnNavigateToPreviousPage="NavigateToPreviousPage"
 								   OnNavigateToNumberedPage="NavigateToNumberedPage"
 								   OnNavigateToNextPage="NavigateToNextPage" />
@@ -61,9 +61,9 @@
 	public int Page { get; set; } = 1;
 
 	private string? CatalogDescription { get; set; }
-	private int take { get; set; } = 6;
-	private int count { get; set; }
-	private int numberOfPages => (int)Math.Ceiling(count / (decimal)take);
+	private int Take { get; set; } = 6;
+	private int Count { get; set; }
+	private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
 
 	private bool dataLoading = true;
 	private List<ProductCatalogDtoRead> Products { get; set; } = [];
@@ -81,7 +81,7 @@
 	{
 		if (firstRender)
 		{
-			await FetchData(take, Page);
+			await FetchData(Take, Page);
 
 			dataLoading = false;
 
@@ -94,17 +94,17 @@
 
 	private async Task FetchData(int take, int page)
 	{
-		var result = await CatalogService.GetProductsPaginated(take, page);
+		var result = await CatalogService.ListProductsPaginated(take, page);
 
 		Products = result.Products;
-		count = result.Count;
+		Count = result.Count;
 	}
 
 	private async Task NavigateToNumberedPage(int page)
 	{
 		Page = page;
 
-		await FetchData(take, Page);
+		await FetchData(Take, Page);
 
 		if (ShouldRender())
 		{
@@ -114,7 +114,7 @@
 
 	private async Task NavigateToNextPage()
 	{
-		await FetchData(take, ++Page);
+		await FetchData(Take, ++Page);
 
 		if (ShouldRender())
 		{
@@ -124,7 +124,7 @@
 
 	private async Task NavigateToPreviousPage()
 	{
-		await FetchData(take, --Page);
+		await FetchData(Take, --Page);
 
 		if (ShouldRender())
 		{

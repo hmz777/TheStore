@@ -69,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.BlazorApp", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Web.BlazorApp.Client", "Src\Web\TheStore.Web.BlazorApp.Client\TheStore.Web.BlazorApp.Client.csproj", "{E706ADCD-0D27-4A66-BFD4-D68D905057B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheStore.Requests", "Src\Shared\TheStore.Requests\TheStore.Requests.csproj", "{57404764-DADC-49DE-BA90-1DCBD5213A8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheStore.Requests", "Src\Shared\TheStore.Requests\TheStore.Requests.csproj", "{57404764-DADC-49DE-BA90-1DCBD5213A8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

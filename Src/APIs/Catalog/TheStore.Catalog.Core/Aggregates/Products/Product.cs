@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using TheStore.Catalog.Core.Aggregates.Categories;
 using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.SharedKernel.Entities;
 using TheStore.SharedKernel.Interfaces;
@@ -6,10 +7,11 @@ using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.Aggregates.Products
 {
-    public class Product : BaseEntity<ProductId>, IAggregateRoot
+	public class Product : BaseEntity<ProductId>, IAggregateRoot
 	{
-		public CategoryId CategoryId { get; set; }
 		public string Name { get; set; }
+		public CategoryId CategoryId { get; set; }
+		public Category Category { get; set; }
 		public MultilanguageString ShortDescription { get; set; }
 		public MultilanguageString Description { get; set; }
 		public List<ProductVariant> Variants { get; set; }
