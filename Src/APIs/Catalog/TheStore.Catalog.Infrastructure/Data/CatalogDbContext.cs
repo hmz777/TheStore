@@ -86,7 +86,8 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 				entity
 				.HasMany(p => p.Reviews)
-				.WithOne();
+				.WithOne()
+				.HasForeignKey(r => r.ProductId);
 			});
 
 			modelBuilder.Entity<ProductVariant>(opt =>
@@ -198,6 +199,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 		public DbSet<Category> Categories => Set<Category>();
 		public DbSet<Product> Products => Set<Product>();
+		public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
 		public DbSet<AssembledProduct> AssembledProducts => Set<AssembledProduct>();
 		public DbSet<Branch> Branches => Set<Branch>();
 	}

@@ -113,13 +113,19 @@ namespace TheStore.Catalog.Infrastructure.Data
 				}
 
 				var product = new Product(
-								new CategoryId(1),
-								GenerateRandomSmallString(),
-								new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
-								new MultilanguageString(GenerateRandomString(), CultureCode.English),
-								true,
-								variants,
-								new List<ProductReview>() { new ProductReview(GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack", true) });
+					new CategoryId(1),
+					GenerateRandomSmallString(),
+					new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
+					new MultilanguageString(GenerateRandomString(), CultureCode.English),
+					true,
+					variants,
+					[
+						new(new ProductId(1), GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 1, "Jack 1", true),
+						new(new ProductId(1), GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 2, "Jack 2", true),
+						new(new ProductId(1), GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 3, "Jack 3", true),
+						new(new ProductId(1), GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 4, "Jack 4", true),
+						new(new ProductId(1), GenerateRandomSmallString(), DateTimeOffset.UtcNow, GenerateRandomString(), 5, "Jack 5", true)
+					]);
 
 				products.Add(product);
 			}

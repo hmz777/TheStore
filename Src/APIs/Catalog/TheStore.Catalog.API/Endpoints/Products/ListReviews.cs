@@ -20,12 +20,12 @@ namespace TheStore.Catalog.API.Endpoints.Products
 		.WithActionResult<ProductReviewsPaginatedResult>
 	{
 		private readonly IValidator<ListReviewsRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Product> repository;
+		private readonly IReadApiRepository<CatalogDbContext, ProductReview> repository;
 		private readonly IMapper mapper;
 
 		public ListReviews(
 			IValidator<ListReviewsRequest> validator,
-			IReadApiRepository<CatalogDbContext, Product> repository,
+			IReadApiRepository<CatalogDbContext, ProductReview> repository,
 			IMapper mapper)
 		{
 			this.validator = validator;

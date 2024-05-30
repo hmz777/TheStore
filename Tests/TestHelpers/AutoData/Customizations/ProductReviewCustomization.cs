@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using TheStore.Catalog.Core.Aggregates.Products;
+using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.TestHelpers.AutoData.Customizations
 {
@@ -10,6 +11,7 @@ namespace TheStore.TestHelpers.AutoData.Customizations
 			fixture.Register(() =>
 			{
 				return new ProductReview(
+					new ProductId(1),
 					fixture.Create<string>(),
 					fixture.Create<DateTimeOffset>(),
 					fixture.Create<string>(),
