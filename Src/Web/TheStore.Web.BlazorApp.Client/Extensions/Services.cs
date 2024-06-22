@@ -21,7 +21,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 		public static IServiceCollection ConfigureHttpClient(this IServiceCollection services, string baseAddress)
 		{
 			services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress))
-				.AddHttpMessageHandler<AntiforgeryHandler>();
+					.AddHttpMessageHandler<AntiforgeryHandler>();
+
 			services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Backend"));
 
 			return services;
@@ -39,6 +40,7 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 		{
 			services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 			services.AddAutoMapper(assemblies);
+			services.AddScoped<EventBroker>();
 
 			return services;
 		}

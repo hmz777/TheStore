@@ -4,9 +4,9 @@ using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 {
-	public class CheckProductExistsReadSpec : Specification<Product>
+	public class CheckProductExistsByIdReadSpec : Specification<Product>
 	{
-		public CheckProductExistsReadSpec(ProductId id)
+		public CheckProductExistsByIdReadSpec(ProductId id)
 		{
 			Query
 				.Where(product => product.Id == id)

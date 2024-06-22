@@ -10,6 +10,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 	public class Product : BaseEntity<ProductId>, IAggregateRoot
 	{
 		public string Name { get; set; }
+		public string Identifier { get; set; }
 		public CategoryId CategoryId { get; set; }
 		public Category Category { get; set; }
 		public MultilanguageString ShortDescription { get; set; }
@@ -24,6 +25,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public Product(
 			CategoryId categoryId,
 			string name,
+			string identifier,
 			MultilanguageString shortDescription,
 			MultilanguageString description,
 			bool published,
@@ -33,11 +35,13 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 			Guard.Against.Null(categoryId, nameof(categoryId));
 			Guard.Against.NegativeOrZero(categoryId.Id, nameof(categoryId.Id));
 			Guard.Against.NullOrEmpty(name, nameof(name));
+			Guard.Against.NullOrEmpty(identifier, nameof(identifier));
 			Guard.Against.Null(shortDescription, nameof(shortDescription));
 			Guard.Against.Null(description, nameof(description));
 
 			CategoryId = categoryId;
 			Name = name;
+			Identifier = identifier;
 			ShortDescription = shortDescription;
 			Description = description;
 			Published = published;

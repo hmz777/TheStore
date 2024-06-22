@@ -5,13 +5,13 @@ namespace TheStore.Web.BlazorApp.Client.Mediator.Commands
 {
 	public class AddItemToCartCommand : IRequest
 	{
-		public int ItemId { get; }
+		public string Sku { get; }
 
-		public AddItemToCartCommand(int itemId)
+		public AddItemToCartCommand(string sku)
 		{
-			Guard.Against.NegativeOrZero(itemId, nameof(itemId));
+			Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
 
-			ItemId = itemId;
+			Sku = sku;
 		}
 	}
 }

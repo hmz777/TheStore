@@ -83,7 +83,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 					request.Sku, request.ProductId);
 
 			return CreatedAtRoute(
-				GetByIdRequest.RouteName,
+				GetByIdentifierRequest.RouteName,
 				routeValues: new { ProductId = product.Id.Id },
 				mapper.Map<ProductCatalogDtoRead>(product));
 		}

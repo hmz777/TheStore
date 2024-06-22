@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @using System.Security.Claims;
 @using System.Timers;
-@using System.Net
+@using System.Net;
+
 @inject IJSRuntime JS;
 @inject NavigationManager Navigation;
 @implements IAsyncDisposable
@@ -46,7 +47,7 @@
 				<GlobalSearch OnSearch="OnSearch" @bind-SearchTerm="searchTerm" />
 			</li>
 			<li class="nav-item">
-				@* <Cart /> *@
+				<Cart />
 			</li>
 			@if (navExpanded)
 			{
@@ -83,12 +84,6 @@
 
 			await navModule.InvokeVoidAsync("InitNavbarObservability", DotNetObjectReference.Create(this));
 		}
-	}
-
-	private async Task ClickTest()
-	{
-		var authState = await AuthenticationState;
-		var user = authState.User;
 	}
 
 	private void BeginLogout(MouseEventArgs args)

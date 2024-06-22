@@ -7,7 +7,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName(nameof(ProductDetailsDtoRead))]
 	public class ProductDetailsDtoRead : DtoBase
 	{
-		public int ProductId { get; set; }
+		public string Identifier { get; set; }
 		public CategoryDtoRead Category { get; set; }
 		public string Name { get; set; }
 		public MultilanguageStringDto ShortDescription { get; set; }

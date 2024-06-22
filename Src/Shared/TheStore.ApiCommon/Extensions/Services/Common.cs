@@ -16,6 +16,7 @@ using System.IO.Abstractions;
 using System.Reflection;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Helpers.Swagger;
+using TheStore.ApiCommon.Mediator;
 using TheStore.ApiCommon.Services;
 using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
@@ -56,6 +57,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 
 		public static WebApplicationBuilder ConfigureLogging(this WebApplicationBuilder webApplicationBuilder)
 		{
+			var services = webApplicationBuilder.Services;
 			var host = webApplicationBuilder.Host;
 			var configuration = webApplicationBuilder.Configuration;
 			var environment = webApplicationBuilder.Environment;
@@ -66,40 +68,33 @@ namespace TheStore.ApiCommon.Extensions.Services
 				.CreateBootstrapLogger();
 
 			Log.Information("Setup Logging");
+			services.AddSerilog();
 			host.UseSerilog((context, config) =>
 			{
+				config
+					.MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+					.MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+					.MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
+					.MinimumLevel.Information()
+					.Enrich.FromLogContext()
+					.Enrich.WithMachineName()
+					.Enrich.WithEnvironmentName()
+					.WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
+
 				if (environment.IsProduction())
 				{
 					var seqUrl = configuration.GetValue<string>(Logging.Seq);
-
-					config
-					   .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-					   .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-					   .MinimumLevel.Information()
-					   .Enrich.FromLogContext()
-					   .Enrich.WithMachineName()
-					   .Enrich.WithEnvironmentName()
-					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
 
 					if (string.IsNullOrWhiteSpace(seqUrl) == false)
 					{
 						Log.Information("Using Seq on Url: {Url}", seqUrl);
 						config.WriteTo.Seq(seqUrl);
 					}
+				}
 
-				}
-				else
-				{
-					config
-					   .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-					   .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-					   .MinimumLevel.Information()
-					   .Enrich.FromLogContext()
-					   .Enrich.WithMachineName()
-					   .Enrich.WithEnvironmentName()
-					   .WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
-				}
 			}, preserveStaticLogger: false);
+
+			// TODO: Dispose of logger on shutdown
 
 			return webApplicationBuilder;
 		}
@@ -180,10 +175,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 		{
 			webApplicationBuilder.Services
 				.AddControllers()
-				.AddJsonOptions(opt =>
-				{
-					opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-				});
+				.AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true);
 
 			return webApplicationBuilder;
 		}
@@ -218,7 +210,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			{
 				automapper.AddCollectionMappers();
 				automapper.UseEntityFrameworkCoreModel<TContext>(serviceProvider);
-				automapper.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
+				automapper.ShouldMapProperty = p => p.GetMethod!.IsPublic || p.GetMethod.IsAssembly;
 				automapper.ShouldMapField = p => p.IsPublic || p.IsAssembly;
 				automapper.ShouldUseConstructor = constructor => constructor.IsPublic;
 
@@ -249,8 +241,6 @@ namespace TheStore.ApiCommon.Extensions.Services
 					  case Constants.RunningPlatform.DockerCompose:
 					  case Constants.RunningPlatform.Kubernetes:
 						  authority = configuration.GetValue<string>(Identity.IdentityServer);
-						  break;
-					  default:
 						  break;
 				  }
 
@@ -323,6 +313,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 			webApplicationBuilder.Services.AddMediatR(config =>
 			{
 				config.RegisterServicesFromAssemblies(assemblies);
+				config.AddOpenBehavior(typeof(LogginBahaviour<,>));
 			});
 
 			return webApplicationBuilder;

@@ -24,9 +24,9 @@ namespace TheStore.Web.BlazorApp.Client.Services
 			};
 		}
 
-		public async Task<ProductDetailsDtoRead> GetProductDetails(int id, CancellationToken cancellationToken = default)
+		public async Task<ProductDetailsDtoRead> GetProductDetails(string identifier, CancellationToken cancellationToken = default)
 		{
-			var request = new GetByIdRequest() { ProductId = id };
+			var request = new GetByIdentifierRequest { Identifier = identifier };
 
 			var product = await httpClient.GetFromJsonAsync<ProductDetailsDtoRead>(endpoint + request.Route, cancellationToken);
 
@@ -34,9 +34,9 @@ namespace TheStore.Web.BlazorApp.Client.Services
 			return product ?? throw new Exception("Couldn't fetch product details");
 		}
 
-		public async Task<ProductReviewsPaginatedResult> ListProductReviewsPaginated(int productId, int take, int page, CancellationToken cancellationToken = default)
+		public async Task<ProductReviewsPaginatedResult> ListProductReviewsPaginated(string identifier, int take, int page, CancellationToken cancellationToken = default)
 		{
-			var request = new ListReviewsRequest() { ProductId = productId, Page = page, Take = take };
+			var request = new ListReviewsRequest { Identifier = identifier, Page = page, Take = take };
 
 			var productReviewsResult = await httpClient.GetFromJsonAsync<ProductReviewsPaginatedResult>(endpoint + request.Route, cancellationToken);
 

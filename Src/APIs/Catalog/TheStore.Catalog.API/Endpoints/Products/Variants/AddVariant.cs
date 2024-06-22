@@ -73,7 +73,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Variants
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Create a variant of product with id: {Id}", request.ProductId);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName,
+			return CreatedAtRoute(GetByIdentifierRequest.RouteName,
 				routeValues: new { ProductId = product.Id.Id }, mapper.Map<ProductCatalogDtoRead>(product));
 		}
 	}

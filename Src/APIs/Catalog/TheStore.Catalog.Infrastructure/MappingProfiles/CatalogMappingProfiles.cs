@@ -24,11 +24,8 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<Category, CategoryDtoUpdate>().ReverseMap();
 
 			// Products
-			CreateMap<Product, ProductCatalogDtoRead>()
-				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id));
-
-			CreateMap<Product, ProductDetailsDtoRead>()
-				.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id.Id));
+			CreateMap<Product, ProductCatalogDtoRead>();
+			CreateMap<Product, ProductDetailsDtoRead>();
 
 			CreateMap<ProductDtoUpdate, Product>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => new CategoryId(src.CategoryId)))

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Migration : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,25 +49,13 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductColor",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductColor", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
                     Published = table.Column<bool>(type: "bit", nullable: false),
                     Description_Json = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShortDescription_Json = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -77,28 +65,41 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "ProductReviews",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductColorID = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    User = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Published = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.ID);
+                    table.PrimaryKey("PK_ProductReviews", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Image_ProductColor_ProductColorID",
-                        column: x => x.ProductColorID,
-                        principalTable: "ProductColor",
-                        principalColumn: "ID");
+                        name: "FK_ProductReviews_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductVariant",
+                name: "ProductVariants",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -112,32 +113,92 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     Inventory_MaxStockThreshold = table.Column<int>(type: "int", nullable: false),
                     Inventory_OverStock = table.Column<int>(type: "int", nullable: false),
                     Inventory_OnReorder = table.Column<bool>(type: "bit", nullable: false),
-                    ColorID = table.Column<int>(type: "int", nullable: false),
                     Options_Published = table.Column<bool>(type: "bit", nullable: false),
                     Options_CanBePurchased = table.Column<bool>(type: "bit", nullable: false),
                     Options_CanBeFavorited = table.Column<bool>(type: "bit", nullable: false),
+                    Options_IsMainVariant = table.Column<bool>(type: "bit", nullable: false),
                     Dimentions_Width = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     Dimentions_Height = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     Dimentions_Length = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     Dimentions_Unit_Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Description_Json = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShortDescription_Json = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductVariant", x => x.ID);
+                    table.PrimaryKey("PK_ProductVariants", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ProductVariant_ProductColor_ColorID",
-                        column: x => x.ColorID,
+                        name: "FK_ProductVariants_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductColor",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ColorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ColorCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMainColor = table.Column<bool>(type: "bit", nullable: false),
+                    variantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductColor", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProductColor_ProductVariants_variantId",
+                        column: x => x.variantId,
+                        principalTable: "ProductVariants",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSpecification",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductVariantID = table.Column<int>(type: "int", nullable: false),
+                    Name_Json = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value_Json = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSpecification", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProductSpecification_ProductVariants_ProductVariantID",
+                        column: x => x.ProductVariantID,
+                        principalTable: "ProductVariants",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StringFileUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMainImage = table.Column<bool>(type: "bit", nullable: false),
+                    ProductColorID = table.Column<int>(type: "int", nullable: false),
+                    Alt_Json = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Image_ProductColor_ProductColorID",
+                        column: x => x.ProductColorID,
                         principalTable: "ProductColor",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductVariant_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -169,42 +230,6 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         principalColumn: "ID");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProductReview",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductVariantID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductReview", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ProductReview_ProductVariant_ProductVariantID",
-                        column: x => x.ProductVariantID,
-                        principalTable: "ProductVariant",
-                        principalColumn: "ID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductSpecification",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductVariantID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductSpecification", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ProductSpecification_ProductVariant_ProductVariantID",
-                        column: x => x.ProductVariantID,
-                        principalTable: "ProductVariant",
-                        principalColumn: "ID");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Branches_ImageID",
                 table: "Branches",
@@ -216,9 +241,20 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 column: "ProductColorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductReview_ProductVariantID",
-                table: "ProductReview",
-                column: "ProductVariantID");
+                name: "IX_ProductColor_variantId",
+                table: "ProductColor",
+                column: "variantId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductReviews_ProductId",
+                table: "ProductReviews",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductSpecification_ProductVariantID",
@@ -226,13 +262,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 column: "ProductVariantID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariant_ColorID",
-                table: "ProductVariant",
-                column: "ColorID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariant_ProductId",
-                table: "ProductVariant",
+                name: "IX_ProductVariants_ProductId",
+                table: "ProductVariants",
                 column: "ProductId");
         }
 
@@ -246,10 +277,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 name: "Branches");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "ProductReview");
+                name: "ProductReviews");
 
             migrationBuilder.DropTable(
                 name: "ProductSpecification");
@@ -258,13 +286,16 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 name: "Image");
 
             migrationBuilder.DropTable(
-                name: "ProductVariant");
-
-            migrationBuilder.DropTable(
                 name: "ProductColor");
 
             migrationBuilder.DropTable(
+                name: "ProductVariants");
+
+            migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

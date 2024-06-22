@@ -192,6 +192,10 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -302,7 +306,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariant");
+                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Image", b =>
@@ -350,6 +354,22 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.Property<int>("ProductVariantID")
                         .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Name#MultilanguageString", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Json")
+                                .HasColumnType("nvarchar(max)");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Value", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Value#MultilanguageString", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Json")
+                                .HasColumnType("nvarchar(max)");
+                        });
 
                     b.HasKey("ID");
 
@@ -445,7 +465,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -470,7 +490,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -486,7 +506,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("DimensionsProductVariantID");
 
-                                    b2.ToTable("ProductVariant");
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("DimensionsProductVariantID");
@@ -518,7 +538,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -535,7 +555,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -551,7 +571,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("MoneyProductVariantID");
 
-                                    b2.ToTable("ProductVariant");
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("MoneyProductVariantID");

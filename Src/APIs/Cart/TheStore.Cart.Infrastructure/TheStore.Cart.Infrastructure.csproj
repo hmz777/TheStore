@@ -27,5 +27,5 @@
 	<ItemGroup>
 	  <Protobuf Include="Protos\CatalogEntityChecks.proto" GrpcServices="Client" />
 	</ItemGroup>
-	
+
 </Project>

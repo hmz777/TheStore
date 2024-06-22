@@ -1,15 +1,14 @@
 ﻿using Ardalis.Specification;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueObjects.Keys;
 
 namespace TheStore.Catalog.Infrastructure.Data.Specifications.Products
 {
-	public class GetProductByIdReadSpec : Specification<Product>,
+	public class GetProductByIdentifierReadSpec : Specification<Product>,
 		ISingleResultSpecification<Product>
 	{
-		public GetProductByIdReadSpec(ProductId productId)
+		public GetProductByIdentifierReadSpec(string identifier)
 		{
-			Query.Where(product => product.Id == productId)
+			Query.Where(product => product.Identifier == identifier)
 				 .Include(p => p.Variants)
 				 .ThenInclude(v => v.Sepcifications)
 				 .AsNoTracking();

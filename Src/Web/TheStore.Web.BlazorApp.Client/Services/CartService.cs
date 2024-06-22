@@ -1,12 +1,12 @@
 ﻿namespace TheStore.Web.BlazorApp.Client.Services
 {
-	public class CartService
+	public class CartService(EventBroker eventBroker)
 	{
-		public event EventHandler<int> ItemAddedToCart = null!;
-
-		public void AddItemToCart(int itemId)
+		public void AddItemToCart(string sku)
 		{
-			ItemAddedToCart?.Invoke(this, itemId);
+			// TODO: Contact server
+
+			eventBroker.OnItemAddedToCart?.Invoke(this, sku);
 		}
 	}
 }

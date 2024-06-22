@@ -1,5 +1,5 @@
-using Serilog;
 using System.Reflection;
+using TheStore.ApiCommon.Extensions.Middleware;
 using TheStore.ApiCommon.Extensions.Migrations;
 using TheStore.Catalog.API.Helpers;
 using TheStore.Catalog.Infrastructure.Data;
@@ -16,8 +16,6 @@ app.UseCors("Cors");
 
 if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
 {
-	Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CatalogDbContext)}");
-
 	// Apply pending migrations.
 	// In production, we use a different strategy.
 	app.Migrate<CatalogDbContext>();
@@ -34,10 +32,9 @@ if (app.Environment.IsDevelopment())
 	});
 }
 
-using (var scope = app.Services.CreateScope())
+if (args.Contains("/Seed"))
 {
-	var context = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
-	await new DataSeeder().SeedDataAsync(context);
+	await app.SeedData(new DataSeeder());
 }
 
 if (app.Environment.IsProduction())

@@ -105,7 +105,9 @@ namespace TheStore.Catalog.Infrastructure.Data
 						Options = new ProductVariantOptions { Published = true, CanBeFavorited = true, CanBePurchased = true },
 						Dimentions = new Dimensions(randomNumber, randomNumber, randomNumber, UnitOfMeasure.Cm),
 						Sepcifications = [
-							new(new MultilanguageString("Name", CultureCode.English), new MultilanguageString("Value", CultureCode.English))
+							new(new MultilanguageString("Name1", CultureCode.English), new MultilanguageString("Value1", CultureCode.English)),
+							new(new MultilanguageString("Name2", CultureCode.English), new MultilanguageString("Value2", CultureCode.English)),
+							new(new MultilanguageString("Name3", CultureCode.English), new MultilanguageString("Value3", CultureCode.English))
 						]
 					};
 
@@ -115,6 +117,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 				var product = new Product(
 					new CategoryId(1),
 					GenerateRandomSmallString(),
+					$"Identifier-{i}",
 					new MultilanguageString(GenerateRandomSmallString(), CultureCode.English),
 					new MultilanguageString(GenerateRandomString(), CultureCode.English),
 					true,

@@ -6,7 +6,7 @@ namespace TheStore.SharedModels.Models.Products
 	[DisplayName(nameof(ProductCatalogDtoRead))]
 	public class ProductCatalogDtoRead : DtoBase
 	{
-		public int ProductId { get; set; }
+		public string Identifier { get; set; }
 		public string Name { get; set; }
 		public MultilanguageStringDto ShortDescription { get; set; }
 		public List<ProductVariantCatalogDtoRead> Variants { get; set; }

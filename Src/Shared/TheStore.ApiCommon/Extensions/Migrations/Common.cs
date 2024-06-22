@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace TheStore.ApiCommon.Extensions.Migrations
 {
@@ -8,6 +9,8 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 	{
 		public static void Migrate<TContext>(this WebApplication webApplication) where TContext : DbContext
 		{
+			Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(TContext)}...");
+
 			var services = webApplication.Services;
 
 			using (var scope = services.CreateScope())
@@ -18,6 +21,8 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 				context.Database.EnsureDeleted();
 				context.Database.Migrate();
 			}
+
+			Log.Information($"Database successfully migrated with context {nameof(TContext)}");
 		}
 	}
 }

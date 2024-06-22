@@ -15,5 +15,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Keys
 
 			return this.Id == productId.Id;
 		}
+
+		public override int GetHashCode() => this.Id.GetHashCode();
 	}
 }

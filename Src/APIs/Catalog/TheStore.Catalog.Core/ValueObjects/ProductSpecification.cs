@@ -1,13 +1,12 @@
 ﻿using Ardalis.GuardClauses;
-using CSharpFunctionalExtensions;
 using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Catalog.Core.ValueObjects
 {
-	public class ProductSpecification : ValueObject
+	public class ProductSpecification
 	{
-		public MultilanguageString Name { get; }
-		public MultilanguageString Value { get; }
+		public MultilanguageString Name { get; set; }
+		public MultilanguageString Value { get; set; }
 
 		// Ef Core
 		private ProductSpecification() { }
@@ -19,12 +18,6 @@ namespace TheStore.Catalog.Core.ValueObjects
 
 			Name = name;
 			Value = value;
-		}
-
-		protected override IEnumerable<IComparable> GetEqualityComponents()
-		{
-			yield return Name;
-			yield return Value;
 		}
 	}
 }

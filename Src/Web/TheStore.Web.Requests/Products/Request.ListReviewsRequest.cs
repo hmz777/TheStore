@@ -2,14 +2,14 @@
 {
 	public class ListReviewsRequest : RequestBase
 	{
-		public const string RouteTemplate = "products/{ProductId:int}/reviews";
+		public const string RouteTemplate = "products/{Identifier}/reviews";
 		public override string Route =>
 			(RouteTemplate + "?page={Page:int}&take={Take:int}")
-						 .Replace("{ProductId:int}", ProductId.ToString())
+						 .Replace("{Identifier}", Identifier)
 						 .Replace("{Page:int}", Page.ToString())
 						 .Replace("{Take:int}", Take.ToString());
 
-		public int ProductId { get; set; }
+		public string Identifier { get; set; }
 		public int Take { get; set; }
 		public int Page { get; set; }
 	}

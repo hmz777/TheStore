@@ -21,7 +21,7 @@
 			@foreach (var product in Products)
 			{
 				<div class="col-12 col-md-6 col-lg-4">
-					<ProductCard @key="product.ProductId"
+					<ProductCard @key="product.Identifier"
 								 Product="product" />
 				</div>
 			}

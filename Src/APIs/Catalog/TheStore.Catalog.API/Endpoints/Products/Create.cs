@@ -55,7 +55,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 				log.Information("Create a single product with name: {Name}", request.Product.Name);
 
-			return CreatedAtRoute(GetByIdRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductCatalogDtoRead>(singleProduct));
+			return CreatedAtRoute(GetByIdentifierRequest.RouteName, routeValues: new { ProductId = singleProduct.Id.Id }, mapper.Map<ProductCatalogDtoRead>(singleProduct));
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 		[Fact]
 		public async Task Can_Get_Product_By_Id()
 		{
-			var request = new GetByIdRequest() { ProductId = 1 };
+			var request = new GetByIdentifierRequest() { Identifier = "aaa" };
 
 			var response = await _client
 				.GetFromJsonAsync<ProductCatalogDtoRead>(request.Route);

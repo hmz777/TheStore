@@ -1,16 +1,16 @@
-﻿@page "/product/{productId:int}/{productName}/"
+﻿@page "/product/{Identifier}/{ProductName}/"
 @using AutoMapper
 @using MediatR;
 @using TheStore.SharedModels.Models.Products;
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
 @using TheStore.Web.BlazorApp.Client.Helpers;
 @using TheStore.Web.BlazorApp.Client.Mediator.Commands;
+@using TheStore.Web.BlazorApp.Client.Mediator.Queries
 @using TheStore.Web.BlazorApp.Client.Models;
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Services;
 @inject IMediator Mediator;
 @inject IMapper Mapper;
-@inject CatalogService CatalogService;
 
 @if (DataLoading)
 {
@@ -22,7 +22,7 @@ else
 		<div class="row">
 			<div class="col-12 col-lg-6">
 				<div class="product-images">
-					<ImageGallery ProductColor="CurrentVariant.Color" />
+					<ImageGallery ProductColor="CurrentVariant!.Color" />
 				</div>
 				<div class="row">
 					<div class="col-12">
@@ -31,7 +31,7 @@ else
 								<h2 class="my-4">Reviews</h2>
 							</header>
 							<article class="product-reviews">
-								<Reviews ProductId="@ProductId" />
+								<Reviews Identifier="@Identifier" />
 							</article>
 						</article>
 					</div>
@@ -40,7 +40,7 @@ else
 			<div class="col-12 col-lg-6 px-5">
 				<div class="product-details">
 					<div class="info-cell">
-						<h1 class="product-title">@Product.Name</h1>
+						<h1 class="product-title">@Product!.Name</h1>
 					</div>
 					<div class="info-cell">
 						<span class="product-category">@Product.Category.Name</span>
@@ -105,16 +105,16 @@ else
 
 @code {
 	[Parameter]
-	public string ProductName { get; set; }
+	public string? ProductName { get; set; }
 
 	[Parameter]
-	public int ProductId { get; set; }
+	public string? Identifier { get; set; }
 
-	private ProductDetailsDtoRead Product { get; set; }
+	private ProductDetailsDtoRead? Product { get; set; }
 
-	private List<ProductColorDtoRead> Colors => Product.Variants.Select(v => v.Color).ToList();
+	private List<ProductColorDtoRead> Colors => Product?.Variants.Select(v => v.Color).ToList() ?? [];
 
-	private ProductVariantDetailsDtoRead CurrentVariant { get; set; }
+	private ProductVariantDetailsDtoRead? CurrentVariant { get; set; }
 
 	private bool DataLoading { get; set; } = true;
 
@@ -124,7 +124,7 @@ else
 
 		if (firstRender)
 		{
-			Product = await CatalogService.GetProductDetails(ProductId);
+			Product = await Mediator.Send(new GetProductDetailsQuery(Identifier!));
 			CurrentVariant = Product.MainVariant;
 
 			DataLoading = false;
@@ -134,7 +134,7 @@ else
 
 	private void VariantChosen(string variantSku)
 	{
-		CurrentVariant = Product.Variants.First(v => v.Sku == variantSku);
+		CurrentVariant = Product?.Variants.First(v => v.Sku == variantSku);
 
 		if (ShouldRender())
 		{
@@ -146,7 +146,7 @@ else
 	{
 		await InvokeAsync(async () =>
 		{
-			await Mediator.Send(new AddItemToCartCommand(ProductId));
+			await Mediator.Send(new AddItemToCartCommand(Identifier!));
 		});
 	}
 }

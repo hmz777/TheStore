@@ -13,8 +13,8 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20240527212857_UpdateReviews")]
-    partial class UpdateReviews
+    [Migration("20240619163204_AddProductIdentifierField")]
+    partial class AddProductIdentifierField
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,6 +195,10 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -220,6 +224,8 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
                 });
 
@@ -239,7 +245,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Published")
@@ -260,7 +266,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReview");
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", b =>
@@ -276,7 +282,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("Sku")
@@ -303,7 +309,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariant");
+                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Image", b =>
@@ -349,8 +355,24 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("ProductVariantID")
+                    b.Property<int>("ProductVariantID")
                         .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Name#MultilanguageString", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Json")
+                                .HasColumnType("nvarchar(max)");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Value", "TheStore.Catalog.Core.ValueObjects.ProductSpecification.Value#MultilanguageString", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Json")
+                                .HasColumnType("nvarchar(max)");
+                        });
 
                     b.HasKey("ID");
 
@@ -399,18 +421,33 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.Navigation("Image");
                 });
 
+            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>
+                {
+                    b.HasOne("TheStore.Catalog.Core.Aggregates.Categories.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductReview", b =>
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.Product", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", b =>
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.Product", null)
                         .WithMany("Variants")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariantOptions", "Options", b1 =>
                         {
@@ -431,7 +468,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -456,7 +493,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -472,7 +509,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("DimensionsProductVariantID");
 
-                                    b2.ToTable("ProductVariant");
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("DimensionsProductVariantID");
@@ -504,7 +541,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -521,7 +558,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariant");
+                            b1.ToTable("ProductVariants");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
@@ -537,7 +574,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("MoneyProductVariantID");
 
-                                    b2.ToTable("ProductVariant");
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("MoneyProductVariantID");
@@ -573,7 +610,9 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                 {
                     b.HasOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", null)
                         .WithMany("Sepcifications")
-                        .HasForeignKey("ProductVariantID");
+                        .HasForeignKey("ProductVariantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", b =>
@@ -583,6 +622,11 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .HasForeignKey("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", "variantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Categories.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>

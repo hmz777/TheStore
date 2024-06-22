@@ -199,6 +199,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 		public DbSet<Category> Categories => Set<Category>();
 		public DbSet<Product> Products => Set<Product>();
+		public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
 		public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
 		public DbSet<AssembledProduct> AssembledProducts => Set<AssembledProduct>();
 		public DbSet<Branch> Branches => Set<Branch>();

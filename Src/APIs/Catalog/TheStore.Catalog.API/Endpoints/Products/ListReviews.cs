@@ -7,7 +7,6 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.AutoMapper;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
-using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 using TheStore.Requests.Models.Products;
@@ -20,16 +19,19 @@ namespace TheStore.Catalog.API.Endpoints.Products
 		.WithActionResult<ProductReviewsPaginatedResult>
 	{
 		private readonly IValidator<ListReviewsRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, ProductReview> repository;
+		private readonly IReadApiRepository<CatalogDbContext, ProductReview> reviewRepository;
+		private readonly IReadApiRepository<CatalogDbContext, Product> productRepository;
 		private readonly IMapper mapper;
 
 		public ListReviews(
 			IValidator<ListReviewsRequest> validator,
-			IReadApiRepository<CatalogDbContext, ProductReview> repository,
+			IReadApiRepository<CatalogDbContext, ProductReview> reviewRepository,
+			IReadApiRepository<CatalogDbContext, Product> productRepository,
 			IMapper mapper)
 		{
 			this.validator = validator;
-			this.repository = repository;
+			this.reviewRepository = reviewRepository;
+			this.productRepository = productRepository;
 			this.mapper = mapper;
 		}
 
@@ -49,12 +51,18 @@ namespace TheStore.Catalog.API.Endpoints.Products
 			if (validation.IsValid == false)
 				return BadRequest(validation.AsErrors());
 
-			var spec = new ListProductReviewsWithPaginationReadSpec(new ProductId(request.ProductId), request.Page, request.Take);
+			var product = await productRepository
+				.FirstOrDefaultAsync(new CheckProductExistsByIdentifierReadSpec(request.Identifier), cancellationToken);
 
-			var reviews = (await repository.ListAsync(spec, cancellationToken))
+			if (product == null)
+				return NotFound();
+
+			var spec = new ListProductReviewsWithPaginationReadSpec(product.Id, request.Page, request.Take);
+
+			var reviews = (await reviewRepository.ListAsync(spec, cancellationToken))
 						.Map<ProductReview, ProductReviewDto>(mapper);
 
-			var reviewsTotalCount = await repository.CountAsync(spec, cancellationToken);
+			var reviewsTotalCount = await reviewRepository.CountAsync(spec, cancellationToken);
 
 			return new ProductReviewsPaginatedResult
 			{

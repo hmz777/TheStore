@@ -7,7 +7,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 	{
 		public ListReviewsValidator()
 		{
-			RuleFor(r => r.ProductId)
+			RuleFor(r => r.Identifier)
 				.NotEmpty();
 
 			RuleFor(x => x.Page)

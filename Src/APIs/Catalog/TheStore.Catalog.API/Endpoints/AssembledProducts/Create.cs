@@ -57,7 +57,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 				log.Information("Create assembled product with name: {Name}", request.AssembledProduct.Name);
 
 			return CreatedAtRoute(
-				GetByIdRequest.RouteName,
+				GetByIdentifierRequest.RouteName,
 				routeValues: new { ProductId = assembledProduct.Id },
 				mapper.Map<AssembledProductDtoRead>(assembledProduct));
 		}

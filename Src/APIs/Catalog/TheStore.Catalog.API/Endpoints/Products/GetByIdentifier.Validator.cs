@@ -3,11 +3,11 @@ using TheStore.Requests.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products
 {
-	public class GetByIdValidator : AbstractValidator<GetByIdRequest>
+	public class GetByIdValidator : AbstractValidator<GetByIdentifierRequest>
 	{
 		public GetByIdValidator()
 		{
-			RuleFor(x => x.ProductId)
+			RuleFor(x => x.Identifier)
 				.NotEmpty();
 		}
 	}

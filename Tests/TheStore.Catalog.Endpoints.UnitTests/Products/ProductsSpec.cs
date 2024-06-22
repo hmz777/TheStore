@@ -53,15 +53,15 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 			fixture.Customize(new AutoMapperCustomization(new CatalogMappingProfiles()));
 			fixture.Customize(new EndpointsCustomization());
 
-			var request = fixture.Create<GetByIdRequest>();
+			var request = fixture.Create<GetByIdentifierRequest>();
 			var singleProduct = fixture.Create<Product>();
-			singleProduct.Id = new ProductId(request.ProductId);
+			singleProduct.Identifier = request.Identifier;
 
 			var mockRepository = new Mock<IReadApiRepository<CatalogDbContext, Product>>();
 			mockRepository.Setup(x => x.FirstOrDefaultAsync(It.IsAny<Specification<Product>>(), default))
 				.ReturnsAsync(singleProduct);
 
-			var sut = new GetById(new GetByIdValidator(), mockRepository.Object, fixture.Create<IMapper>());
+			var sut = new GetByIdentifier(new GetByIdValidator(), mockRepository.Object, fixture.Create<IMapper>());
 
 			var result = (await sut.HandleAsync(request)).Value;
 

@@ -3,7 +3,7 @@
 @using System.Timers;
 
 @inject IJSRuntime JS;
-@inject CartService CartService;
+@inject EventBroker EventBroker;
 @implements IAsyncDisposable;
 
 <div id="cart">
@@ -44,7 +44,7 @@
 
 	protected override void OnInitialized()
 	{
-		CartService.ItemAddedToCart += CartItemAdded;
+		EventBroker.OnItemAddedToCart += CartItemAdded;
 		cartItemShowTimer = new Timer(TimeSpan.FromMilliseconds(3500));
 		cartItemShowTimer.Elapsed += CartItemShowTimerElapsed;
 		cartItemShowTimer.Enabled = false;
@@ -60,7 +60,7 @@
 	}
 
 	// Event handler
-	private async void CartItemAdded(object? sender, int itemId)
+	private async void CartItemAdded(object? sender, string sku)
 	{
 		cartCount++;
 		cartInfoShown = true;
@@ -101,7 +101,7 @@
 			await appUtilsModule.DisposeAsync();
 		}
 
-		CartService.ItemAddedToCart -= CartItemAdded;
+		EventBroker.OnItemAddedToCart -= CartItemAdded;
 		cartItemShowTimer?.Dispose();
 	}
 }

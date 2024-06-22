@@ -82,7 +82,7 @@ namespace TheStore.Catalog.API.Endpoints.AssembledProducts
 					request.PartId, request.Sku, request.ProductId);
 
 			return CreatedAtRoute(
-			GetByIdRequest.RouteName,
+			GetByIdentifierRequest.RouteName,
 				routeValues: new { ProductId = assembledProduct.Id },
 				mapper.Map<AssembledProductDtoRead>(assembledProduct));
 		}

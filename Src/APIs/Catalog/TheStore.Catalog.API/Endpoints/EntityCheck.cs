@@ -52,7 +52,7 @@ namespace TheStore.Catalog.API.Endpoints
 		public async override Task<CheckReply> ProductExists(CheckRequest request, ServerCallContext context)
 		{
 			var exists = await productRepository
-				.AnyAsync(new CheckProductExistsReadSpec(new ProductId(request.Id)));
+				.AnyAsync(new CheckProductExistsByIdReadSpec(new ProductId(request.Id)));
 
 			return new CheckReply()
 			{
