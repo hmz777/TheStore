@@ -1,0 +1,13 @@
+﻿@using TheStore.SharedModels.Models.ValueObjectsDtos
+
+<article class="size-selector">
+
+</article>
+
+@code {
+	[Parameter]
+	public List<SizeDto> Sizes { get; set; }
+
+	[Parameter]
+	public EventCallback<SizeDto> SizeChosen { get; set; }
+}

@@ -34,12 +34,18 @@
 	</article>
 	<div class="product-card-controls">
 		<div class="action-btn-group">
-			<button class="action-btn action-btn--primary action-btn--small" type="button">
-				<i class="las la-shopping-bag"></i>
-			</button>
-			<button class="action-btn action-btn--primary action-btn--small" type="button">
-				<i class="las la-heart"></i>
-			</button>
+			@if (CurrentVariant.Options.CanBePurchased)
+			{
+				<button class="action-btn action-btn--primary action-btn--small" type="button">
+					<i class="las la-shopping-bag"></i>
+				</button>
+			}
+			@if (CurrentVariant.Options.CanBeFavorited)
+			{
+				<button class="action-btn action-btn--primary action-btn--small" type="button">
+					<i class="las la-heart"></i>
+				</button>
+			}
 		</div>
 	</div>
 </article>

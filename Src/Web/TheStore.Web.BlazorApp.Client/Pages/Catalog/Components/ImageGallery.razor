@@ -3,26 +3,28 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
-<div class="image-gallery">
-	<div class="image-gallery-main">
-		<img loading="lazy" src="@mainImage.StringFileUri" alt="@mainImage.Alt" />
-	</div>
-	<div class="image-gallery-other">
-		<div class="swiper" id="product-details-image-gallery">
-			<div class="swiper-wrapper">
-				@foreach (var image in ProductColor.Images.Where(image => image != mainImage))
-				{
-					<div class="swiper-slide">
-						<button type="button">
-							<img loading="lazy" src="@image.StringFileUri" alt="@image.Alt" />
-						</button>
-					</div>
-				}
+<article class="product-images-section">
+	<div class="image-gallery">
+		<div class="image-gallery-main">
+			<img loading="lazy" src="@mainImage.StringFileUri" alt="@mainImage.Alt" />
+		</div>
+		<div class="image-gallery-other">
+			<div class="swiper" id="product-details-image-gallery">
+				<div class="swiper-wrapper">
+					@foreach (var image in ProductColor.Images.Where(image => image != mainImage))
+					{
+						<div class="swiper-slide">
+							<button type="button">
+								<img loading="lazy" src="@image.StringFileUri" alt="@image.Alt" />
+							</button>
+						</div>
+					}
+				</div>
+				<div class="swiper-pagination"></div>
 			</div>
-			<div class="swiper-pagination"></div>
 		</div>
 	</div>
-</div>
+</article>
 
 @code {
 	[Parameter]

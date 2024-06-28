@@ -21,19 +21,10 @@ else
 	<div class="container my-5">
 		<div class="row">
 			<div class="col-12 col-lg-6">
-				<div class="product-images">
-					<ImageGallery ProductColor="CurrentVariant!.Color" />
-				</div>
+				<ImageGallery ProductColor="ChosenVariant!.Color" />
 				<div class="row">
 					<div class="col-12">
-						<article class="product-reviews-section">
-							<header>
-								<h2 class="my-4">Reviews</h2>
-							</header>
-							<article class="product-reviews">
-								<Reviews Identifier="@Identifier" />
-							</article>
-						</article>
+						<Reviews Identifier="@Identifier" />
 					</div>
 				</div>
 			</div>
@@ -44,13 +35,15 @@ else
 					</div>
 					<div class="info-cell">
 						<span class="product-category">@Product.Category.Name</span>
-						@* TODO: Make Category required relationship for product in order to be pulled with the product *@
 					</div>
 					<div class="info-cell">
-						<span class="product-price">@CurrentVariant.Price</span>
+						<span class="product-price">@ChosenVariant.Price</span>
 					</div>
 					<div class="info-cell">
 						<VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
+					</div>
+					<div class="info-cell">
+						<SizeSelector Sizes="ChosenVariant.Sizes" SizeChosen="SizeChosen" />
 					</div>
 					<div class="info-cell">
 						<button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
@@ -70,32 +63,13 @@ else
 				</div>
 				<div class="product-attributes">
 					<div class="product-attribute">
-						<h3 class="my-4">Shipping</h3>
-						<ul>
-							<li>
-								Shipping details...
-							</li>
-						</ul>
+						<ProductShipping />
 					</div>
 					<div class="product-attribute">
-						<h3 class="my-4">Dimentions</h3>
-						<ul>
-							<li>
-								<span class="spec-label">Height</span>:
-								<span class="spec-value">@CurrentVariant.Dimentions.Height @CurrentVariant.Dimentions.Unit</span>
-							</li>
-							<li>
-								<span class="spec-label">Width</span>:
-								<span class="spec-value">@CurrentVariant.Dimentions.Width @CurrentVariant.Dimentions.Unit</span>
-							</li>
-							<li>
-								<span class="spec-label">Length</span>:
-								<span class="spec-value">@CurrentVariant.Dimentions.Length @CurrentVariant.Dimentions.Unit</span>
-							</li>
-						</ul>
+						<ProductDimentions Dimentions="ChosenVariant.Dimentions" />
 					</div>
 					<div class="product-attribute">
-						<ProductSpecifications Specifications="@CurrentVariant.Sepcifications" />
+						<ProductSpecifications Specifications="@ChosenVariant.Sepcifications" />
 					</div>
 				</div>
 			</div>
@@ -114,18 +88,17 @@ else
 
 	private List<ProductColorDtoRead> Colors => Product?.Variants.Select(v => v.Color).ToList() ?? [];
 
-	private ProductVariantDetailsDtoRead? CurrentVariant { get; set; }
+	private ProductVariantDetailsDtoRead? ChosenVariant { get; set; }
+	private SizeDto ChosenSize { get; set; }
 
 	private bool DataLoading { get; set; } = true;
 
 	protected async override Task OnAfterRenderAsync(bool firstRender)
 	{
-		// Get full UI product details
-
 		if (firstRender)
 		{
 			Product = await Mediator.Send(new GetProductDetailsQuery(Identifier!));
-			CurrentVariant = Product.MainVariant;
+			ChosenVariant = Product.MainVariant;
 
 			DataLoading = false;
 			StateHasChanged();
@@ -134,7 +107,17 @@ else
 
 	private void VariantChosen(string variantSku)
 	{
-		CurrentVariant = Product?.Variants.First(v => v.Sku == variantSku);
+		ChosenVariant = Product?.Variants.First(v => v.Sku == variantSku);
+
+		if (ShouldRender())
+		{
+			StateHasChanged();
+		}
+	}
+
+	private void SizeChosen(SizeDto size)
+	{
+		ChosenSize = size;
 
 		if (ShouldRender())
 		{

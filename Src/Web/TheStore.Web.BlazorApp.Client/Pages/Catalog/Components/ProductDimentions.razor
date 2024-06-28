@@ -1,0 +1,24 @@
+﻿@using TheStore.SharedModels.Models.ValueObjectsDtos
+
+<article class="product-dimentions-section">
+	<h3 class="my-4">Dimentions</h3>
+	<ul>
+		<li>
+			<span class="spec-label">Height</span>:
+			<span class="spec-value">@Dimentions.Height @Dimentions.Unit</span>
+		</li>
+		<li>
+			<span class="spec-label">Width</span>:
+			<span class="spec-value">@Dimentions.Width @Dimentions.Unit</span>
+		</li>
+		<li>
+			<span class="spec-label">Length</span>:
+			<span class="spec-value">@Dimentions.Length @Dimentions.Unit</span>
+		</li>
+	</ul>
+</article>
+
+@code {
+	[Parameter]
+	public DimentionsDto Dimentions { get; set; }
+}

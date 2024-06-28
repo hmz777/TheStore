@@ -3,31 +3,38 @@
 @using TheStore.Web.BlazorApp.Client.Services
 @inject CatalogService CatalogService;
 
-@if (DataLoading)
-{
-	<ProductReviewsSkeleton />
-}
-else
-{
-	var count = ProductReviewsResult.Reviews.Count;
+<article class="product-reviews-section">
+	<header>
+		<h2 class="my-4">Reviews</h2>
+	</header>
+	<article class="product-reviews">
+		@if (DataLoading)
+		{
+			<ProductReviewsSkeleton />
+		}
+		else
+		{
+			var count = ProductReviewsResult.Reviews.Count;
 
-	@for (var i = 0; i < count; i++)
-	{
-		var review = ProductReviewsResult.Reviews[i];
+			@for (var i = 0; i < count; i++)
+			{
+				var review = ProductReviewsResult.Reviews[i];
 
-		<Review @key="@($"review-{review.GetHashCode()}")"
-				Title="@review.Title"
-				Rating="@review.Rating"
-				Date="review.Date"
-				User="@review.User"
-				Content="@review.Content" />
-	}
+				<Review @key="@($"review-{review.GetHashCode()}")"
+						Title="@review.Title"
+						Rating="@review.Rating"
+						Date="review.Date"
+						User="@review.User"
+						Content="@review.Content" />
+			}
 
-	@if (Page < NumberOfPages)
-	{
-		<button class="action-btn action-btn--secondary align-self-center mt-4" @onclick="LoadMore" type="button">Load More</button>
-	}
-}
+			@if (Page < NumberOfPages)
+			{
+				<button class="action-btn action-btn--secondary align-self-center mt-4" @onclick="LoadMore" type="button">Load More</button>
+			}
+		}
+	</article>
+</article>
 
 @code {
 	[Parameter]
