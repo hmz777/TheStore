@@ -5,45 +5,56 @@ using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Services;
 using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
-var builder = WebApplication.CreateBuilder(args)
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.CreateLogger();
+
+try
+{
+	var builder = WebApplication.CreateBuilder(args)
 	.RegisterServices<CartDbContext>(Assembly.GetExecutingAssembly());
 
-// Pipeline
+	// Pipeline
 
-var app = builder.Build();
+	var app = builder.Build();
 
-if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
-{
-	Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CartDbContext)}");
-
-	// Apply pending migrations.
-	// In production, we use a different strategy.
-	app.Migrate<CartDbContext>();
-}
-
-if (app.Environment.IsDevelopment())
-{
-	// Swagger
-	app.UseSwagger();
-	app.UseSwaggerUI(options =>
+	if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
 	{
-		options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-		options.RoutePrefix = string.Empty;
-	});
-}
+		Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CartDbContext)}");
 
-using (var scope = app.Services.CreateScope())
+		// Apply pending migrations.
+		// In production, we use a different strategy.
+		app.Migrate<CartDbContext>();
+	}
+
+	if (app.Environment.IsDevelopment())
+	{
+		// Swagger
+		app.UseSwagger();
+		app.UseSwaggerUI(options =>
+		{
+			options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+			options.RoutePrefix = string.Empty;
+		});
+	}
+
+	using (var scope = app.Services.CreateScope())
+	{
+		var context = scope.ServiceProvider.GetRequiredService<CartDbContext>();
+		await new DataSeeder().SeedDataAsync(context);
+	}
+
+	app.MapControllers();
+
+	app.Run();
+}
+catch (Exception ex)
 {
-	var context = scope.ServiceProvider.GetRequiredService<CartDbContext>();
-	await new DataSeeder().SeedDataAsync(context);
+	Log.Fatal(ex, "Application terminated unexpectedly");
 }
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+finally
+{
+	Log.CloseAndFlush();
+}
 
 public partial class Program { }

@@ -54,7 +54,7 @@ namespace TheStore.Catalog.API.Endpoints.Products
 				return BadRequest(validation.AsErrors());
 
 			var product = (await repository
-				.FirstOrDefaultAsync(new GetProductByIdentifierReadSpec(request.Identifier), cancellationToken))
+				.FirstOrDefaultAsync(new GetProductByIdentifierSpec(request.Identifier), cancellationToken))
 				.Map<Product, ProductDetailsDtoRead>(mapper);
 
 			if (product == null)

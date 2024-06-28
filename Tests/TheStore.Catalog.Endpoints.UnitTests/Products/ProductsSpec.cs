@@ -276,7 +276,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<UpdateImageOfVariantRequest>();
 			var product = fixture.Create<Product>();
-			product.Id = new ProductId(request.ProductId);
+			product.Identifier = request.Identifier;
 
 			var variant = fixture.Create<ProductVariant>();
 			variant.Sku = request.Sku;
@@ -312,7 +312,7 @@ namespace TheStore.Catalog.Endpoints.UnitTests.Products
 
 			var request = fixture.Create<RemoveImageFromVariantRequest>();
 			var product = fixture.Create<Product>();
-			product.Id = new ProductId(request.ProductId);
+			product.Identifier = request.Identifier;
 
 			var image = new Image(request.ImagePath, fixture.Create<MultilanguageString>(), false);
 

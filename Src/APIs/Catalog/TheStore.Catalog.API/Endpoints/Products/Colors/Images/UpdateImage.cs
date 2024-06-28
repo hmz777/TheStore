@@ -11,8 +11,8 @@ using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Core.ValueObjects;
-using TheStore.Catalog.Core.ValueObjects.Keys;
 using TheStore.Catalog.Infrastructure.Data;
+using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
 using TheStore.Catalog.Infrastructure.Mediator.Handlers.ImageUpload;
 using TheStore.Requests;
 using TheStore.Requests.Models.Products;
@@ -60,7 +60,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 				return BadRequest(validation.AsErrors());
 
 			var singleProduct = await apiRepository
-				.GetByIdAsync(new ProductId(request.ProductId), cancellationToken);
+				.FirstOrDefaultAsync(new GetProductByIdentifierSpec(request.Identifier), cancellationToken);
 
 			if (singleProduct == null)
 				return NotFound("Product not found");
@@ -84,8 +84,8 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
 			{
-				log.Information("Update an image with path: {ImagePath} in variant with SKU: {Sku} in product with id: {Id}",
-					request.ImagePath, request.Sku, request.ProductId);
+				log.Information("Update an image with path: {ImagePath} in variant with SKU: {Sku} in product with identifier: {Identifier}",
+					request.ImagePath, request.Sku, request.Identifier);
 			}
 
 			return NoContent();

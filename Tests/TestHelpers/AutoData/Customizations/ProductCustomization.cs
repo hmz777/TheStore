@@ -12,15 +12,14 @@ namespace TheStore.TestHelpers.AutoData.Customizations
 			fixture.Customize(new MultilanguageStringCustomization());
 			fixture.Register(() =>
 			{
-				var singleProduct = new Product(
+				return new Product(
 					new CategoryId(fixture.Create<int>()),
+					fixture.Create<string>(),
 					fixture.Create<string>(),
 					fixture.Create<MultilanguageString>(),
 					fixture.Create<MultilanguageString>(),
 					false,
 					fixture.CreateMany<ProductVariant>().ToList());
-
-				return singleProduct;
 			});
 		}
 	}

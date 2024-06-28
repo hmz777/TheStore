@@ -140,7 +140,7 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 			var product = listResponse!.First();
 
 			var request = fixture.Create<UpdateImageOfVariantRequest>();
-			request.ProductId = product.ProductId;
+			request.Identifier = product.Identifier;
 			request.Sku = product.Variants[0].Sku;
 			request.ImagePath = product.Variants.First().Color.GetMainImage().StringFileUri;
 
@@ -169,9 +169,9 @@ namespace TheStore.Catalog.Endpoints.IntegrationTests.Products
 
 			var removeRequest = new RemoveImageFromVariantRequest
 			{
-				ProductId = product.ProductId,
+				Identifier = product.Identifier,
 				Sku = product.Variants[0].Sku,
-				ImagePath = product.Variants.First().Color.GetMainImage().StringFileUri
+				ImagePath = product.Variants[0].Color.GetMainImage().StringFileUri
 			};
 
 			var removeResponse = await _client.DeleteAsync(removeRequest.Route);

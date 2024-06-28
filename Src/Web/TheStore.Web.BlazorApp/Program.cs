@@ -9,6 +9,10 @@ using TheStore.Web.BlazorApp.Components;
 using TheStore.Web.BlazorApp.Components.Identity;
 using TheStore.Web.BlazorApp.Extensions;
 
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.CreateLogger();
+
 try
 {
 	var builder = WebApplication.CreateBuilder(args);
@@ -66,7 +70,7 @@ try
 }
 catch (Exception ex)
 {
-	Log.Error(ex, ex.Message);
+	Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
 {

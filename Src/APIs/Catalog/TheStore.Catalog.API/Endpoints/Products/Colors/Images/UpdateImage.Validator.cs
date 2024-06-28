@@ -8,7 +8,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 	{
 		public UpdateImageValidator()
 		{
-			RuleFor(x => x.ProductId)
+			RuleFor(x => x.Identifier)
 				.NotEmpty();
 
 			RuleFor(x => x.Sku)

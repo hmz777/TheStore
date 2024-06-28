@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Serilog;
 using System.Reflection;
 using TheStore.Web.BlazorApp.Client.Auth;
 using TheStore.Web.BlazorApp.Client.Configuration;
@@ -10,6 +11,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 	{
 		public static IServiceCollection ConfigureAuthorization(this IServiceCollection services)
 		{
+			Log.Information("Configure authorization");
+
 			services.AddAuthorizationCore();
 			services.AddCascadingAuthenticationState();
 			services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
@@ -20,6 +23,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 
 		public static IServiceCollection ConfigureHttpClient(this IServiceCollection services, string baseAddress)
 		{
+			Log.Information("Configure http client");
+
 			services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress))
 					.AddHttpMessageHandler<AntiforgeryHandler>();
 
@@ -30,6 +35,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 
 		public static IServiceCollection AddClientConfiguration(this IServiceCollection services, IConfiguration configuration)
 		{
+			Log.Information("Add client configuration");
+
 			services.AddOptions();
 			services.Configure<ClientAppConfig>(configuration.GetRequiredSection(ClientAppConfig.Key));
 
@@ -38,6 +45,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 
 		public static IServiceCollection ConfigureHelperServices(this IServiceCollection services, params Assembly[] assemblies)
 		{
+			Log.Information("Configure helper services");
+
 			services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 			services.AddAutoMapper(assemblies);
 			services.AddScoped<EventBroker>();
@@ -47,6 +56,8 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 
 		public static IServiceCollection ConfigureApis(this IServiceCollection services)
 		{
+			Log.Information("Configure APIs");
+
 			services.AddScoped<CatalogService>();
 			services.AddScoped<CartService>();
 

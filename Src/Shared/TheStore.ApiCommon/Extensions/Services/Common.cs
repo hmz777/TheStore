@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Events;
+using Serilog.Templates;
 using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Reflection;
@@ -63,23 +63,18 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var environment = webApplicationBuilder.Environment;
 
 			// Logging
-			Log.Logger = new LoggerConfiguration()
-				.WriteTo.Console()
-				.CreateBootstrapLogger();
 
 			Log.Information("Setup Logging");
-			services.AddSerilog();
-			host.UseSerilog((context, config) =>
+			services.AddSerilog(config =>
 			{
 				config
-					.MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
-					.MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
-					.MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
-					.MinimumLevel.Information()
+					.MinimumLevel.Warning()
 					.Enrich.FromLogContext()
 					.Enrich.WithMachineName()
 					.Enrich.WithEnvironmentName()
-					.WriteTo.Console(outputTemplate: "[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {CorrelationId}] {Message:lj}{NewLine}{Exception}");
+					.WriteTo.Console(new ExpressionTemplate(
+						"[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {#if CorrelationId is not null} ({CorrelationId}){#end}] {Message:lj}{NewLine}{Exception}"
+						));
 
 				if (environment.IsProduction())
 				{
@@ -91,8 +86,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 						config.WriteTo.Seq(seqUrl);
 					}
 				}
-
-			}, preserveStaticLogger: false);
+			});
 
 			// TODO: Dispose of logger on shutdown
 
@@ -120,7 +114,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 					// This mode is for testing purposes
 					// Trigger runtime database migration
 					Environment.SetEnvironmentVariable(
-						TheStore.ApiCommon.Constants.ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
+						Testing.ApplyMigrationsAtRuntime, true.ToString());
 
 					// If we reach here, then we're running the API independent of any infrastructure
 					services.AddDbContext<TContext>(options =>

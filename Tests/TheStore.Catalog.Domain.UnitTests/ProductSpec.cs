@@ -86,10 +86,11 @@ namespace TheStore.Catalog.Domain.UnitTests
 		#region Product
 
 		[Theory]
-		[InlineData(0, null)]
-		[InlineData(1, null)]
-		[InlineData(0, "name")]
-		public void Cant_Create_Valid_Product(int categoryId, string? name)
+		[InlineData(0, null, "qdqw-dqwd-qwdq")]
+		[InlineData(1, null, "qwdqw-dqwd-qwd")]
+		[InlineData(0, "name", "qdqwdqw-qwdqwd")]
+		[InlineData(0, "name", "qwdqw?@!@#")]
+		public void Cant_Create_Valid_Product(int categoryId, string? name, string? identifier)
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new DomainCustomization());
@@ -97,6 +98,7 @@ namespace TheStore.Catalog.Domain.UnitTests
 			var action = () => new Product(
 				new CategoryId(categoryId),
 				name!,
+				identifier!,
 				fixture.Create<MultilanguageString>(),
 				fixture.Create<MultilanguageString>(),
 				false,

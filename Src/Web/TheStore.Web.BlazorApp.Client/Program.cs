@@ -1,17 +1,33 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Serilog;
 using System.Reflection;
 using TheStore.Web.BlazorApp.Client.Extensions;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.CreateLogger();
 
-builder.Services.AddClientConfiguration(builder.Configuration);
+try
+{
+	var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.ConfigureAuthorization();
+	builder.Services.AddClientConfiguration(builder.Configuration);
 
-builder.Services.ConfigureHttpClient(builder.HostEnvironment.BaseAddress);
+	builder.Services.ConfigureAuthorization();
 
-builder.Services.ConfigureApis();
+	builder.Services.ConfigureHttpClient(builder.HostEnvironment.BaseAddress);
 
-builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly());
+	builder.Services.ConfigureApis();
 
-await builder.Build().RunAsync();
+	builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly());
+
+	await builder.Build().RunAsync();
+}
+catch (Exception ex)
+{
+	Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+	Log.CloseAndFlush();
+}

@@ -7,7 +7,7 @@ namespace TheStore.Catalog.API.Endpoints.Products.Colors.Images
 	{
 		public RemoveImageValidator()
 		{
-			RuleFor(x => x.ProductId)
+			RuleFor(x => x.Identifier)
 				.NotEmpty();
 
 			RuleFor(x => x.Sku)
