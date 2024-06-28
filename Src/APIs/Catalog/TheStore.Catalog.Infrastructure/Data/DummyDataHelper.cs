@@ -101,6 +101,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 						ShortDescription = new MultilanguageString(GenerateRandomString(), CultureCode.English),
 						Price = new Money((j + 1) * 500, Currency.Usd),
 						Inventory = new InventoryRecord(i, 5, 100, 0, false),
+						Sizes = [new("XXS", SizeStandard.EUStandard), new("XS", SizeStandard.EUStandard)],
 						Color = new ProductColor(GenerateRandomString(), color, false, images),
 						Options = new ProductVariantOptions { Published = true, CanBeFavorited = true, CanBePurchased = true },
 						Dimentions = new Dimensions(randomNumber, randomNumber, randomNumber, UnitOfMeasure.Cm),

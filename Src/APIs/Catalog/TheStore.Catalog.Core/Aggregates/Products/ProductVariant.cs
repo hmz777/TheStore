@@ -12,6 +12,7 @@ namespace TheStore.Catalog.Core.Aggregates.Products
 		public MultilanguageString ShortDescription { get; set; }
 		public Money Price { get; set; }
 		public InventoryRecord Inventory { get; set; }
+		public List<Size> Sizes { get; set; }
 		public ProductColor Color { get; set; }
 		public ProductVariantOptions Options { get; set; }
 		public Dimensions Dimentions { get; set; }

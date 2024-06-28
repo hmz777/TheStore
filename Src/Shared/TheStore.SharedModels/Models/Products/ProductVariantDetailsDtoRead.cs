@@ -12,6 +12,7 @@ namespace TheStore.SharedModels.Models.Products
 		public MultilanguageStringDto ShortDescription { get; set; }
 		public MoneyDto Price { get; set; }
 		public InventoryRecordDto Inventory { get; set; }
+		public List<SizeDto> Sizes { get; set; }
 		public ProductColorDtoRead Color { get; set; }
 		public ProductVariantOptionsDto Options { get; set; }
 		public DimentionsDto Dimentions { get; set; }

@@ -101,9 +101,16 @@ namespace TheStore.Catalog.Infrastructure.Data
 				{
 					priceOpt.OwnsOne(pOpt => pOpt.Currency);
 					priceOpt.Property(c => c.Amount).HasColumnType("decimal").HasPrecision(8, 2);
+					priceOpt.ToJson();
 				});
 
-				opt.OwnsOne(v => v.Inventory);
+				opt.OwnsOne(v => v.Inventory).ToJson();
+
+				opt.OwnsMany(v => v.Sizes, sizesOpt =>
+				{
+					sizesOpt.OwnsOne(s => s.Standard);
+					sizesOpt.ToJson();
+				});
 
 				opt.HasOne(v => v.Color)
 				   .WithOne()
@@ -112,7 +119,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 
 				opt.Navigation(v => v.Color).AutoInclude();
 
-				opt.OwnsOne(v => v.Options);
+				opt.OwnsOne(v => v.Options).ToJson();
 
 				opt.OwnsOne(v => v.Dimentions, opt =>
 				{
@@ -120,6 +127,7 @@ namespace TheStore.Catalog.Infrastructure.Data
 					opt.Property(d => d.Width).HasColumnType("decimal").HasPrecision(5, 2);
 					opt.Property(d => d.Height).HasColumnType("decimal").HasPrecision(5, 2);
 					opt.Property(d => d.Length).HasColumnType("decimal").HasPrecision(5, 2);
+					opt.ToJson();
 				});
 
 				opt.HasMany(v => v.Sepcifications)

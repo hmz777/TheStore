@@ -78,6 +78,8 @@ namespace TheStore.Catalog.Infrastructure.MappingProfiles
 			CreateMap<ProductReview, ProductReviewDto>().ReverseMap();
 			CreateMap<UnitOfMeasure, UnitOfMeasureDto>().ReverseMap();
 			CreateMap<ProductSpecification, ProductSpecificationDto>().ReverseMap();
+			CreateMap<Size, SizeDto>().ReverseMap();
+			CreateMap<SizeStandard, SizeStandardDto>().ReverseMap();
 		}
 	}
 }

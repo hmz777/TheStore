@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheStore.Catalog.Infrastructure.Data;
 
@@ -12,9 +13,11 @@ using TheStore.Catalog.Infrastructure.Data;
 namespace TheStore.Catalog.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    partial class CatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240628181934_AddProductSize")]
+    partial class AddProductSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,7 +94,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ImageID");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Categories.Category", b =>
@@ -127,7 +130,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.AssembledProduct", b =>
@@ -172,7 +175,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AssembledProducts", (string)null);
+                    b.ToTable("AssembledProducts");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.Product", b =>
@@ -223,7 +226,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductReview", b =>
@@ -263,7 +266,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReviews", (string)null);
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductSpecification", b =>
@@ -298,7 +301,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductVariantID");
 
-                    b.ToTable("ProductSpecification", (string)null);
+                    b.ToTable("ProductSpecification");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Products.ProductVariant", b =>
@@ -341,7 +344,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariants", (string)null);
+                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Image", b =>
@@ -375,7 +378,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductColorID");
 
-                    b.ToTable("Image", (string)null);
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.ValueObjects.Products.ProductColor", b =>
@@ -406,7 +409,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                     b.HasIndex("variantId")
                         .IsUnique();
 
-                    b.ToTable("ProductColor", (string)null);
+                    b.ToTable("ProductColor");
                 });
 
             modelBuilder.Entity("TheStore.Catalog.Core.Aggregates.Branches.Branch", b =>
@@ -455,7 +458,34 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Dimentions#TheStore.Catalog.Core.ValueObjects.Dimensions", "Dimentions", b1 =>
+                    b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariantOptions", "Options", b1 =>
+                        {
+                            b1.Property<int>("ProductVariantID")
+                                .HasColumnType("int");
+
+                            b1.Property<bool>("CanBeFavorited")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("CanBePurchased")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsMainVariant")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("Published")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("ProductVariantID");
+
+                            b1.ToTable("ProductVariants");
+
+                            b1.ToJson("Options");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductVariantID");
+                        });
+
+                    b.OwnsOne("TheStore.Catalog.Core.ValueObjects.Dimensions", "Dimentions", b1 =>
                         {
                             b1.Property<int>("ProductVariantID")
                                 .HasColumnType("int");
@@ -474,14 +504,14 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariants", (string)null);
+                            b1.ToTable("ProductVariants");
 
                             b1.ToJson("Dimentions");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
 
-                            b1.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Dimentions#TheStore.Catalog.Core.ValueObjects.Dimensions.Unit#TheStore.Catalog.Core.ValueObjects.UnitOfMeasure", "Unit", b2 =>
+                            b1.OwnsOne("TheStore.Catalog.Core.ValueObjects.UnitOfMeasure", "Unit", b2 =>
                                 {
                                     b2.Property<int>("DimensionsProductVariantID")
                                         .HasColumnType("int");
@@ -492,7 +522,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("DimensionsProductVariantID");
 
-                                    b2.ToTable("ProductVariants", (string)null);
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("DimensionsProductVariantID");
@@ -502,7 +532,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 .IsRequired();
                         });
 
-                    b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Inventory#TheStore.Catalog.Core.ValueObjects.InventoryRecord", "Inventory", b1 =>
+                    b.OwnsOne("TheStore.Catalog.Core.ValueObjects.InventoryRecord", "Inventory", b1 =>
                         {
                             b1.Property<int>("ProductVariantID")
                                 .HasColumnType("int");
@@ -524,7 +554,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariants", (string)null);
+                            b1.ToTable("ProductVariants");
 
                             b1.ToJson("Inventory");
 
@@ -532,34 +562,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 .HasForeignKey("ProductVariantID");
                         });
 
-                    b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Options#TheStore.Catalog.Core.Aggregates.Products.ProductVariantOptions", "Options", b1 =>
-                        {
-                            b1.Property<int>("ProductVariantID")
-                                .HasColumnType("int");
-
-                            b1.Property<bool>("CanBeFavorited")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("CanBePurchased")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("IsMainVariant")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("Published")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("ProductVariantID");
-
-                            b1.ToTable("ProductVariants", (string)null);
-
-                            b1.ToJson("Options");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductVariantID");
-                        });
-
-                    b.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Price#TheStore.Catalog.Core.ValueObjects.Money", "Price", b1 =>
+                    b.OwnsOne("TheStore.Catalog.Core.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<int>("ProductVariantID")
                                 .HasColumnType("int");
@@ -570,14 +573,14 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID");
 
-                            b1.ToTable("ProductVariants", (string)null);
+                            b1.ToTable("ProductVariants");
 
                             b1.ToJson("Price");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductVariantID");
 
-                            b1.OwnsOne("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Price#TheStore.Catalog.Core.ValueObjects.Money.Currency#TheStore.Catalog.Core.ValueObjects.Currency", "Currency", b2 =>
+                            b1.OwnsOne("TheStore.Catalog.Core.ValueObjects.Currency", "Currency", b2 =>
                                 {
                                     b2.Property<int>("MoneyProductVariantID")
                                         .HasColumnType("int");
@@ -588,7 +591,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                                     b2.HasKey("MoneyProductVariantID");
 
-                                    b2.ToTable("ProductVariants", (string)null);
+                                    b2.ToTable("ProductVariants");
 
                                     b2.WithOwner()
                                         .HasForeignKey("MoneyProductVariantID");
@@ -598,7 +601,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
                                 .IsRequired();
                         });
 
-                    b.OwnsMany("TheStore.Catalog.Core.Aggregates.Products.ProductVariant.Sizes#TheStore.Catalog.Core.ValueObjects.Size", "Sizes", b1 =>
+                    b.OwnsMany("TheStore.Catalog.Core.ValueObjects.Size", "Sizes", b1 =>
                         {
                             b1.Property<int>("ProductVariantID")
                                 .HasColumnType("int");
@@ -617,7 +620,7 @@ namespace TheStore.Catalog.Infrastructure.Data.Migrations
 
                             b1.HasKey("ProductVariantID", "Id");
 
-                            b1.ToTable("ProductVariants", (string)null);
+                            b1.ToTable("ProductVariants");
 
                             b1.ToJson("Sizes");
 
