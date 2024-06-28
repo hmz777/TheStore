@@ -5,7 +5,7 @@ namespace TheStore.Catalog.Core.ValueObjects.Products
 {
 	public class ProductColor : ValueObject
 	{
-		public List<Image> Images { get; set; }
+		public List<Image> Images { get; private set; }
 		public string ColorName { get; private set; }
 		public string ColorCode { get; private set; }
 		public bool IsMainColor { get; private set; }
