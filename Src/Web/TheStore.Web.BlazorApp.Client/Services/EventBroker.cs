@@ -1,7 +1,9 @@
-﻿namespace TheStore.Web.BlazorApp.Client.Services
+﻿using TheStore.SharedModels.Models;
+
+namespace TheStore.Web.BlazorApp.Client.Services
 {
 	public class EventBroker
 	{
-		public EventHandler<string>? OnItemAddedToCart;
+		public Action<Result>? OnItemAddedToCart;
 	}
 }

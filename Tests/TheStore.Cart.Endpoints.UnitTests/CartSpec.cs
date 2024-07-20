@@ -60,20 +60,20 @@ namespace TheStore.Cart.Endpoints.UnitTests
 		}
 
 		[Fact]
-		public async void Can_Add_Item_To_Cart()
+		public async Task Can_Add_Item_To_Cart()
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization(new CartMappingProfiles()));
-			var request = new AddToCartRequest(Guid.NewGuid(), 1);
+			var request = new AddToCartRequest("Sku 0");
 			var cart = fixture.Create<Core.Aggregates.Cart>();
-			cart.Id = request.CartId;
+			cart.Id = Guid.NewGuid();
 
 			var mockRepository = new Mock<IApiRepository<CartDbContext, Core.Aggregates.Cart>>();
-			mockRepository.Setup(x => x.GetByIdAsync(request.CartId, default))
+			mockRepository.Setup(x => x.GetByIdAsync(default))
 				.ReturnsAsync(cart);
 
 			var mockEntityCheckService = new Mock<ICatalogEntityCheckService>();
-			mockEntityCheckService.Setup(x => x.CheckProductExistsAsync(request.ProductId, default))
+			mockEntityCheckService.Setup(x => x.CheckProductExistsAsync(request.Sku, default))
 				.ReturnsAsync(true);
 
 			var mapper = fixture.Create<IMapper>();
@@ -92,9 +92,9 @@ namespace TheStore.Cart.Endpoints.UnitTests
 		public async Task Can_Remove_Item_From_Cart()
 		{
 			var fixture = new Fixture();
-			var request = new RemoveFromCartRequest(Guid.NewGuid(), 1);
+			var request = new RemoveFromCartRequest(Guid.NewGuid(), "Sku 0");
 			var cart = fixture.Create<Core.Aggregates.Cart>();
-			cart.AddItem(new CartItem(request.ProductId, 1));
+			cart.AddItem(new CartItem(request.Sku, 1));
 			cart.Id = request.CartId;
 
 			var mockRepository = new Mock<IApiRepository<CartDbContext, Core.Aggregates.Cart>>();

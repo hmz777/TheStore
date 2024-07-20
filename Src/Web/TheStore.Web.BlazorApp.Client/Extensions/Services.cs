@@ -9,24 +9,23 @@ namespace TheStore.Web.BlazorApp.Client.Extensions
 {
 	public static class Services
 	{
-		public static IServiceCollection ConfigureAuthorization(this IServiceCollection services)
+		public static IServiceCollection ConfigureBlazorClientAuthenticationAndAuthorization(this IServiceCollection services)
 		{
 			Log.Information("Configure authorization");
 
 			services.AddAuthorizationCore();
 			services.AddCascadingAuthenticationState();
-			services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
-			services.AddTransient<AntiforgeryHandler>();
+			services.AddScoped<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 
 			return services;
 		}
 
-		public static IServiceCollection ConfigureHttpClient(this IServiceCollection services, string baseAddress)
+		public static IServiceCollection ConfigureClientHttpClient(this IServiceCollection services, string baseAddress)
 		{
 			Log.Information("Configure http client");
 
-			services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress))
-					.AddHttpMessageHandler<AntiforgeryHandler>();
+			services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress));
+			//.AddHttpMessageHandler<AntiforgeryHandler>();
 
 			services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Backend"));
 

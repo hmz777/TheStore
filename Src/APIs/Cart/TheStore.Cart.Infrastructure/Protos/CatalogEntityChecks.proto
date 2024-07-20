@@ -7,7 +7,7 @@ service CatalogEntityChecks {
 }
 
 message CheckRequest {
-	int32 Id = 1;
+	string Sku = 1;
 }
 
 message CheckReply {

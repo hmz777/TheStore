@@ -14,11 +14,11 @@ using Serilog.Templates;
 using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Reflection;
+using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Helpers.Swagger;
 using TheStore.ApiCommon.Mediator;
 using TheStore.ApiCommon.Services;
-using static TheStore.ApiCommon.Constants.ConfigurationKeys;
 
 namespace TheStore.ApiCommon.Extensions.Services
 {
@@ -29,25 +29,25 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var configuration = webApplicationBuilder.Configuration;
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
 			var environment = webApplicationBuilder.Environment;
-			var isKubernetes = configuration.GetValue<bool>(Deployment.IsKubernetes);
-			var isCompose = configuration.GetValue<bool>(Deployment.IsDockerCompose);
+			var isKubernetes = configuration.GetValue<bool>(AppConfiguration.Deployment.IsKubernetesConfigKey);
+			var isCompose = configuration.GetValue<bool>(AppConfiguration.Deployment.IsDockerComposeConfigKey);
 
 			Log.Information("App Name: {AppName}", appName);
 
 			if (isKubernetes)
 			{
 				Log.Information("Deployment: Kubernetes");
-				RunningPlatform = Constants.RunningPlatform.Kubernetes;
+				AppConfiguration.RunningPlatform = Constants.RunningPlatform.Kubernetes;
 			}
 			else if (isCompose)
 			{
 				Log.Information("Deployment: Docker Compose");
-				RunningPlatform = Constants.RunningPlatform.DockerCompose;
+				AppConfiguration.RunningPlatform = Constants.RunningPlatform.DockerCompose;
 			}
 			else
 			{
 				Log.Information("Deployment: No Infrastructure");
-				RunningPlatform = Constants.RunningPlatform.Standalone;
+				AppConfiguration.RunningPlatform = Constants.RunningPlatform.Standalone;
 			}
 
 			Log.Information("Environment: {EnvironmentName}", environment.EnvironmentName);
@@ -72,13 +72,11 @@ namespace TheStore.ApiCommon.Extensions.Services
 					.Enrich.FromLogContext()
 					.Enrich.WithMachineName()
 					.Enrich.WithEnvironmentName()
-					.WriteTo.Console(new ExpressionTemplate(
-						"[{Timestamp:dd/MM/yyyy - HH:mm:ss} {Level:u3} - {#if CorrelationId is not null} ({CorrelationId}){#end}] {Message:lj}{NewLine}{Exception}"
-						));
+					.WriteTo.Console(new ExpressionTemplate(AppConfiguration.Logging.LoggingTemplate));
 
 				if (environment.IsProduction())
 				{
-					var seqUrl = configuration.GetValue<string>(Logging.Seq);
+					var seqUrl = configuration.GetValue<string>(AppConfiguration.Logging.SeqConfigKey);
 
 					if (string.IsNullOrWhiteSpace(seqUrl) == false)
 					{
@@ -101,20 +99,20 @@ namespace TheStore.ApiCommon.Extensions.Services
 			var services = webApplicationBuilder.Services;
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
 			var dbName = databaseName ?? appName + "Db";
-			var dbUser = configuration.GetValue<string>(ConnectionStrings.DbUser);
-			var dbPass = configuration.GetValue<string>(ConnectionStrings.DbPassword);
+			var dbUser = configuration.GetValue<string>(AppConfiguration.ConnectionStrings.DbUserConfigKey);
+			var dbPass = configuration.GetValue<string>(AppConfiguration.ConnectionStrings.DbPasswordConfigKey);
 
 			Log.Information("Add Database Context");
 
-			var connectionString = configuration.GetValue<string>(ConnectionStrings.ConnectionString);
+			var connectionString = configuration.GetValue<string>(AppConfiguration.ConnectionStrings.ConnectionStringConfigKey);
 
-			switch (RunningPlatform)
+			switch (AppConfiguration.RunningPlatform)
 			{
 				case Constants.RunningPlatform.Standalone:
 					// This mode is for testing purposes
 					// Trigger runtime database migration
 					Environment.SetEnvironmentVariable(
-						Testing.ApplyMigrationsAtRuntime, true.ToString());
+						AppConfiguration.Testing.ApplyMigrationsAtRuntimeEnvVarName, true.ToString());
 
 					// If we reach here, then we're running the API independent of any infrastructure
 					services.AddDbContext<TContext>(options =>
@@ -213,13 +211,13 @@ namespace TheStore.ApiCommon.Extensions.Services
 			return webApplicationBuilder;
 		}
 
-		public static WebApplicationBuilder ConfigureJwtAuthorization(this WebApplicationBuilder webApplicationBuilder)
+		public static WebApplicationBuilder ConfigureJwtAuthenticationAndAuthorization(this WebApplicationBuilder webApplicationBuilder)
 		{
 			var services = webApplicationBuilder.Services;
 			var configuration = webApplicationBuilder.Configuration;
 			var appName = Assembly.GetCallingAssembly().GetName().Name;
 
-			Log.Information("Add Authorization");
+			Log.Information("Add Jwt Authentication");
 
 			// Authorization
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -227,28 +225,28 @@ namespace TheStore.ApiCommon.Extensions.Services
 			  {
 				  string? authority = null;
 
-				  switch (RunningPlatform)
+				  switch (AppConfiguration.RunningPlatform)
 				  {
 					  case Constants.RunningPlatform.Standalone:
 						  authority = "https://localhost:7575";
 						  break;
 					  case Constants.RunningPlatform.DockerCompose:
 					  case Constants.RunningPlatform.Kubernetes:
-						  authority = configuration.GetValue<string>(Identity.IdentityServer);
+						  authority = configuration.GetValue<string>(AppConfiguration.Identity.IdentityServerConfigKey);
 						  break;
 				  }
 
 				  if (string.IsNullOrWhiteSpace(authority))
 				  {
-					  throw new InvalidOperationException("Couldn't configure JWT authorization, authority is null!");
+					  throw new InvalidOperationException("Couldn't configure JWT authentication, authority is null!");
 				  }
 
-				  Log.Information("Authorization added With authority: {Authority}", authority);
+				  Log.Information("Authentication added With authority: {Authority}", authority);
 
 				  options.Authority = authority;
 				  options.Audience = appName;
 				  options.SaveToken = true;
-				  options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+				  options.TokenValidationParameters.ValidTypes = ["at+jwt"];
 
 				  if (webApplicationBuilder.Environment.IsDevelopment())
 				  {
@@ -327,7 +325,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 		{
 			Log.Information("Add Masstransit on RabbitMQ");
 
-			switch (RunningPlatform)
+			switch (AppConfiguration.RunningPlatform)
 			{
 				case Constants.RunningPlatform.Standalone:
 					webApplicationBuilder.Services.AddMassTransit(config =>
@@ -357,11 +355,11 @@ namespace TheStore.ApiCommon.Extensions.Services
 						var configuration = webApplicationBuilder.Configuration;
 
 						var host = configuration
-										.GetValue<string>(RabbitMqConfig.RabbitMqHost);
+										.GetValue<string>(AppConfiguration.RabbitMqConfig.RabbitMqHostConfigKey);
 						var username = configuration
-										.GetValue<string>(RabbitMqConfig.RabbitMqUsername);
+										.GetValue<string>(AppConfiguration.RabbitMqConfig.RabbitMqUsernameConfigKey);
 						var password = configuration
-										.GetValue<string>(RabbitMqConfig.RabbitMqPassword);
+										.GetValue<string>(AppConfiguration.RabbitMqConfig.RabbitMqPasswordConfigKey);
 
 						config.UsingRabbitMq((context, rabbitMqConfig) =>
 						{

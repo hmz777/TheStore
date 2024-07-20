@@ -21,7 +21,7 @@ namespace TheStore.Cart.Domain.UnitTests
 		public void Can_Add_Wishlist_Item()
 		{
 			var wishlist = new Wishlist(new BuyerId(Guid.NewGuid()));
-			var wishlistItem = new WishlistItem(1);
+			var wishlistItem = new WishlistItem("Sku 0");
 
 			wishlist.AddItem(wishlistItem);
 
@@ -31,7 +31,7 @@ namespace TheStore.Cart.Domain.UnitTests
 		[Fact]
 		public void Can_Remove_Wishlist_Item()
 		{
-			var wishlistItem = new WishlistItem(1);
+			var wishlistItem = new WishlistItem("Sku 0");
 			var wishlist = new Wishlist(
 				new BuyerId(Guid.NewGuid()), new List<WishlistItem>() { wishlistItem });
 

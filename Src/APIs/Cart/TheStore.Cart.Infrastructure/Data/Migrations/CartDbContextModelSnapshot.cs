@@ -17,7 +17,7 @@ namespace TheStore.Cart.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -121,11 +121,12 @@ namespace TheStore.Cart.Infrastructure.Data.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
-                            b1.Property<int>("ProductId")
-                                .HasColumnType("int");
-
                             b1.Property<int>("Quantity")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("Sku")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("CartId", "Id");
 
@@ -159,8 +160,9 @@ namespace TheStore.Cart.Infrastructure.Data.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
-                            b1.Property<int>("ProductId")
-                                .HasColumnType("int");
+                            b1.Property<string>("Sku")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("WishlistId", "Id");
 

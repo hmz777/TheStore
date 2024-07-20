@@ -1,10 +1,12 @@
 ﻿@page "/cart"
+@using TheStore.SharedModels.Models.Cart
 @using TheStore.Web.BlazorApp.Client.Shared
 @using TheStore.SharedModels.Models.Products;
 @using TheStore.Web.BlazorApp.Client.Helpers;
 @using TheStore.Web.BlazorApp.Client.Pages.Cart.Components
 @inject IJSRuntime JS;
 @implements IAsyncDisposable;
+@attribute [Authorize]
 
 <div class="container mb-5">
 	<div class="row gx-5">
@@ -90,9 +92,9 @@
 </div>
 
 @code {
-	private IJSObjectReference? appUtilsModule;
+    private IJSObjectReference? appUtilsModule;
 
-	private List<ProductVariantCatalogDtoRead> Variants { get; set; } = [];
+    private List<CartItemDto> Variants { get; set; } = [];
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{

@@ -10,26 +10,26 @@
 			this.catalogEntityChecksClient = catalogEntityChecksClient;
 		}
 
-		public virtual async Task<bool> CheckBranchExistsAsync(int id, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> CheckBranchExistsAsync(string sku, CancellationToken cancellationToken = default)
 		{
 			var result = await catalogEntityChecksClient
-				.BranchExistsAsync(new CheckRequest() { Id = id }, cancellationToken: cancellationToken);
+				.BranchExistsAsync(new CheckRequest() { Sku = sku }, cancellationToken: cancellationToken);
 
 			return result.Result;
 		}
 
-		public virtual async Task<bool> CheckCategoryExistsAsync(int id, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> CheckCategoryExistsAsync(string sku, CancellationToken cancellationToken = default)
 		{
 			var result = await catalogEntityChecksClient
-				.CategoryExistsAsync(new CheckRequest() { Id = id }, cancellationToken: cancellationToken);
+				.CategoryExistsAsync(new CheckRequest() { Sku = sku }, cancellationToken: cancellationToken);
 
 			return result.Result;
 		}
 
-		public virtual async Task<bool> CheckProductExistsAsync(int id, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> CheckProductExistsAsync(string sku, CancellationToken cancellationToken = default)
 		{
 			var result = await catalogEntityChecksClient
-				.ProductExistsAsync(new CheckRequest() { Id = id }, cancellationToken: cancellationToken);
+				.ProductExistsAsync(new CheckRequest() { Sku = sku }, cancellationToken: cancellationToken);
 
 			return result.Result;
 		}

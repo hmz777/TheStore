@@ -26,7 +26,7 @@ namespace TheStore.Catalog.Infrastructure.Services
 			webApplicationBuilder.ConfigureCors();
 			webApplicationBuilder.ConfigureJsonSerializerOptions();
 			webApplicationBuilder.ConfigureSwagger();
-			webApplicationBuilder.ConfigureJwtAuthorization();
+			webApplicationBuilder.ConfigureJwtAuthenticationAndAuthorization();
 			webApplicationBuilder.ConfigureAuthorizationPolicies();
 			webApplicationBuilder.ConfigureAutoMapper<TContext>(assembly, InfrastructureAssembly);
 			webApplicationBuilder.ConfigureFluentValidation(assembly, InfrastructureAssembly);

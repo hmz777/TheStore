@@ -4,16 +4,16 @@ namespace TheStore.Cart.Core.Entities
 {
 	public class WishlistItem : ValueObject
 	{
-		public int ProductId { get; set; }
+		public string Sku { get; set; }
 
-		public WishlistItem(int productId)
+		public WishlistItem(string sku)
 		{
-			ProductId = productId;
+			Sku = sku;
 		}
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			yield return ProductId;
+			yield return Sku;
 		}
 	}
 }

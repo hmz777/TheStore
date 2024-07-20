@@ -6,22 +6,22 @@
 <h1>Loading...</h1>
 
 @code {
-	[CascadingParameter]
-	private HttpContext? HttpContext { get; set; }
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
 
-	[SupplyParameterFromQuery]
-	private string? ReturnUrl { get; set; }
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
 
-	protected override async Task OnParametersSetAsync()
-	{
-		if (HttpContext == null)
-		{
-			return;
-		}
+    protected override async Task OnParametersSetAsync()
+    {
+        if (HttpContext == null)
+        {
+            return;
+        }
 
-		await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
-			{
-				RedirectUri = ReturnUrl
-			});
-	}
+        await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+        {
+            RedirectUri = ReturnUrl ?? "/"
+        });
+    }
 }

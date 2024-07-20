@@ -9,7 +9,7 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 	{
 		public static void Migrate<TContext>(this WebApplication webApplication) where TContext : DbContext
 		{
-			Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(TContext)}...");
+			Log.Warning($"Runtime database migration flag is set, migrating with context {typeof(TContext).Name}...");
 
 			var services = webApplication.Services;
 
@@ -22,7 +22,7 @@ namespace TheStore.ApiCommon.Extensions.Migrations
 				context.Database.Migrate();
 			}
 
-			Log.Information($"Database successfully migrated with context {nameof(TContext)}");
+			Log.Information($"Database successfully migrated with context {typeof(TContext).Name}");
 		}
 	}
 }

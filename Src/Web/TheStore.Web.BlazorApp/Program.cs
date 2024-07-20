@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Serilog;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
@@ -25,14 +23,11 @@ try
 	builder.Services.AddRazorComponents()
 		.AddInteractiveWebAssemblyComponents();
 
-	builder.Services.AddAuthorization();
-	builder.Services.AddAuthentication().AddIdentityCookies();
-	builder.Services.AddCascadingAuthenticationState();
-	builder.Services.AddScoped<AuthenticationStateProvider, NoOpAuthenticationStateProvider>();
-
-	builder.ConfigureOidc();
+	builder.Services.ConfigureOidc();
+	builder.Services.ConfigureBlazorAuthenticationAndAuthorization();
 
 	builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(BffAuthenticationStateProvider))!);
+	builder.Services.ConfigureServerHttpClient();
 	builder.Services.ConfigureApis();
 
 	var app = builder.Build();
@@ -52,13 +47,10 @@ try
 	app.UseHttpsRedirection();
 
 	app.UseStaticFiles();
-	app.UseAntiforgery();
 
 	app.UseAuthentication();
-	app.UseBff();
 	app.UseAuthorization();
-
-	app.MapBffManagementEndpoints();
+	app.UseAntiforgery();
 
 	app.MapRazorComponents<App>()
 		.AddInteractiveWebAssemblyRenderMode()

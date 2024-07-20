@@ -9,11 +9,10 @@
 		<button @onclick="() => ShowOptions(!OptionsShown)"
 				class="c-select-value"
 				type="button">
-			<span>@InternalValue</span>
-			<i class="las la-caret-down @(OptionsShown ? "la-rotate-180" : "")"></i>
+			<span class="c-select-text">@DisplayText</span>
+			<i class="las la-caret-down ms-2 @(OptionsShown ? "la-rotate-180" : "")"></i>
 		</button>
 		<div class="c-select-options @(OptionsShown ? "shown" : "")">
-			<SelectOption @ref="DefaultSelect" Text="@DefaultText" Value="default(T)" Disabled="true" />
 			@ChildContent
 		</div>
 	</div>
@@ -21,7 +20,7 @@
 
 @code {
 	[Parameter]
-	public string DefaultText { get; set; } = "Select an option";
+	public string DisplayText { get; set; } = "Select an option";
 
 	[Parameter]
 	public RenderFragment ChildContent { get; set; }
@@ -39,7 +38,6 @@
 	private bool OptionsShown { get; set; }
 	private T? InternalValue { get; set; }
 	private List<SelectOption<T>> Options = new();
-	private SelectOption<T?> DefaultSelect { get; set; }
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
@@ -55,16 +53,12 @@
 		{
 			ChangeValueInternal(GetOptionFromHashCode(Value.GetHashCode()));
 		}
-		else if (firstRender)
-		{
-			DefaultSelect.Select(true);
-		}
 	}
 
 	private SelectOption<T>? GetOptionFromHashCode(int hashCode)
 	{
 		return Options
-		.Where(v => v.Value.GetHashCode() == hashCode)
+		.Where(v => v.Value!.GetHashCode() == hashCode)
 		.FirstOrDefault();
 	}
 
@@ -78,6 +72,7 @@
 		}
 
 		InternalValue = selectedOption.Value;
+		DisplayText = selectedOption.Text;
 		selectedOption.Select(true);
 
 		if (ShouldRender())

@@ -23,7 +23,7 @@ namespace TheStore.TestHelpers.WebApplication
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             // Trigger runtime database migration
-            Environment.SetEnvironmentVariable(ConfigurationKeys.Testing.ApplyMigrationsAtRuntime, true.ToString());
+            Environment.SetEnvironmentVariable(AppConfiguration.Testing.ApplyMigrationsAtRuntimeEnvVarName, true.ToString());
 
             builder.UseTestServer(o => o.PreserveExecutionContext = true);
 

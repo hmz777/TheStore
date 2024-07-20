@@ -5,24 +5,24 @@ namespace TheStore.Cart.Core.Entities
 {
 	public class CartItem : ValueObject
 	{
-		public int ProductId { get; set; }
+		public string Sku { get; private set; }
 		public int Quantity { get; set; }
 
-		public CartItem(int productId, int quantity)
+		public CartItem(string sku, int quantity)
 		{
-			Guard.Against.Zero(productId, nameof(productId));
+			Guard.Against.NullOrEmpty(sku, nameof(sku));
 			Guard.Against.NegativeOrZero(quantity, nameof(quantity));
 
-			ProductId = productId;
+			Sku = sku;
 			Quantity = quantity;
 		}
 
-		public CartItem IncreaseQuantity() => new(ProductId, ++Quantity);
-		public CartItem DecreaseQuantity() => new(ProductId, --Quantity);
+		public CartItem IncreaseQuantity() => new(Sku, ++Quantity);
+		public CartItem DecreaseQuantity() => new(Sku, --Quantity);
 
 		protected override IEnumerable<IComparable> GetEqualityComponents()
 		{
-			yield return ProductId;
+			yield return Sku;
 		}
 	}
 }

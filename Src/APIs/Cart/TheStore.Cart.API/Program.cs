@@ -1,12 +1,13 @@
 using Serilog;
+using Serilog.Templates;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Migrations;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Services;
-using static TheStore.ApiCommon.Constants.ConfigurationKeys;
+using static TheStore.ApiCommon.Constants.AppConfiguration;
 
 Log.Logger = new LoggerConfiguration()
-	.WriteTo.Console()
+	.WriteTo.Console(new ExpressionTemplate(Logging.LoggingTemplate))
 	.CreateLogger();
 
 try
@@ -18,10 +19,10 @@ try
 
 	var app = builder.Build();
 
-	if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntime) == "True")
-	{
-		Log.Warning($"Runtime database migration flag is set, migrating with context {nameof(CartDbContext)}");
+	app.UseCors("Cors");
 
+	if (Environment.GetEnvironmentVariable(Testing.ApplyMigrationsAtRuntimeEnvVarName) == "True")
+	{
 		// Apply pending migrations.
 		// In production, we use a different strategy.
 		app.Migrate<CartDbContext>();
@@ -57,4 +58,4 @@ finally
 	Log.CloseAndFlush();
 }
 
-public partial class Program { }
+public partial class Program;

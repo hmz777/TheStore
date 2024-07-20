@@ -2,14 +2,15 @@
 using System.Net.Http.Json;
 using TheStore.SharedModels.Models.Products;
 using TheStore.Web.BlazorApp.Client.Configuration;
+using TheStore.Web.BlazorApp.Client.Helpers;
 using TheStore.Web.Requests.Products;
 
 namespace TheStore.Web.BlazorApp.Client.Services
 {
 	public class CatalogService(IOptions<ClientAppConfig> options, HttpClient httpClient)
 	{
-		private readonly string endpoint = options.Value.Endpoints.First(e => e.Name == "Catalog Api").Url;
-		private readonly HttpClient httpClient = httpClient;
+		private readonly string endpoint = options.Value.Endpoints
+			.First(e => e.Name == Constants.Endpoints.CatalogEndpointConfigKey).Url;
 
 		public async Task<ProductsPaginatedResult> ListProductsPaginated(int take, int page, CancellationToken cancellationToken = default)
 		{

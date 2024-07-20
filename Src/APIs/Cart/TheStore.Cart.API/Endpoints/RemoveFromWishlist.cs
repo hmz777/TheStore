@@ -53,7 +53,7 @@ namespace TheStore.Cart.API.Endpoints
 				return NotFound("Wishlist not found");
 
 			var wishlistItem = wishlist.Items
-				.FirstOrDefault(ci => ci.ProductId == request.ProductId);
+				.FirstOrDefault(ci => ci.Sku == request.Sku);
 
 			if (wishlistItem == null)
 				return NotFound("Wishlist item not found");
@@ -63,8 +63,10 @@ namespace TheStore.Cart.API.Endpoints
 			await apiRepository.SaveChangesAsync(cancellationToken);
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Remove item with product id: {ProductId} from wishlist with id: {WishlistId}",
-					wishlistItem.ProductId, request.WishlistId);
+			{
+				log.Information("Remove item with product Sku: {Sku} from wishlist with id: {WishlistId}",
+					wishlistItem.Sku, request.WishlistId);
+			}
 
 			return NoContent();
 		}

@@ -7,10 +7,7 @@ namespace TheStore.Cart.API.Endpoints
 	{
 		public AddToCartValidator()
 		{
-			RuleFor(x => x.CartId)
-				.NotEmpty();
-
-			RuleFor(x => x.ProductId)
+			RuleFor(x => x.Sku)
 				.NotEmpty();
 		}
 	}

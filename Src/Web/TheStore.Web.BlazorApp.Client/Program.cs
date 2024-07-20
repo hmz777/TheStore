@@ -13,9 +13,9 @@ try
 
 	builder.Services.AddClientConfiguration(builder.Configuration);
 
-	builder.Services.ConfigureAuthorization();
+	builder.Services.ConfigureBlazorClientAuthenticationAndAuthorization();
 
-	builder.Services.ConfigureHttpClient(builder.HostEnvironment.BaseAddress);
+	builder.Services.ConfigureClientHttpClient(builder.HostEnvironment.BaseAddress);
 
 	builder.Services.ConfigureApis();
 

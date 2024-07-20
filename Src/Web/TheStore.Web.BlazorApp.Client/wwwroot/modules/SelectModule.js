@@ -1,9 +1,11 @@
 export function HookSelectDropdownAwayClick(blazor) {
-
     document.body.addEventListener('click', function (e) {
-        if (e.target.classList.contains('c-select-options') == false &&
-            e.target.classList.contains('c-select-option') == false) {
-            blazor.invokeMethodAsync('ShowOptions', false);
+        let classList = e.target.classList;
+
+        for (var i = 0; i < classList.length; i++) {
+            if (classList[i].includes('c-select') == false) {
+                blazor.invokeMethodAsync('ShowOptions', false);
+            }
         }
     });
 }

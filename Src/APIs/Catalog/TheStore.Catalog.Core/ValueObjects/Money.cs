@@ -6,8 +6,8 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class Money : ValueObject
 	{
-		public static readonly Money ZeroUsd = new(0, Currency.Usd);
-		public static readonly Money ZeroEur = new(0, Currency.Eur);
+		public static Money ZeroUsd => new(0, Currency.Usd);
+		public static Money ZeroEur => new(0, Currency.Eur);
 
 		public decimal Amount { get; private set; }
 		public Currency Currency { get; private set; }

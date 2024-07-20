@@ -20,7 +20,7 @@ namespace TheStore.Cart.Domain.UnitTests
 		public void Can_Add_Cart_Item()
 		{
 			var cart = new Core.Aggregates.Cart(new BuyerId(Guid.NewGuid()));
-			var cartItem = new CartItem(1, 5);
+			var cartItem = new CartItem("Sku 0", 5);
 
 			cart.AddItem(cartItem);
 
@@ -30,7 +30,7 @@ namespace TheStore.Cart.Domain.UnitTests
 		[Fact]
 		public void Can_Remove_Cart_Item()
 		{
-			var cartItem = new CartItem(1, 5);
+			var cartItem = new CartItem("Sku 0", 5);
 			var cart = new Core.Aggregates.Cart(
 				new BuyerId(Guid.NewGuid()), new List<CartItem>() { cartItem });
 

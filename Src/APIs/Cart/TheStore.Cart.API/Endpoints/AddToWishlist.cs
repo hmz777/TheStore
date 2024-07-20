@@ -59,7 +59,7 @@ namespace TheStore.Cart.API.Endpoints
 				return BadRequest(validation.AsErrors());
 
 			var productExists = await catalogEntityCheckService
-				.CheckProductExistsAsync(request.ProductId, cancellationToken);
+				.CheckProductExistsAsync(request.Sku, cancellationToken);
 
 			if (productExists == false)
 				return NotFound("Product not found");
@@ -70,22 +70,24 @@ namespace TheStore.Cart.API.Endpoints
 			if (wishlist == null)
 				return NotFound("Wishlist not found");
 
-			var wishlistItem = wishlist.Items.FirstOrDefault(wi => wi.ProductId == request.ProductId);
+			var wishlistItem = wishlist.Items.FirstOrDefault(wi => wi.Sku == request.Sku);
 
 			// If item already exists so we do nothing
 
 			if (wishlistItem == null)
 			{
 				// Item don't exist we create a new one
-				wishlistItem = new WishlistItem(request.ProductId);
+				wishlistItem = new WishlistItem(request.Sku);
 				wishlist.AddItem(wishlistItem);
 
 				await apiRepository.SaveChangesAsync(cancellationToken);
 			}
 
 			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Add product with id: {ProductId} to wishlist with id: {WishlistId}",
-					request.ProductId, request.WishlistId);
+			{
+				log.Information("Add product with Sku: {Sku} to wishlist with id: {WishlistId}",
+					request.Sku, request.WishlistId);
+			}
 
 			return CreatedAtRoute(
 				GetWishlistByIdRequest.RouteName,

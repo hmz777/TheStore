@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using TheStore.Requests;
 
 namespace TheStore.Requests.Models.Wishlist
 {
@@ -13,17 +12,15 @@ namespace TheStore.Requests.Models.Wishlist
 		[FromRoute(Name = nameof(WishlistId))]
 		public Guid WishlistId { get; set; }
 
-		public int ProductId { get; set; }
+		[FromBody]
+		public string Sku { get; set; }
 
-		public AddToWishlistRequest()
-		{
+		public AddToWishlistRequest() { }
 
-		}
-
-		public AddToWishlistRequest(Guid wishlistId, int productId)
+		public AddToWishlistRequest(Guid wishlistId, string sku)
 		{
 			WishlistId = wishlistId;
-			ProductId = productId;
+			Sku = sku;
 		}
 	}
 }

@@ -302,3 +302,14 @@
         }
     }
 }
+
+.size-selector {
+    .size-selector-inner {
+        display: flex;
+        flex-flow: row wrap;
+
+        .size-btn:not(:last-of-type) {
+            margin-right: .5em;
+        }
+    }
+}

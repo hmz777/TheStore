@@ -1,29 +1,20 @@
 ﻿using System.ComponentModel;
-using TheStore.Web.Requests;
 
 namespace TheStore.Web.Requests.Cart
 {
 	[DisplayName("Cart." + nameof(AddToCartRequest))]
 	public class AddToCartRequest : RequestBase
 	{
-		public const string RouteTemplate = "cart/{CartId}";
-		public override string Route => RouteTemplate.
-			Replace("{CartId}", CartId.ToString());
+		public const string RouteTemplate = "cart";
+		public override string Route => RouteTemplate;
 
-		public Guid CartId { get; set; }
+		public string Sku { get; set; }
 
+		public AddToCartRequest() { }
 
-		public int ProductId { get; set; }
-
-		public AddToCartRequest()
+		public AddToCartRequest(string sku)
 		{
-
-		}
-
-		public AddToCartRequest(Guid cartId, int productId)
-		{
-			CartId = cartId;
-			ProductId = productId;
+			Sku = sku;
 		}
 	}
 }

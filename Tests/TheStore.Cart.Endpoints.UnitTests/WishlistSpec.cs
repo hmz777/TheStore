@@ -64,7 +64,7 @@ namespace TheStore.Cart.Endpoints.UnitTests
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization(new CartMappingProfiles()));
-			var request = new AddToWishlistRequest(Guid.NewGuid(), 1);
+			var request = new AddToWishlistRequest(Guid.NewGuid(), "Sku 0");
 			var wishlist = fixture.Create<Wishlist>();
 			wishlist.Id = request.WishlistId;
 
@@ -73,7 +73,7 @@ namespace TheStore.Cart.Endpoints.UnitTests
 				.ReturnsAsync(wishlist);
 
 			var mockEntityCheckService = new Mock<ICatalogEntityCheckService>();
-			mockEntityCheckService.Setup(x => x.CheckProductExistsAsync(request.ProductId, default))
+			mockEntityCheckService.Setup(x => x.CheckProductExistsAsync(request.Sku, default))
 				.ReturnsAsync(true);
 
 			var mapper = fixture.Create<IMapper>();
@@ -92,9 +92,9 @@ namespace TheStore.Cart.Endpoints.UnitTests
 		public async Task Can_Remove_Item_From_Wishlist()
 		{
 			var fixture = new Fixture();
-			var request = new RemoveFromWishlistRequest(Guid.NewGuid(), 1);
+			var request = new RemoveFromWishlistRequest(Guid.NewGuid(), "Sku 0");
 			var wishlist = fixture.Create<Wishlist>();
-			wishlist.AddItem(new WishlistItem(request.ProductId));
+			wishlist.AddItem(new WishlistItem(request.Sku));
 			wishlist.Id = request.WishlistId;
 
 			var mockRepository = new Mock<IApiRepository<CartDbContext, Wishlist>>();

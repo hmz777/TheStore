@@ -2,8 +2,8 @@
 {
 	public interface ICatalogEntityCheckService
 	{
-		Task<bool> CheckBranchExistsAsync(int id, CancellationToken cancellationToken = default);
-		Task<bool> CheckCategoryExistsAsync(int id, CancellationToken cancellationToken = default);
-		Task<bool> CheckProductExistsAsync(int id, CancellationToken cancellationToken = default);
+		Task<bool> CheckBranchExistsAsync(string sku, CancellationToken cancellationToken = default);
+		Task<bool> CheckCategoryExistsAsync(string sku, CancellationToken cancellationToken = default);
+		Task<bool> CheckProductExistsAsync(string sku, CancellationToken cancellationToken = default);
 	}
 }

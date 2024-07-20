@@ -1,32 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using TheStore.Requests;
 
 namespace TheStore.Requests.Models.Cart
 {
 	[DisplayName("Cart." + nameof(RemoveFromCartRequest))]
 	public class RemoveFromCartRequest : RequestBase
 	{
-		public const string RouteTemplate = "cart/{CartId}/{ProductId:int}";
+		public const string RouteTemplate = "cart/{CartId}/{Sku}";
 		public override string Route => RouteTemplate
 			.Replace("{CartId}", CartId.ToString())
-			.Replace("{ProductId:int}", ProductId.ToString());
+			.Replace("{Sku}", Sku);
 
 		[FromRoute(Name = nameof(CartId))]
 		public Guid CartId { get; set; }
 
-		[FromRoute(Name = nameof(ProductId))]
-		public int ProductId { get; set; }
+		[FromRoute(Name = nameof(Sku))]
+		public string Sku { get; set; }
 
-		public RemoveFromCartRequest()
-		{
+		public RemoveFromCartRequest() { }
 
-		}
-
-		public RemoveFromCartRequest(Guid cartId, int productId)
+		public RemoveFromCartRequest(Guid cartId, string sku)
 		{
 			CartId = cartId;
-			ProductId = productId;
+			Sku = sku;
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace TheStore.Cart.Infrastructure.Services
 			webApplicationBuilder.PlatformDetect();
 			webApplicationBuilder.ConfigureDataAccess<TContext>(Constants.DatabaseName);
 			webApplicationBuilder.ConfigureApi();
-			webApplicationBuilder.ConfigureJwtAuthorization();
+			webApplicationBuilder.ConfigureJwtAuthenticationAndAuthorization();
 			webApplicationBuilder.ConfigureJsonSerializerOptions();
 			webApplicationBuilder.ConfigureSwagger();
 			webApplicationBuilder.ConfigureAutoMapper<TContext>(assembly, InfrastructureAssembly);
@@ -32,7 +32,8 @@ namespace TheStore.Cart.Infrastructure.Services
 			webApplicationBuilder.Services.AddGrpcClient<CatalogEntityChecks.CatalogEntityChecksClient>(options =>
 			{
 				var address = webApplicationBuilder.Configuration.GetSection("CatalogService")
-								.GetValue<string>("Uri");
+								.GetValue<string>("Uri")
+								?? throw new Exception("Catalog gRPC address can not be read");
 
 				options.Address = new Uri(address);
 			});

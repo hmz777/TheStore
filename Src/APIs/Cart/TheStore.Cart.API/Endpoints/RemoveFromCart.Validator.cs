@@ -10,7 +10,7 @@ namespace TheStore.Cart.API.Endpoints
 			RuleFor(x => x.CartId)
 				.NotEmpty();
 
-			RuleFor(x => x.ProductId)
+			RuleFor(x => x.Sku)
 				.NotEmpty();
 		}
 	}

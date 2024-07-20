@@ -4,11 +4,14 @@ namespace TheStore.Catalog.Core.ValueObjects
 {
 	public class SizeStandard
 	{
-		public static readonly SizeStandard USStandard = new("US");
-		public static readonly SizeStandard UKStandard = new("UK");
-		public static readonly SizeStandard EUStandard = new("EU");
+		public static SizeStandard USStandard => new("US");
+		public static SizeStandard UKStandard => new("UK");
+		public static SizeStandard EUStandard => new("EU");
 
 		public string Value { get; private set; }
+
+		// Ef Core
+		private SizeStandard() { }
 
 		public SizeStandard(string value)
 		{

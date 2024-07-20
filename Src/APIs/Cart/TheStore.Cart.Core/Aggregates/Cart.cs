@@ -20,7 +20,7 @@ namespace TheStore.Cart.Core.Aggregates
 		// Ef Core
 		private Cart() { }
 
-		public Cart(BuyerId buyerId, List<CartItem> items = null)
+		public Cart(BuyerId buyerId, List<CartItem> items = null!)
 		{
 			BuyerId = buyerId;
 			this.items = items ?? new();
@@ -34,6 +34,20 @@ namespace TheStore.Cart.Core.Aggregates
 				return false;
 
 			items.Add(item);
+
+			return true;
+		}
+
+		public bool UpdateItem(CartItem item)
+		{
+			Guard.Against.Null(item, nameof(item));
+
+			var cartItem = items.FirstOrDefault(i => i.Sku == item.Sku);
+
+			if (cartItem == null) { return false; }
+
+			// TODO: Later more properties will be added related to more specific attributes like sizes and colors
+			cartItem.Quantity = item.Quantity;
 
 			return true;
 		}
