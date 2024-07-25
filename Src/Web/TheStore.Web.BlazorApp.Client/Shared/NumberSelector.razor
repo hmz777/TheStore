@@ -1,0 +1,26 @@
+﻿<Select class="cart-item-quantity" Value="Value" ValueChanged="ValueChanged">
+    @for (int i = MinValue; i <= MaxValue; i++)
+    {
+        <SelectOption @key="@($"quantity_select_{i}")" Value="i" Text="i" />
+    }
+</Select>
+
+@code {
+    [Parameter]
+    public int Value { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ValueChanged { get; set; }
+
+    [Parameter]
+    public int MaxValue { get; set; }
+
+    [Parameter]
+    public int MinValue { get; set; }
+
+    private async Task OnValueChanged(int newValue)
+    {
+        Value = newValue;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
