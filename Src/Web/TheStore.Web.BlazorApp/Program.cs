@@ -1,70 +1,73 @@
 using Serilog;
 using System.Reflection;
 using TheStore.ApiCommon.Extensions.Services;
-using TheStore.Web.BlazorApp.Auth;
+using TheStore.Web.BlazorApp.Client.Auth;
 using TheStore.Web.BlazorApp.Client.Extensions;
 using TheStore.Web.BlazorApp.Components;
-using TheStore.Web.BlazorApp.Components.Identity;
 using TheStore.Web.BlazorApp.Extensions;
 
 Log.Logger = new LoggerConfiguration()
-	.WriteTo.Console()
-	.CreateLogger();
+    .WriteTo.Console()
+    .CreateLogger();
 
 try
 {
-	var builder = WebApplication.CreateBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
 
-	builder.ConfigureLogging();
+    builder.ConfigureLogging();
 
-	builder.Services.AddServerConfiguration(builder.Configuration);
+    builder.Services.AddServerConfiguration(builder.Configuration);
 
-	// Add services to the container.
-	builder.Services.AddRazorComponents()
-		.AddInteractiveWebAssemblyComponents();
+    // Add services to the container.
+    builder.Services.AddRazorComponents()
+        .AddInteractiveWebAssemblyComponents();
 
-	builder.Services.ConfigureOidc();
-	builder.Services.ConfigureBlazorAuthenticationAndAuthorization();
+    builder.Services.ConfigureOidc();
+    builder.Services.ConfigureBlazorAuthenticationAndAuthorization();
 
-	builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(BffAuthenticationStateProvider))!);
-	builder.Services.ConfigureServerHttpClient();
-	builder.Services.ConfigureApis();
+    builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(),
+                                             Assembly.GetAssembly(typeof(AntiforgeryHandler))!);
 
-	var app = builder.Build();
+    builder.Services.ConfigureServerHttpClient();
+    builder.Services.ConfigureApis();
 
-	// Configure the HTTP request pipeline.
-	if (app.Environment.IsDevelopment())
-	{
-		app.UseWebAssemblyDebugging();
-	}
-	else
-	{
-		app.UseExceptionHandler("/Error", createScopeForErrors: true);
-		// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-		app.UseHsts();
-	}
+    builder.Services.AddControllers();
 
-	app.UseHttpsRedirection();
+    var app = builder.Build();
 
-	app.UseStaticFiles();
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseWebAssemblyDebugging();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Error", createScopeForErrors: true);
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
-	app.UseAuthentication();
-	app.UseAuthorization();
-	app.UseAntiforgery();
+    app.UseHttpsRedirection();
 
-	app.MapRazorComponents<App>()
-		.AddInteractiveWebAssemblyRenderMode()
-		.AddAdditionalAssemblies(typeof(TheStore.Web.BlazorApp.Client._Imports).Assembly);
+    app.UseStaticFiles();
 
-	app.MapAdditionalIdentityEndpoints();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseAntiforgery();
 
-	app.Run();
+    app.MapRazorComponents<App>()
+        .AddInteractiveWebAssemblyRenderMode()
+        .AddAdditionalAssemblies(typeof(TheStore.Web.BlazorApp.Client._Imports).Assembly);
+
+    app.MapControllers();
+
+    app.Run();
 }
 catch (Exception ex)
 {
-	Log.Fatal(ex, "Application terminated unexpectedly");
+    Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
 {
-	Log.CloseAndFlush();
+    Log.CloseAndFlush();
 }

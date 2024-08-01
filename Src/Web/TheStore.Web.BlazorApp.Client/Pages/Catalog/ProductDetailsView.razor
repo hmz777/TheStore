@@ -14,122 +14,131 @@
 
 @if (DataLoading)
 {
-	<ProductDetailsSkeleton />
+    <ProductDetailsSkeleton />
 }
 else
 {
-	<div class="container my-5">
-		<div class="row">
-			<div class="col-12 col-lg-6">
-				<ImageGallery ProductColor="ChosenVariant!.Color" />
-				<div class="row">
-					<div class="col-12">
-						<Reviews Identifier="@Identifier" />
-					</div>
-				</div>
-			</div>
-			<div class="col-12 col-lg-6 px-5">
-				<div class="product-details">
-					<div class="info-cell">
-						<h1 class="product-title">@Product!.Name</h1>
-					</div>
-					<div class="info-cell">
-						<span class="product-category">@Product.Category.Name</span>
-					</div>
-					<div class="info-cell">
-						<span class="product-price">@ChosenVariant.Price</span>
-					</div>
-					<div class="info-cell">
-						<VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
-					</div>
-					<div class="info-cell">
-						<SizeSelector Sizes="ChosenVariant.Sizes" SizeChosen="SizeChosen" />
-					</div>
-					<div class="info-cell">
-						<button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
-							<span class="px-2">Add to Cart</span>
-							<i class="las la-shopping-bag"></i>
-						</button>
-					</div>
-					<div class="info-cell">
-						<button class="action-btn action-btn--secondary action-btn--block" type="button">
-							<span class="px-2">Favorite</span>
-							<i class="lar la-heart"></i>
-						</button>
-					</div>
-					<div class="info-cell">
-						<p class="product-description">@Product.Description</p>
-					</div>
-				</div>
-				<div class="product-attributes">
-					<div class="product-attribute">
-						<Shipping />
-					</div>
-					<div class="product-attribute">
-						<ProductDimentions Dimentions="ChosenVariant.Dimentions" />
-					</div>
-					<div class="product-attribute">
-						<ProductSpecifications Specifications="@ChosenVariant.Sepcifications" />
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <ImageGallery ProductColor="ChosenVariant!.Color" />
+                <div class="row">
+                    <div class="col-12">
+                        <Reviews Identifier="@Identifier" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-5">
+                <div class="product-details">
+                    <div class="info-cell">
+                        <h1 class="product-title">@Product!.Name</h1>
+                    </div>
+                    <div class="info-cell">
+                        <span class="product-category">@Product.Category.Name</span>
+                    </div>
+                    <div class="info-cell">
+                        <span class="product-price">@ChosenVariant.Price</span>
+                    </div>
+                    <div class="info-cell">
+                        <VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
+                    </div>
+                    <div class="info-cell">
+                        <SizeSelector Sizes="ChosenVariant.Sizes" SizeChosen="SizeChosen" />
+                    </div>
+                    <div class="info-cell">
+                        <button class="action-btn action-btn--primary action-btn--block" @onclick="AddToCart" type="button">
+                            <span class="px-2">Add to Cart</span>
+                            <i class="las la-shopping-bag"></i>
+                        </button>
+                    </div>
+                    <div class="info-cell">
+                        <button class="action-btn action-btn--secondary action-btn--block" type="button">
+                            <span class="px-2">Favorite</span>
+                            <i class="lar la-heart"></i>
+                        </button>
+                    </div>
+                    <div class="info-cell">
+                        <p class="product-description">@Product.Description</p>
+                    </div>
+                </div>
+                <div class="product-attributes">
+                    <div class="product-attribute">
+                        <Shipping />
+                    </div>
+                    <div class="product-attribute">
+                        <ProductDimentions Dimentions="ChosenVariant.Dimentions" />
+                    </div>
+                    <div class="product-attribute">
+                        <ProductSpecifications Specifications="@ChosenVariant.Sepcifications" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @code {
-	[Parameter]
-	public string? ProductName { get; set; }
+    [Parameter]
+    public string? ProductName { get; set; }
 
-	[Parameter]
-	public string? Identifier { get; set; }
+    [Parameter]
+    public string? Identifier { get; set; }
 
-	private ProductDetailsDtoRead? Product { get; set; }
+    private ProductDetailsDtoRead? Product { get; set; }
 
-	private List<ProductColorDtoRead> Colors => Product?.Variants.Select(v => v.Color).ToList() ?? [];
+    private List<ProductColorDtoRead> Colors => Product?.Variants.Select(v => v.Color).ToList() ?? [];
 
-	private ProductVariantDetailsDtoRead? ChosenVariant { get; set; }
-	private SizeDto ChosenSize { get; set; }
+    private ProductVariantDetailsDtoRead? ChosenVariant { get; set; }
+    private SizeDto ChosenSize { get; set; }
 
-	private bool DataLoading { get; set; } = true;
+    private bool DataLoading { get; set; } = true;
 
-	protected async override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			Product = await Mediator.Send(new GetProductDetailsQuery(Identifier!));
-			ChosenVariant = Product.MainVariant;
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await Mediator.Send(new GetProductDetailsQuery(Identifier!));
 
-			DataLoading = false;
-			StateHasChanged();
-		}
-	}
+            if (result.IsSuccessful == false)
+            {
+                // TODO: Show friendly error to user
+                // TODO: Show error page
+                return;
+            }
 
-	private void VariantChosen(string variantSku)
-	{
-		ChosenVariant = Product?.Variants.First(v => v.Sku == variantSku);
+            Product = result.Value;
+            ChosenVariant = Product.MainVariant;
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
-	}
+            DataLoading = false;
+            StateHasChanged();
+        }
+    }
 
-	private void SizeChosen(SizeDto size)
-	{
-		ChosenSize = size;
+    private void VariantChosen(string variantSku)
+    {
+        ChosenVariant = Product?.Variants.First(v => v.Sku == variantSku);
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
-	}
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
 
-	private async Task AddToCart()
-	{
-		await InvokeAsync(async () =>
-		{
-			await Mediator.Send(new AddItemToCartCommand(Identifier!));
-		});
-	}
+    private void SizeChosen(SizeDto size)
+    {
+        ChosenSize = size;
+
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task AddToCart()
+    {
+        await InvokeAsync(async () =>
+        {
+            await Mediator.Send(new AddItemToCartCommand(Identifier!));
+        });
+    }
 }

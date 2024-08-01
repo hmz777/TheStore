@@ -1,75 +1,88 @@
-﻿@using TheStore.SharedModels.Models.Products
+﻿@using MediatR
+@using TheStore.SharedModels.Models.Products
 @using TheStore.Web.BlazorApp.Client.Helpers;
+@using TheStore.Web.BlazorApp.Client.Mediator.Queries
 @using TheStore.Web.BlazorApp.Client.Services
-@inject CatalogService CatalogService;
+
+@inject IMediator Mediator;
 
 <article class="product-reviews-section">
-	<header>
-		<h2 class="my-4">Reviews</h2>
-	</header>
-	<article class="product-reviews">
-		@if (DataLoading)
-		{
-			<ReviewsSkeleton />
-		}
-		else
-		{
-			var count = ProductReviewsResult.Reviews.Count;
+    <header>
+        <h2 class="my-4">Reviews</h2>
+    </header>
+    <article class="product-reviews">
+        @if (DataLoading)
+        {
+            <ReviewsSkeleton />
+        }
+        else
+        {
+            var count = ProductReviewsResult.Reviews.Count;
 
-			@for (var i = 0; i < count; i++)
-			{
-				var review = ProductReviewsResult.Reviews[i];
+            @for (var i = 0; i < count; i++)
+            {
+                var review = ProductReviewsResult.Reviews[i];
 
-				<Review @key="@($"review-{review.GetHashCode()}")"
-						Title="@review.Title"
-						Rating="@review.Rating"
-						Date="review.Date"
-						User="@review.User"
-						Content="@review.Content" />
-			}
+                <Review @key="@($"review-{review.GetHashCode()}")"
+                        Title="@review.Title"
+                        Rating="@review.Rating"
+                        Date="review.Date"
+                        User="@review.User"
+                        Content="@review.Content" />
+            }
 
-			@if (Page < NumberOfPages)
-			{
-				<button class="action-btn action-btn--secondary align-self-center mt-4" @onclick="LoadMore" type="button">Load More</button>
-			}
-		}
-	</article>
+            @if (Page < NumberOfPages)
+            {
+                <button class="action-btn action-btn--secondary align-self-center mt-4" @onclick="LoadMore" type="button">Load More</button>
+            }
+        }
+    </article>
 </article>
 
 @code {
-	[Parameter]
-	public string Identifier { get; set; }
+    [Parameter]
+    public string Identifier { get; set; }
 
-	private ProductReviewsPaginatedResult ProductReviewsResult { get; set; } = new();
-	private ProductReviewsPaginatedResult ProductReviewsResultInternal { get; set; } = new();
-	private int Take { get; set; } = 2;
-	private int Page { get; set; } = 1;
-	private int Count => ProductReviewsResult.Count;
-	private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
-	private bool DataLoading { get; set; } = true;
+    private ProductReviewsPaginatedResult ProductReviewsResult { get; set; } = new();
+    private int Take { get; set; } = 2;
+    private int Page { get; set; } = 1;
+    private int Count => ProductReviewsResult.Count;
+    private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
+    private bool DataLoading { get; set; } = true;
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await FetchData(1);
-			DataLoading = false;
-			StateHasChanged();
-		}
-	}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await FetchData();
+            DataLoading = false;
 
-	private async Task FetchData(int page)
-	{
-		ProductReviewsResultInternal = await CatalogService.ListProductReviewsPaginated(Identifier, Take, page);
+            if (ShouldRender())
+            {
+                StateHasChanged();
+            }
+        }
+    }
 
-		ProductReviewsResult.PageNumber = ProductReviewsResultInternal.PageNumber;
-		ProductReviewsResult.Count = ProductReviewsResultInternal.Count;
-		ProductReviewsResult.Reviews.AddRange(ProductReviewsResultInternal.Reviews);
-	}
+    private async Task FetchData()
+    {
+        var result = await Mediator.Send(new ListProductReviewsQuery(Identifier, Take, Page));
 
-	private async Task LoadMore()
-	{
-		await FetchData(++Page);
-		StateHasChanged();
-	}
+        var value = result.Value!;
+        ProductReviewsResult.PageNumber = value.PageNumber;
+        ProductReviewsResult.Count = value.Count;
+        ProductReviewsResult.Reviews.AddRange(value.Reviews);
+
+        Page++;
+    }
+
+    private async Task LoadMore()
+    {
+        await FetchData();
+
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
 }

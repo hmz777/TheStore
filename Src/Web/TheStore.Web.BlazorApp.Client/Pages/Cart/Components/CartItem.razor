@@ -3,40 +3,46 @@
 @using TheStore.SharedModels.Models.Products;
 
 <article class="cart-item" @attributes="OtherAttributes">
-	<div class="cart-item-inner">
-		<img loading="lazy" class="cart-item-image" src="https://placehold.co/600x400.png" alt="Item image" />
-		<div class="cart-item-content">
-			<div class="cart-item-content-inner">
-				<span class="cart-item-info cart-item-info-name">@Item.ProductName</span>
-				<span class="cart-item-info cart-item-info-cateogry">@Item.ProductCategory</span>
-				<span class="cart-item-info cart-item-info-variant">Black/White</span>
-				<div class="cart-item-info">
-					<Select class="cart-item-quantity" @bind-Value="Quantity">
-						<SelectOption Value="1" Text="1" />
-						<SelectOption Value="2" Text="2" />
-						<SelectOption Value="3" Text="3" />
-					</Select>
-				</div>
-				<div class="cart-item-info mt-4">
-					<button class="me-2" type="button">
-						<i class="lar la-heart la-2x"></i>
-					</button>
-					<button type="button">
-						<i class="las la-trash la-2x"></i>
-					</button>
-				</div>
-			</div>
-			<span class="cart-item-price">@Item.prod.ToString()</span>
-		</div>
-	</div>
+    <div class="cart-item-inner">
+        <img loading="lazy" class="cart-item-image" src="@Item.ProductPictureUrl" alt="@Item.ProductPictureDescription" />
+        <div class="cart-item-content">
+            <div class="cart-item-content-inner">
+                <span class="cart-item-info cart-item-info-name">@Item.ProductName</span>
+                <span class="cart-item-info cart-item-info-cateogry">@Item.ProductCategory</span>
+                <span class="cart-item-info cart-item-info-variant">
+                    <span class="cart-item-variant dp-color">@Item.ProductColor</span>
+                    <span class="cart-item-variant">@Item.ProductSize</span>
+                </span>
+                <div class="cart-item-info">
+                    <NumberSelector Value="Item.Quantity" ValueChanged="OnItemQuantityUpdated" />
+                </div>
+                <div class="cart-item-info mt-4">
+                    <button class="me-2" type="button">
+                        <i class="lar la-heart la-2x"></i>
+                    </button>
+                    <button type="button">
+                        <i class="las la-trash la-2x"></i>
+                    </button>
+                </div>
+            </div>
+            <span class="cart-item-price">@Item.ProductPrice</span>
+        </div>
+    </div>
 </article>
 
 @code {
     [Parameter]
     public CartItemDto Item { get; set; }
 
-	[Parameter(CaptureUnmatchedValues = true)]
-	public Dictionary<string, object> OtherAttributes { get; set; }
+    [Parameter]
+    public EventCallback<CartItemDto> ItemChanged { get; set; }
 
-	private int Quantity { get; set; } = 1;
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> OtherAttributes { get; set; }
+
+    private async Task OnItemQuantityUpdated(int quantity)
+    {
+        Item.Quantity = quantity;
+        await ItemChanged.InvokeAsync(Item);
+    }
 }

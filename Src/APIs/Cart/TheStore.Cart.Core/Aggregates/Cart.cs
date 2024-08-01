@@ -8,55 +8,56 @@ using TheStore.SharedKernel.Interfaces;
 
 namespace TheStore.Cart.Core.Aggregates
 {
-	public class Cart : BaseEntity<Guid>, IAggregateRoot
-	{
-		private List<CartItem> items;
+    public class Cart : BaseEntity<Guid>, IAggregateRoot
+    {
+        private List<CartItem> items;
 
-		[NotMapped]
-		public ReadOnlyCollection<CartItem> Items => items.AsReadOnly();
+        [NotMapped]
+        public ReadOnlyCollection<CartItem> Items => items.AsReadOnly();
 
-		public BuyerId BuyerId { get; private set; }
+        public BuyerId BuyerId { get; private set; }
 
-		// Ef Core
-		private Cart() { }
+        // Ef Core
+        private Cart() { }
 
-		public Cart(BuyerId buyerId, List<CartItem> items = null!)
-		{
-			BuyerId = buyerId;
-			this.items = items ?? new();
-		}
+        public Cart(BuyerId buyerId, List<CartItem> items = null!)
+        {
+            BuyerId = buyerId;
+            this.items = items ?? new();
+        }
 
-		public bool AddItem(CartItem item)
-		{
-			Guard.Against.Null(item, nameof(item));
+        public void AddItem(CartItem item)
+        {
+            Guard.Against.Null(item, nameof(item));
 
-			if (items.Contains(item))
-				return false;
+            if (items.Contains(item))
+            {
+                item.IncreaseQuantity();
+                return;
+            }
 
-			items.Add(item);
+            items.Add(item);
+        }
 
-			return true;
-		}
+        public bool UpdateItem(CartItem item)
+        {
+            Guard.Against.Null(item, nameof(item));
 
-		public bool UpdateItem(CartItem item)
-		{
-			Guard.Against.Null(item, nameof(item));
+            var cartItem = items.FirstOrDefault(i => i.Sku == item.Sku);
 
-			var cartItem = items.FirstOrDefault(i => i.Sku == item.Sku);
+            if (cartItem == null) { return false; }
 
-			if (cartItem == null) { return false; }
+            // TODO: Later more properties will be added related to more specific attributes like sizes and colors
+            cartItem.Quantity = item.Quantity;
 
-			// TODO: Later more properties will be added related to more specific attributes like sizes and colors
-			cartItem.Quantity = item.Quantity;
+            return true;
+        }
 
-			return true;
-		}
+        public bool RemoveItem(CartItem item)
+        {
+            Guard.Against.Null(item, nameof(item));
 
-		public bool RemoveItem(CartItem item)
-		{
-			Guard.Against.Null(item, nameof(item));
-
-			return items.Remove(item);
-		}
-	}
+            return items.Remove(item);
+        }
+    }
 }

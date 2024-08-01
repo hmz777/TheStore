@@ -1,66 +1,73 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Serilog;
 using System.Reflection;
+using System.Text.Json;
 using TheStore.Web.BlazorApp.Client.Auth;
 using TheStore.Web.BlazorApp.Client.Configuration;
 using TheStore.Web.BlazorApp.Client.Services;
 
 namespace TheStore.Web.BlazorApp.Client.Extensions
 {
-	public static class Services
-	{
-		public static IServiceCollection ConfigureBlazorClientAuthenticationAndAuthorization(this IServiceCollection services)
-		{
-			Log.Information("Configure authorization");
+    public static class Services
+    {
+        public static IServiceCollection ConfigureBlazorClientAuthenticationAndAuthorization(this IServiceCollection services)
+        {
+            Log.Information("Configure authorization");
 
-			services.AddAuthorizationCore();
-			services.AddCascadingAuthenticationState();
-			services.AddScoped<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+            services.AddAuthorizationCore();
+            services.AddCascadingAuthenticationState();
+            services.AddScoped<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 
-			return services;
-		}
+            return services;
+        }
 
-		public static IServiceCollection ConfigureClientHttpClient(this IServiceCollection services, string baseAddress)
-		{
-			Log.Information("Configure http client");
+        public static IServiceCollection ConfigureClientHttpClient(this IServiceCollection services, string baseAddress)
+        {
+            Log.Information("Configure http client");
 
-			services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress));
-			//.AddHttpMessageHandler<AntiforgeryHandler>();
+            services.AddScoped<AntiforgeryHandler>();
 
-			services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Backend"));
+            services.AddHttpClient("Backend", client => client.BaseAddress = new Uri(baseAddress))
+                    .AddHttpMessageHandler<AntiforgeryHandler>();
 
-			return services;
-		}
+            services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Backend"));
 
-		public static IServiceCollection AddClientConfiguration(this IServiceCollection services, IConfiguration configuration)
-		{
-			Log.Information("Add client configuration");
+            return services;
+        }
 
-			services.AddOptions();
-			services.Configure<ClientAppConfig>(configuration.GetRequiredSection(ClientAppConfig.Key));
+        public static IServiceCollection AddClientConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            Log.Information("Add client configuration");
 
-			return services;
-		}
+            services.AddOptions();
+            services.Configure<ClientAppConfig>(configuration.GetRequiredSection(ClientAppConfig.Key));
+            services.Configure<JsonSerializerOptions>(jsonOptions =>
+            {
+                jsonOptions.PropertyNameCaseInsensitive = false;
+            });
 
-		public static IServiceCollection ConfigureHelperServices(this IServiceCollection services, params Assembly[] assemblies)
-		{
-			Log.Information("Configure helper services");
+            return services;
+        }
 
-			services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
-			services.AddAutoMapper(assemblies);
-			services.AddScoped<EventBroker>();
+        public static IServiceCollection ConfigureHelperServices(this IServiceCollection services, params Assembly[] assemblies)
+        {
+            Log.Information("Configure helper services");
 
-			return services;
-		}
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
+            services.AddAutoMapper(assemblies);
+            services.AddScoped<EventBroker>();
 
-		public static IServiceCollection ConfigureApis(this IServiceCollection services)
-		{
-			Log.Information("Configure APIs");
+            return services;
+        }
 
-			services.AddScoped<CatalogService>();
-			services.AddScoped<CartService>();
+        public static IServiceCollection ConfigureApis(this IServiceCollection services)
+        {
+            Log.Information("Configure APIs");
 
-			return services;
-		}
-	}
+            services.AddScoped<CatalogService>();
+            services.AddScoped<CartService>();
+
+            return services;
+        }
+    }
 }

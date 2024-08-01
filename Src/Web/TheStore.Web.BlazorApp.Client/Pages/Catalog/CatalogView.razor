@@ -1,4 +1,6 @@
 ﻿@page "/catalog/{catalogName?}/{manufacturer?}/{priceRange?}/{sortDirection?}/{page:int?}"
+@using MediatR
+@using TheStore.Web.BlazorApp.Client.Mediator.Queries
 @using TheStore.Web.BlazorApp.Client.Services
 @using TheStore.SharedModels.Models.Products;
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
@@ -6,129 +8,138 @@
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Shared.Results;
 
-@inject CatalogService CatalogService
+@inject IMediator Mediator
 
 <CatalogHeader Header="@CatalogName" Description="@CatalogDescription" />
 
 <div class="container my-5">
-	<div class="row">
-		@if (dataLoading)
-		{
-			<ProductCardsSkeleton />
-		}
-		else if (Products.Count > 0)
-		{
-			@foreach (var product in Products)
-			{
-				<div class="col-12 col-md-6 col-lg-4">
-					<ProductCard @key="product.Identifier"
-								 Product="product" />
-				</div>
-			}
+    <div class="row">
+        @if (dataLoading)
+        {
+            <ProductCardsSkeleton />
+        }
+        else if (Products.Count > 0)
+        {
+            @foreach (var product in Products)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <ProductCard @key="product.Identifier"
+                                 Product="product" />
+                </div>
+            }
 
-			<div class="col-12 position-sticky" style="bottom:1em;z-index:3;">
-				<CatalogPagination CurrentPage="Page"
-								   NumberOfPages="NumberOfPages"
-								   OnNavigateToPreviousPage="NavigateToPreviousPage"
-								   OnNavigateToNumberedPage="NavigateToNumberedPage"
-								   OnNavigateToNextPage="NavigateToNextPage" />
-			</div>
-		}
-		else
-		{
-			<div class="col-12 col-lg-6 offset-lg-3">
-				<Result Type="ResultType.NoProducts"
-						Message="No products available with the current filter" />
-			</div>
-		}
-	</div>
+            <div class="col-12 position-sticky" style="bottom:1em;z-index:3;">
+                <CatalogPagination CurrentPage="Page"
+                                   NumberOfPages="NumberOfPages"
+                                   OnNavigateToPreviousPage="NavigateToPreviousPage"
+                                   OnNavigateToNumberedPage="NavigateToNumberedPage"
+                                   OnNavigateToNextPage="NavigateToNextPage" />
+            </div>
+        }
+        else
+        {
+            <div class="col-12 col-lg-6 offset-lg-3">
+                <Result Type="ResultType.NoProducts"
+                        Message="No products available with the current filter" />
+            </div>
+        }
+    </div>
 </div>
 
 @code {
-	[Parameter]
-	public string? CatalogName { get; set; }
+    [Parameter]
+    public string? CatalogName { get; set; }
 
-	[Parameter]
-	public string? Manufacturer { get; set; }
+    [Parameter]
+    public string? Manufacturer { get; set; }
 
-	[Parameter]
-	public string? PriceRange { get; set; }
+    [Parameter]
+    public string? PriceRange { get; set; }
 
-	[Parameter]
-	public string? SortDirection { get; set; }
+    [Parameter]
+    public string? SortDirection { get; set; }
 
-	[Parameter]
-	public int Page { get; set; } = 1;
+    [Parameter]
+    public int Page { get; set; } = 1;
 
-	private string? CatalogDescription { get; set; }
-	private int Take { get; set; } = 6;
-	private int Count { get; set; }
-	private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
+    private string? CatalogDescription { get; set; }
+    private int Take { get; set; } = 6;
+    private int Count { get; set; }
+    private int NumberOfPages => (int)Math.Ceiling(Count / (decimal)Take);
 
-	private bool dataLoading = true;
-	private List<ProductCatalogDtoRead> Products { get; set; } = [];
+    private bool dataLoading = true;
+    private List<ProductCatalogDtoRead> Products { get; set; } = [];
 
-	protected override void OnParametersSet()
-	{
-		CatalogName = CatalogName ?? "Product Catalog";
-		CatalogDescription = CatalogDescription ?? "A variety of products to choose from!";
+    protected override void OnParametersSet()
+    {
+        CatalogName = CatalogName ?? "Product Catalog";
+        CatalogDescription = CatalogDescription ?? "A variety of products to choose from!";
 
-		SortDirection = SortDirection ?? "asc";
-		Page = Page == default ? 1 : Page;
-	}
+        SortDirection = SortDirection ?? "asc";
+        Page = Page == default ? 1 : Page;
+    }
 
-	protected async override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await FetchData(Take, Page);
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await FetchData(Page, Take);
 
-			dataLoading = false;
+            dataLoading = false;
 
-			if (ShouldRender())
-			{
-				StateHasChanged();
-			}
-		}
-	}
+            if (ShouldRender())
+            {
+                StateHasChanged();
+            }
+        }
+    }
 
-	private async Task FetchData(int take, int page)
-	{
-		var result = await CatalogService.ListProductsPaginated(take, page);
+    private async Task FetchData(int page, int take)
+    {
+        var result = await Mediator.Send(new ListProductsWithPaginationQuery(page, take));
 
-		Products = result.Products;
-		Count = result.Count;
-	}
+        if (result.IsSuccessful == false)
+        {
+            // TODO: User some messaging service to show friendly error to user
+            // TODO: Show error page
+            return;
+        }
 
-	private async Task NavigateToNumberedPage(int page)
-	{
-		Page = page;
+        var value = result.Value;
 
-		await FetchData(Take, Page);
+        Products = value.Products;
+        Count = value.Count;
+    }
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
-	}
+    private async Task NavigateToNumberedPage(int page)
+    {
+        Page = page;
 
-	private async Task NavigateToNextPage()
-	{
-		await FetchData(Take, ++Page);
+        await FetchData(Take, Page);
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
-	}
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
 
-	private async Task NavigateToPreviousPage()
-	{
-		await FetchData(Take, --Page);
+    private async Task NavigateToNextPage()
+    {
+        await FetchData(Take, ++Page);
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
-	}
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task NavigateToPreviousPage()
+    {
+        await FetchData(Take, --Page);
+
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
+    }
 }

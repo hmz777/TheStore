@@ -11,59 +11,51 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Catalog.Core.Aggregates.Products;
 using TheStore.Catalog.Infrastructure.Data;
 using TheStore.Catalog.Infrastructure.Data.Specifications.Products;
+using TheStore.Catalog.Infrastructure.Helpers;
 using TheStore.Requests;
 using TheStore.Requests.Models.Products;
+using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Products;
 
 namespace TheStore.Catalog.API.Endpoints.Products
 {
-	public class GetByIdentifier : EndpointBaseAsync
-		.WithRequest<GetByIdentifierRequest>
-		.WithActionResult<ProductDetailsDtoRead>
-	{
-		private readonly IValidator<GetByIdentifierRequest> validator;
-		private readonly IReadApiRepository<CatalogDbContext, Product> repository;
-		private readonly IMapper mapper;
-		private readonly Serilog.ILogger log = Log.ForContext<GetByIdentifier>();
+    public class GetByIdentifier(
+        IValidator<GetByIdentifierRequest> validator,
+        IReadApiRepository<CatalogDbContext, Product> repository,
+        IMapper mapper) : EndpointBaseAsync
+        .WithRequest<GetByIdentifierRequest>
+        .WithActionResult<Result<ProductDetailsDtoRead>>
+    {
+        private readonly Serilog.ILogger log = Log.ForContext<GetByIdentifier>();
 
-		public GetByIdentifier(
-			IValidator<GetByIdentifierRequest> validator,
-			IReadApiRepository<CatalogDbContext, Product> repository,
-			IMapper mapper)
-		{
-			this.validator = validator;
-			this.repository = repository;
-			this.mapper = mapper;
-		}
+        [HttpGet(GetByIdentifierRequest.RouteTemplate, Name = GetByIdentifierRequest.RouteName)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(
+            Summary = "Gets a single product by identifier",
+            Description = "Gets a single product by identifier",
+            OperationId = "Product.Single.GetByIdentifier",
+            Tags = ["Products"])]
+        public async override Task<ActionResult<Result<ProductDetailsDtoRead>>> HandleAsync(
+        [FromRoute] GetByIdentifierRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            var validation = await validator.ValidateAsync(request, cancellationToken);
+            if (validation.IsValid == false)
+                return BadRequest(Result.Failure(validation.AsErrors(), ValidationMessages.InvalidProductIdentifier));
 
-		[HttpGet(GetByIdentifierRequest.RouteTemplate, Name = GetByIdentifierRequest.RouteName)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[SwaggerOperation(
-			Summary = "Gets a single product by identifier",
-			Description = "Gets a single product by identifier",
-			OperationId = "Product.Single.GetByIdentifier",
-			Tags = new[] { "Products" })]
-		public async override Task<ActionResult<ProductDetailsDtoRead>> HandleAsync(
-		[FromRoute] GetByIdentifierRequest request,
-			CancellationToken cancellationToken = default)
-		{
-			var validation = await validator.ValidateAsync(request, cancellationToken);
-			if (validation.IsValid == false)
-				return BadRequest(validation.AsErrors());
+            var product = (await repository
+                .FirstOrDefaultAsync(new GetProductByIdentifierSpec(request.Identifier), cancellationToken))
+                .Map<Product, ProductDetailsDtoRead>(mapper);
 
-			var product = (await repository
-				.FirstOrDefaultAsync(new GetProductByIdentifierSpec(request.Identifier), cancellationToken))
-				.Map<Product, ProductDetailsDtoRead>(mapper);
+            if (product == null)
+                return NotFound(Result.Failure(ValidationMessages.InvalidProductIdentifier));
 
-			if (product == null)
-				return NotFound();
+            using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
+                log.Information("Get a single product with Identifier: {Identifier}", request.Identifier);
 
-			using (LogContext.PushProperty(nameof(RequestBase.CorrelationId), request.CorrelationId))
-				log.Information("Get a single product with Identifier: {Identifier}", request.Identifier);
-
-			return product;
-		}
-	}
+            return Result.Success(product);
+        }
+    }
 }

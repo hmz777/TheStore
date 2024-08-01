@@ -40,7 +40,7 @@ namespace TheStore.Cart.Endpoints.UnitTests
 		{
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMapperCustomization(new CartMappingProfiles()));
-			var request = new GetCartByIdRequest();
+			var request = new GetUserCartRequest();
 			request.CartId = Guid.NewGuid();
 
 			var cart = fixture.Create<Core.Aggregates.Cart>();
@@ -52,7 +52,7 @@ namespace TheStore.Cart.Endpoints.UnitTests
 
 			var mapper = fixture.Create<IMapper>();
 
-			var sut = new GetCartById(new GetCartByIdValidator(), mockRepository.Object, mapper);
+			var sut = new GetUserCart(new GetCartByIdValidator(), mockRepository.Object, mapper);
 			var result = (await sut.HandleAsync(request)).Value;
 
 			result.Should().NotBeNull();

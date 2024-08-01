@@ -4,13 +4,13 @@ using TheStore.SharedModels.Models;
 
 namespace TheStore.Web.BlazorApp.Client.Mediator.Commands
 {
-    public class AddItemToCartCommand : IRequest<Result>
+    public class RemoveItemFromCartCommand : IRequest<Result>
     {
         public string Sku { get; }
 
-        public AddItemToCartCommand(string sku)
+        public RemoveItemFromCartCommand(string sku)
         {
-            Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
+            Guard.Against.NullOrEmpty(sku, nameof(sku));
 
             Sku = sku;
         }
