@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0" />
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.7" />
