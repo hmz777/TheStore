@@ -4,26 +4,41 @@ using System.Text.Json;
 using TheStore.SharedModels.Models;
 using TheStore.SharedModels.Models.Cart;
 using TheStore.Web.BlazorApp.Client.Configuration;
-using TheStore.Web.BlazorApp.Client.Helpers;
 using TheStore.Web.Requests.Cart;
 
 namespace TheStore.Web.BlazorApp.Client.Services
 {
-    public class CartService(
-        IOptions<ClientAppConfig> options,
-        IOptions<JsonSerializerOptions> jsonOptions,
-        HttpClient httpClient,
-        EventBroker eventBroker)
+    public class CartService
     {
-        private readonly string endpoint = options.Value.Endpoints
-            .First(e => e.Name == Constants.Endpoints.CartEndpointConfigKey).Url;
+        private readonly IOptions<JsonSerializerOptions> jsonOptions;
+        private readonly EventBroker eventBroker;
+        protected HttpClient? httpClient;
 
+        public CartService(
+            IOptions<JsonSerializerOptions> jsonOptions,
+            IHttpClientFactory httpClientFactory,
+            EventBroker eventBroker)
+        {
+            this.jsonOptions = jsonOptions;
+            this.eventBroker = eventBroker;
+
+            if (OperatingSystem.IsBrowser())
+            {
+                httpClient = httpClientFactory.CreateClient(Constants.HttpClientConstants.ClientBackendHttpClient);
+            }
+            else
+            {
+                httpClient = httpClientFactory.CreateClient(Constants.HttpClientConstants.ServerAuthenticatedCartHttpClient);
+            }
+        }
+
+        // TODO: Fix endpoint in Cart API
         public async Task<Result> AddItemToCart(string sku, CancellationToken cancellationToken = default)
         {
             var request = new AddToCartRequest(sku);
 
-            var response = await httpClient
-                .PostAsJsonAsync(endpoint + request.Route, request, cancellationToken);
+            var response = await httpClient!
+                .PostAsJsonAsync(request.Route, request, cancellationToken);
 
             var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -45,8 +60,8 @@ namespace TheStore.Web.BlazorApp.Client.Services
         {
             var request = new GetUserCartRequest();
 
-            var response = await httpClient
-                .GetFromJsonAsync<Result<CartDto>>(endpoint + request.Route, cancellationToken);
+            var response = await httpClient!
+                .GetFromJsonAsync<Result<CartDto>>(request.Route, cancellationToken);
 
             if (response == null)
             {
