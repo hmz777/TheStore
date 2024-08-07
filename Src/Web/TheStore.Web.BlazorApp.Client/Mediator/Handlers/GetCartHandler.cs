@@ -15,9 +15,9 @@ namespace TheStore.Web.BlazorApp.Client.Mediator.Handlers
             this.cartService = cartService;
         }
 
-        public Task<Result<CartDto>> Handle(GetCartQuery request, CancellationToken cancellationToken)
+        public async Task<Result<CartDto>> Handle(GetCartQuery request, CancellationToken cancellationToken)
         {
-            return cartService.GetCart(cancellationToken);
+            return await cartService.GetCart(cancellationToken);
         }
     }
 }
