@@ -5,6 +5,7 @@ using TheStore.Web.BlazorApp.Client.Auth;
 using TheStore.Web.BlazorApp.Client.Extensions;
 using TheStore.Web.BlazorApp.Components;
 using TheStore.Web.BlazorApp.Extensions;
+using TheStore.Web.BlazorApp.Services;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -15,23 +16,18 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.ConfigureLogging();
-
-    builder.Services.AddServerConfiguration(builder.Configuration);
-
-    // Add services to the container.
-    builder.Services.AddRazorComponents()
-        .AddInteractiveWebAssemblyComponents();
-
-    builder.Services.ConfigureOidc();
-    builder.Services.ConfigureBlazorAuthenticationAndAuthorization();
-
-    builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(),
-                                             Assembly.GetAssembly(typeof(AntiforgeryHandler))!);
-
-    builder.Services.ConfigureServerHttpClient();
-    builder.Services.ConfigureApis();
-
+    builder.Services.ConfigureExternalApisEndpoints(builder.Configuration);
+    builder.Services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
+    builder.Services.ConfigureServerAuthenticationAndAuthorization();
+    builder.Services.ConfigureHelperServices(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(AntiforgeryHandler))!);
+    builder.Services.ConfigureJsonOptions();
+    builder.ConfigureServerHttpClients();
+    builder.Services.ConfigureExternalApis();
+    builder.Services.AddHttpContextAccessor();
     builder.Services.AddControllers();
+
+    // TODO: Temporary
+    builder.Services.AddSingleton<AccessTokenDelegator>();
 
     var app = builder.Build();
 
@@ -51,9 +47,10 @@ try
 
     app.UseStaticFiles();
 
+    app.UseAntiforgery();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.UseAntiforgery();
+    app.UseAccessTokenPopulator();
 
     app.MapRazorComponents<App>()
         .AddInteractiveWebAssemblyRenderMode()
