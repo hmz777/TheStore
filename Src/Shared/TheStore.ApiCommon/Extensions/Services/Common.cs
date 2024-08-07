@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Templates;
@@ -37,17 +38,17 @@ namespace TheStore.ApiCommon.Extensions.Services
             if (isKubernetes)
             {
                 Log.Information("Deployment: Kubernetes");
-                AppConfiguration.RunningPlatform = Constants.RunningPlatform.Kubernetes;
+                AppConfiguration.RunningPlatform = RunningPlatform.Kubernetes;
             }
             else if (isCompose)
             {
                 Log.Information("Deployment: Docker Compose");
-                AppConfiguration.RunningPlatform = Constants.RunningPlatform.DockerCompose;
+                AppConfiguration.RunningPlatform = RunningPlatform.DockerCompose;
             }
             else
             {
                 Log.Information("Deployment: No Infrastructure");
-                AppConfiguration.RunningPlatform = Constants.RunningPlatform.Standalone;
+                AppConfiguration.RunningPlatform = RunningPlatform.Standalone;
             }
 
             Log.Information("Environment: {EnvironmentName}", environment.EnvironmentName);
@@ -86,8 +87,6 @@ namespace TheStore.ApiCommon.Extensions.Services
                 }
             });
 
-            // TODO: Dispose of logger on shutdown
-
             return webApplicationBuilder;
         }
 
@@ -108,7 +107,7 @@ namespace TheStore.ApiCommon.Extensions.Services
 
             switch (AppConfiguration.RunningPlatform)
             {
-                case Constants.RunningPlatform.Standalone:
+                case RunningPlatform.Standalone:
                     // This mode is for testing purposes
                     // Trigger runtime database migration
                     Environment.SetEnvironmentVariable(
@@ -121,8 +120,8 @@ namespace TheStore.ApiCommon.Extensions.Services
                          .UseSqlServer($"Server=localhost;Database={dbName};User Id=SA;Password=P@ss12345;MultipleActiveResultSets=true;TrustServerCertificate=true");
                     });
                     break;
-                case Constants.RunningPlatform.DockerCompose:
-                case Constants.RunningPlatform.Kubernetes:
+                case RunningPlatform.DockerCompose:
+                case RunningPlatform.Kubernetes:
 
                     if (string.IsNullOrEmpty(connectionString))
                     {
@@ -219,7 +218,6 @@ namespace TheStore.ApiCommon.Extensions.Services
 
             Log.Information("Add Jwt Authentication");
 
-            // Authorization
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
               {
@@ -227,11 +225,11 @@ namespace TheStore.ApiCommon.Extensions.Services
 
                   switch (AppConfiguration.RunningPlatform)
                   {
-                      case Constants.RunningPlatform.Standalone:
+                      case RunningPlatform.Standalone:
                           authority = "https://localhost:7575";
                           break;
-                      case Constants.RunningPlatform.DockerCompose:
-                      case Constants.RunningPlatform.Kubernetes:
+                      case RunningPlatform.DockerCompose:
+                      case RunningPlatform.Kubernetes:
                           authority = configuration.GetValue<string>(AppConfiguration.Identity.IdentityServerConfigKey);
                           break;
                   }
@@ -244,9 +242,12 @@ namespace TheStore.ApiCommon.Extensions.Services
                   Log.Information("Authentication added With authority: {Authority}", authority);
 
                   options.Authority = authority;
-                  options.Audience = appName;
                   options.SaveToken = true;
-                  options.TokenValidationParameters.ValidTypes = ["at+jwt"];
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidTypes = ["at+jwt"],
+                      ValidateAudience = false
+                  };
 
                   if (webApplicationBuilder.Environment.IsDevelopment())
                   {
@@ -327,11 +328,12 @@ namespace TheStore.ApiCommon.Extensions.Services
 
             switch (AppConfiguration.RunningPlatform)
             {
-                case Constants.RunningPlatform.Standalone:
+                case RunningPlatform.Standalone:
                     webApplicationBuilder.Services.AddMassTransit(config =>
                     {
                         var configuration = webApplicationBuilder.Configuration;
 
+                        // Here we're running in local dev mode
                         var host = "localhost";
                         var username = "guest";
                         var password = "guest";
@@ -348,8 +350,8 @@ namespace TheStore.ApiCommon.Extensions.Services
                         });
                     });
                     break;
-                case Constants.RunningPlatform.DockerCompose:
-                case Constants.RunningPlatform.Kubernetes:
+                case RunningPlatform.DockerCompose:
+                case RunningPlatform.Kubernetes:
                     webApplicationBuilder.Services.AddMassTransit(config =>
                     {
                         var configuration = webApplicationBuilder.Configuration;
@@ -360,6 +362,11 @@ namespace TheStore.ApiCommon.Extensions.Services
                                         .GetValue<string>(AppConfiguration.RabbitMqConfig.RabbitMqUsernameConfigKey);
                         var password = configuration
                                         .GetValue<string>(AppConfiguration.RabbitMqConfig.RabbitMqPasswordConfigKey);
+
+                        if (host is null || username is null || password is null)
+                        {
+                            throw new Exception("RabbitMQ configuration isn't complete");
+                        }
 
                         config.UsingRabbitMq((context, rabbitMqConfig) =>
                         {
@@ -372,8 +379,6 @@ namespace TheStore.ApiCommon.Extensions.Services
                             rabbitMqConfig.ConfigureEndpoints(context);
                         });
                     });
-                    break;
-                default:
                     break;
             }
 
