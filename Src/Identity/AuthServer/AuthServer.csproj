@@ -40,6 +40,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\TheStore.ApiCommon\TheStore.ApiCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Localization\LocalizationResources.ar-SY.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
