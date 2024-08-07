@@ -107,7 +107,7 @@
 
         var value = result.Value;
 
-        Products = value.Products;
+        Products = value!.Products;
         Count = value.Count;
     }
 
@@ -115,7 +115,7 @@
     {
         Page = page;
 
-        await FetchData(Take, Page);
+        await FetchData(Page, Take);
 
         if (ShouldRender())
         {
