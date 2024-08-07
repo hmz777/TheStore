@@ -1,7 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
@@ -10,9 +9,9 @@ using System.Security.Claims;
 using TheStore.ApiCommon.Data.Repository;
 using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.ValueObjects.Keys;
+using TheStore.Cart.Infrastructure.Configuration;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Data.Specifications;
-using TheStore.Cart.Infrastructure.Helpers;
 using TheStore.Requests;
 using TheStore.Requests.Models.Cart;
 using TheStore.SharedModels.Models;
@@ -39,7 +38,6 @@ namespace TheStore.Cart.API.Endpoints
             this.mapper = mapper;
         }
 
-        [Authorize]
         [HttpGet(GetUserCartRequest.RouteTemplate, Name = GetUserCartRequest.RouteName)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
