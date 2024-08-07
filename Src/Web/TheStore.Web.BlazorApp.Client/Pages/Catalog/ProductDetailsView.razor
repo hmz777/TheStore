@@ -1,5 +1,4 @@
 ﻿@page "/product/{Identifier}/{ProductName}/"
-@using AutoMapper
 @using MediatR;
 @using TheStore.SharedModels.Models.Products;
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
@@ -10,7 +9,6 @@
 @using TheStore.Web.BlazorApp.Client.Pages.Catalog.Components
 @using TheStore.Web.BlazorApp.Client.Services;
 @inject IMediator Mediator;
-@inject IMapper Mapper;
 
 @if (DataLoading)
 {
@@ -40,7 +38,7 @@ else
                         <span class="product-price">@ChosenVariant.Price</span>
                     </div>
                     <div class="info-cell">
-                        <VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
+                        <VariantSelector Variants="VariantSelectorModels" VariantChosen="VariantChosen" ControlSize="ControlSize.Normal" />
                     </div>
                     <div class="info-cell">
                         <SizeSelector Sizes="ChosenVariant.Sizes" SizeChosen="SizeChosen" />
@@ -86,6 +84,14 @@ else
 
     private ProductDetailsDtoRead? Product { get; set; }
 
+    private List<VariantSelectorModel> VariantSelectorModels =>
+        Product!.Variants.Select(v => new VariantSelectorModel()
+            {
+                Color = v.Color,
+                Options = v.Options,
+                Sku = v.Sku
+            }).ToList();
+
     private List<ProductColorDtoRead> Colors => Product?.Variants.Select(v => v.Color).ToList() ?? [];
 
     private ProductVariantDetailsDtoRead? ChosenVariant { get; set; }
@@ -107,7 +113,7 @@ else
             }
 
             Product = result.Value;
-            ChosenVariant = Product.MainVariant;
+            ChosenVariant = Product!.MainVariant;
 
             DataLoading = false;
             StateHasChanged();

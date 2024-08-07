@@ -1,102 +1,108 @@
-﻿@using AutoMapper
-@using TheStore.Web.BlazorApp.Client.Helpers
+﻿@using TheStore.Web.BlazorApp.Client.Helpers
 @using TheStore.SharedModels.Models.Products
 @using TheStore.SharedModels.Models.ValueObjectsDtos;
 @implements IAsyncDisposable
-@inject IMapper Mapper
 @inject IJSRuntime JS
 
 <article class="product-card" style="color:@ColorHelpers.ChangeColorBrightness(CurrentVariant.Color.ColorCode, -0.5f)">
-	<div class="swiper" id="image-carousel-@Product.Identifier">
-		<div class="swiper-wrapper">
-			@foreach (var image in CurrentVariant.Color.Images)
-			{
-				<div class="swiper-slide">
-					<img loading="lazy" class="product-card-image" src="@image.StringFileUri" alt="@image.Alt" />
-				</div>
-			}
-		</div>
-		<div class="swiper-pagination"></div>
-	</div>
-	<article class="product-card-body">
-		<div class="d-flex flex-row">
-			<VariantSelector Variants="Mapper.Map<List<VariantSelectorModel>>(Product.Variants)" VariantChosen="VariantChosen" />
-			<span class="product-card-body-dimentions">@CurrentVariant.Dimentions</span>
-		</div>
-		<header class="product-card-body-title" title="@Product.Name">
-			<a href="/product/@Product.Identifier/@(SlugUrlHelper.URLFriendly(Product.Name))">
-				<h5 class="m-0">@Product.Name</h5>
-			</a>
-		</header>
-		<article class="product-card-body-desc" title="@Product.ShortDescription">
-			<p class="product-price">@CurrentVariant.Price</p>
-		</article>
-	</article>
-	<div class="product-card-controls">
-		<div class="action-btn-group">
-			@if (CurrentVariant.Options.CanBePurchased)
-			{
-				<button class="action-btn action-btn--primary action-btn--small" type="button">
-					<i class="las la-shopping-bag"></i>
-				</button>
-			}
-			@if (CurrentVariant.Options.CanBeFavorited)
-			{
-				<button class="action-btn action-btn--primary action-btn--small" type="button">
-					<i class="las la-heart"></i>
-				</button>
-			}
-		</div>
-	</div>
+    <div class="swiper" id="image-carousel-@Product.Identifier">
+        <div class="swiper-wrapper">
+            @foreach (var image in CurrentVariant.Color.Images)
+            {
+                <div class="swiper-slide">
+                    <img loading="lazy" class="product-card-image" src="@image.StringFileUri" alt="@image.Alt" />
+                </div>
+            }
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <article class="product-card-body">
+        <div class="d-flex flex-row">
+            <VariantSelector Variants="VariantSelectorModels" VariantChosen="VariantChosen" />
+            <span class="product-card-body-dimentions">@CurrentVariant.Dimentions</span>
+        </div>
+        <header class="product-card-body-title" title="@Product.Name">
+            <a href="/product/@Product.Identifier/@(SlugUrlHelper.URLFriendly(Product.Name))">
+                <h5 class="m-0">@Product.Name</h5>
+            </a>
+        </header>
+        <article class="product-card-body-desc" title="@Product.ShortDescription">
+            <p class="product-price">@CurrentVariant.Price</p>
+        </article>
+    </article>
+    <div class="product-card-controls">
+        <div class="action-btn-group">
+            @if (CurrentVariant.Options.CanBePurchased)
+            {
+                <button class="action-btn action-btn--primary action-btn--small" type="button">
+                    <i class="las la-shopping-bag"></i>
+                </button>
+            }
+            @if (CurrentVariant.Options.CanBeFavorited)
+            {
+                <button class="action-btn action-btn--primary action-btn--small" type="button">
+                    <i class="las la-heart"></i>
+                </button>
+            }
+        </div>
+    </div>
 </article>
 
 @code {
-	[Parameter]
-	public ProductCatalogDtoRead Product { get; set; }
+    [Parameter]
+    public ProductCatalogDtoRead Product { get; set; }
 
-	private IJSObjectReference? catalogModule;
+    private List<VariantSelectorModel> VariantSelectorModels =>
+            Product.Variants.Select(v => new VariantSelectorModel()
+                {
+                    Color = v.Color,
+                    Options = v.Options,
+                    Sku = v.Sku
+                }).ToList();
 
-	private ProductVariantCatalogDtoRead CurrentVariant { get; set; }
+    private IJSObjectReference? catalogModule;
 
-	protected async override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			catalogModule = await JS.InvokeAsync<IJSObjectReference>("import",
-					"./modules/CatalogModule.js");
+    private ProductVariantCatalogDtoRead? CurrentVariant { get; set; }
 
-			await CreateImageCarousel();
-		}
-	}
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            catalogModule = await JS.InvokeAsync<IJSObjectReference>("import",
+                    "./modules/CatalogModule.js");
 
-	protected override void OnInitialized()
-	{
-		CurrentVariant = Product.MainVariant;
-		CreateImageCarousel();
-	}
+            await CreateImageCarousel();
+        }
+    }
 
-	private void VariantChosen(string variantSku)
-	{
-		CurrentVariant = Product.Variants.First(v => v.Sku == variantSku);
+    protected override void OnInitialized()
+    {
+        CurrentVariant = Product.MainVariant;
+        CreateImageCarousel();
+    }
 
-		if (ShouldRender())
-		{
-			StateHasChanged();
-		}
+    private void VariantChosen(string variantSku)
+    {
+        CurrentVariant = Product.Variants.First(v => v.Sku == variantSku);
 
-		CreateImageCarousel();
-	}
+        if (ShouldRender())
+        {
+            StateHasChanged();
+        }
 
-	private ValueTask CreateImageCarousel()
-			=> catalogModule is not null ?
-						catalogModule.InvokeVoidAsync("CreateProductImagesCarousel", $"#image-carousel-{Product.Identifier}") :
-						ValueTask.CompletedTask;
+        CreateImageCarousel();
+    }
 
-	public async ValueTask DisposeAsync()
-	{
-		if (catalogModule is not null)
-		{
-			await catalogModule.DisposeAsync();
-		}
-	}
+    private ValueTask CreateImageCarousel()
+            => catalogModule is not null ?
+                        catalogModule.InvokeVoidAsync("CreateProductImagesCarousel", $"#image-carousel-{Product.Identifier}") :
+                        ValueTask.CompletedTask;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (catalogModule is not null)
+        {
+            await catalogModule.DisposeAsync();
+        }
+    }
 }
