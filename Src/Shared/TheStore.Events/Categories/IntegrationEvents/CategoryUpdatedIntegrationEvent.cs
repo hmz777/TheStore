@@ -1,16 +1,23 @@
-﻿using TheStore.SharedKernel.ValueObjects;
+﻿using Ardalis.GuardClauses;
+using TheStore.SharedKernel.ValueObjects;
 
 namespace TheStore.Events.Categories.IntegrationEvents
 {
-	public class CategoryUpdatedIntegrationEvent : IIntegrationEvent
-	{
-		public DateTimeOffset DateOccurred { get; }
-		public MultilanguageString Name { get; }
+    public class CategoryUpdatedIntegrationEvent : IIntegrationEvent
+    {
+        public DateTimeOffset DateOccurred { get; private set; };
+        public EventStatus Status { get; private set; }
+        public MultilanguageString Name { get; private set; }
 
-		public CategoryUpdatedIntegrationEvent(MultilanguageString name)
-		{
-			Name = name ?? throw new ArgumentNullException(nameof(name));
-			DateOccurred = DateTimeOffset.UtcNow;
-		}
-	}
+        public CategoryUpdatedIntegrationEvent(DateTimeOffset dateOccurred, EventStatus status, MultilanguageString name)
+        {
+            Guard.Against.Default(dateOccurred, nameof(dateOccurred));
+            Guard.Against.Null(name, nameof(name));
+            Guard.Against.EnumOutOfRange(status, nameof(status));
+
+            DateOccurred = dateOccurred;
+            Status = status;
+            Name = name;
+        }
+    }
 }

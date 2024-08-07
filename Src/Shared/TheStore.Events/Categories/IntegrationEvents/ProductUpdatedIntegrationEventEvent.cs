@@ -1,14 +1,22 @@
-﻿namespace TheStore.Events.Categories.IntegrationEvents
+﻿using Ardalis.GuardClauses;
+
+namespace TheStore.Events.Categories.IntegrationEvents
 {
     public class ProductUpdatedIntegrationEventEvent : IIntegrationEvent
     {
-		public DateTimeOffset DateOccurred { get; }
-		public string Name { get; set; }
+        public DateTimeOffset DateOccurred { get; private set; }
+        public EventStatus Status { get; private set; }
+        public string Name { get; private set; }
 
-        public ProductUpdatedIntegrationEventEvent(string name)
+        public ProductUpdatedIntegrationEventEvent(DateTimeOffset dateOccurred, EventStatus status, string name)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-			DateOccurred = DateTimeOffset.UtcNow;
-		}
+            Guard.Against.Default(dateOccurred, nameof(dateOccurred));
+            Guard.Against.NullOrEmpty(name, nameof(name));
+            Guard.Against.EnumOutOfRange(status, nameof(status));
+
+            DateOccurred = dateOccurred;
+            Status = status;
+            Name = name;
+        }
     }
 }
