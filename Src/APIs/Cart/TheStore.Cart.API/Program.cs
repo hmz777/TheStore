@@ -1,11 +1,10 @@
 using Serilog;
 using Serilog.Templates;
 using System.Reflection;
-using TheStore.ApiCommon.Constants;
 using TheStore.ApiCommon.Extensions.Middleware;
 using TheStore.ApiCommon.Extensions.Migrations;
 using TheStore.Cart.Infrastructure.Data;
-using TheStore.Cart.Infrastructure.Services;
+using TheStore.Cart.Infrastructure.Extensions;
 using static TheStore.ApiCommon.Constants.AppConfiguration;
 
 Log.Logger = new LoggerConfiguration()
@@ -39,19 +38,22 @@ try
         });
     }
 
-    if (args.Contains("/Seed"))
+    if (args.Contains("/seed"))
     {
         await app.SeedData(new DataSeeder());
     }
 
-    app.UseCors(AppConfiguration.Services.CorsPolicyName);
+    app.UseCors(Services.CorsPolicyName);
 
     if (app.Environment.IsProduction())
     {
         app.UseHttpsRedirection();
     }
 
-    app.MapControllers();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers()
+        .RequireAuthorization();
 
     app.Run();
 }
