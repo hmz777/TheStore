@@ -8,11 +8,12 @@ using TheStore.ApiCommon.Extensions.Security;
 using TheStore.ApiCommon.Extensions.Services;
 using TheStore.ApiCommon.Interfaces;
 using TheStore.Catalog.Infrastructure.Data.Configuration;
+using TheStore.Catalog.Infrastructure.Services;
 using TheStore.Catalog.Infrastructure.Services.Cache;
 
-namespace TheStore.Catalog.Infrastructure.Services
+namespace TheStore.Catalog.Infrastructure.Extensions
 {
-    public static class Extensions
+    public static class ServiceExtensions
     {
         private readonly static Assembly InfrastructureAssembly = Assembly.GetExecutingAssembly();
 
@@ -47,6 +48,7 @@ namespace TheStore.Catalog.Infrastructure.Services
             //webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
             // Register Cache Configuration as interface
+            // TODO: Later we'll control the cache config via an API
             webApplicationBuilder.Services.Configure<CacheConfiguration>(webApplicationBuilder.Configuration);
             webApplicationBuilder.Services.AddSingleton<ICacheConfiguration>(sProvider => sProvider.GetRequiredService<IOptions<CacheConfiguration>>().Value);
 
