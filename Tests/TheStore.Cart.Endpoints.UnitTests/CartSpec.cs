@@ -9,13 +9,13 @@ using TheStore.Cart.API.Endpoints;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.MappingProfiles;
-using TheStore.Cart.Infrastructure.Services;
+using TheStore.Cart.Infrastructure.Services.Rpc;
 using TheStore.Requests.Models.Cart;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Cart.Endpoints.UnitTests
 {
-	public class CartSpec
+    public class CartSpec
 	{
 		[Fact]
 		public async Task Can_List_Carts()

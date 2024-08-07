@@ -10,14 +10,14 @@ using TheStore.ApiCommon.Extensions.ModelValidation;
 using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
-using TheStore.Cart.Infrastructure.Services;
+using TheStore.Cart.Infrastructure.Services.Rpc;
 using TheStore.Requests;
 using TheStore.Requests.Models.Wishlist;
 using TheStore.SharedModels.Models.Wishlist;
 
 namespace TheStore.Cart.API.Endpoints
 {
-	public class AddToWishlist : EndpointBaseAsync
+    public class AddToWishlist : EndpointBaseAsync
 		.WithRequest<AddToWishlistRequest>
 		.WithActionResult
 	{

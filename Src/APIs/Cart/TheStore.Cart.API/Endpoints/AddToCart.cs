@@ -13,14 +13,14 @@ using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Core.ValueObjects.Keys;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.Data.Specifications;
-using TheStore.Cart.Infrastructure.Services;
+using TheStore.Cart.Infrastructure.Services.Rpc;
 using TheStore.Requests;
 using TheStore.Requests.Models.Cart;
 using TheStore.SharedModels.Models.Cart;
 
 namespace TheStore.Cart.API.Endpoints
 {
-	public class AddToCart : EndpointBaseAsync
+    public class AddToCart : EndpointBaseAsync
 		.WithRequest<AddToCartRequest>
 		.WithActionResult
 	{

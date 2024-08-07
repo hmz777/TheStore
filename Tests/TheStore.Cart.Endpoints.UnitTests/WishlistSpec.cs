@@ -10,13 +10,13 @@ using TheStore.Cart.Core.Aggregates;
 using TheStore.Cart.Core.Entities;
 using TheStore.Cart.Infrastructure.Data;
 using TheStore.Cart.Infrastructure.MappingProfiles;
-using TheStore.Cart.Infrastructure.Services;
+using TheStore.Cart.Infrastructure.Services.Rpc;
 using TheStore.Requests.Models.Wishlist;
 using TheStore.TestHelpers.AutoData.Customizations;
 
 namespace TheStore.Cart.Endpoints.UnitTests
 {
-	public class WishlistSpec
+    public class WishlistSpec
 	{
 		[Fact]
 		public async Task Can_List_Wishlists()
